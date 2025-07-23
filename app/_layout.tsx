@@ -1,72 +1,73 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
-import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { Tabs } from "expo-router";
+import Colors from "@/constants/colors";
+import { Home, Map, Train, Settings, Trophy } from "lucide-react-native";
+import { Platform } from "react-native";
 
-export const unstable_settings = {
-  initialRouteName: "(tabs)",
-};
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    ...FontAwesome.font,
-  });
-
-  useEffect(() => {
-    if (error) {
-      console.error(error);
-      throw error;
-    }
-  }, [error]);
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
-  return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
+export default function TabLayout() {
   return (
-    <>
-      <StatusBar style="dark" />
-      <Stack
-        screenOptions={{
-          headerBackTitle: "Back",
-          headerTitleStyle: {
-            fontWeight: "600",
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: Colors.primary,
+        tabBarInactiveTintColor: Colors.textLight,
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: "500",
+        },
+        tabBarStyle: {
+          height: Platform.OS === 'android' ? 65 : 60,
+          paddingBottom: Platform.OS === 'android' ? 10 : 8,
+          paddingTop: Platform.OS === 'android' ? 5 : 0,
+        },
+        headerShadowVisible: false,
+        // Android-specific tab styling
+        ...(Platform.OS === 'android' && {
+          tabBarStyle: {
+            height: 65,
+            paddingBottom: 10,
+            paddingTop: 5,
+            elevation: 8,
+            borderTopWidth: 0,
           },
-          headerShadowVisible: false,
+        }),
+      }}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: "Home",
+          tabBarIcon: ({ color }) => <Home size={24} color={color} />,
+          headerTitle: "KidMap",
         }}
-      >
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen 
-          name="route/[id]" 
-          options={{ 
-            title: "Route Details",
-            animation: "slide_from_right",
-          }} 
-        />
-        <Stack.Screen 
-          name="search" 
-          options={{ 
-            title: "Search Places",
-            animation: "slide_from_bottom",
-            presentation: "modal",
-          }} 
-        />
-      </Stack>
-    </>
+      />
+      <Tabs.Screen
+        name="map"
+        options={{
+          title: "Map",
+          tabBarIcon: ({ color }) => <Map size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="transit"
+        options={{
+          title: "Transit",
+          tabBarIcon: ({ color }) => <Train size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="achievements"
+        options={{
+          title: "Achievements",
+          tabBarIcon: ({ color }) => <Trophy size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "Settings",
+          tabBarIcon: ({ color }) => <Settings size={24} color={color} />,
+        }}
+      />
+    </Tabs>
   );
 }
