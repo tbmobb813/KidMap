@@ -44,3 +44,25 @@ export type Route = {
   departureTime: string;
   arrivalTime: string;
 };
+
+export type AccessibilitySettings = {
+  largeText: boolean;
+  highContrast: boolean;
+  voiceDescriptions: boolean;
+  simplifiedMode: boolean;
+};
+
+export type WeatherInfo = {
+  condition: string;
+  temperature: number;
+  recommendation: string;
+};
+
+export type PhotoCheckIn = {
+  id: string;
+  placeId: string;
+  placeName: string;
+  photoUrl: string;
+  timestamp: number; // Changed from Date to number for consistency
+  notes?: string;
+};
