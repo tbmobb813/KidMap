@@ -20,5 +20,9 @@ export default {
   mapWater: "#A5D7F7",
   mapPark: "#B8E39B",
   mapRoad: "#FFFFFF",
-  mapBuilding: "#E6E6E6"
+  mapBuilding: "#E6E6E6",
+  
+  // Android-specific colors
+  androidRipple: "#E3F2FD",
+  androidElevation: "#000000",
 };
