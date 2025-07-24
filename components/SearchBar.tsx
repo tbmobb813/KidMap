@@ -26,9 +26,20 @@ const SearchBar: React.FC<SearchBarProps> = ({
         placeholder={placeholder}
         placeholderTextColor={Colors.textLight}
         autoCapitalize="none"
+        accessible={true}
+        accessibilityLabel="Search input"
+        accessibilityHint="Enter a place or address to search"
+        returnKeyType="search"
       />
       {value.length > 0 && (
-        <Pressable onPress={onClear} style={styles.clearButton}>
+        <Pressable
+          onPress={onClear}
+          style={styles.clearButton}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel="Clear search"
+          accessibilityHint="Clears the search input"
+        >
           <X size={18} color={Colors.textLight} />
         </Pressable>
       )}

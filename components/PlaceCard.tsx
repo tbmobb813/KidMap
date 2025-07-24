@@ -40,6 +40,10 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, onPress }) => {
         pressed && styles.pressed
       ]}
       onPress={() => onPress(place)}
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={`Place: ${place.name}`}
+      accessibilityHint={`Show details for ${place.name} at ${place.address}`}
     >
       <View style={styles.iconContainer}>
         {getIcon()}

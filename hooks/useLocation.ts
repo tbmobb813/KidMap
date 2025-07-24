@@ -1,7 +1,15 @@
+/**
+ * useLocation custom hook for KidMap.
+ * Handles geolocation for both web and native platforms.
+ * Returns current location and loading/error state.
+ */
 import { useState, useEffect } from "react";
 import * as Location from "expo-location";
 import { Platform, Alert } from "react-native";
 
+/**
+ * Location data type returned by the hook.
+ */
 type LocationData = {
   latitude: number;
   longitude: number;
@@ -9,6 +17,10 @@ type LocationData = {
 };
 
 export default function useLocation() {
+/**
+ * Returns the user's current location (lat/lng) and loading/error state.
+ * Uses expo-location for native, browser geolocation for web.
+ */
   const [location, setLocation] = useState<LocationData>({
     latitude: 40.7128,
     longitude: -74.0060,

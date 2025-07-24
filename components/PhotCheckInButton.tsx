@@ -92,6 +92,11 @@ const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({ placeName, plac
       style={[styles.container, isLoading && styles.loading]}
       onPress={handlePhotoCheckIn}
       disabled={isLoading}
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={isLoading ? `Taking photo for check-in at ${placeName}` : `Photo check-in at ${placeName}`}
+      accessibilityHint={isLoading ? "Wait for the photo to be taken" : `Take a photo to check in at ${placeName}`}
+      accessibilityState={{ disabled: isLoading }}
     >
       <Camera size={20} color="#FFFFFF" />
       <Text style={styles.text}>

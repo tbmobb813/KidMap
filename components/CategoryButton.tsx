@@ -59,6 +59,10 @@ const CategoryButton: React.FC<CategoryButtonProps> = ({ category, onPress }) =>
         pressed && styles.pressed
       ]}
       onPress={() => onPress(category)}
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={`Category: ${getCategoryName()}`}
+      accessibilityHint={`Show places in the ${getCategoryName()} category`}
     >
       <View style={styles.iconContainer}>
         {getIcon()}

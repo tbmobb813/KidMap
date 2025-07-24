@@ -1,3 +1,8 @@
+/**
+ * HomeScreen (main tab) for KidMap app.
+ * Displays search, categories, fun facts, weather, and user stats.
+ * Uses modular components for each section.
+ */
 import React, { useState } from "react";
 import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import { useRouter } from "expo-router";
@@ -20,24 +25,23 @@ import { useGamificationStore } from "@/stores/gamificationStore";
 import { useRegionalData } from "@/hooks/useRegionalData";
 import { trackScreenView, trackUserAction } from "@/utils/analytics";
 
+/**
+ * Type for search suggestions in the search bar.
+ */
 type SearchSuggestion = {
-  id: string;
-  text: string;
-  type: "recent" | "popular" | "place";
-  place?: Place;
-};
-
-const categories: PlaceCategory[] = [
-  "home", "school", "park", "library", "store", "restaurant", "friend", "family"
-];
-
 export default function HomeScreen() {
   const router = useRouter();
+  // Get current user location
   const { location } = useLocation();
+  // State for search bar
   const [searchQuery, setSearchQuery] = useState("");
+  // Show/hide fun fact card
   const [showFunFact, setShowFunFact] = useState(true);
+  // Pull-to-refresh state
   const [refreshing, setRefreshing] = useState(false);
-  
+  // Sample error toast state
+  const [toastVisible, setToastVisible] = useState(false);
+
   const { 
     favorites, 
     setDestination,
@@ -89,26 +93,62 @@ export default function HomeScreen() {
       }
     });
     
-    // Add regional popular places
-    regionalContent.popularPlaces.forEach((place, index) => {
-      if (place.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-        searchSuggestions.push({
-          id: `popular-${index}`,
-          text: place.name,
-          type: "popular",
-          place: {
-            id: `popular-${index}`,
-            name: place.name,
-            address: place.description,
-            category: place.category as PlaceCategory,
-            coordinates: {
-              latitude: currentRegion.coordinates.latitude + (Math.random() - 0.5) * 0.01,
-              longitude: currentRegion.coordinates.longitude + (Math.random() - 0.5) * 0.01,
-            }
-          },
-        });
-      }
+    return searchSuggestions;
+  }, [searchQuery, recentSearches, favorites]);
+
+  const handlePlaceSelect = (place: Place) => {
+    setDestination(place);
+    addToRecentSearches(place);
+    router.push({ pathname: "/route/[id]", params: { id: place.id } });
+  };
+
+  const handleCategorySelect = (category: PlaceCategory) => {
+    trackUserAction('select_category', { category });
+    router.push({
+      pathname: "/search",
+      params: { category }
     });
+  };
+
+  const handleCurrentLocation = () => {
+    const currentPlace = {
+      id: "current-location",
+      name: "Current Location",
+      address: "Your current position",
+      category: "other" as PlaceCategory,
+      coordinates: {
+        latitude: location.latitude,
+        longitude: location.longitude
+      }
+    };
+    
+    trackUserAction('use_current_location');
+    handlePlaceSelect(currentPlace);
+  };
+
+  // Sample function to trigger an error toast
+  const triggerErrorToast = () => {
+    setToastVisible(true);
+    setTimeout(() => setToastVisible(false), 3000);
+  };
+
+  return (
+    <PullToRefresh onRefresh={handleRefresh} refreshing={refreshing}>
+      {/* Sample error toast */}
+      <Toast
+        message="Something went wrong! This is a sample error toast."
+        type="error"
+        visible={toastVisible}
+        onHide={() => setToastVisible(false)}
+      />
+      {/* Button to trigger error toast for demonstration */}
+      <AccessibleButton
+        title="Show Error Toast"
+        onPress={triggerErrorToast}
+        style={{ margin: 16 }}
+        variant="outline"
+      />
+      <View style={styles.container}>
     
     return searchSuggestions;
   }, [searchQuery, recentSearches, favorites, regionalContent.popularPlaces, currentRegion]);

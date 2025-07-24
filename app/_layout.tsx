@@ -1,3 +1,7 @@
+/**
+ * Root layout for the KidMap app. Handles font loading, splash screen, error boundaries,
+ * and provides global providers (React Query, etc). This is the main entry point for the app UI.
+ */
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
@@ -14,6 +18,7 @@ import { trackScreenView } from "@/utils/analytics";
 import { performanceMonitor } from "@/utils/performance";
 import { useRegionStore } from "@/stores/regionStore";
 
+// React Query client for caching and managing server state
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -25,6 +30,9 @@ const queryClient = new QueryClient({
   },
 });
 
+/**
+ * Expo router settings (unstable API)
+ */
 export const unstable_settings = {
   initialRouteName: "(tabs)",
 };
@@ -32,11 +40,17 @@ export const unstable_settings = {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+/**
+ * Main layout component. Handles font loading, splash screen, and error boundaries.
+ * Returns the navigation stack when ready.
+ */
 export default function RootLayout() {
+  // Load custom fonts
   const [loaded, error] = useFonts({
     ...FontAwesome.font,
   });
   const [appReady, setAppReady] = React.useState(false);
+  // Check if region is configured (region selection logic)
   const { isConfigured } = useRegionStore();
 
   useEffect(() => {

@@ -51,6 +51,10 @@ const SearchWithSuggestions: React.FC<SearchWithSuggestionsProps> = ({
         onSelectSuggestion(item);
         setShowSuggestions(false);
       }}
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={`Suggestion: ${item.text}`}
+      accessibilityHint={`Select ${item.text} as your search input`}
     >
       {getSuggestionIcon(item.type)}
       <Text style={styles.suggestionText} numberOfLines={1}>

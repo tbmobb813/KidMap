@@ -1,8 +1,24 @@
+/**
+ * AccessibleButton component for KidMap.
+ * Provides a Pressable button with accessibility props and visual variants.
+ * Ensures proper labeling and hints for screen readers.
+ */
 import React from "react";
 import { Pressable, Text, StyleSheet, ViewStyle, TextStyle } from "react-native";
 import Colors from "@/constants/colors";
 import { getAccessibilityLabel, getAccessibilityHint } from "@/utils/accessibility";
 
+/**
+ * Props for AccessibleButton.
+ * - title: Button text
+ * - onPress: Callback when pressed
+ * - style: Optional button style
+ * - textStyle: Optional text style
+ * - disabled: Disable button
+ * - accessibilityLabel: Custom label for screen readers
+ * - accessibilityHint: Custom hint for screen readers
+ * - variant: Visual style variant
+ */
 type AccessibleButtonProps = {
   title: string;
   onPress: () => void;
@@ -14,6 +30,9 @@ type AccessibleButtonProps = {
   variant?: "primary" | "secondary" | "outline";
 };
 
+/**
+ * Renders a visually styled, accessible button for the app.
+ */
 const AccessibleButton: React.FC<AccessibleButtonProps> = ({
   title,
   onPress,
