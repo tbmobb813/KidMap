@@ -1,11 +1,7 @@
-/**
- * HomeScreen (main tab) for KidMap app.
- * Displays search, categories, fun facts, weather, and user stats.
- * Uses modular components for each section.
- */
-import React, { useState } from "react";
-import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
+import React, { useState, useEffect, useMemo } from "react";
+import { Linking, Platform, StyleSheet, Text, View, Pressable } from "react-native";
 import { useRouter } from "expo-router";
+import { MapPin, Navigation } from "lucide-react-native";
 import Colors from "@/constants/colors";
 import SearchWithSuggestions from "@/components/SearchWithSuggestions";
 import PlaceCard from "@/components/PlaceCard";
@@ -17,83 +13,73 @@ import WeatherCard from "@/components/WeatherCard";
 import PhotoCheckInButton from "@/components/PhotoCheckInButton";
 import EmptyState from "@/components/EmptyState";
 import PullToRefresh from "@/components/PullToRefresh";
-import { useNavigationStore } from "@/stores/navigationStore";
-import { PlaceCategory, Place } from "@/types/navigation";
-import { MapPin, Navigation } from "lucide-react-native";
+import Toast from "@/components/Toast";
+import AccessibleButton from "@/components/AccessibleButton";
+import { useGeofencing } from "@/hooks/useGeofencing";
 import useLocation from "@/hooks/useLocation";
-import { useGamificationStore } from "@/stores/gamificationStore";
 import { useRegionalData } from "@/hooks/useRegionalData";
+import { useNavigationStore } from "@/stores/navigationStore";
+import { useGamificationStore } from "@/stores/gamificationStore";
+import { sendLocalNotification, requestNotificationPermissions, configureNotificationHandler } from "@/utils/notifications";
 import { trackScreenView, trackUserAction } from "@/utils/analytics";
+import type { SearchSuggestion } from "@/components/SearchWithSuggestions";
+import type { PlaceCategory, Place } from "@/types/navigation";
 
-/**
- * Type for search suggestions in the search bar.
- */
-type SearchSuggestion = {
 export default function HomeScreen() {
   const router = useRouter();
-  // Get current user location
   const { location } = useLocation();
-  // State for search bar
+
   const [searchQuery, setSearchQuery] = useState("");
-  // Show/hide fun fact card
   const [showFunFact, setShowFunFact] = useState(true);
-  // Pull-to-refresh state
   const [refreshing, setRefreshing] = useState(false);
-  // Sample error toast state
   const [toastVisible, setToastVisible] = useState(false);
 
-  const { 
-    favorites, 
-    setDestination,
-    addToRecentSearches,
-    recentSearches
-  } = useNavigationStore();
-
-  const { userStats, completeTrip } = useGamificationStore();
+  const { favorites, setDestination, addToRecentSearches, recentSearches } = useNavigationStore();
+  const { userStats, completeTrip, safetyContacts } = useGamificationStore();
   const { formatters, regionalContent, currentRegion } = useRegionalData();
 
-  React.useEffect(() => {
-    trackScreenView('home');
+  useEffect(() => {
+    configureNotificationHandler();
+    requestNotificationPermissions();
+    trackScreenView("home");
   }, []);
 
-  // Mock weather data with regional formatting
+  useGeofencing((zoneId, event) => {
+    const action = event === "enter" ? "entered" : "exited";
+    sendLocalNotification(
+      `Safe Zone ${action}`,
+      `You have ${action} a safe zone (${zoneId}).`
+    );
+    const primaryContact = safetyContacts?.find((c) => c.isPrimary);
+    if (primaryContact && Platform.OS !== "web") {
+      const message = `Alert: Your child has ${action} safe zone (${zoneId}).`;
+      Linking.openURL(`sms:${primaryContact.phone}&body=${encodeURIComponent(message)}`);
+    }
+  });
+
   const mockWeather = {
     condition: "Sunny",
     temperature: 72,
     recommendation: `Perfect weather for exploring ${currentRegion.name}! Don't forget sunscreen.`
   };
 
-  // Generate search suggestions
-  const suggestions: SearchSuggestion[] = React.useMemo(() => {
+  const suggestions = useMemo(() => {
     if (!searchQuery.trim()) return [];
-    
-    const searchSuggestions: SearchSuggestion[] = [];
-    
-    // Add recent searches
-    recentSearches.forEach(place => {
+    const result: SearchSuggestion[] = [];
+
+    recentSearches.forEach((place) => {
       if (place.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-        searchSuggestions.push({
-          id: `recent-${place.id}`,
-          text: place.name,
-          type: "recent",
-          place,
-        });
+        result.push({ id: `recent-${place.id}`, text: place.name, type: "recent", place });
       }
     });
-    
-    // Add favorites
-    favorites.forEach(place => {
+
+    favorites.forEach((place) => {
       if (place.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-        searchSuggestions.push({
-          id: `favorite-${place.id}`,
-          text: place.name,
-          type: "place",
-          place,
-        });
+        result.push({ id: `favorite-${place.id}`, text: place.name, type: "place", place });
       }
     });
-    
-    return searchSuggestions;
+
+    return result;
   }, [searchQuery, recentSearches, favorites]);
 
   const handlePlaceSelect = (place: Place) => {
@@ -103,121 +89,78 @@ export default function HomeScreen() {
   };
 
   const handleCategorySelect = (category: PlaceCategory) => {
-    trackUserAction('select_category', { category });
-    router.push({
-      pathname: "/search",
-      params: { category }
-    });
+    trackUserAction("select_category", { category });
+    router.push({ pathname: "/search", params: { category } });
   };
 
   const handleCurrentLocation = () => {
-    const currentPlace = {
+    const currentPlace: Place = {
       id: "current-location",
       name: "Current Location",
       address: "Your current position",
-      category: "other" as PlaceCategory,
-      coordinates: {
-        latitude: location.latitude,
-        longitude: location.longitude
-      }
+      category: "other",
+      coordinates: { latitude: location.latitude, longitude: location.longitude },
     };
-    
-    trackUserAction('use_current_location');
+    trackUserAction("use_current_location");
     handlePlaceSelect(currentPlace);
   };
 
-  // Sample function to trigger an error toast
   const triggerErrorToast = () => {
     setToastVisible(true);
     setTimeout(() => setToastVisible(false), 3000);
   };
 
+  const categories: PlaceCategory[] = [
+    "park",
+    "museum",
+    "playground",
+    "zoo",
+    "aquarium",
+    "library",
+    "other",
+  ];
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    } catch (error) {
+      setToastVisible(true);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  const handleSuggestionSelect = (suggestion: SearchSuggestion) => {
+    if (suggestion.place) {
+      handlePlaceSelect(suggestion.place);
+    } else {
+      setToastVisible(true);
+    }
+  };
+
   return (
     <PullToRefresh onRefresh={handleRefresh} refreshing={refreshing}>
-      {/* Sample error toast */}
       <Toast
         message="Something went wrong! This is a sample error toast."
         type="error"
         visible={toastVisible}
         onHide={() => setToastVisible(false)}
       />
-      {/* Button to trigger error toast for demonstration */}
+
       <AccessibleButton
         title="Show Error Toast"
         onPress={triggerErrorToast}
         style={{ margin: 16 }}
         variant="outline"
       />
-      <View style={styles.container}>
-    
-    return searchSuggestions;
-  }, [searchQuery, recentSearches, favorites, regionalContent.popularPlaces, currentRegion]);
 
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    // Simulate refresh delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setRefreshing(false);
-    trackUserAction('pull_to_refresh', { screen: 'home' });
-  };
-
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      trackUserAction('search', { query: searchQuery });
-      router.push("/search");
-    }
-  };
-
-  const handlePlaceSelect = (place: Place) => {
-    setDestination(place);
-    addToRecentSearches(place);
-    completeTrip("Current Location", place.name);
-    trackUserAction('select_place', { place_name: place.name, place_category: place.category });
-    router.push("/map");
-  };
-
-  const handleSuggestionSelect = (suggestion: SearchSuggestion) => {
-    if (suggestion.place) {
-      handlePlaceSelect(suggestion.place);
-    }
-  };
-
-  const handleCategorySelect = (category: PlaceCategory) => {
-    trackUserAction('select_category', { category });
-    router.push({
-      pathname: "/search",
-      params: { category }
-    });
-  };
-
-  const handleCurrentLocation = () => {
-    const currentPlace = {
-      id: "current-location",
-      name: "Current Location",
-      address: "Your current position",
-      category: "other" as PlaceCategory,
-      coordinates: {
-        latitude: location.latitude,
-        longitude: location.longitude
-      }
-    };
-    
-    trackUserAction('use_current_location');
-    handlePlaceSelect(currentPlace);
-  };
-
-  return (
-    <PullToRefresh onRefresh={handleRefresh} refreshing={refreshing}>
       <View style={styles.container}>
         <UserStatsCard stats={userStats} />
-        
+
         <WeatherCard weather={mockWeather} />
-        
-        {showFunFact && (
-          <RegionalFunFactCard 
-            onDismiss={() => setShowFunFact(false)}
-          />
-        )}
+
+        {showFunFact && <RegionalFunFactCard onDismiss={() => setShowFunFact(false)} />}
 
         <SafetyPanel currentLocation={location} />
 
@@ -229,10 +172,7 @@ export default function HomeScreen() {
             suggestions={suggestions}
             placeholder={`Where do you want to go in ${currentRegion.name}?`}
           />
-          <Pressable 
-            style={styles.currentLocationButton}
-            onPress={handleCurrentLocation}
-          >
+          <Pressable style={styles.currentLocationButton} onPress={handleCurrentLocation}>
             <Navigation size={20} color={Colors.primary} />
             <Text style={styles.currentLocationText}>Use my location</Text>
           </Pressable>
@@ -241,11 +181,7 @@ export default function HomeScreen() {
         <Text style={styles.sectionTitle}>Categories</Text>
         <View style={styles.categoriesContainer}>
           {categories.map((category) => (
-            <CategoryButton
-              key={category}
-              category={category}
-              onPress={handleCategorySelect}
-            />
+            <CategoryButton key={category} category={category} onPress={handleCategorySelect} />
           ))}
         </View>
 
@@ -253,13 +189,12 @@ export default function HomeScreen() {
         {favorites.length > 0 ? (
           favorites.map((place) => (
             <View key={place.id}>
-              <PlaceCard
-                place={place}
-                onPress={handlePlaceSelect}
-              />
-              <PhotoCheckInButton 
+              <PlaceCard place={place} onPress={handlePlaceSelect} />
+              <PhotoCheckInButton
                 placeName={place.name}
                 placeId={place.id}
+                placeLat={place.coordinates.latitude}
+                placeLng={place.coordinates.longitude}
               />
             </View>
           ))

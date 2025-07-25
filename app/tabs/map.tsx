@@ -1,32 +1,45 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, ScrollView, Pressable, Dimensions, Platform } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Pressable,
+  Dimensions,
+  Platform,
+} from "react-native";
 import { useRouter } from "expo-router";
 import Colors from "@/constants/colors";
 import MapPlaceholder from "@/components/MapPlaceholder";
 import RouteCard from "@/components/RouteCard";
 import { useNavigationStore } from "@/stores/navigationStore";
 import { Route } from "@/types/navigation";
+import { fetchRoute, TravelMode } from "@/utils/api";
 import { Navigation, MapPin, Search } from "lucide-react-native";
 import useLocation from "@/hooks/useLocation";
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 export default function MapScreen() {
   const router = useRouter();
   const { location } = useLocation();
-  
-  const { 
+
+  const {
     origin,
     destination,
     availableRoutes,
     selectedRoute,
     setOrigin,
-    findRoutes,
-    selectRoute
+    setDestination,
+    selectRoute,
+    clearRoute,
   } = useNavigationStore();
 
+  const [travelMode, setTravelMode] = useState<TravelMode>("walking");
+  const [loadingRoute, setLoadingRoute] = useState(false);
+  const [routeError, setRouteError] = useState<string | null>(null);
+
   useEffect(() => {
-    // If no origin is set, use current location
     if (!origin && location) {
       setOrigin({
         id: "current-location",
@@ -35,18 +48,62 @@ export default function MapScreen() {
         category: "other",
         coordinates: {
           latitude: location.latitude,
-          longitude: location.longitude
-        }
+          longitude: location.longitude,
+        },
       });
     }
   }, [location, origin]);
 
   useEffect(() => {
-    // Find routes when both origin and destination are set
-    if (origin && destination) {
-      findRoutes();
-    }
-  }, [origin, destination]);
+    const fetchAndSetRoute = async () => {
+      if (origin && destination) {
+        setLoadingRoute(true);
+        setRouteError(null);
+        try {
+          const from: [number, number] = [
+            origin.coordinates.longitude,
+            origin.coordinates.latitude,
+          ];
+          const to: [number, number] = [
+            destination.coordinates.longitude,
+            destination.coordinates.latitude,
+          ];
+          const routeResult = await fetchRoute(from, to, travelMode);
+
+          if (routeResult) {
+            const newRoute: Route = {
+              id: `${travelMode}-${Date.now()}`,
+              steps: [
+                {
+                  id: "main",
+                  type:
+                    travelMode === "walking" || travelMode === "cycling"
+                      ? "walk"
+                      : "bus",
+                  from: origin.name,
+                  to: destination.name,
+                  duration: Math.round(routeResult.duration / 60),
+                  departureTime: "",
+                  arrivalTime: "",
+                },
+              ],
+              totalDuration: Math.round(routeResult.duration / 60),
+              departureTime: "",
+              arrivalTime: "",
+            };
+            selectRoute(newRoute);
+          } else {
+            setRouteError("No route found.");
+          }
+        } catch (e) {
+          setRouteError("Failed to fetch route.");
+        } finally {
+          setLoadingRoute(false);
+        }
+      }
+    };
+    fetchAndSetRoute();
+  }, [origin, destination, travelMode]);
 
   const handleRouteSelect = (route: Route) => {
     selectRoute(route);
@@ -58,19 +115,19 @@ export default function MapScreen() {
   };
 
   return (
-    <ScrollView 
+    <ScrollView
       style={styles.container}
       contentContainerStyle={styles.scrollContent}
       showsVerticalScrollIndicator={false}
       bounces={true}
     >
       <View style={styles.mapContainer}>
-        <MapPlaceholder 
+        <MapPlaceholder
           message={
-            destination 
-              ? `Map showing route to ${destination.name}` 
+            destination
+              ? `Map showing route to ${destination.name}`
               : "Select a destination to see the route"
-          } 
+          }
         />
       </View>
 
@@ -85,47 +142,68 @@ export default function MapScreen() {
               <MapPin size={16} color="#FFFFFF" />
             </View>
           </View>
-          
+
           <View style={styles.locationTexts}>
             <Pressable style={styles.locationButton}>
               <Text style={styles.locationText} numberOfLines={1}>
                 {origin?.name || "Select starting point"}
               </Text>
             </Pressable>
-            
-            <Pressable 
+
+            <Pressable
               style={styles.locationButton}
               onPress={handleSearchPress}
             >
-              <Text 
-                style={[
-                  styles.locationText, 
-                  !destination && styles.placeholderText
-                ]} 
+              <Text
+                style={[styles.locationText, !destination && styles.placeholderText]}
                 numberOfLines={1}
               >
                 {destination?.name || "Where to?"}
               </Text>
               {!destination && (
-                <Search size={16} color={Colors.textLight} style={styles.searchIcon} />
+                <Search
+                  size={16}
+                  color={Colors.textLight}
+                  style={styles.searchIcon}
+                />
               )}
             </Pressable>
           </View>
         </View>
 
+        <View style={styles.modeSelectorContainer}>
+          {(["walking", "cycling", "transit", "driving"] as TravelMode[]).map(
+            (mode) => (
+              <Pressable
+                key={mode}
+                style={[styles.modeButton, travelMode === mode && styles.modeButtonActive]}
+                onPress={() => setTravelMode(mode)}
+              >
+                <Text
+                  style={[styles.modeButtonText, travelMode === mode && styles.modeButtonTextActive]}
+                >
+                  {mode.charAt(0).toUpperCase() + mode.slice(1)}
+                </Text>
+              </Pressable>
+            )
+          )}
+        </View>
+
         {destination ? (
           <>
-            <Text style={styles.sectionTitle}>Available Routes</Text>
-            <View style={styles.routesContainer}>
-              {availableRoutes.map(route => (
-                <RouteCard
-                  key={route.id}
-                  route={route}
-                  onPress={handleRouteSelect}
-                  isSelected={selectedRoute?.id === route.id}
-                />
-              ))}
-            </View>
+            <Text style={styles.sectionTitle}>Route</Text>
+            {loadingRoute ? (
+              <Text style={styles.loadingText}>Loading route...</Text>
+            ) : routeError ? (
+              <Text style={styles.errorText}>{routeError}</Text>
+            ) : selectedRoute ? (
+              <RouteCard
+                key={selectedRoute.id}
+                route={selectedRoute}
+                onPress={handleRouteSelect}
+                isSelected={true}
+              />
+            ) : null}
           </>
         ) : (
           <View style={styles.emptyStateContainer}>
@@ -133,10 +211,7 @@ export default function MapScreen() {
             <Text style={styles.emptyStateText}>
               Select a destination to see available routes
             </Text>
-            <Pressable 
-              style={styles.searchButton}
-              onPress={handleSearchPress}
-            >
+            <Pressable style={styles.searchButton} onPress={handleSearchPress}>
               <Text style={styles.searchButtonText}>Search Places</Text>
             </Pressable>
           </View>
@@ -166,9 +241,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     paddingBottom: 32,
-  },
-  routesContainer: {
-    gap: 12,
   },
   locationBar: {
     flexDirection: "row",
@@ -217,11 +289,50 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
   },
+  modeSelectorContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: 16,
+    gap: 8,
+  },
+  modeButton: {
+    backgroundColor: Colors.card,
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    marginHorizontal: 4,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  modeButtonActive: {
+    backgroundColor: Colors.primary,
+    borderColor: Colors.primary,
+  },
+  modeButtonText: {
+    color: Colors.text,
+    fontWeight: "600",
+    fontSize: 15,
+  },
+  modeButtonTextActive: {
+    color: "#fff",
+  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "700",
     color: Colors.text,
     marginBottom: 16,
+  },
+  loadingText: {
+    color: Colors.textLight,
+    fontSize: 16,
+    textAlign: "center",
+    marginVertical: 12,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 16,
+    textAlign: "center",
+    marginVertical: 12,
   },
   emptyStateContainer: {
     alignItems: "center",

@@ -1,20 +1,67 @@
+import { isMockLocation, getDeviceInfo } from "@/utils/deviceValidation";
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Pressable, Alert, Platform, BackHandler } from "react-native";
 import Colors from "@/constants/colors";
 import { Camera, MapPin } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigationStore } from "@/stores/navigationStore";
+import useLocation from "@/hooks/useLocation";
+
 
 type PhotoCheckInButtonProps = {
   placeName: string;
   placeId: string;
+  placeLat: number;
+  placeLng: number;
 };
 
-const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({ placeName, placeId }) => {
+const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({ placeName, placeId, placeLat, placeLng }) => {
+
   const [isLoading, setIsLoading] = useState(false);
   const { addPhotoCheckIn } = useNavigationStore();
+  const { latitude, longitude, error: locationError } = useLocation();
+
+  // Haversine formula for distance in meters
+  function getDistanceFromLatLonInMeters(lat1: number, lon1: number, lat2: number, lon2: number) {
+    const R = 6371e3; // meters
+    const φ1 = lat1 * Math.PI/180;
+    const φ2 = lat2 * Math.PI/180;
+    const Δφ = (lat2-lat1) * Math.PI/180;
+    const Δλ = (lon2-lon1) * Math.PI/180;
+    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+              Math.cos(φ1) * Math.cos(φ2) *
+              Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  }
+
 
   const handlePhotoCheckIn = async () => {
+    // Spoofing prevention: check for mock location (Android)
+    if (await isMockLocation()) {
+      Alert.alert("Location Spoofing Detected", "Mock location detected. Please disable mock location apps to check in.");
+      return;
+    }
+    // Require location
+    if (locationError) {
+      Alert.alert("Location Error", "Could not get your location. Please enable location services and try again.");
+      return;
+    }
+
+    // Use real place coordinates from props
+    const distance = getDistanceFromLatLonInMeters(latitude, longitude, placeLat, placeLng);
+    const allowedRadius = 100; // meters
+    if (distance > allowedRadius) {
+      Alert.alert("Too Far From Location", `You must be within ${allowedRadius} meters of the destination to check in. (Currently: ${Math.round(distance)}m)`);
+      return;
+    }
+
+    // Optionally: Add server-side validation here for extra anti-spoofing (future)
+    // await validateCheckInOnServer({ latitude, longitude, deviceInfo: getDeviceInfo(), placeId });
+
+    // Always capture device info for audit
+    const deviceInfo = getDeviceInfo();
+
     if (Platform.OS === 'web') {
       Alert.alert("Photo Check-in", "Camera not available on web. Check-in recorded!");
       addPhotoCheckIn({
@@ -22,20 +69,21 @@ const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({ placeName, plac
         placeName,
         photoUrl: "https://via.placeholder.com/300x200?text=Check-in+Photo",
         timestamp: Date.now(),
-        notes: "Checked in successfully!"
+        notes: "Checked in successfully!",
+        deviceInfo,
       });
       return;
     }
 
     try {
       setIsLoading(true);
-      
+
       // Android-specific permission handling
       const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
       if (!permissionResult.granted) {
         if (Platform.OS === 'android') {
           Alert.alert(
-            "Camera Permission", 
+            "Camera Permission",
             "Camera permission is required for photo check-ins. Please enable camera access in your device settings.",
             [
               { text: "Cancel", style: "cancel" },
@@ -51,7 +99,7 @@ const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({ placeName, plac
       }
 
       // Android-optimized camera options
-      const cameraOptions = Platform.OS === 'android' 
+      const cameraOptions = Platform.OS === 'android'
         ? {
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
@@ -74,9 +122,10 @@ const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({ placeName, plac
           placeName,
           photoUrl: result.assets[0].uri,
           timestamp: Date.now(),
-          notes: "Safe arrival confirmed!"
+          notes: "Safe arrival confirmed!",
+          deviceInfo,
         });
-        
+
         Alert.alert("Check-in Complete!", `You've safely arrived at ${placeName}!`);
       }
     } catch (error) {
@@ -94,8 +143,8 @@ const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({ placeName, plac
       disabled={isLoading}
       accessible={true}
       accessibilityRole="button"
-      accessibilityLabel={isLoading ? `Taking photo for check-in at ${placeName}` : `Photo check-in at ${placeName}`}
-      accessibilityHint={isLoading ? "Wait for the photo to be taken" : `Take a photo to check in at ${placeName}`}
+      accessibilityLabel={isLoading ? ("Taking photo for check-in at " + placeName) : ("Photo check-in at " + placeName)}
+      accessibilityHint={isLoading ? "Wait for the photo to be taken" : ("Take a photo to check in at " + placeName)}
       accessibilityState={{ disabled: isLoading }}
     >
       <Camera size={20} color="#FFFFFF" />

@@ -220,3 +220,105 @@ export const createNetworkAwareApi = <T extends any[], R>(
     }
   };
 };
+
+// --- Multi-Modal Routing: Mapbox Directions API ---
+// Docs: https://docs.mapbox.com/api/navigation/directions/
+
+export type TravelMode = 'walking' | 'cycling' | 'driving' | 'transit';
+
+export type RouteLeg = {
+  summary: string;
+  steps: Array<{
+    maneuver: { instruction: string; location: [number, number] };
+    distance: number;
+    duration: number;
+    name: string;
+  }>;
+  distance: number;
+  duration: number;
+};
+
+export type RouteResult = {
+  legs: RouteLeg[];
+  distance: number;
+  duration: number;
+  geometry: any;
+  mode: TravelMode;
+};
+
+
+const MAPBOX_TOKEN = 'YOUR_MAPBOX_ACCESS_TOKEN'; // TODO: Move to env/config
+const GOOGLE_MAPS_KEY = 'YOUR_GOOGLE_MAPS_API_KEY'; // TODO: Move to env/config
+
+// Google Directions API for transit
+export async function fetchGoogleTransitRoute(
+  from: [number, number],
+  to: [number, number]
+): Promise<RouteResult | null> {
+  const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${from[1]},${from[0]}&destination=${to[1]},${to[0]}&mode=transit&key=${GOOGLE_MAPS_KEY}`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.routes && data.routes.length > 0) {
+      const route = data.routes[0];
+      // Parse Google steps to RouteLegs
+      const legs: RouteLeg[] = route.legs.map((leg: any) => ({
+        summary: leg.summary || '',
+        steps: leg.steps.map((step: any) => ({
+          maneuver: {
+            instruction: step.html_instructions || '',
+            location: [step.start_location.lng, step.start_location.lat],
+          },
+          distance: step.distance.value,
+          duration: step.duration.value,
+          name: step.transit_details?.line?.short_name || step.travel_mode,
+        })),
+        distance: leg.distance.value,
+        duration: leg.duration.value,
+      }));
+      return {
+        legs,
+        distance: route.legs[0].distance.value,
+        duration: route.legs[0].duration.value,
+        geometry: route.overview_polyline,
+        mode: 'transit',
+      };
+    }
+    return null;
+  } catch (e) {
+    console.warn('Failed to fetch Google transit route:', e);
+    return null;
+  }
+}
+
+// Unified fetchRoute for all modes
+export async function fetchRoute(
+  from: [number, number],
+  to: [number, number],
+  mode: TravelMode = 'walking'
+): Promise<RouteResult | null> {
+  if (mode === 'transit') {
+    return fetchGoogleTransitRoute(from, to);
+  }
+  // Mapbox for other modes
+  const profile = mode === 'walking' ? 'walking' : mode === 'cycling' ? 'cycling' : mode === 'driving' ? 'driving' : 'driving';
+  const url = `https://api.mapbox.com/directions/v5/mapbox/${profile}/${from[0]},${from[1]};${to[0]},${to[1]}?geometries=geojson&steps=true&access_token=${MAPBOX_TOKEN}`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.routes && data.routes.length > 0) {
+      const route = data.routes[0];
+      return {
+        legs: route.legs,
+        distance: route.distance,
+        duration: route.duration,
+        geometry: route.geometry,
+        mode,
+      };
+    }
+    return null;
+  } catch (e) {
+    console.warn('Failed to fetch route:', e);
+    return null;
+  }
+}

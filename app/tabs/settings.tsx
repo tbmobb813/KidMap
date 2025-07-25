@@ -147,6 +147,16 @@ export default function SettingsScreen() {
               value={simplifiedDirections}
               onValueChange={setSimplifiedDirections}
             />
+           <LinkItem
+             icon={<Shield size={24} color={Colors.primary} />}
+             title="Parent Dashboard"
+             onPress={() => {
+               // Use your navigation method here. If using Expo Router, use router.push:
+               if (typeof window !== 'undefined' && window.location) {
+                 window.location.href = '/parent-dashboard';
+               }
+             }}
+           />
           </View>
 
           <View style={styles.section}>

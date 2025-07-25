@@ -17,6 +17,9 @@ export type PlaceCategory =
   | "library" 
   | "store" 
   | "restaurant" 
+  | "food-pizza"
+  | "food-burger"
+  | "food-icecream"
   | "friend" 
   | "family" 
   | "other";
@@ -65,4 +68,5 @@ export type PhotoCheckIn = {
   photoUrl: string;
   timestamp: number; // Changed from Date to number for consistency
   notes?: string;
+  deviceInfo?: any; // For anti-spoofing audit, optional for backward compatibility
 };

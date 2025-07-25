@@ -14,17 +14,29 @@ export default function RouteDetailScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   
-  const { 
+
+  const {
     origin,
     destination,
     availableRoutes,
-    selectedRoute
+    selectedRoute,
+    selectRoute
   } = useNavigationStore();
 
-  // Find the route by ID
-  const route = selectedRoute?.id === id 
-    ? selectedRoute 
-    : availableRoutes.find(r => r.id === id);
+
+  // Find the route by ID or fallback to selectedRoute
+  const [activeRouteId, setActiveRouteId] = useState(
+    selectedRoute?.id === id ? id : (availableRoutes[0]?.id || id)
+  );
+  const route = availableRoutes.find(r => r.id === activeRouteId) || selectedRoute;
+
+  // Helper to get a label for each route (based on main mode)
+  function getRouteLabel(r) {
+    const mainStep = r.steps.find(s => s.type !== 'walk') || r.steps[0];
+    let label = mainStep.type.charAt(0).toUpperCase() + mainStep.type.slice(1);
+    if (mainStep.line) label += ` Line ${mainStep.line}`;
+    return label;
+  }
 
   const [showFunFact, setShowFunFact] = useState(true);
   const [currentFunFact] = useState(getRandomFunFact("subway"));
@@ -45,6 +57,28 @@ export default function RouteDetailScreen() {
 
   return (
     <ScrollView style={styles.container}>
+      {/* Route type selector */}
+      {availableRoutes.length > 1 && (
+        <View style={styles.routeTypeSelector}>
+          {availableRoutes.map((r) => (
+            <Pressable
+              key={r.id}
+              style={[styles.routeTypeButton, activeRouteId === r.id && styles.routeTypeButtonActive]}
+              onPress={() => {
+                setActiveRouteId(r.id);
+                selectRoute(r);
+              }}
+              accessibilityRole="button"
+              accessibilityState={{ selected: activeRouteId === r.id }}
+            >
+              <Text style={[styles.routeTypeButtonText, activeRouteId === r.id && styles.routeTypeButtonTextActive]}>
+                {getRouteLabel(r)}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+      )}
+
       <MapPlaceholder 
         message={`Map showing route from ${origin.name} to ${destination.name}`} 
       />
@@ -120,6 +154,34 @@ export default function RouteDetailScreen() {
 }
 
 const styles = StyleSheet.create({
+  routeTypeSelector: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 12,
+    marginBottom: 8,
+    gap: 8,
+  },
+  routeTypeButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    backgroundColor: Colors.card,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    marginHorizontal: 4,
+  },
+  routeTypeButtonActive: {
+    backgroundColor: Colors.primary,
+    borderColor: Colors.primary,
+  },
+  routeTypeButtonText: {
+    color: Colors.text,
+    fontWeight: '600',
+  },
+  routeTypeButtonTextActive: {
+    color: '#fff',
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.background,

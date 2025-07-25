@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, Pressable, View } from "react-native";
 import Colors from "@/constants/colors";
 import { PlaceCategory } from "@/types/navigation";
-import { Home, School, BookOpen, Trees, Store, Utensils, Users, Heart, MapPin } from "lucide-react-native";
+import { Home, School, BookOpen, Trees, Store, Utensils, Users, Heart, MapPin, Pizza, IceCream, Sandwich } from "lucide-react-native";
 
 type CategoryButtonProps = {
   category: PlaceCategory;
@@ -10,26 +10,33 @@ type CategoryButtonProps = {
 };
 
 const CategoryButton: React.FC<CategoryButtonProps> = ({ category, onPress }) => {
+  // Use larger, more playful icons for kids
   const getIcon = () => {
     switch (category) {
       case "home":
-        return <Home size={24} color="#FFF" />;
+        return <Home size={40} color="#FFF" />;
       case "school":
-        return <School size={24} color="#FFF" />;
+        return <School size={40} color="#FFF" />;
       case "library":
-        return <BookOpen size={24} color="#FFF" />;
+        return <BookOpen size={40} color="#FFF" />;
       case "park":
-        return <Trees size={24} color="#FFF" />;
+        return <Trees size={40} color="#FFF" />;
       case "store":
-        return <Store size={24} color="#FFF" />;
+        return <Store size={40} color="#FFF" />;
       case "restaurant":
-        return <Utensils size={24} color="#FFF" />;
+        return <Utensils size={40} color="#FFF" />;
+      case "food-pizza":
+        return <Pizza size={40} color="#FFF" />;
+      case "food-burger":
+        return <Sandwich size={40} color="#FFF" />;
+      case "food-icecream":
+        return <IceCream size={40} color="#FFF" />;
       case "friend":
-        return <Users size={24} color="#FFF" />;
+        return <Users size={40} color="#FFF" />;
       case "family":
-        return <Heart size={24} color="#FFF" />;
+        return <Heart size={40} color="#FFF" />;
       default:
-        return <MapPin size={24} color="#FFF" />;
+        return <MapPin size={40} color="#FFF" />;
     }
   };
 
@@ -92,11 +99,15 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     marginBottom: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   text: {
     color: "#FFF",
-    fontSize: 14,
-    fontWeight: "600",
+    fontSize: 18,
+    fontWeight: "700",
+    textAlign: 'center',
+    marginTop: 4,
   },
 });
 
