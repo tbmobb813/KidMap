@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View, ScrollView, Pressable, Dimensions, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import Colors from "@/constants/colors";
@@ -9,11 +9,11 @@ import { Route } from "@/types/navigation";
 import { Navigation, MapPin, Search } from "lucide-react-native";
 import useLocation from "@/hooks/useLocation";
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { height: screenHeight } = Dimensions.get('window');
 
 export default function MapScreen() {
   const router = useRouter();
-  const { location } = useLocation();
+  const { location, loading } = useLocation();
   
   const { 
     origin,
@@ -27,7 +27,7 @@ export default function MapScreen() {
 
   useEffect(() => {
     // If no origin is set, use current location
-    if (!origin && location) {
+    if (!origin && location && !loading && !location.error) {
       setOrigin({
         id: "current-location",
         name: "Current Location",
@@ -39,14 +39,14 @@ export default function MapScreen() {
         }
       });
     }
-  }, [location, origin]);
+  }, [location, origin, loading, setOrigin]);
 
   useEffect(() => {
     // Find routes when both origin and destination are set
     if (origin && destination) {
       findRoutes();
     }
-  }, [origin, destination]);
+  }, [origin, destination, findRoutes]);
 
   const handleRouteSelect = (route: Route) => {
     selectRoute(route);
