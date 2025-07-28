@@ -34,7 +34,6 @@ describe('Routing and Navigation', () => {
     expect(route).toEqual(mockRoute);
   });
 
-
   it('should fetch a route for cycling mode', async () => {
     const cyclingRoute = { ...mockRoute, mode: 'cycling' };
 

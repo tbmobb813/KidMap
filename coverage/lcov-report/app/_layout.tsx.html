@@ -391,21 +391,21 @@
  * Root layout for the KidMap app. Handles font loading, splash screen, error boundaries,
  * and provides global providers (React Query, etc). This is the main entry point for the app UI.
  */
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
-import React from "react";
-import { StatusBar } from "expo-status-bar";
-import { Platform } from "react-native";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Colors from "@/constants/colors";
-import ErrorBoundary from "@/components/ErrorBoundary";
-import NetworkStatusBar from "@/components/NetworkStatusBar";
-import { trackScreenView } from "@/utils/analytics";
-import { performanceMonitor } from "@/utils/performance";
-import { useRegionStore } from "@/stores/regionStore";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useFonts } from 'expo-font';
+import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
+import React from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { Platform } from 'react-native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Colors from '@/constants/colors';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import NetworkStatusBar from '@/components/NetworkStatusBar';
+import { trackScreenView } from '@/utils/analytics';
+import { performanceMonitor } from '@/utils/performance';
+import { useRegionStore } from '@/stores/regionStore';
 &nbsp;
 // React Query client for caching and managing server state
 const queryClient = <span class="cstat-no" title="statement not covered" >new QueryClient({</span>
@@ -423,7 +423,7 @@ const queryClient = <span class="cstat-no" title="statement not covered" >new Qu
  * Expo router settings (unstable API)
  */
 export const unstable_settings = <span class="cstat-no" title="statement not covered" >{</span>
-  initialRouteName: "(tabs)",
+  initialRouteName: '(tabs)',
 };
 &nbsp;
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -444,7 +444,7 @@ export default function <span class="fstat-no" title="function not covered" >Roo
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    performanceMonitor.startTimer('app_startup');</span>
-    
+&nbsp;
     async function <span class="fstat-no" title="function not covered" >prepare(</span>) {
 <span class="cstat-no" title="statement not covered" >      try {</span>
         // Pre-load fonts, make any API calls you need to do here
@@ -467,7 +467,7 @@ export default function <span class="fstat-no" title="function not covered" >Roo
     // Add a minimum delay to ensure splash screen shows briefly
     const timer = <span class="cstat-no" title="statement not covered" >setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (!appReady) {</span>
-<span class="cstat-no" title="statement not covered" >        console.log("Font loading timeout, showing app anyway");</span>
+<span class="cstat-no" title="statement not covered" >        console.log('Font loading timeout, showing app anyway');</span>
 <span class="cstat-no" title="statement not covered" >        setAppReady(true);</span>
 <span class="cstat-no" title="statement not covered" >        performanceMonitor.endTimer('app_startup');</span>
 <span class="cstat-no" title="statement not covered" >        SplashScreen.hideAsync();</span>
@@ -500,16 +500,16 @@ function <span class="fstat-no" title="function not covered" >RootLayoutNav(</sp
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
-      &lt;StatusBar 
-        style={Platform.OS === 'android' ? 'dark' : 'dark'} 
+      &lt;StatusBar
+        style={Platform.OS === 'android' ? 'dark' : 'dark'}
         backgroundColor={Platform.OS === 'android' ? Colors.background : undefined}
       /&gt;
       &lt;NetworkStatusBar /&gt;
       &lt;Stack
         screenOptions={{
-          headerBackTitle: "Back",
+          headerBackTitle: 'Back',
           headerTitleStyle: {
-            fontWeight: "600",
+            fontWeight: '600',
           },
           headerShadowVisible: false,
           headerStyle: {
@@ -518,30 +518,30 @@ function <span class="fstat-no" title="function not covered" >RootLayoutNav(</sp
         }}
       &gt;
         {!isConfigured ? (
-          &lt;Stack.Screen 
-            name="onboarding" 
-            options={{ 
+          &lt;Stack.Screen
+            name="onboarding"
+            options={{
               headerShown: false,
               gestureEnabled: false,
-            }} 
+            }}
           /&gt;
         ) : (
           &lt;&gt;
             &lt;Stack.Screen name="(tabs)" options={{ headerShown: false }} /&gt;
-            &lt;Stack.Screen 
-              name="route/[id]" 
-              options={{ 
-                title: "Route Details",
+            &lt;Stack.Screen
+              name="route/[id]"
+              options={{
+                title: 'Route Details',
                 animation: Platform.OS === 'android' ? 'slide_from_right' : 'slide_from_right',
-              }} 
+              }}
             /&gt;
-            &lt;Stack.Screen 
-              name="search" 
-              options={{ 
-                title: "Search Places",
+            &lt;Stack.Screen
+              name="search"
+              options={{
+                title: 'Search Places',
                 animation: Platform.OS === 'android' ? 'slide_from_bottom' : 'slide_from_bottom',
                 presentation: Platform.OS === 'android' ? 'modal' : 'modal',
-              }} 
+              }}
             /&gt;
           &lt;/&gt;
         )}
@@ -556,7 +556,7 @@ function <span class="fstat-no" title="function not covered" >RootLayoutNav(</sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-26T20:08:48.734Z
+                at 2025-07-28T18:53:22.986Z
             </div>
         <script src="../prettify.js"></script>
         <script>

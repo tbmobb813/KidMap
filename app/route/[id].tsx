@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { fetchRoute, TravelMode, RouteResult } from '@/utils/api';
-import Colors from "@/constants/colors";
-import DirectionStep from "@/components/DirectionStep";
-import MapPlaceholder from "@/components/MapPlaceholder";
-import { useNavigationStore } from "@/stores/navigationStore";
-import { Clock, Navigation, MapPin } from "lucide-react-native";
-import VoiceNavigation from "@/components/VoiceNavigation";
-import FunFactCard from "@/components/FunFactCard";
-import { getRandomFunFact } from "@/mocks/funFacts";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import Colors from '@/constants/colors';
+import DirectionStep from '@/components/DirectionStep';
+import MapPlaceholder from '@/components/MapPlaceholder';
+import { useNavigationStore } from '@/stores/navigationStore';
+import { Clock, Navigation, MapPin } from 'lucide-react-native';
+import VoiceNavigation from '@/components/VoiceNavigation';
+import FunFactCard from '@/components/FunFactCard';
+import { getRandomFunFact } from '@/mocks/funFacts';
+import LoadingSpinner from '@/components/LoadingSpinner';
 import MapView, { Polyline, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 
 export default function RouteDetailScreen() {
@@ -18,7 +18,7 @@ export default function RouteDetailScreen() {
   const { id } = useLocalSearchParams();
   const { origin, destination } = useNavigationStore();
 
-  // --- Phase 3 additions: mode selector & fetch state ---
+  // Enhanced mode selector & fetch state
   const [mode, setMode] = useState<TravelMode>('walking');
   const [routeResult, setRouteResult] = useState<RouteResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -26,40 +26,50 @@ export default function RouteDetailScreen() {
 
   useEffect(() => {
     if (!origin || !destination) return;
-    let cancelled = false;
+    // Use AbortController for cancellation
+    const abortController = new AbortController();
+
     async function loadRoute() {
       setLoading(true);
       setError(null);
-      const result = await fetchRoute(origin.coords, destination.coords, mode);
-      if (cancelled) return;
-      if (result) setRouteResult(result);
-      else setError('Unable to load route');
-      setLoading(false);
+      try {
+        // Pass the abort signal to fetchRoute (ensure fetchRoute supports cancellation)
+        const result = await fetchRoute(origin.location, destination.location, mode, abortController.signal);
+        if (result) {
+          setRouteResult(result);
+        } else {
+          setError('Unable to load route');
+        }
+      } catch (err: any) {
+        if (!abortController.signal.aborted) {
+          console.error('Error fetching route:', err);
+          setError(err.message || 'An error occurred while fetching the route.');
+        }
+      } finally {
+        setLoading(false);
+      }
     }
     loadRoute();
-    return () => { cancelled = true; };
+
+    return () => {
+      abortController.abort();
+    };
   }, [origin, destination, mode]);
 
-  const displayDistance = routeResult?.distance ?? /* fallback */ 0;
-  const displayDuration = routeResult?.duration ?? /* fallback */ 0;
+  const displayDistance = routeResult?.distance ?? 0;
+  const displayDuration = routeResult?.duration ?? 0;
 
   return (
     <View style={styles.container}>
       {/* Mode Selector */}
       <View style={styles.modeSelector}>
-        {(['walking','cycling','transit'] as TravelMode[]).map(m => (
+        {(['walking', 'cycling', 'transit'] as TravelMode[]).map((m) => (
           <Pressable
             key={m}
-            style={[
-              styles.modeButton,
-              mode === m && styles.modeButtonActive
-            ]}
+            style={[styles.modeButton, mode === m && styles.modeButtonActive]}
             onPress={() => setMode(m)}
           >
-            <Text style={[
-              styles.modeText,
-              mode === m && styles.modeTextActive
-            ]}>
+            <Text style={[styles.modeText, mode === m && styles.modeTextActive]}>
               {m.charAt(0).toUpperCase() + m.slice(1)}
             </Text>
           </Pressable>
@@ -79,7 +89,7 @@ export default function RouteDetailScreen() {
         </View>
       )}
 
-      {/* Empty State (no route & not loading) */}
+      {/* Empty State */}
       {!loading && !error && !routeResult && (
         <MapPlaceholder message="No route available. Try a different mode or location." />
       )}
@@ -87,12 +97,8 @@ export default function RouteDetailScreen() {
       {/* Header - Distance & Duration */}
       {routeResult && (
         <View style={styles.headerContainer}>
-          <Text style={styles.headerText}>
-            Distance: {displayDistance} m
-          </Text>
-          <Text style={styles.headerText}>
-            Duration: {Math.round(displayDuration / 60)} min
-          </Text>
+          <Text style={styles.headerText}>Distance: {displayDistance} m</Text>
+          <Text style={styles.headerText}>Duration: {Math.round(displayDuration / 60)} min</Text>
         </View>
       )}
 
@@ -101,8 +107,8 @@ export default function RouteDetailScreen() {
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         initialRegion={{
-          latitude: origin.coords[0],
-          longitude: origin.coords[1],
+          latitude: origin.location[0],
+          longitude: origin.location[1],
           latitudeDelta: 0.05,
           longitudeDelta: 0.05,
         }}
@@ -110,21 +116,27 @@ export default function RouteDetailScreen() {
         {routeResult && (
           <>
             <Polyline
-              coordinates={routeResult.steps.flatMap(s => ([
+              coordinates={routeResult.steps.flatMap((s) => [
                 { latitude: s.startLocation[0], longitude: s.startLocation[1] },
-                { latitude: s.endLocation[0],   longitude: s.endLocation[1]   }
-              ]))}
+                { latitude: s.endLocation[0], longitude: s.endLocation[1] },
+              ])}
               strokeColor={Colors.primary}
               strokeWidth={4}
             />
-            <Marker coordinate={{
-              latitude: origin.coords[0],
-              longitude: origin.coords[1]
-            }} title="Start" />
-            <Marker coordinate={{
-              latitude: destination.coords[0],
-              longitude: destination.coords[1]
-            }} title="End" />
+            <Marker
+              coordinate={{
+                latitude: origin.location[0],
+                longitude: origin.location[1],
+              }}
+              title="Start"
+            />
+            <Marker
+              coordinate={{
+                latitude: destination.location[0],
+                longitude: destination.location[1],
+              }}
+              title="End"
+            />
           </>
         )}
       </MapView>
@@ -132,7 +144,7 @@ export default function RouteDetailScreen() {
       {/* Route Steps */}
       {routeResult && (
         <ScrollView>
-          {routeResult.legs.flatMap(leg =>
+          {routeResult.legs.flatMap((leg) =>
             leg.steps.map((step, idx) => (
               <DirectionStep key={`${leg.summary}-${idx}`} step={step} />
             ))
@@ -140,72 +152,7 @@ export default function RouteDetailScreen() {
         </ScrollView>
       )}
 
-      {/* <VoiceNavigation 
-        currentStep={routeResult ? routeResult.steps[0]?.instruction : "Loading route..."}
-      /> */}
-
-      {/* {showFunFact && (
-        <FunFactCard 
-          fact={currentFunFact}
-          location="Transit System"
-          onDismiss={() => setShowFunFact(false)}
-        />
-      )} */}
-      
-      {/* <View style={styles.contentContainer}>
-        <View style={styles.routeSummary}>
-          <View style={styles.locationContainer}>
-            <View style={styles.locationRow}>
-              <View style={[styles.locationPin, styles.originPin]}>
-                <Navigation size={16} color="#FFFFFF" />
-              </View>
-              <Text style={styles.locationText} numberOfLines={1}>
-                {origin.name}
-              </Text>
-            </View>
-            
-            <View style={styles.locationConnector} />
-            
-            <View style={styles.locationRow}>
-              <View style={[styles.locationPin, styles.destinationPin]}>
-                <MapPin size={16} color="#FFFFFF" />
-              </View>
-              <Text style={styles.locationText} numberOfLines={1}>
-                {destination.name}
-              </Text>
-            </View>
-          </View>
-          
-          <View style={styles.timeInfo}>
-            <Text style={styles.duration}>{route.totalDuration} min</Text>
-            <View style={styles.timeRow}>
-              <Clock size={14} color={Colors.textLight} style={styles.clockIcon} />
-              <Text style={styles.timeText}>
-                {route.departureTime} - {route.arrivalTime}
-              </Text>
-            </View>
-          </View>
-        </View>
-        
-        <Text style={styles.sectionTitle}>Step by Step Directions</Text>
-        
-        <View style={styles.stepsContainer}>
-          {(routeResult?.steps || route.steps).map((step, index) => (
-            <DirectionStep
-              key={index}
-              step={step}
-              isLast={index === (routeResult?.steps.length || route.steps.length) - 1}
-            />
-          ))}
-        </View>
-        
-        <View style={styles.tipContainer}>
-          <Text style={styles.tipTitle}>Kid-Friendly Tip</Text>
-          <Text style={styles.tipText}>
-            Remember to stay with an adult and keep your phone with you at all times!
-          </Text>
-        </View>
-      </View> */}
+      {/* Optional integration for VoiceNavigation and FunFactCard can go here */}
     </View>
   );
 }
@@ -215,29 +162,29 @@ const styles = StyleSheet.create({
   modeSelector: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginVertical: 12
+    marginVertical: 12,
   },
   modeButton: {
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: Colors.primary
+    borderColor: Colors.primary,
   },
   modeButtonActive: {
-    backgroundColor: Colors.primary
+    backgroundColor: Colors.primary,
   },
   modeText: {
     color: Colors.primary,
-    fontWeight: '500'
+    fontWeight: '500',
   },
   modeTextActive: {
-    color: '#fff'
+    color: '#fff',
   },
   errorText: {
     color: Colors.error,
     textAlign: 'center',
-    marginVertical: 12
+    marginVertical: 12,
   },
   routeTypeSelector: {
     flexDirection: 'row',
@@ -280,16 +227,16 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   locationRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 8,
   },
   locationPin: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginRight: 12,
   },
   originPin: {
@@ -317,13 +264,13 @@ const styles = StyleSheet.create({
   },
   duration: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     color: Colors.text,
     marginBottom: 4,
   },
   timeRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   clockIcon: {
     marginRight: 4,
@@ -334,7 +281,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     color: Colors.text,
     marginBottom: 16,
   },
@@ -342,7 +289,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   tipContainer: {
-    backgroundColor: "#F0F4FF",
+    backgroundColor: '#F0F4FF',
     borderRadius: 12,
     padding: 16,
     marginBottom: 24,
@@ -351,7 +298,7 @@ const styles = StyleSheet.create({
   },
   tipTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     color: Colors.primary,
     marginBottom: 8,
   },
@@ -362,11 +309,11 @@ const styles = StyleSheet.create({
   },
   errorContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 16,
   },
-  errorText: {
+  errorTextLarge: {
     fontSize: 18,
     color: Colors.text,
     marginBottom: 24,
@@ -378,9 +325,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   backButtonText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   headerContainer: {
     backgroundColor: Colors.card,

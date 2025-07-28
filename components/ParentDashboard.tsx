@@ -1,6 +1,14 @@
-
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Modal, TextInput, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Modal,
+  TextInput,
+  Alert,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SafeZoneManager from './SafeZoneManager';
 import { pingDevice, sendLocationUpdate } from '@/utils/pingDevice';
@@ -65,7 +73,9 @@ const ParentDashboard: React.FC = () => {
       </Section>
 
       <Section title="Device Ping / Locate">
-        <Text style={styles.sectionText}>Ping your child's device to ring or request a location update.</Text>
+        <Text style={styles.sectionText}>
+          Ping your child's device to ring or request a location update.
+        </Text>
         <TouchableOpacity
           style={styles.button}
           onPress={async () => {

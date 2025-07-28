@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, Text, View, Pressable, Alert } from "react-native";
-import Colors from "@/constants/colors";
-import { Mic, MicOff, Volume2 } from "lucide-react-native";
+import React, { useState, useEffect, useRef } from 'react';
+import { StyleSheet, Text, View, Pressable, Alert } from 'react-native';
+import Colors from '@/constants/colors';
+import { Mic, MicOff, Volume2 } from 'lucide-react-native';
 
 type VoiceNavigationProps = {
   currentStep?: string;
   onVoiceCommand?: (command: string) => void;
 };
 
-const VoiceNavigation: React.FC<VoiceNavigationProps> = ({ 
-  currentStep = "Walk to Main Street Station",
-  onVoiceCommand 
+const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
+  currentStep = 'Walk to Main Street Station',
+  onVoiceCommand,
 }) => {
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -21,10 +21,10 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
 
   // list of available voice commands
   const voiceCommands = [
-    "Where am I?",
-    "Repeat directions",
-    "Call for help",
-    "How much time left?"
+    'Where am I?',
+    'Repeat directions',
+    'Call for help',
+    'How much time left?',
   ];
 
   useEffect(() => {
@@ -38,11 +38,11 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
   const handleVoiceToggle = () => {
     if (isListening) {
       setIsListening(false);
-      Alert.alert("Voice stopped", "No longer listening for commands");
+      Alert.alert('Voice stopped', 'No longer listening for commands');
     } else {
       setIsListening(true);
-      Alert.alert("Voice activated", "Say 'help' for available commands");
-      
+      Alert.alert('Voice activated', "Say 'help' for available commands");
+
       listeningTimeout.current = setTimeout(() => {
         setIsListening(false);
       }, 5000);
@@ -51,8 +51,8 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
 
   const handleSpeak = () => {
     setIsSpeaking(true);
-    Alert.alert("Speaking", `"${currentStep}"`);
-    
+    Alert.alert('Speaking', `"${currentStep}"`);
+
     speakingTimeout.current = setTimeout(() => {
       setIsSpeaking(false);
     }, 2000);
@@ -69,36 +69,22 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
       <View style={styles.controlsContainer}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={isListening ? "Stop voice input" : "Start voice input"}
-          style={[
-            styles.voiceButton,
-            isListening && styles.listeningButton
-          ]}
+          accessibilityLabel={isListening ? 'Stop voice input' : 'Start voice input'}
+          style={[styles.voiceButton, isListening && styles.listeningButton]}
           onPress={handleVoiceToggle}
         >
-          {isListening ? (
-            <MicOff size={24} color="#FFFFFF" />
-          ) : (
-            <Mic size={24} color="#FFFFFF" />
-          )}
-          <Text style={styles.buttonText}>
-            {isListening ? "Stop" : "Voice"}
-          </Text>
+          {isListening ? <MicOff size={24} color="#FFFFFF" /> : <Mic size={24} color="#FFFFFF" />}
+          <Text style={styles.buttonText}>{isListening ? 'Stop' : 'Voice'}</Text>
         </Pressable>
 
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Repeat instructions aloud"
-          style={[
-            styles.speakButton,
-            isSpeaking && styles.speakingButton
-          ]}
+          style={[styles.speakButton, isSpeaking && styles.speakingButton]}
           onPress={handleSpeak}
         >
           <Volume2 size={24} color="#FFFFFF" />
-          <Text style={styles.buttonText}>
-            {isSpeaking ? "Speaking..." : "Repeat"}
-          </Text>
+          <Text style={styles.buttonText}>{isSpeaking ? 'Speaking...' : 'Repeat'}</Text>
         </Pressable>
       </View>
 
@@ -106,8 +92,10 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
       {isListening && (
         <View style={styles.commandsContainer}>
           <Text style={styles.commandsTitle}>Voice Commands:</Text>
-          {voiceCommands.map(cmd => (
-            <Text key={cmd} style={styles.commandText}>• {cmd}</Text>
+          {voiceCommands.map((cmd) => (
+            <Text key={cmd} style={styles.commandText}>
+              • {cmd}
+            </Text>
           ))}
         </View>
       )}
@@ -123,20 +111,20 @@ const styles = StyleSheet.create({
     margin: 16,
   },
   stepContainer: {
-    backgroundColor: "#F0F4FF",
+    backgroundColor: '#F0F4FF',
     borderRadius: 8,
     padding: 12,
     marginBottom: 16,
   },
   stepText: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     color: Colors.text,
-    textAlign: "center",
+    textAlign: 'center',
   },
   controlsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     gap: 16,
   },
   voiceButton: {
@@ -144,7 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     borderRadius: 8,
     padding: 12,
-    alignItems: "center",
+    alignItems: 'center',
     gap: 4,
   },
   listeningButton: {
@@ -155,26 +143,26 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondary,
     borderRadius: 8,
     padding: 12,
-    alignItems: "center",
+    alignItems: 'center',
     gap: 4,
   },
   speakingButton: {
     backgroundColor: Colors.warning,
   },
   buttonText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   commandsContainer: {
     marginTop: 16,
-    backgroundColor: "#F9F9F9",
+    backgroundColor: '#F9F9F9',
     borderRadius: 8,
     padding: 12,
   },
   commandsTitle: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
     color: Colors.text,
     marginBottom: 8,
   },

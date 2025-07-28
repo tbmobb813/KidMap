@@ -1,13 +1,25 @@
-import React from "react";
-import { StyleSheet, Text, View, Switch, ScrollView, Pressable } from "react-native";
-import Colors from "@/constants/colors";
-import { Bell, Shield, MapPin, Clock, HelpCircle, Info, ChevronRight, Eye, Globe, Settings, RefreshCw } from "lucide-react-native";
-import AccessibilitySettings from "@/components/AccessibilitySettings";
-import RegionSwitcher from "@/components/RegionSwitcher";
-import RegionalTransitCard from "@/components/RegionalTransitCard";
-import CityManagement from "@/components/CityManagement";
-import { useRegionStore } from "@/stores/regionStore";
-import { transitDataUpdater } from "@/utils/transitDataUpdater";
+import React from 'react';
+import { StyleSheet, Text, View, Switch, ScrollView, Pressable } from 'react-native';
+import Colors from '@/constants/colors';
+import {
+  Bell,
+  Shield,
+  MapPin,
+  Clock,
+  HelpCircle,
+  Info,
+  ChevronRight,
+  Eye,
+  Globe,
+  Settings,
+  RefreshCw,
+} from 'lucide-react-native';
+import AccessibilitySettings from '@/components/AccessibilitySettings';
+import RegionSwitcher from '@/components/RegionSwitcher';
+import RegionalTransitCard from '@/components/RegionalTransitCard';
+import CityManagement from '@/components/CityManagement';
+import { useRegionStore } from '@/stores/regionStore';
+import { transitDataUpdater } from '@/utils/transitDataUpdater';
 
 type SettingItemProps = {
   icon: React.ReactNode;
@@ -30,10 +42,16 @@ export default function SettingsScreen() {
   const [simplifiedDirections, setSimplifiedDirections] = React.useState(true);
   const [showAccessibility, setShowAccessibility] = React.useState(false);
   const [showCityManagement, setShowCityManagement] = React.useState(false);
-  
+
   const { currentRegion, userPreferences, updatePreferences } = useRegionStore();
 
-  const SettingItem: React.FC<SettingItemProps> = ({ icon, title, description, value, onValueChange }) => (
+  const SettingItem: React.FC<SettingItemProps> = ({
+    icon,
+    title,
+    description,
+    value,
+    onValueChange,
+  }) => (
     <View style={styles.settingItem}>
       <View style={styles.settingIcon}>{icon}</View>
       <View style={styles.settingContent}>
@@ -43,18 +61,15 @@ export default function SettingsScreen() {
       <Switch
         value={value}
         onValueChange={onValueChange}
-        trackColor={{ false: "#E0E0E0", true: Colors.primary }}
+        trackColor={{ false: '#E0E0E0', true: Colors.primary }}
         thumbColor="#FFFFFF"
       />
     </View>
   );
 
   const LinkItem: React.FC<LinkItemProps> = ({ icon, title, onPress }) => (
-    <Pressable 
-      style={({ pressed }) => [
-        styles.linkItem,
-        pressed && styles.linkItemPressed
-      ]}
+    <Pressable
+      style={({ pressed }) => [styles.linkItem, pressed && styles.linkItemPressed]}
       onPress={onPress}
     >
       <View style={styles.settingIcon}>{icon}</View>
@@ -67,17 +82,19 @@ export default function SettingsScreen() {
     try {
       console.log('Starting transit data update for all regions...');
       const results = await transitDataUpdater.updateAllRegions();
-      
-      const successCount = results.filter(r => r.success).length;
+
+      const successCount = results.filter((r) => r.success).length;
       const totalCount = results.length;
-      
+
       if (successCount === totalCount) {
         console.log(`Successfully updated transit data for all ${totalCount} regions`);
       } else {
         console.log(`Updated ${successCount}/${totalCount} regions successfully`);
-        results.filter(r => !r.success).forEach(result => {
-          console.error(`Failed to update ${result.regionId}: ${result.message}`);
-        });
+        results
+          .filter((r) => !r.success)
+          .forEach((result) => {
+            console.error(`Failed to update ${result.regionId}: ${result.message}`);
+          });
       }
     } catch (error) {
       console.error('Failed to update transit data:', error);
@@ -97,13 +114,13 @@ export default function SettingsScreen() {
             <View style={styles.regionContainer}>
               <RegionSwitcher />
             </View>
-            
+
             <LinkItem
               icon={<Settings size={24} color={Colors.primary} />}
               title="Manage Cities"
               onPress={() => setShowCityManagement(true)}
             />
-            
+
             <LinkItem
               icon={<RefreshCw size={24} color={Colors.primary} />}
               title="Update Transit Data"
@@ -115,7 +132,7 @@ export default function SettingsScreen() {
 
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>App Settings</Text>
-            
+
             <SettingItem
               icon={<Bell size={24} color={Colors.primary} />}
               title="Notifications"
@@ -123,7 +140,7 @@ export default function SettingsScreen() {
               value={notificationsEnabled}
               onValueChange={setNotificationsEnabled}
             />
-            
+
             <SettingItem
               icon={<Shield size={24} color={Colors.primary} />}
               title="Safety Alerts"
@@ -131,7 +148,7 @@ export default function SettingsScreen() {
               value={safetyAlertsEnabled}
               onValueChange={setSafetyAlertsEnabled}
             />
-            
+
             <SettingItem
               icon={<MapPin size={24} color={Colors.primary} />}
               title="Save Location History"
@@ -139,7 +156,7 @@ export default function SettingsScreen() {
               value={locationHistoryEnabled}
               onValueChange={setLocationHistoryEnabled}
             />
-            
+
             <SettingItem
               icon={<Clock size={24} color={Colors.primary} />}
               title="Simplified Directions"
@@ -147,21 +164,21 @@ export default function SettingsScreen() {
               value={simplifiedDirections}
               onValueChange={setSimplifiedDirections}
             />
-           <LinkItem
-             icon={<Shield size={24} color={Colors.primary} />}
-             title="Parent Dashboard"
-             onPress={() => {
-               // Use your navigation method here. If using Expo Router, use router.push:
-               if (typeof window !== 'undefined' && window.location) {
-                 window.location.href = '/parent-dashboard';
-               }
-             }}
-           />
+            <LinkItem
+              icon={<Shield size={24} color={Colors.primary} />}
+              title="Parent Dashboard"
+              onPress={() => {
+                // Use your navigation method here. If using Expo Router, use router.push:
+                if (typeof window !== 'undefined' && window.location) {
+                  window.location.href = '/parent-dashboard';
+                }
+              }}
+            />
           </View>
 
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Preferences</Text>
-            
+
             <View style={styles.preferenceItem}>
               <Globe size={24} color={Colors.primary} />
               <View style={styles.preferenceContent}>
@@ -170,28 +187,32 @@ export default function SettingsScreen() {
                   <Pressable
                     style={[
                       styles.unitButton,
-                      userPreferences.preferredUnits === "imperial" && styles.activeUnit
+                      userPreferences.preferredUnits === 'imperial' && styles.activeUnit,
                     ]}
-                    onPress={() => updatePreferences({ preferredUnits: "imperial" })}
+                    onPress={() => updatePreferences({ preferredUnits: 'imperial' })}
                   >
-                    <Text style={[
-                      styles.unitText,
-                      userPreferences.preferredUnits === "imperial" && styles.activeUnitText
-                    ]}>
+                    <Text
+                      style={[
+                        styles.unitText,
+                        userPreferences.preferredUnits === 'imperial' && styles.activeUnitText,
+                      ]}
+                    >
                       Imperial
                     </Text>
                   </Pressable>
                   <Pressable
                     style={[
                       styles.unitButton,
-                      userPreferences.preferredUnits === "metric" && styles.activeUnit
+                      userPreferences.preferredUnits === 'metric' && styles.activeUnit,
                     ]}
-                    onPress={() => updatePreferences({ preferredUnits: "metric" })}
+                    onPress={() => updatePreferences({ preferredUnits: 'metric' })}
                   >
-                    <Text style={[
-                      styles.unitText,
-                      userPreferences.preferredUnits === "metric" && styles.activeUnitText
-                    ]}>
+                    <Text
+                      style={[
+                        styles.unitText,
+                        userPreferences.preferredUnits === 'metric' && styles.activeUnitText,
+                      ]}
+                    >
                       Metric
                     </Text>
                   </Pressable>
@@ -202,13 +223,13 @@ export default function SettingsScreen() {
 
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Help & Information</Text>
-            
+
             <LinkItem
               icon={<HelpCircle size={24} color={Colors.primary} />}
               title="Help Center"
               onPress={() => {}}
             />
-            
+
             <LinkItem
               icon={<Info size={24} color={Colors.primary} />}
               title="About KidMap"
@@ -218,7 +239,7 @@ export default function SettingsScreen() {
 
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Accessibility</Text>
-            
+
             <LinkItem
               icon={<Eye size={24} color={Colors.primary} />}
               title="Accessibility Settings"
@@ -247,16 +268,16 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     color: Colors.text,
     marginBottom: 16,
   },
   regionContainer: {
-    alignItems: "flex-start",
+    alignItems: 'flex-start',
   },
   settingItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: Colors.card,
     borderRadius: 12,
     padding: 16,
@@ -266,9 +287,9 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#F0F4FF",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: '#F0F4FF',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginRight: 16,
   },
   settingContent: {
@@ -276,7 +297,7 @@ const styles = StyleSheet.create({
   },
   settingTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     color: Colors.text,
     marginBottom: 4,
   },
@@ -285,8 +306,8 @@ const styles = StyleSheet.create({
     color: Colors.textLight,
   },
   linkItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: Colors.card,
     borderRadius: 12,
     padding: 16,
@@ -294,17 +315,17 @@ const styles = StyleSheet.create({
   },
   linkItemPressed: {
     opacity: 0.8,
-    backgroundColor: "#EAEAEA",
+    backgroundColor: '#EAEAEA',
   },
   linkTitle: {
     flex: 1,
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     color: Colors.text,
   },
   preferenceItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: Colors.card,
     borderRadius: 12,
     padding: 16,
@@ -316,12 +337,12 @@ const styles = StyleSheet.create({
   },
   preferenceTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     color: Colors.text,
     marginBottom: 8,
   },
   unitsToggle: {
-    flexDirection: "row",
+    flexDirection: 'row',
     backgroundColor: Colors.border,
     borderRadius: 8,
     padding: 2,
@@ -331,21 +352,21 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 6,
-    alignItems: "center",
+    alignItems: 'center',
   },
   activeUnit: {
     backgroundColor: Colors.primary,
   },
   unitText: {
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
     color: Colors.textLight,
   },
   activeUnitText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
   },
   versionContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     padding: 24,
   },
   versionText: {

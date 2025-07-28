@@ -5,9 +5,11 @@ Object.defineProperty(global, 'navigator', {
   writable: true,
   value: {
     geolocation: {
-      getCurrentPosition: jest.fn((success) => success({
-        coords: { latitude: 37.7749, longitude: -122.4194 },
-      })),
+      getCurrentPosition: jest.fn((success) =>
+        success({
+          coords: { latitude: 37.7749, longitude: -122.4194 },
+        }),
+      ),
       watchPosition: jest.fn(),
       clearWatch: jest.fn(),
     },
@@ -24,17 +26,19 @@ import { pingDevice, sendLocationUpdate } from '@/utils/pingDevice';
 // Mock expo-notifications
 jest.mock('expo-notifications', () => ({
   scheduleNotificationAsync: jest.fn(),
-  getNotificationAsync: jest.fn(() => Promise.resolve({
-    title: 'Ping Alert',
-    body: 'Your device is being pinged!',
-  })),
+  getNotificationAsync: jest.fn(() =>
+    Promise.resolve({
+      title: 'Ping Alert',
+      body: 'Your device is being pinged!',
+    }),
+  ),
 }));
 
 // Mock useLocation hook
 jest.mock('@/hooks/useLocation', () => ({
   __esModule: true,
   default: jest.fn(() => ({
-    location: { latitude: 37.7749, longitude: -122.4194 }
+    location: { latitude: 37.7749, longitude: -122.4194 },
   })),
 }));
 
@@ -45,8 +49,11 @@ afterEach(() => {
 
 describe('Device Ping/Locate', () => {
   it('should make the device ring with a ping alert', async () => {
-    const scheduleNotificationSpy = jest.spyOn(require('expo-notifications'), 'scheduleNotificationAsync');
-    
+    const scheduleNotificationSpy = jest.spyOn(
+      require('expo-notifications'),
+      'scheduleNotificationAsync',
+    );
+
     await pingDevice();
 
     expect(scheduleNotificationSpy).toHaveBeenCalledWith({
@@ -62,9 +69,9 @@ describe('Device Ping/Locate', () => {
   it('should send location updates with correct coordinates', async () => {
     const mockUseLocation = require('@/hooks/useLocation').default;
     const mockCoords = { latitude: 37.7749, longitude: -122.4194 };
-    
+
     mockUseLocation.mockReturnValue({
-      location: mockCoords
+      location: mockCoords,
     });
 
     // Spy on console.log to verify location is logged
@@ -73,18 +80,18 @@ describe('Device Ping/Locate', () => {
     await sendLocationUpdate();
 
     expect(consoleLogSpy).toHaveBeenCalledWith(
-      `Sending location: ${mockCoords.latitude}, ${mockCoords.longitude}`
+      `Sending location: ${mockCoords.latitude}, ${mockCoords.longitude}`,
     );
-    
+
     consoleLogSpy.mockRestore();
   });
 
   it('should handle geolocation errors gracefully', async () => {
     const mockUseLocation = require('@/hooks/useLocation').default;
-    
+
     // Mock useLocation to return null (no location available)
     mockUseLocation.mockReturnValue({
-      location: null
+      location: null,
     });
 
     // Spy on console.error to verify error handling
@@ -93,7 +100,7 @@ describe('Device Ping/Locate', () => {
     await sendLocationUpdate();
 
     expect(consoleErrorSpy).toHaveBeenCalledWith('Location not available');
-    
+
     consoleErrorSpy.mockRestore();
   });
 });

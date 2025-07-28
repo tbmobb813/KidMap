@@ -14,10 +14,9 @@ export async function triggerDevicePing() {
 
   // Play a sound (simple beep)
   try {
-    const { sound } = await Audio.Sound.createAsync(
-      require('../assets/sounds/ping.mp3'),
-      { shouldPlay: true }
-    );
+    const { sound } = await Audio.Sound.createAsync(require('../assets/sounds/ping.mp3'), {
+      shouldPlay: true,
+    });
     // Optionally unload after playing
     sound.setOnPlaybackStatusUpdate((status) => {
       if (status.isLoaded && status.didJustFinish) {

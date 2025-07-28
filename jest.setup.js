@@ -85,17 +85,18 @@ jest.mock('react-native/Libraries/Animated/AnimatedImplementation', () => ({
 // ----- Mock expo-notifications -----
 jest.mock('expo-notifications', () => ({
   scheduleNotificationAsync: jest.fn(),
-  getNotificationAsync: jest.fn(() => Promise.resolve({
-    title: 'Ping Alert',
-    body: 'Your device is being pinged!',
-  })),
+  getNotificationAsync: jest.fn(() =>
+    Promise.resolve({
+      title: 'Ping Alert',
+      body: 'Your device is being pinged!',
+    }),
+  ),
 }));
 
 // ----- Polyfill fetch for Node environment -----
 if (!global.fetch) {
   global.fetch = require('node-fetch');
 }
-
 
 // ----- Setup React Native Gesture Handler -----
 import 'react-native-gesture-handler/jestSetup';
@@ -118,10 +119,19 @@ jest.mock('expo-constants', () => ({
 
 jest.mock('expo-location', () => ({
   requestForegroundPermissionsAsync: jest.fn(() => Promise.resolve({ status: 'granted' })),
-  getCurrentPositionAsync: jest.fn(() => Promise.resolve({
-    coords: { latitude: 37.78825, longitude: -122.4324, accuracy: 5, altitude: 0, heading: 0, speed: 0 },
-    timestamp: Date.now(),
-  })),
+  getCurrentPositionAsync: jest.fn(() =>
+    Promise.resolve({
+      coords: {
+        latitude: 37.78825,
+        longitude: -122.4324,
+        accuracy: 5,
+        altitude: 0,
+        heading: 0,
+        speed: 0,
+      },
+      timestamp: Date.now(),
+    }),
+  ),
   watchPositionAsync: jest.fn(() => Promise.resolve({ remove: jest.fn() })),
 }));
 
@@ -163,9 +173,11 @@ global.console = {
 };
 global.navigator = {
   geolocation: {
-    getCurrentPosition: jest.fn((success) => success({
-      coords: { latitude: 37.7749, longitude: -122.4194 },
-    })),
+    getCurrentPosition: jest.fn((success) =>
+      success({
+        coords: { latitude: 37.7749, longitude: -122.4194 },
+      }),
+    ),
     watchPosition: jest.fn(),
     clearWatch: jest.fn(),
   },
@@ -183,3 +195,6 @@ jest.mock('react-native/Libraries/Components/ScrollView/ScrollView', () => {
   });
 });
 
+if (typeof navigator === 'undefined') {
+  global.navigator = {};
+}

@@ -303,19 +303,7 @@
 <a name='L238'></a><a href='#L238'>238</a>
 <a name='L239'></a><a href='#L239'>239</a>
 <a name='L240'></a><a href='#L240'>240</a>
-<a name='L241'></a><a href='#L241'>241</a>
-<a name='L242'></a><a href='#L242'>242</a>
-<a name='L243'></a><a href='#L243'>243</a>
-<a name='L244'></a><a href='#L244'>244</a>
-<a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a>
-<a name='L247'></a><a href='#L247'>247</a>
-<a name='L248'></a><a href='#L248'>248</a>
-<a name='L249'></a><a href='#L249'>249</a>
-<a name='L250'></a><a href='#L250'>250</a>
-<a name='L251'></a><a href='#L251'>251</a>
-<a name='L252'></a><a href='#L252'>252</a>
-<a name='L253'></a><a href='#L253'>253</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L241'></a><a href='#L241'>241</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -400,19 +388,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -567,11 +543,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
-import Colors from "@/constants/colors";
-import TransitStepIndicator from "./TransitStepIndicator";
-import { Clock, MapPin, RefreshCw, Bell } from "lucide-react-native";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
+import Colors from '@/constants/colors';
+import TransitStepIndicator from './TransitStepIndicator';
+import { Clock, MapPin, RefreshCw, Bell } from 'lucide-react-native';
 &nbsp;
 export type LiveArrival = {
   id: string;
@@ -580,7 +556,7 @@ export type LiveArrival = {
   destination: string;
   arrivalTime: number; // minutes
   platform?: string;
-  type: "subway" | "train" | "bus";
+  type: 'subway' | 'train' | 'bus';
 };
 &nbsp;
 type LiveArrivalsCardProps = {
@@ -591,20 +567,20 @@ type LiveArrivalsCardProps = {
   isRefreshing?: boolean;
 };
 &nbsp;
-const LiveArrivalsCard: React.FC&lt;LiveArrivalsCardProps&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({ </span></span>
-  stationName, 
-  arrivals, 
-  lastUpdated = <span class="branch-0 cbranch-no" title="branch not covered" >"Just now",</span>
+const LiveArrivalsCard: React.FC&lt;LiveArrivalsCardProps&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
+  stationName,
+  arrivals,
+  lastUpdated = <span class="branch-0 cbranch-no" title="branch not covered" >'Just now',</span>
   onRefresh,
-  isRefreshing = <span class="branch-0 cbranch-no" title="branch not covered" >false</span>
+  isRefreshing = <span class="branch-0 cbranch-no" title="branch not covered" >false,</span>
 }) =&gt; {
   const [alertedArrivals, setAlertedArrivals] = <span class="cstat-no" title="statement not covered" >useState&lt;Set&lt;string&gt;&gt;(new Set());</span>
 &nbsp;
   // Alert for trains arriving soon
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    arrivals.forEach(<span class="fstat-no" title="function not covered" >ar</span>rival =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    arrivals.forEach(<span class="fstat-no" title="function not covered" >(a</span>rrival) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (arrival.arrivalTime &lt;= 1 &amp;&amp; !alertedArrivals.has(arrival.id)) {</span>
-<span class="cstat-no" title="statement not covered" >        setAlertedArrivals(<span class="fstat-no" title="function not covered" >pr</span>ev =&gt; <span class="cstat-no" title="statement not covered" >new Set([...prev, arrival.id]))</span>;</span>
+<span class="cstat-no" title="statement not covered" >        setAlertedArrivals(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; <span class="cstat-no" title="statement not covered" >new Set([...prev, arrival.id]))</span>;</span>
       }
     });
   }, [arrivals]);
@@ -616,25 +592,22 @@ const LiveArrivalsCard: React.FC&lt;LiveArrivalsCardProps&gt; = <span class="cst
   };
 &nbsp;
   const getArrivalTimeText = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(m</span>inutes: number) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (minutes === 0) <span class="cstat-no" title="statement not covered" >return "Arriving";</span></span>
-<span class="cstat-no" title="statement not covered" >    if (minutes === 1) <span class="cstat-no" title="statement not covered" >return "1 min";</span></span>
+<span class="cstat-no" title="statement not covered" >    if (minutes === 0) <span class="cstat-no" title="statement not covered" >return 'Arriving';</span></span>
+<span class="cstat-no" title="statement not covered" >    if (minutes === 1) <span class="cstat-no" title="statement not covered" >return '1 min';</span></span>
 <span class="cstat-no" title="statement not covered" >    return `${minutes} min`;</span>
   };
 &nbsp;
   const renderArrival = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> item }: { item: LiveArrival }) =&gt; (</span>
-<span class="cstat-no" title="statement not covered" >    &lt;View style={[</span>
-      styles.arrivalItem,
-      item.arrivalTime &lt;= 1 &amp;&amp; styles.urgentArrival
-    ]}&gt;
-      &lt;TransitStepIndicator 
+<span class="cstat-no" title="statement not covered" >    &lt;View style={[styles.arrivalItem, item.arrivalTime &lt;= 1 &amp;&amp; styles.urgentArrival]}&gt;</span>
+      &lt;TransitStepIndicator
         step={{
           id: item.id,
           type: item.type,
           line: item.line,
           color: item.color,
-          from: "",
-          to: "",
-          duration: 0
+          from: '',
+          to: '',
+          duration: 0,
         }}
         size="medium"
       /&gt;
@@ -642,18 +615,13 @@ const LiveArrivalsCard: React.FC&lt;LiveArrivalsCardProps&gt; = <span class="cst
         &lt;Text style={styles.destinationText} numberOfLines={1}&gt;
           {item.destination}
         &lt;/Text&gt;
-        {item.platform &amp;&amp; (
-          &lt;Text style={styles.platformText}&gt;Platform {item.platform}&lt;/Text&gt;
-        )}
+        {item.platform &amp;&amp; &lt;Text style={styles.platformText}&gt;Platform {item.platform}&lt;/Text&gt;}
       &lt;/View&gt;
       &lt;View style={styles.timeContainer}&gt;
         {item.arrivalTime &lt;= 1 &amp;&amp; (
           &lt;Bell size={14} color={Colors.warning} style={styles.alertIcon} /&gt;
         )}
-        &lt;Text style={[
-          styles.arrivalTime,
-          { color: getArrivalTimeColor(item.arrivalTime) }
-        ]}&gt;
+        &lt;Text style={[styles.arrivalTime, { color: getArrivalTimeColor(item.arrivalTime) }]}&gt;
           {getArrivalTimeText(item.arrivalTime)}
         &lt;/Text&gt;
       &lt;/View&gt;
@@ -673,14 +641,10 @@ const LiveArrivalsCard: React.FC&lt;LiveArrivalsCardProps&gt; = <span class="cst
             &lt;Text style={styles.updateText}&gt;{lastUpdated}&lt;/Text&gt;
           &lt;/View&gt;
           {onRefresh &amp;&amp; (
-            &lt;Pressable 
-              style={styles.refreshButton}
-              onPress={onRefresh}
-              disabled={isRefreshing}
-            &gt;
-              &lt;RefreshCw 
-                size={16} 
-                color={Colors.primary} 
+            &lt;Pressable style={styles.refreshButton} onPress={onRefresh} disabled={isRefreshing}&gt;
+              &lt;RefreshCw
+                size={16}
+                color={Colors.primary}
                 style={[styles.refreshIcon, isRefreshing &amp;&amp; styles.spinning]}
               /&gt;
             &lt;/Pressable&gt;
@@ -692,7 +656,7 @@ const LiveArrivalsCard: React.FC&lt;LiveArrivalsCardProps&gt; = <span class="cst
         &lt;FlatList
           data={arrivals.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.arrivalTime - b.arrivalTime)</span>}
           renderItem={renderArrival}
-          keyExtractor={<span class="fstat-no" title="function not covered" >it</span>em =&gt; <span class="cstat-no" title="statement not covered" >item.id}</span>
+          keyExtractor={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.id}</span>
           scrollEnabled={false}
           contentContainerStyle={styles.arrivalsList}
         /&gt;
@@ -711,24 +675,24 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 16,
     paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: Colors.border,
   },
   stationInfo: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     flex: 1,
   },
   stationIcon: {
@@ -736,18 +700,18 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
   },
   stationName: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     color: Colors.text,
     flex: 1,
   },
   headerActions: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
   },
   updateInfo: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   updateText: {
     fontSize: 12,
@@ -767,15 +731,15 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
     gap: 8,
   },
   arrivalItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 8,
     borderRadius: 8,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   urgentArrival: {
-    backgroundColor: "#FFF9E6",
+    backgroundColor: '#FFF9E6',
     borderLeftWidth: 3,
     borderLeftColor: Colors.warning,
   },
@@ -785,18 +749,18 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
   },
   destinationText: {
     fontSize: 15,
-    fontWeight: "600",
+    fontWeight: '600',
     color: Colors.text,
     marginBottom: 2,
   },
   platformText: {
     fontSize: 12,
     color: Colors.textLight,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   timeContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
   },
   alertIcon: {
@@ -804,12 +768,12 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
   },
   arrivalTime: {
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: '700',
     minWidth: 50,
-    textAlign: "right",
+    textAlign: 'right',
   },
   emptyState: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingVertical: 24,
   },
   emptyText: {
@@ -826,7 +790,7 @@ export default LiveArrivalsCard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-26T20:08:48.734Z
+                at 2025-07-28T18:53:22.986Z
             </div>
         <script src="../prettify.js"></script>
         <script>

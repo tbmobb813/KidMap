@@ -1,10 +1,10 @@
 export type TransitSystem = {
   id: string;
   name: string;
-  type: "subway" | "train" | "bus" | "tram" | "ferry";
+  type: 'subway' | 'train' | 'bus' | 'tram' | 'ferry';
   color: string;
   routes?: string[];
-  status?: "operational" | "delayed" | "suspended";
+  status?: 'operational' | 'delayed' | 'suspended';
   lastUpdated?: string;
 };
 
@@ -30,14 +30,14 @@ export type RegionConfig = {
   }[];
   weatherApiKey?: string;
   transitApiEndpoint?: string;
-  mapStyle?: "standard" | "satellite" | "hybrid";
+  mapStyle?: 'standard' | 'satellite' | 'hybrid';
   lastUpdated?: string;
 };
 
 export type UserRegionPreferences = {
   selectedRegion: string;
   preferredLanguage: string;
-  preferredUnits: "metric" | "imperial";
+  preferredUnits: 'metric' | 'imperial';
   accessibilityMode: boolean;
   parentalControls: boolean;
 };

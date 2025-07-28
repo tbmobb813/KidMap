@@ -7,6 +7,7 @@ The KidMap app now includes a comprehensive city management system that supports
 ## Supported Cities
 
 ### United States (10 cities)
+
 - **New York City** - MTA Subway, Bus, LIRR
 - **Chicago** - CTA L Train, Bus, Metra
 - **San Francisco** - Muni, Muni Metro, Cable Car, BART
@@ -19,12 +20,14 @@ The KidMap app now includes a comprehensive city management system that supports
 - **Miami** - Metrorail, Metrobus, Metromover
 
 ### International (2 cities)
+
 - **London, UK** - London Underground, Bus, Overground
 - **Tokyo, Japan** - JR Lines, Tokyo Metro, Toei Subway
 
 ## Features
 
 ### City Management Interface
+
 - **Search & Filter**: Find cities by name or country
 - **Add Custom Cities**: Create new city configurations
 - **Edit Existing Cities**: Update transit systems and information
@@ -32,6 +35,7 @@ The KidMap app now includes a comprehensive city management system that supports
 - **Regional Organization**: Cities grouped by country
 
 ### Transit Data Management
+
 - **Real-time Updates**: Automatic transit data refresh
 - **Manual Updates**: Force refresh for specific cities or all cities
 - **API Integration**: Each city has its own transit API endpoint
@@ -39,6 +43,7 @@ The KidMap app now includes a comprehensive city management system that supports
 - **Route Information**: Detailed route data for each transit system
 
 ### Regional Customization
+
 - **Local Information**: Emergency numbers, safety tips, fun facts
 - **Popular Places**: Kid-friendly attractions and landmarks
 - **Cultural Adaptation**: Timezone, currency, language settings
@@ -47,6 +52,7 @@ The KidMap app now includes a comprehensive city management system that supports
 ## Technical Implementation
 
 ### File Structure
+
 ```
 config/regions/
 ├── newYork.ts
@@ -73,7 +79,9 @@ components/
 ```
 
 ### Data Structure
+
 Each city configuration includes:
+
 - Basic information (name, country, timezone, coordinates)
 - Transit systems with routes and colors
 - Emergency contact information
@@ -83,7 +91,9 @@ Each city configuration includes:
 - API endpoints for real-time data
 
 ### Transit Data Updates
+
 The system includes a sophisticated transit data updater that:
+
 - Fetches real-time information from transit APIs
 - Updates schedules, routes, and service alerts
 - Handles API rate limiting with batch processing
@@ -93,11 +103,13 @@ The system includes a sophisticated transit data updater that:
 ## Usage
 
 ### For Users
+
 1. **Switch Cities**: Go to Settings → Region & Location → Region Switcher
 2. **Manage Cities**: Go to Settings → Manage Cities
 3. **Update Transit Data**: Go to Settings → Update Transit Data
 
 ### For Developers
+
 1. **Add New City**: Create new config file in `config/regions/`
 2. **Update Store**: Import and add to `regionStore.ts`
 3. **Test Integration**: Verify all features work with new city
@@ -106,18 +118,21 @@ The system includes a sophisticated transit data updater that:
 ## Production Readiness
 
 ### Scalability
+
 - Modular city configuration system
 - Efficient state management with Zustand
 - Persistent storage with AsyncStorage
 - Optimized API calls with batching
 
 ### Maintenance
+
 - Easy to add new cities
 - Simple transit data updates
 - Clear separation of concerns
 - Comprehensive error handling
 
 ### User Experience
+
 - Intuitive city management interface
 - Real-time transit information
 - Offline capability with cached data
@@ -126,6 +141,7 @@ The system includes a sophisticated transit data updater that:
 ## Future Enhancements
 
 ### Planned Features
+
 - **Automatic Location Detection**: Auto-select city based on GPS
 - **Transit Alerts**: Push notifications for service disruptions
 - **Favorite Routes**: Save commonly used transit routes
@@ -133,6 +149,7 @@ The system includes a sophisticated transit data updater that:
 - **Multi-language Support**: Localized content for international cities
 
 ### API Integrations
+
 - **Real-time Arrivals**: Live departure times
 - **Service Alerts**: Delays, closures, and disruptions
 - **Route Planning**: Multi-modal journey planning
@@ -141,43 +158,45 @@ The system includes a sophisticated transit data updater that:
 ## Configuration Examples
 
 ### Adding a New City
+
 ```typescript
 export const newCityConfig: RegionConfig = {
-  id: "new-city",
-  name: "New City",
-  country: "United States",
-  timezone: "America/New_York",
-  currency: "USD",
-  language: "en",
+  id: 'new-city',
+  name: 'New City',
+  country: 'United States',
+  timezone: 'America/New_York',
+  currency: 'USD',
+  language: 'en',
   coordinates: { latitude: 40.0, longitude: -74.0 },
   transitSystems: [
     {
-      id: "city-metro",
-      name: "City Metro",
-      type: "subway",
-      color: "#0066CC",
-      routes: ["Red", "Blue", "Green"]
-    }
+      id: 'city-metro',
+      name: 'City Metro',
+      type: 'subway',
+      color: '#0066CC',
+      routes: ['Red', 'Blue', 'Green'],
+    },
   ],
-  emergencyNumber: "911",
-  safetyTips: ["Stay with an adult", "Keep your transit card safe"],
-  funFacts: ["Fun fact about the city"],
+  emergencyNumber: '911',
+  safetyTips: ['Stay with an adult', 'Keep your transit card safe'],
+  funFacts: ['Fun fact about the city'],
   popularPlaces: [
     {
-      name: "City Park",
-      category: "park",
-      description: "Great place for families"
-    }
+      name: 'City Park',
+      category: 'park',
+      description: 'Great place for families',
+    },
   ],
-  transitApiEndpoint: "https://api.newcity.gov/",
-  mapStyle: "standard"
+  transitApiEndpoint: 'https://api.newcity.gov/',
+  mapStyle: 'standard',
 };
 ```
 
 ### Updating Transit Data
+
 ```typescript
 // Update single city
-const result = await transitDataUpdater.updateRegionTransitData("nyc");
+const result = await transitDataUpdater.updateRegionTransitData('nyc');
 
 // Update all cities
 const results = await transitDataUpdater.updateAllRegions();

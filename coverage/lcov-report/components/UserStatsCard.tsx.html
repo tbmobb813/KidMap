@@ -198,11 +198,7 @@
 <a name='L133'></a><a href='#L133'>133</a>
 <a name='L134'></a><a href='#L134'>134</a>
 <a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L136'></a><a href='#L136'>136</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -216,16 +212,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -341,11 +333,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import Colors from "@/constants/colors";
-import { Trophy, MapPin, Zap, Target } from "lucide-react-native";
-import { UserStats } from "@/types/gamification";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import Colors from '@/constants/colors';
+import { Trophy, MapPin, Zap, Target } from 'lucide-react-native';
+import { UserStats } from '@/types/gamification';
 &nbsp;
 type UserStatsCardProps = {
   stats: UserStats;
@@ -355,7 +347,8 @@ const UserStatsCard: React.FC&lt;UserStatsCardProps&gt; = <span class="cstat-no"
   const getProgressToNextLevel = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const pointsForCurrentLevel = <span class="cstat-no" title="statement not covered" >(stats.level - 1) * 200;</span>
     const pointsForNextLevel = <span class="cstat-no" title="statement not covered" >stats.level * 200;</span>
-    const progress = <span class="cstat-no" title="statement not covered" >(stats.totalPoints - pointsForCurrentLevel) / (pointsForNextLevel - pointsForCurrentLevel);</span>
+    const progress =
+<span class="cstat-no" title="statement not covered" >      (stats.totalPoints - pointsForCurrentLevel) / (pointsForNextLevel - pointsForCurrentLevel);</span>
 <span class="cstat-no" title="statement not covered" >    return Math.max(0, Math.min(1, progress));</span>
   };
 &nbsp;
@@ -371,12 +364,7 @@ const UserStatsCard: React.FC&lt;UserStatsCardProps&gt; = <span class="cstat-no"
 &nbsp;
       &lt;View style={styles.progressContainer}&gt;
         &lt;View style={styles.progressBar}&gt;
-          &lt;View 
-            style={[
-              styles.progressFill, 
-              { width: `${getProgressToNextLevel() * 100}%` }
-            ]} 
-          /&gt;
+          &lt;View style={[styles.progressFill, { width: `${getProgressToNextLevel() * 100}%` }]} /&gt;
         &lt;/View&gt;
         &lt;Text style={styles.progressText}&gt;
           {Math.round(getProgressToNextLevel() * 100)}% to Level {stats.level + 1}
@@ -412,31 +400,31 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
     borderRadius: 16,
     padding: 20,
     margin: 16,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 16,
   },
   levelContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
   levelText: {
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: '700',
     color: Colors.text,
   },
   pointsText: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     color: Colors.primary,
   },
   progressContainer: {
@@ -446,36 +434,36 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
     height: 8,
     backgroundColor: Colors.border,
     borderRadius: 4,
-    overflow: "hidden",
+    overflow: 'hidden',
     marginBottom: 8,
   },
   progressFill: {
-    height: "100%",
+    height: '100%',
     backgroundColor: Colors.primary,
     borderRadius: 4,
   },
   progressText: {
     fontSize: 12,
     color: Colors.textLight,
-    textAlign: "center",
+    textAlign: 'center',
   },
   statsGrid: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   statItem: {
-    alignItems: "center",
+    alignItems: 'center',
     gap: 4,
   },
   statNumber: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     color: Colors.text,
   },
   statLabel: {
     fontSize: 12,
     color: Colors.textLight,
-    fontWeight: "500",
+    fontWeight: '500',
   },
 });
 &nbsp;
@@ -487,7 +475,7 @@ export default UserStatsCard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-26T20:08:48.734Z
+                at 2025-07-28T18:53:22.986Z
             </div>
         <script src="../prettify.js"></script>
         <script>

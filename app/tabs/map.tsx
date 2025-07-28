@@ -1,24 +1,16 @@
-import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Pressable,
-  Dimensions,
-  Platform,
-} from "react-native";
-import { useRouter } from "expo-router";
-import Colors from "@/constants/colors";
-import MapPlaceholder from "@/components/MapPlaceholder";
-import RouteCard from "@/components/RouteCard";
-import { useNavigationStore } from "@/stores/navigationStore";
-import { Route } from "@/types/navigation";
-import { fetchRoute, TravelMode } from "@/utils/api";
-import { Navigation, MapPin, Search } from "lucide-react-native";
-import useLocation from "@/hooks/useLocation";
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, Pressable, Dimensions, Platform } from 'react-native';
+import { useRouter } from 'expo-router';
+import Colors from '@/constants/colors';
+import MapPlaceholder from '@/components/MapPlaceholder';
+import RouteCard from '@/components/RouteCard';
+import { useNavigationStore } from '@/stores/navigationStore';
+import { Route } from '@/types/navigation';
+import { fetchRoute, TravelMode } from '@/utils/api';
+import { Navigation, MapPin, Search } from 'lucide-react-native';
+import useLocation from '@/hooks/useLocation';
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 export default function MapScreen() {
   const router = useRouter();
@@ -35,17 +27,17 @@ export default function MapScreen() {
     clearRoute,
   } = useNavigationStore();
 
-  const [travelMode, setTravelMode] = useState<TravelMode>("walking");
+  const [travelMode, setTravelMode] = useState<TravelMode>('walking');
   const [loadingRoute, setLoadingRoute] = useState(false);
   const [routeError, setRouteError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!origin && location) {
       setOrigin({
-        id: "current-location",
-        name: "Current Location",
-        address: "Your current position",
-        category: "other",
+        id: 'current-location',
+        name: 'Current Location',
+        address: 'Your current position',
+        category: 'other',
         coordinates: {
           latitude: location.latitude,
           longitude: location.longitude,
@@ -75,28 +67,25 @@ export default function MapScreen() {
               id: `${travelMode}-${Date.now()}`,
               steps: [
                 {
-                  id: "main",
-                  type:
-                    travelMode === "walking" || travelMode === "cycling"
-                      ? "walk"
-                      : "bus",
+                  id: 'main',
+                  type: travelMode === 'walking' || travelMode === 'cycling' ? 'walk' : 'bus',
                   from: origin.name,
                   to: destination.name,
                   duration: Math.round(routeResult.duration / 60),
-                  departureTime: "",
-                  arrivalTime: "",
+                  departureTime: '',
+                  arrivalTime: '',
                 },
               ],
               totalDuration: Math.round(routeResult.duration / 60),
-              departureTime: "",
-              arrivalTime: "",
+              departureTime: '',
+              arrivalTime: '',
             };
             selectRoute(newRoute);
           } else {
-            setRouteError("No route found.");
+            setRouteError('No route found.');
           }
         } catch (e) {
-          setRouteError("Failed to fetch route.");
+          setRouteError('Failed to fetch route.');
         } finally {
           setLoadingRoute(false);
         }
@@ -111,7 +100,7 @@ export default function MapScreen() {
   };
 
   const handleSearchPress = () => {
-    router.push("/search");
+    router.push('/search');
   };
 
   return (
@@ -126,7 +115,7 @@ export default function MapScreen() {
           message={
             destination
               ? `Map showing route to ${destination.name}`
-              : "Select a destination to see the route"
+              : 'Select a destination to see the route'
           }
         />
       </View>
@@ -146,47 +135,38 @@ export default function MapScreen() {
           <View style={styles.locationTexts}>
             <Pressable style={styles.locationButton}>
               <Text style={styles.locationText} numberOfLines={1}>
-                {origin?.name || "Select starting point"}
+                {origin?.name || 'Select starting point'}
               </Text>
             </Pressable>
 
-            <Pressable
-              style={styles.locationButton}
-              onPress={handleSearchPress}
-            >
+            <Pressable style={styles.locationButton} onPress={handleSearchPress}>
               <Text
                 style={[styles.locationText, !destination && styles.placeholderText]}
                 numberOfLines={1}
               >
-                {destination?.name || "Where to?"}
+                {destination?.name || 'Where to?'}
               </Text>
               {!destination && (
-                <Search
-                  size={16}
-                  color={Colors.textLight}
-                  style={styles.searchIcon}
-                />
+                <Search size={16} color={Colors.textLight} style={styles.searchIcon} />
               )}
             </Pressable>
           </View>
         </View>
 
         <View style={styles.modeSelectorContainer}>
-          {(["walking", "cycling", "transit", "driving"] as TravelMode[]).map(
-            (mode) => (
-              <Pressable
-                key={mode}
-                style={[styles.modeButton, travelMode === mode && styles.modeButtonActive]}
-                onPress={() => setTravelMode(mode)}
+          {(['walking', 'cycling', 'transit', 'driving'] as TravelMode[]).map((mode) => (
+            <Pressable
+              key={mode}
+              style={[styles.modeButton, travelMode === mode && styles.modeButtonActive]}
+              onPress={() => setTravelMode(mode)}
+            >
+              <Text
+                style={[styles.modeButtonText, travelMode === mode && styles.modeButtonTextActive]}
               >
-                <Text
-                  style={[styles.modeButtonText, travelMode === mode && styles.modeButtonTextActive]}
-                >
-                  {mode.charAt(0).toUpperCase() + mode.slice(1)}
-                </Text>
-              </Pressable>
-            )
-          )}
+                {mode.charAt(0).toUpperCase() + mode.slice(1)}
+              </Text>
+            </Pressable>
+          ))}
         </View>
 
         {destination ? (
@@ -208,9 +188,7 @@ export default function MapScreen() {
         ) : (
           <View style={styles.emptyStateContainer}>
             <MapPin size={40} color={Colors.textLight} />
-            <Text style={styles.emptyStateText}>
-              Select a destination to see available routes
-            </Text>
+            <Text style={styles.emptyStateText}>Select a destination to see available routes</Text>
             <Pressable style={styles.searchButton} onPress={handleSearchPress}>
               <Text style={styles.searchButtonText}>Search Places</Text>
             </Pressable>
@@ -243,22 +221,22 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   locationBar: {
-    flexDirection: "row",
+    flexDirection: 'row',
     backgroundColor: Colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
   },
   locationPins: {
-    alignItems: "center",
+    alignItems: 'center',
     marginRight: 16,
   },
   locationPin: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   originPin: {
     backgroundColor: Colors.primary,
@@ -276,7 +254,7 @@ const styles = StyleSheet.create({
   },
   locationButton: {
     paddingVertical: 8,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   locationText: {
     fontSize: 16,
@@ -286,12 +264,12 @@ const styles = StyleSheet.create({
     color: Colors.textLight,
   },
   searchIcon: {
-    position: "absolute",
+    position: 'absolute',
     right: 0,
   },
   modeSelectorContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
     marginBottom: 16,
     gap: 8,
   },
@@ -310,33 +288,33 @@ const styles = StyleSheet.create({
   },
   modeButtonText: {
     color: Colors.text,
-    fontWeight: "600",
+    fontWeight: '600',
     fontSize: 15,
   },
   modeButtonTextActive: {
-    color: "#fff",
+    color: '#fff',
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     color: Colors.text,
     marginBottom: 16,
   },
   loadingText: {
     color: Colors.textLight,
     fontSize: 16,
-    textAlign: "center",
+    textAlign: 'center',
     marginVertical: 12,
   },
   errorText: {
-    color: "red",
+    color: 'red',
     fontSize: 16,
-    textAlign: "center",
+    textAlign: 'center',
     marginVertical: 12,
   },
   emptyStateContainer: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 32,
     minHeight: 200,
   },
@@ -345,7 +323,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     fontSize: 16,
     color: Colors.textLight,
-    textAlign: "center",
+    textAlign: 'center',
   },
   searchButton: {
     backgroundColor: Colors.primary,
@@ -354,8 +332,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   searchButtonText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
 });

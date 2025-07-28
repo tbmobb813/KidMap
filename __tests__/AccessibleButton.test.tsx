@@ -18,17 +18,13 @@ describe('AccessibleButton', () => {
 
   it('handles press events correctly', () => {
     const onPressMock = jest.fn();
-    const { getByText } = render(
-      <AccessibleButton title="Click Me" onPress={onPressMock} />
-    );
+    const { getByText } = render(<AccessibleButton title="Click Me" onPress={onPressMock} />);
     fireEvent.press(getByText('Click Me'));
     expect(onPressMock).toHaveBeenCalledTimes(1);
   });
 
   it('has proper accessibility role and label', () => {
-    const { getByRole } = render(
-      <AccessibleButton title="Accessible" onPress={jest.fn()} />
-    );
+    const { getByRole } = render(<AccessibleButton title="Accessible" onPress={jest.fn()} />);
 
     const button = getByRole('button');
     expect(button).toBeTruthy();

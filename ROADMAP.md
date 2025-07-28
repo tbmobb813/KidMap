@@ -1,6 +1,5 @@
 # KidMap Feature Roadmap: Parental Controls & Safety
 
-
 ## Phase 1: Custom Categories & Kid-Friendly UI
 
 - [ ] Design data model for custom categories (parent/child editable)
@@ -8,7 +7,6 @@
 - [ ] Store categories securely (local or backend)
 - [ ] Make icons larger and more visually kid-friendly throughout the app
 - [ ] Update category icons (e.g., food: pizza, burger, etc. instead of just restaurant)
-
 
 ## Phase 2: Parental Controls Dashboard & Parent App
 
@@ -43,7 +41,6 @@
 - [ ] Use push notifications/background location
 - [ ] UI for parent to trigger ping
 
-
 ## Phase 7: Safety Tools Refactor & Language Improvements
 
 - [ ] Move photo check-in to safety tools section
@@ -51,7 +48,9 @@
 - [ ] Improve icons and language for safety tools (e.g., use "I made it!" or "I'm OK" instead of "I'm safe")
 
 ---
+
 **General:**
+
 - [ ] Update documentation and onboarding
 - [ ] Add tests for new features
 - [ ] Gather feedback from parents/children

@@ -135,7 +135,10 @@
 <a name='L70'></a><a href='#L70'>70</a>
 <a name='L71'></a><a href='#L71'>71</a>
 <a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -169,11 +172,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -181,19 +181,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -207,18 +195,36 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useRef } from "react";
-import { StyleSheet, View, Animated, Platform } from "react-native";
-import Colors from "@/constants/colors";
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useRef } from 'react';
+import { StyleSheet, View, Animated, Platform } from 'react-native';
+import Colors from '@/constants/colors';
 &nbsp;
 type LoadingSpinnerProps = {
-  size?: "small" | "medium" | "large";
+  size?: 'small' | 'medium' | 'large';
   color?: string;
 };
 &nbsp;
-const LoadingSpinner: React.FC&lt;LoadingSpinnerProps&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({ </span></span>
-  size = <span class="branch-0 cbranch-no" title="branch not covered" >"medium", </span>
-  color = <span class="branch-0 cbranch-no" title="branch not covered" >Colors.primary </span>
+const LoadingSpinner: React.FC&lt;LoadingSpinnerProps&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
+  size = <span class="branch-0 cbranch-no" title="branch not covered" >'medium',</span>
+  color = <span class="branch-0 cbranch-no" title="branch not covered" >Colors.primary,</span>
 }) =&gt; {
   const spinValue = <span class="cstat-no" title="statement not covered" >useRef(new Animated.Value(0)).current;</span>
 &nbsp;
@@ -241,9 +247,12 @@ const LoadingSpinner: React.FC&lt;LoadingSpinnerProps&gt; = <span class="cstat-n
 &nbsp;
   const getSize = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    switch (size) {</span>
-      case "small": <span class="cstat-no" title="statement not covered" >return 20;</span>
-      case "medium": <span class="cstat-no" title="statement not covered" >return 32;</span>
-      case "large": <span class="cstat-no" title="statement not covered" >return 48;</span>
+      case 'small':
+<span class="cstat-no" title="statement not covered" >        return 20;</span>
+      case 'medium':
+<span class="cstat-no" title="statement not covered" >        return 32;</span>
+      case 'large':
+<span class="cstat-no" title="statement not covered" >        return 48;</span>
     }
   };
 &nbsp;
@@ -269,8 +278,8 @@ const LoadingSpinner: React.FC&lt;LoadingSpinnerProps&gt; = <span class="cstat-n
 &nbsp;
 const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.create({</span>
   container: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   spinner: {
     borderWidth: 3,
@@ -286,7 +295,7 @@ export default LoadingSpinner;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-26T20:08:48.734Z
+                at 2025-07-28T18:53:22.986Z
             </div>
         <script src="../prettify.js"></script>
         <script>

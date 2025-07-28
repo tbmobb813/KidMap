@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Pressable } from "react-native";
-import Colors from "@/constants/colors";
-import { Clock, X, MapPin } from "lucide-react-native";
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
+import Colors from '@/constants/colors';
+import { Clock, X, MapPin } from 'lucide-react-native';
 
 type SmartNotificationProps = {
   title: string;
   message: string;
-  type: "reminder" | "weather" | "safety" | "achievement";
+  type: 'reminder' | 'weather' | 'safety' | 'achievement';
   onDismiss: () => void;
   actionText?: string;
   onAction?: () => void;
@@ -18,43 +18,57 @@ const SmartNotification: React.FC<SmartNotificationProps> = ({
   type,
   onDismiss,
   actionText,
-  onAction
+  onAction,
 }) => {
   const getIcon = () => {
     switch (type) {
-      case "reminder": return <Clock size={20} color={Colors.primary} />;
-      case "weather": return <MapPin size={20} color={Colors.warning} />;
-      case "safety": return <MapPin size={20} color={Colors.error} />;
-      case "achievement": return <MapPin size={20} color={Colors.secondary} />;
+      case 'reminder':
+        return <Clock size={20} color={Colors.primary} />;
+      case 'weather':
+        return <MapPin size={20} color={Colors.warning} />;
+      case 'safety':
+        return <MapPin size={20} color={Colors.error} />;
+      case 'achievement':
+        return <MapPin size={20} color={Colors.secondary} />;
     }
   };
 
   const getBackgroundColor = () => {
     switch (type) {
-      case "reminder": return "#F0F4FF";
-      case "weather": return "#FFF9E6";
-      case "safety": return "#FFE6E6";
-      case "achievement": return "#F0FFF4";
+      case 'reminder':
+        return '#F0F4FF';
+      case 'weather':
+        return '#FFF9E6';
+      case 'safety':
+        return '#FFE6E6';
+      case 'achievement':
+        return '#F0FFF4';
     }
   };
 
   const getBorderColor = () => {
     switch (type) {
-      case "reminder": return Colors.primary;
-      case "weather": return Colors.warning;
-      case "safety": return Colors.error;
-      case "achievement": return Colors.secondary;
+      case 'reminder':
+        return Colors.primary;
+      case 'weather':
+        return Colors.warning;
+      case 'safety':
+        return Colors.error;
+      case 'achievement':
+        return Colors.secondary;
     }
   };
 
   return (
-    <View style={[
-      styles.container, 
-      { 
-        backgroundColor: getBackgroundColor(),
-        borderLeftColor: getBorderColor()
-      }
-    ]}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: getBackgroundColor(),
+          borderLeftColor: getBorderColor(),
+        },
+      ]}
+    >
       <View style={styles.content}>
         <View style={styles.header}>
           {getIcon()}
@@ -63,9 +77,9 @@ const SmartNotification: React.FC<SmartNotificationProps> = ({
             <X size={16} color={Colors.textLight} />
           </Pressable>
         </View>
-        
+
         <Text style={styles.message}>{message}</Text>
-        
+
         {actionText && onAction && (
           <Pressable style={styles.actionButton} onPress={onAction}>
             <Text style={styles.actionText}>{actionText}</Text>
@@ -81,7 +95,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     margin: 16,
     borderLeftWidth: 4,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -91,14 +105,14 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 8,
   },
   title: {
     flex: 1,
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     color: Colors.text,
     marginLeft: 8,
   },
@@ -116,12 +130,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 16,
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
   },
   actionText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
   },
 });
 

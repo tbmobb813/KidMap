@@ -3,6 +3,7 @@
 This file tracks planned, in-progress, and future features for the KidMap project. Community contributions and feedback are welcome!
 
 ## 🚀 In Progress / Next Up
+
 - Polish accessibility for all interactive components
 - Add more unit and integration tests
 - Replace mock data with real API integration
@@ -10,6 +11,7 @@ This file tracks planned, in-progress, and future features for the KidMap projec
 - Improve error handling and user feedback throughout the app
 
 ## 🗺️ Planned Features
+
 - Bathroom Finder: Locate clean, safe restrooms along routes
 - Weather Integration: "It's raining! Remember your umbrella" notifications
 - Crowd Level Indicators: Avoid overwhelming rush hour crowds
@@ -26,6 +28,7 @@ This file tracks planned, in-progress, and future features for the KidMap projec
 - Voice & Audio Features: Kid-friendly voice navigation, audio stop announcements
 
 ## ✅ Recently Completed
+
 - Initial app structure and navigation
 - Basic search and category selection
 - Favorites and recent searches
@@ -34,4 +37,5 @@ This file tracks planned, in-progress, and future features for the KidMap projec
 - Jest test setup and sample test
 
 ---
+
 For more details, see the README or open an issue to discuss new ideas!

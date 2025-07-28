@@ -29,4 +29,5 @@ To keep your project secure and up-to-date, follow this process regularly:
 - Run `npm test` and manually test the app after any dependency changes.
 
 ---
+
 Repeat this process monthly or before major releases to ensure a healthy codebase.

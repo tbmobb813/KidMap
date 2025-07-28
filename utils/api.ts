@@ -1,25 +1,23 @@
-import { GOOGLE_MAPS_API_KEY } from '@env';  // install react-native-dotenv or similar
+import Constants from 'expo-constants';
 
-// utils/api.ts - simple routing stub
-const API_BASE_URL = __DEV__
-  ? 'http://localhost:3000/api'
-  : 'https://your-production-api.com/api';
+const GOOGLE_MAPS_API_KEY =
+  Constants.expoConfig?.android?.config?.googleMaps?.apiKey ||
+  Constants.expoConfig?.ios?.config?.googleMapsApiKey ||
+  Constants.expoConfig?.extra?.googleMapsApiKey;
 
 // utils/api.ts - simple routing stub for testing
-const API_BASE_URL = __DEV__
-  ? 'http://localhost:3000/api'
-  : 'https://your-production-api.com/api';
+const API_BASE_URL = __DEV__ ? 'http://localhost:3000/api' : 'https://your-production-api.com/api';
 
 // utils/api.ts - minimal routing stub to satisfy tests
 export type TravelMode = 'walking' | 'cycling' | 'transit';
 
 export interface RouteStep {
   instruction: string;
-  distance: number;            // meters
-  duration: number;            // seconds
+  distance: number; // meters
+  duration: number; // seconds
   startLocation: [number, number];
   endLocation: [number, number];
-  line?: string;               // e.g. bus/train line for transit
+  line?: string; // e.g. bus/train line for transit
   mode: TravelMode;
 }
 
@@ -37,14 +35,15 @@ export interface RouteResult {
 export async function fetchRoute(
   from: [number, number],
   to: [number, number],
-  mode: TravelMode = 'walking'
+  mode: TravelMode = 'walking',
 ): Promise<RouteResult | null> {
   try {
-    const url = `https://maps.googleapis.com/maps/api/directions/json`
-      + `?origin=${from[0]},${from[1]}`
-      + `&destination=${to[0]},${to[1]}`
-      + `&mode=${mode}`
-      + `&key=${GOOGLE_MAPS_API_KEY}`;
+    const url =
+      `https://maps.googleapis.com/maps/api/directions/json` +
+      `?origin=${from[0]},${from[1]}` +
+      `&destination=${to[0]},${to[1]}` +
+      `&mode=${mode}` +
+      `&key=${GOOGLE_MAPS_API_KEY}`;
     const resp = await fetch(url);
     const json = await resp.json();
     if (json.status !== 'OK' || !json.routes?.length) return null;

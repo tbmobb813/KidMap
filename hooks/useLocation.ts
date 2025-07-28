@@ -3,9 +3,9 @@
  * Handles geolocation for both web and native platforms.
  * Returns current location and loading/error state.
  */
-import { useState, useEffect } from "react";
-import * as Location from "expo-location";
-import { Platform, Alert } from "react-native";
+import { useState, useEffect } from 'react';
+import * as Location from 'expo-location';
+import { Platform, Alert } from 'react-native';
 
 /**
  * Location data type returned by the hook.
@@ -17,13 +17,13 @@ type LocationData = {
 };
 
 export default function useLocation() {
-/**
- * Returns the user's current location (lat/lng) and loading/error state.
- * Uses expo-location for native, browser geolocation for web.
- */
+  /**
+   * Returns the user's current location (lat/lng) and loading/error state.
+   * Uses expo-location for native, browser geolocation for web.
+   */
   const [location, setLocation] = useState<LocationData>({
     latitude: 40.7128,
-    longitude: -74.0060,
+    longitude: -74.006,
     error: null,
   });
   const [loading, setLoading] = useState(true);
@@ -32,8 +32,8 @@ export default function useLocation() {
     (async () => {
       try {
         setLoading(true);
-        
-        if (Platform.OS === "web") {
+
+        if (Platform.OS === 'web') {
           // Web geolocation API
           if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -46,12 +46,12 @@ export default function useLocation() {
                 setLoading(false);
               },
               (error) => {
-                setLocation(prev => ({
+                setLocation((prev) => ({
                   ...prev,
-                  error: "Could not get your location"
+                  error: 'Could not get your location',
                 }));
                 setLoading(false);
-              }
+              },
             );
           }
           return;
@@ -59,41 +59,48 @@ export default function useLocation() {
 
         // Request permissions for mobile platforms
         const { status } = await Location.requestForegroundPermissionsAsync();
-        
-        if (status !== "granted") {
+
+        if (status !== 'granted') {
           // Android-specific permission handling
           if (Platform.OS === 'android') {
             Alert.alert(
-              "Location Permission",
-              "This app needs location access to show you nearby places and directions. Please enable location in your device settings.",
+              'Location Permission',
+              'This app needs location access to show you nearby places and directions. Please enable location in your device settings.',
               [
-                { text: "Cancel", style: "cancel" },
-                { text: "Settings", onPress: () => {
-                  // On Android, we can't directly open settings, but we can guide the user
-                  Alert.alert("Enable Location", "Go to Settings > Apps > KidMap > Permissions > Location");
-                }}
-              ]
+                { text: 'Cancel', style: 'cancel' },
+                {
+                  text: 'Settings',
+                  onPress: () => {
+                    // On Android, we can't directly open settings, but we can guide the user
+                    Alert.alert(
+                      'Enable Location',
+                      'Go to Settings > Apps > KidMap > Permissions > Location',
+                    );
+                  },
+                },
+              ],
             );
           }
-          
-          setLocation(prev => ({
+
+          setLocation((prev) => ({
             ...prev,
-            error: "Permission to access location was denied"
+            error: 'Permission to access location was denied',
           }));
           setLoading(false);
           return;
         }
 
         // Get current location with Android-optimized settings
-        const locationOptions = Platform.OS === 'android' 
-          ? {
-              accuracy: Location.Accuracy.Balanced,
-              timeout: 15000,
-              maximumAge: 10000,
-            }
-          : {
-              accuracy: Location.Accuracy.Balanced,
-            };
+        const locationOptions =
+          Platform.OS === 'android'
+            ? {
+                accuracy: Location.Accuracy.Balanced,
+                timeout: 15000,
+                maximumAge: 10000,
+              }
+            : {
+                accuracy: Location.Accuracy.Balanced,
+              };
 
         const currentLocation = await Location.getCurrentPositionAsync(locationOptions);
 
@@ -103,10 +110,10 @@ export default function useLocation() {
           error: null,
         });
       } catch (error) {
-        console.log("Location error:", error);
-        setLocation(prev => ({
+        console.log('Location error:', error);
+        setLocation((prev) => ({
           ...prev,
-          error: "Could not get your location"
+          error: 'Could not get your location',
         }));
       } finally {
         setLoading(false);

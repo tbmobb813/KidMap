@@ -17,7 +17,12 @@ describe('RouteDetailScreen', () => {
   });
 
   it('shows spinner, then renders steps, then hides spinner', async () => {
-    const stubResult = { mode: 'walking' as TravelMode, totalDistance: 0, totalDuration: 0, steps: [] };
+    const stubResult = {
+      mode: 'walking' as TravelMode,
+      totalDistance: 0,
+      totalDuration: 0,
+      steps: [],
+    };
     (api.fetchRoute as jest.Mock).mockResolvedValueOnce(stubResult);
 
     const { getByTestId, queryByText } = render(<RouteDetailScreen />);
@@ -40,11 +45,18 @@ describe('RouteDetailScreen', () => {
   });
 
   it('allows switching modes and re-fetches', async () => {
-    (api.fetchRoute as jest.Mock).mockResolvedValue({ mode: 'cycling' as TravelMode, totalDistance: 0, totalDuration: 0, steps: [] });
+    (api.fetchRoute as jest.Mock).mockResolvedValue({
+      mode: 'cycling' as TravelMode,
+      totalDistance: 0,
+      totalDuration: 0,
+      steps: [],
+    });
     const { getByText } = render(<RouteDetailScreen />);
 
     await waitFor(() => expect(api.fetchRoute).toHaveBeenCalledTimes(1));
     fireEvent.press(getByText('Cycling'));
-    await waitFor(() => expect(api.fetchRoute).toHaveBeenCalledWith(origin.coords, destination.coords, 'cycling'));
+    await waitFor(() =>
+      expect(api.fetchRoute).toHaveBeenCalledWith(origin.coords, destination.coords, 'cycling'),
+    );
   });
 });

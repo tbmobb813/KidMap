@@ -10,21 +10,21 @@ export type Place = {
   isFavorite?: boolean;
 };
 
-export type PlaceCategory = 
-  | "home" 
-  | "school" 
-  | "park" 
-  | "library" 
-  | "store" 
-  | "restaurant" 
-  | "food-pizza"
-  | "food-burger"
-  | "food-icecream"
-  | "friend" 
-  | "family" 
-  | "other";
+export type PlaceCategory =
+  | 'home'
+  | 'school'
+  | 'park'
+  | 'library'
+  | 'store'
+  | 'restaurant'
+  | 'food-pizza'
+  | 'food-burger'
+  | 'food-icecream'
+  | 'friend'
+  | 'family'
+  | 'other';
 
-export type TransitMode = "subway" | "train" | "bus" | "walk";
+export type TransitMode = 'subway' | 'train' | 'bus' | 'walk';
 
 export type TransitStep = {
   id: string;

@@ -1,8 +1,6 @@
 /** Format meters to “X m” or “Y km” */
 export function formatDistance(m: number): string {
-  return m >= 1000
-    ? `${(m / 1000).toFixed(1)} km`
-    : `${m} m`;
+  return m >= 1000 ? `${(m / 1000).toFixed(1)} km` : `${m} m`;
 }
 
 /** Format seconds to “Z sec”, “W min” or “H h M min” */

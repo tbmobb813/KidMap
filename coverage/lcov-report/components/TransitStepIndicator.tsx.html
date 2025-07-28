@@ -155,7 +155,9 @@
 <a name='L90'></a><a href='#L90'>90</a>
 <a name='L91'></a><a href='#L91'>91</a>
 <a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -167,9 +169,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -183,18 +182,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -210,6 +197,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -247,32 +251,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { TransitStep } from "@/types/navigation";
-import Colors from "@/constants/colors";
-import { Train, Bus, Navigation } from "lucide-react-native";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { TransitStep } from '@/types/navigation';
+import Colors from '@/constants/colors';
+import { Train, Bus, Navigation } from 'lucide-react-native';
 &nbsp;
 type TransitStepIndicatorProps = {
   step: TransitStep;
-  size?: "small" | "medium" | "large";
+  size?: 'small' | 'medium' | 'large';
 };
 &nbsp;
-const TransitStepIndicator: React.FC&lt;TransitStepIndicatorProps&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({ </span></span>
-  step, 
-  size = <span class="branch-0 cbranch-no" title="branch not covered" >"medium" </span>
-}) =&gt; {
+const TransitStepIndicator: React.FC&lt;TransitStepIndicatorProps&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> step, size = <span class="branch-0 cbranch-no" title="branch not covered" >'medium' </span>}) =&gt; {</span>
   const getIcon = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const iconSize = <span class="cstat-no" title="statement not covered" >size === "small" ? 14 : size === "medium" ? 18 : 24;</span>
-    const iconColor = <span class="cstat-no" title="statement not covered" >"#FFFFFF";</span>
-    
+    const iconSize = <span class="cstat-no" title="statement not covered" >size === 'small' ? 14 : size === 'medium' ? 18 : 24;</span>
+    const iconColor = <span class="cstat-no" title="statement not covered" >'#FFFFFF';</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    switch (step.type) {</span>
-      case "subway":
-      case "train":
+      case 'subway':
+      case 'train':
 <span class="cstat-no" title="statement not covered" >        return &lt;Train size={iconSize} color={iconColor} /&gt;;</span>
-      case "bus":
+      case 'bus':
 <span class="cstat-no" title="statement not covered" >        return &lt;Bus size={iconSize} color={iconColor} /&gt;;</span>
-      case "walk":
+      case 'walk':
 <span class="cstat-no" title="statement not covered" >        return &lt;Navigation size={iconSize} color={iconColor} /&gt;;</span>
       default:
 <span class="cstat-no" title="statement not covered" >        return null;</span>
@@ -281,23 +282,28 @@ const TransitStepIndicator: React.FC&lt;TransitStepIndicatorProps&gt; = <span cl
 &nbsp;
   const getBackgroundColor = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (step.color) <span class="cstat-no" title="statement not covered" >return step.color;</span></span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    switch (step.type) {</span>
-      case "subway": <span class="cstat-no" title="statement not covered" >return Colors.subway;</span>
-      case "train": <span class="cstat-no" title="statement not covered" >return Colors.train;</span>
-      case "bus": <span class="cstat-no" title="statement not covered" >return Colors.bus;</span>
-      case "walk": <span class="cstat-no" title="statement not covered" >return Colors.textLight;</span>
-      default: <span class="cstat-no" title="statement not covered" >return Colors.primary;</span>
+      case 'subway':
+<span class="cstat-no" title="statement not covered" >        return Colors.subway;</span>
+      case 'train':
+<span class="cstat-no" title="statement not covered" >        return Colors.train;</span>
+      case 'bus':
+<span class="cstat-no" title="statement not covered" >        return Colors.bus;</span>
+      case 'walk':
+<span class="cstat-no" title="statement not covered" >        return Colors.textLight;</span>
+      default:
+<span class="cstat-no" title="statement not covered" >        return Colors.primary;</span>
     }
   };
 &nbsp;
   const getDimensionsBySize = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    switch (size) {</span>
-      case "small":
+      case 'small':
 <span class="cstat-no" title="statement not covered" >        return { width: 24, height: 24, borderRadius: 12, fontSize: 10 };</span>
-      case "medium":
+      case 'medium':
 <span class="cstat-no" title="statement not covered" >        return { width: 32, height: 32, borderRadius: 16, fontSize: 14 };</span>
-      case "large":
+      case 'large':
 <span class="cstat-no" title="statement not covered" >        return { width: 40, height: 40, borderRadius: 20, fontSize: 18 };</span>
       default:
 <span class="cstat-no" title="statement not covered" >        return { width: 32, height: 32, borderRadius: 16, fontSize: 14 };</span>
@@ -307,19 +313,19 @@ const TransitStepIndicator: React.FC&lt;TransitStepIndicatorProps&gt; = <span cl
   const dimensions = <span class="cstat-no" title="statement not covered" >getDimensionsBySize();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;View style={[
-      styles.container, 
-      { 
-        backgroundColor: getBackgroundColor(),
-        width: dimensions.width,
-        height: dimensions.height,
-        borderRadius: dimensions.borderRadius
-      }
-    ]}&gt;
+    &lt;View
+      style={[
+        styles.container,
+        {
+          backgroundColor: getBackgroundColor(),
+          width: dimensions.width,
+          height: dimensions.height,
+          borderRadius: dimensions.borderRadius,
+        },
+      ]}
+    &gt;
       {step.line ? (
-        &lt;Text style={[styles.lineText, { fontSize: dimensions.fontSize }]}&gt;
-          {step.line}
-        &lt;/Text&gt;
+        &lt;Text style={[styles.lineText, { fontSize: dimensions.fontSize }]}&gt;{step.line}&lt;/Text&gt;
       ) : (
         getIcon()
       )}
@@ -329,12 +335,12 @@ const TransitStepIndicator: React.FC&lt;TransitStepIndicatorProps&gt; = <span cl
 &nbsp;
 const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.create({</span>
   container: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   lineText: {
-    color: "#FFFFFF",
-    fontWeight: "700",
+    color: '#FFFFFF',
+    fontWeight: '700',
   },
 });
 &nbsp;
@@ -346,7 +352,7 @@ export default TransitStepIndicator;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-26T20:08:48.734Z
+                at 2025-07-28T18:53:22.986Z
             </div>
         <script src="../prettify.js"></script>
         <script>

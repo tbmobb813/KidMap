@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -117,9 +116,7 @@ const ParentLockScreen: React.FC<{ onUnlock: () => void }> = ({ onUnlock }) => {
           <Text style={styles.buttonText}>Unlock with Biometrics</Text>
         </TouchableOpacity>
       )}
-      {!!biometricError && (
-        <Text style={styles.errorText}>{biometricError}</Text>
-      )}
+      {!!biometricError && <Text style={styles.errorText}>{biometricError}</Text>}
       <TouchableOpacity style={styles.link} onPress={() => setMode('set')}>
         <Text style={styles.linkText}>Reset PIN</Text>
       </TouchableOpacity>

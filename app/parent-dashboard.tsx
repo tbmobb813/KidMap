@@ -1,5 +1,4 @@
-
-"use client";
+'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import ParentDashboard from '../components/ParentDashboard';
 import ParentLockScreen from '../components/ParentLockScreen';
@@ -14,10 +13,10 @@ const ParentDashboardScreen = () => {
   // Reset auto-lock timer on interaction
   const resetLockTimer = () => {
     if (lockTimer.current) clearTimeout(lockTimer.current);
-      // Use window.setTimeout to get a number ID
-      lockTimer.current = window.setTimeout(() => {
-        setUnlocked(false);
-      }, AUTO_LOCK_TIMEOUT);
+    // Use window.setTimeout to get a number ID
+    lockTimer.current = window.setTimeout(() => {
+      setUnlocked(false);
+    }, AUTO_LOCK_TIMEOUT);
   };
 
   useEffect(() => {
@@ -40,11 +39,7 @@ const ParentDashboardScreen = () => {
     }
   }, [unlocked]);
 
-  return unlocked ? (
-    <ParentDashboard />
-  ) : (
-    <ParentLockScreen onUnlock={() => setUnlocked(true)} />
-  );
+  return unlocked ? <ParentDashboard /> : <ParentLockScreen onUnlock={() => setUnlocked(true)} />;
 };
 
 export default ParentDashboardScreen;

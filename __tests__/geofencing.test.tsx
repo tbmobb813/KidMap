@@ -4,9 +4,7 @@ import { renderHook, act } from '@testing-library/react-hooks';
 
 // --- Mock Safe Zone Store ---
 jest.mock('@/stores/safeZoneStore', () => {
-  let safeZones = [
-    { id: '1', latitude: 37.7749, longitude: -122.4194, radius: 100 },
-  ];
+  let safeZones = [{ id: '1', latitude: 37.7749, longitude: -122.4194, radius: 100 }];
   return {
     useSafeZoneStore: () => ({ safeZones }),
     __setSafeZones: (zones: any[]) => (safeZones = zones),
@@ -43,7 +41,7 @@ describe('Geofencing and Safe Zone Alerts', () => {
     mockUseGeofencing.mockImplementation((cb) => {
       cb('1', 'enter');
     });
-    
+
     renderHook(() => mockUseGeofencing(callback));
     expect(callback).toHaveBeenCalledWith('1', 'enter');
   });
@@ -64,7 +62,7 @@ describe('Geofencing and Safe Zone Alerts', () => {
     mockUseGeofencing.mockImplementation(() => {
       // Do nothing when no safe zones
     });
-    
+
     renderHook(() => mockUseGeofencing(callback));
     expect(callback).not.toHaveBeenCalled();
   });

@@ -14,7 +14,7 @@ RN.Button = ({ title, onPress, ...props }) =>
   React.createElement(
     RN.TouchableOpacity,
     { onPress, accessibilityRole: 'button', ...props },
-    React.createElement(RN.Text, null, title)
+    React.createElement(RN.Text, null, title),
   );
 
 module.exports = RN;
