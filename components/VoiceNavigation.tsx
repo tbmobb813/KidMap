@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, Text, View, Pressable, Alert } from "react-native";
 import Colors from "@/constants/colors";
 import { Mic, MicOff, Volume2 } from "lucide-react-native";
@@ -15,6 +15,26 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
+  // refs to clear timers on unmount
+  const listeningTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const speakingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // list of available voice commands
+  const voiceCommands = [
+    "Where am I?",
+    "Repeat directions",
+    "Call for help",
+    "How much time left?"
+  ];
+
+  useEffect(() => {
+    return () => {
+      // cleanup any pending timers
+      if (listeningTimeout.current) clearTimeout(listeningTimeout.current);
+      if (speakingTimeout.current) clearTimeout(speakingTimeout.current);
+    };
+  }, []);
+
   const handleVoiceToggle = () => {
     if (isListening) {
       setIsListening(false);
@@ -23,8 +43,7 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
       setIsListening(true);
       Alert.alert("Voice activated", "Say 'help' for available commands");
       
-      // Simulate stopping after 5 seconds
-      setTimeout(() => {
+      listeningTimeout.current = setTimeout(() => {
         setIsListening(false);
       }, 5000);
     }
@@ -34,20 +53,23 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
     setIsSpeaking(true);
     Alert.alert("Speaking", `"${currentStep}"`);
     
-    // Simulate speaking duration
-    setTimeout(() => {
+    speakingTimeout.current = setTimeout(() => {
       setIsSpeaking(false);
     }, 2000);
   };
 
   return (
     <View style={styles.container}>
+      {/* step display */}
       <View style={styles.stepContainer}>
         <Text style={styles.stepText}>{currentStep}</Text>
       </View>
 
+      {/* controls */}
       <View style={styles.controlsContainer}>
         <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={isListening ? "Stop voice input" : "Start voice input"}
           style={[
             styles.voiceButton,
             isListening && styles.listeningButton
@@ -65,6 +87,8 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
         </Pressable>
 
         <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Repeat instructions aloud"
           style={[
             styles.speakButton,
             isSpeaking && styles.speakingButton
@@ -78,13 +102,13 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
         </Pressable>
       </View>
 
+      {/* command list */}
       {isListening && (
         <View style={styles.commandsContainer}>
           <Text style={styles.commandsTitle}>Voice Commands:</Text>
-          <Text style={styles.commandText}>• "Where am I?"</Text>
-          <Text style={styles.commandText}>• "Repeat directions"</Text>
-          <Text style={styles.commandText}>• "Call for help"</Text>
-          <Text style={styles.commandText}>• "How much time left?"</Text>
+          {voiceCommands.map(cmd => (
+            <Text key={cmd} style={styles.commandText}>• {cmd}</Text>
+          ))}
         </View>
       )}
     </View>

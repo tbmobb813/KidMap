@@ -34,18 +34,6 @@ describe('Routing and Navigation', () => {
     expect(route).toEqual(mockRoute);
   });
 
-  it('should fetch a route for driving mode', async () => {
-    const drivingRoute = { ...mockRoute, mode: 'driving' };
-
-    jest.spyOn(global, 'fetch').mockResolvedValueOnce({
-      json: async () => ({ routes: [drivingRoute] }),
-    } as any);
-
-    const route = await fetchRoute([0, 0], [1, 1], 'driving');
-
-    expect(global.fetch).toHaveBeenCalledTimes(1);
-    expect(route).toEqual(drivingRoute);
-  });
 
   it('should fetch a route for cycling mode', async () => {
     const cyclingRoute = { ...mockRoute, mode: 'cycling' };

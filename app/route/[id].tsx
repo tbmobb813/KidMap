@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { fetchRoute, TravelMode, RouteResult } from '@/utils/api';
 import Colors from "@/constants/colors";
 import DirectionStep from "@/components/DirectionStep";
 import MapPlaceholder from "@/components/MapPlaceholder";
@@ -9,93 +10,149 @@ import { Clock, Navigation, MapPin } from "lucide-react-native";
 import VoiceNavigation from "@/components/VoiceNavigation";
 import FunFactCard from "@/components/FunFactCard";
 import { getRandomFunFact } from "@/mocks/funFacts";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import MapView, { Polyline, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 
 export default function RouteDetailScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
-  
+  const { origin, destination } = useNavigationStore();
 
-  const {
-    origin,
-    destination,
-    availableRoutes,
-    selectedRoute,
-    selectRoute
-  } = useNavigationStore();
+  // --- Phase 3 additions: mode selector & fetch state ---
+  const [mode, setMode] = useState<TravelMode>('walking');
+  const [routeResult, setRouteResult] = useState<RouteResult | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (!origin || !destination) return;
+    let cancelled = false;
+    async function loadRoute() {
+      setLoading(true);
+      setError(null);
+      const result = await fetchRoute(origin.coords, destination.coords, mode);
+      if (cancelled) return;
+      if (result) setRouteResult(result);
+      else setError('Unable to load route');
+      setLoading(false);
+    }
+    loadRoute();
+    return () => { cancelled = true; };
+  }, [origin, destination, mode]);
 
-  // Find the route by ID or fallback to selectedRoute
-  const [activeRouteId, setActiveRouteId] = useState(
-    selectedRoute?.id === id ? id : (availableRoutes[0]?.id || id)
-  );
-  const route = availableRoutes.find(r => r.id === activeRouteId) || selectedRoute;
-
-  // Helper to get a label for each route (based on main mode)
-  function getRouteLabel(r) {
-    const mainStep = r.steps.find(s => s.type !== 'walk') || r.steps[0];
-    let label = mainStep.type.charAt(0).toUpperCase() + mainStep.type.slice(1);
-    if (mainStep.line) label += ` Line ${mainStep.line}`;
-    return label;
-  }
-
-  const [showFunFact, setShowFunFact] = useState(true);
-  const [currentFunFact] = useState(getRandomFunFact("subway"));
-
-  if (!route || !origin || !destination) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Route not found</Text>
-        <Pressable 
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Text style={styles.backButtonText}>Go Back</Text>
-        </Pressable>
-      </View>
-    );
-  }
+  const displayDistance = routeResult?.distance ?? /* fallback */ 0;
+  const displayDuration = routeResult?.duration ?? /* fallback */ 0;
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Route type selector */}
-      {availableRoutes.length > 1 && (
-        <View style={styles.routeTypeSelector}>
-          {availableRoutes.map((r) => (
-            <Pressable
-              key={r.id}
-              style={[styles.routeTypeButton, activeRouteId === r.id && styles.routeTypeButtonActive]}
-              onPress={() => {
-                setActiveRouteId(r.id);
-                selectRoute(r);
-              }}
-              accessibilityRole="button"
-              accessibilityState={{ selected: activeRouteId === r.id }}
-            >
-              <Text style={[styles.routeTypeButtonText, activeRouteId === r.id && styles.routeTypeButtonTextActive]}>
-                {getRouteLabel(r)}
-              </Text>
-            </Pressable>
-          ))}
+    <View style={styles.container}>
+      {/* Mode Selector */}
+      <View style={styles.modeSelector}>
+        {(['walking','cycling','transit'] as TravelMode[]).map(m => (
+          <Pressable
+            key={m}
+            style={[
+              styles.modeButton,
+              mode === m && styles.modeButtonActive
+            ]}
+            onPress={() => setMode(m)}
+          >
+            <Text style={[
+              styles.modeText,
+              mode === m && styles.modeTextActive
+            ]}>
+              {m.charAt(0).toUpperCase() + m.slice(1)}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
+
+      {/* Loading */}
+      {loading && <LoadingSpinner />}
+
+      {/* Error State */}
+      {error && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{error}</Text>
+          <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Text style={styles.backButtonText}>Go Back</Text>
+          </Pressable>
         </View>
       )}
 
-      <MapPlaceholder 
-        message={`Map showing route from ${origin.name} to ${destination.name}`} 
-      />
-      
-      <VoiceNavigation 
-        currentStep={route.steps[0]?.from ? `${route.steps[0].type === 'walk' ? 'Walk' : 'Take'} from ${route.steps[0].from} to ${route.steps[0].to}` : "Starting your journey"}
-      />
+      {/* Empty State (no route & not loading) */}
+      {!loading && !error && !routeResult && (
+        <MapPlaceholder message="No route available. Try a different mode or location." />
+      )}
 
-      {showFunFact && (
+      {/* Header - Distance & Duration */}
+      {routeResult && (
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerText}>
+            Distance: {displayDistance} m
+          </Text>
+          <Text style={styles.headerText}>
+            Duration: {Math.round(displayDuration / 60)} min
+          </Text>
+        </View>
+      )}
+
+      {/* Map */}
+      <MapView
+        provider={PROVIDER_GOOGLE}
+        style={styles.map}
+        initialRegion={{
+          latitude: origin.coords[0],
+          longitude: origin.coords[1],
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
+        }}
+      >
+        {routeResult && (
+          <>
+            <Polyline
+              coordinates={routeResult.steps.flatMap(s => ([
+                { latitude: s.startLocation[0], longitude: s.startLocation[1] },
+                { latitude: s.endLocation[0],   longitude: s.endLocation[1]   }
+              ]))}
+              strokeColor={Colors.primary}
+              strokeWidth={4}
+            />
+            <Marker coordinate={{
+              latitude: origin.coords[0],
+              longitude: origin.coords[1]
+            }} title="Start" />
+            <Marker coordinate={{
+              latitude: destination.coords[0],
+              longitude: destination.coords[1]
+            }} title="End" />
+          </>
+        )}
+      </MapView>
+
+      {/* Route Steps */}
+      {routeResult && (
+        <ScrollView>
+          {routeResult.legs.flatMap(leg =>
+            leg.steps.map((step, idx) => (
+              <DirectionStep key={`${leg.summary}-${idx}`} step={step} />
+            ))
+          )}
+        </ScrollView>
+      )}
+
+      {/* <VoiceNavigation 
+        currentStep={routeResult ? routeResult.steps[0]?.instruction : "Loading route..."}
+      /> */}
+
+      {/* {showFunFact && (
         <FunFactCard 
           fact={currentFunFact}
           location="Transit System"
           onDismiss={() => setShowFunFact(false)}
         />
-      )}
+      )} */}
       
-      <View style={styles.contentContainer}>
+      {/* <View style={styles.contentContainer}>
         <View style={styles.routeSummary}>
           <View style={styles.locationContainer}>
             <View style={styles.locationRow}>
@@ -133,11 +190,11 @@ export default function RouteDetailScreen() {
         <Text style={styles.sectionTitle}>Step by Step Directions</Text>
         
         <View style={styles.stepsContainer}>
-          {route.steps.map((step, index) => (
+          {(routeResult?.steps || route.steps).map((step, index) => (
             <DirectionStep
-              key={step.id}
+              key={index}
               step={step}
-              isLast={index === route.steps.length - 1}
+              isLast={index === (routeResult?.steps.length || route.steps.length) - 1}
             />
           ))}
         </View>
@@ -148,12 +205,40 @@ export default function RouteDetailScreen() {
             Remember to stay with an adult and keep your phone with you at all times!
           </Text>
         </View>
-      </View>
-    </ScrollView>
+      </View> */}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16 },
+  modeSelector: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginVertical: 12
+  },
+  modeButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: Colors.primary
+  },
+  modeButtonActive: {
+    backgroundColor: Colors.primary
+  },
+  modeText: {
+    color: Colors.primary,
+    fontWeight: '500'
+  },
+  modeTextActive: {
+    color: '#fff'
+  },
+  errorText: {
+    color: Colors.error,
+    textAlign: 'center',
+    marginVertical: 12
+  },
   routeTypeSelector: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -181,10 +266,6 @@ const styles = StyleSheet.create({
   },
   routeTypeButtonTextActive: {
     color: '#fff',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
   },
   contentContainer: {
     padding: 16,
@@ -301,4 +382,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
+  headerContainer: {
+    backgroundColor: Colors.card,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  headerText: {
+    color: Colors.text,
+    fontWeight: '500',
+    fontSize: 16,
+  },
+  map: { flex: 1, marginBottom: 16 },
 });

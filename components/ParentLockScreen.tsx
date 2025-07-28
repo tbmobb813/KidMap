@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as LocalAuthentication from 'expo-local-authentication';
 
 const PIN_KEY = 'parent_pin';
 
@@ -9,11 +11,16 @@ const ParentLockScreen: React.FC<{ onUnlock: () => void }> = ({ onUnlock }) => {
   const [mode, setMode] = useState<'enter' | 'set'>('enter');
   const [newPin, setNewPin] = useState('');
   const [confirmPin, setConfirmPin] = useState('');
+  const [biometricAvailable, setBiometricAvailable] = useState(false);
+  const [biometricError, setBiometricError] = useState('');
 
   React.useEffect(() => {
     (async () => {
       const storedPin = await AsyncStorage.getItem(PIN_KEY);
       if (!storedPin) setMode('set');
+      const available = await LocalAuthentication.hasHardwareAsync();
+      const enrolled = await LocalAuthentication.isEnrolledAsync();
+      setBiometricAvailable(!!(available && enrolled));
     })();
   }, []);
 
@@ -42,6 +49,23 @@ const ParentLockScreen: React.FC<{ onUnlock: () => void }> = ({ onUnlock }) => {
     setNewPin('');
     setConfirmPin('');
     Alert.alert('PIN Set', 'Your parent PIN has been set.');
+  };
+
+  const handleBiometricUnlock = async () => {
+    setBiometricError('');
+    try {
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: 'Authenticate to unlock Parent Mode',
+        fallbackLabel: 'Use PIN',
+      });
+      if (result.success) {
+        onUnlock();
+      } else if (result.error) {
+        setBiometricError(result.error);
+      }
+    } catch (e) {
+      setBiometricError('Biometric authentication failed.');
+    }
   };
 
   if (mode === 'set') {
@@ -88,10 +112,17 @@ const ParentLockScreen: React.FC<{ onUnlock: () => void }> = ({ onUnlock }) => {
       <TouchableOpacity style={styles.button} onPress={handleUnlock}>
         <Text style={styles.buttonText}>Unlock</Text>
       </TouchableOpacity>
+      {biometricAvailable && (
+        <TouchableOpacity style={styles.button} onPress={handleBiometricUnlock}>
+          <Text style={styles.buttonText}>Unlock with Biometrics</Text>
+        </TouchableOpacity>
+      )}
+      {!!biometricError && (
+        <Text style={styles.errorText}>{biometricError}</Text>
+      )}
       <TouchableOpacity style={styles.link} onPress={() => setMode('set')}>
         <Text style={styles.linkText}>Reset PIN</Text>
       </TouchableOpacity>
-      <Text style={styles.biometricText}>(Biometric unlock coming soon)</Text>
     </View>
   );
 };
@@ -141,10 +172,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textDecorationLine: 'underline',
   },
-  biometricText: {
-    marginTop: 24,
-    color: '#A0A8B8',
-    fontSize: 14,
+  errorText: {
+    color: '#D32F2F',
+    fontSize: 15,
+    marginTop: 8,
+    textAlign: 'center',
   },
 });
 

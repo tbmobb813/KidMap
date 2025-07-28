@@ -39,3 +39,5 @@ describe('AccessibleButton', () => {
     expect(toJSON()).toMatchSnapshot();
   });
 });
+
+// Run `npm test -- -u` to update snapshot if necessary
