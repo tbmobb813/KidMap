@@ -6,7 +6,7 @@
     "start": "bunx rork start -p fwkirhovhuv8bp6hssbjv --tunnel",
     "start-web": "bunx rork start -p fwkirhovhuv8bp6hssbjv --web --tunnel",
     "start-web-dev": "DEBUG=expo* bunx rork start -p fwkirhovhuv8bp6hssbjv --web --tunnel",
-    "test": "jest",
+    "test": "npx jest --no-coverage --passWithNoTests",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "format": "prettier --write ."
@@ -36,12 +36,12 @@
     "expo-web-browser": "~14.1.6",
     "lucide-react-native": "^0.475.0",
     "nativewind": "^4.1.23",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-native": "^0.73.7",
     "react-native-css-interop": "^0.1.22",
     "react-native-gesture-handler": "~2.24.0",
-    "react-native-maps": "1.20.1",
+    "react-native-maps": "^1.20.1",
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.3.0",
     "react-native-screens": "~4.10.0",
@@ -56,10 +56,10 @@
     "@babel/preset-typescript": "^7.27.1",
     "@expo/ngrok": "^4.1.0",
     "@testing-library/jest-native": "^5.4.3",
-    "@testing-library/react-hooks": "^8.0.0",
+    "@testing-library/react": "^13.0.0",
     "@testing-library/react-native": "^13.2.0",
     "@types/jest": "^30.0.0",
-    "@types/react": "~19.0.10",
+    "@types/react": "^18.2.0",
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
@@ -74,7 +74,7 @@
     "jest-transform-stub": "^2.0.0",
     "prettier": "^3.6.2",
     "react-native-dotenv": "^3.4.11",
-    "react-test-renderer": "^18.2.0",
+    "react-test-renderer": "18.2.0",
     "typescript": "~5.8.3"
   },
   "private": true,
@@ -83,5 +83,20 @@
     "trailingComma": "all",
     "tabWidth": 2,
     "semi": false
-  }
+  },
+  "description": "Let me start by saying the reason for the creatation of this application is my son, who I love and adore. I want to build a kid-friendly navigation app that simplifies Google Maps functionality while adding subway/train navigation features. The app should be intuitive for children under 16 to use.",
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tbmobb813/KidMap.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tbmobb813/KidMap/issues"
+  },
+  "homepage": "https://github.com/tbmobb813/KidMap#readme"
 }

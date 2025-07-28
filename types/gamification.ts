@@ -6,6 +6,8 @@ export type Achievement = {
   points: number;
   unlocked: boolean;
   unlockedAt?: Date;
+  category: string;
+  requirement: string;
 };
 
 export type UserStats = {
@@ -15,6 +17,16 @@ export type UserStats = {
   favoriteTransitMode: string;
   streakDays: number;
   level: number;
+  averageSafety: number;
+  safeTrips: number;
+  walkingTrips?: number;
+  transitTrips?: number;
+  combinedTrips?: number;
+  morningTrips?: number;
+  eveningTrips?: number;
+  totalDistance?: number;
+  weatherConditions?: string[];
+  consecutiveDays?: number;
 };
 
 export type SafetyContact = {
@@ -27,10 +39,10 @@ export type SafetyContact = {
 
 export type TripJournal = {
   id: string;
-  date: Date;
+  date: string; // Changed from Date to string for JSON serialization
   from: string;
   to: string;
-  photos: string[];
+  photos?: string[];
   notes: string;
   rating: number;
   funFacts: string[];

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable, RefreshControl } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Pressable, Dimensions, Platform, RefreshControl } from 'react-native';
 import Colors from '@/constants/colors';
 import SearchBar from '@/components/SearchBar';
-import { Clock, RefreshCw } from 'lucide-react-native';
+import { Clock, MapPin, AlertCircle, Bell, RefreshCw } from 'lucide-react-native';
 import LiveArrivalsCard from '@/components/LiveArrivalsCard';
 import useLocation from '@/hooks/useLocation';
 import { 
@@ -11,6 +11,8 @@ import {
   TransitStation, 
   TransitLine 
 } from '@/utils/transitApi';
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 export default function TransitScreen() {
   const { location } = useLocation();
@@ -121,6 +123,20 @@ export default function TransitScreen() {
     }
   };
 
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'normal':
+        return <Clock size={16} color={Colors.success} />;
+      case 'delayed':
+        return <Clock size={16} color={Colors.warning} />;
+      case 'alert':
+      case 'suspended':
+        return <AlertCircle size={16} color={Colors.error} />;
+      default:
+        return <Clock size={16} color={Colors.textLight} />;
+    }
+  };
+
   const filteredLines = transitLines.filter(line =>
     line.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -161,7 +177,6 @@ export default function TransitScreen() {
           <SearchBar
             value={searchQuery}
             onChangeText={setSearchQuery}
-            onClear={() => setSearchQuery('')}
             placeholder="Search transit lines..."
           />
         </View>
@@ -196,7 +211,7 @@ export default function TransitScreen() {
               >
                 {station.name}
               </Text>
-              <Text style={styles.stationDistance}>{((station as any).distance * 1000).toFixed(0)}m</Text>
+              <Text style={styles.stationDistance}>{(station.distance * 1000).toFixed(0)}m</Text>
             </Pressable>
           ))}
         </ScrollView>
@@ -205,15 +220,7 @@ export default function TransitScreen() {
         {selectedStationData && (
           <LiveArrivalsCard
             stationName={selectedStationData.name}
-            arrivals={(selectedStationData.arrivals || []).map(arrival => ({
-              id: arrival.route,
-              line: arrival.route,
-              color: '#4A80F0',
-              destination: arrival.destination,
-              arrivalTime: arrival.arrivalTime.includes('min') ? 
-                parseInt(arrival.arrivalTime) || 0 : 0,
-              type: 'subway' as const,
-            }))}
+            arrivals={selectedStationData.arrivals || []}
             lastUpdated={getTimeAgo(lastRefresh)}
             onRefresh={handleRefreshArrivals}
             isRefreshing={isRefreshing}
@@ -232,18 +239,14 @@ export default function TransitScreen() {
               <Text style={styles.lineText}>{line.name}</Text>
             </View>
             <View style={styles.statusContainer}>
-              <View
-                style={[
-                  styles.statusDot,
-                  { backgroundColor: getStatusColor(line.status) },
-                ]}
-              />
-              <Text style={styles.statusText}>{line.message || 'No status information'}</Text>
+              <View style={styles.statusInfo}>
+                {getStatusIcon(line.status)}
+                <Text style={styles.statusText}>{line.statusMessage}</Text>
+              </View>
             </View>
           </Pressable>
         ))}
       </ScrollView>
-    </View>
   );
 }
 
@@ -270,14 +273,17 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: Colors.card,
   },
+  scrollContent: {
+    flexGrow: 1,
+    padding: 16,
+    paddingBottom: 32,
+  },
   searchContainer: {
-    marginHorizontal: 16,
     marginBottom: 16,
   },
   lastUpdatedContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 16,
     marginBottom: 16,
     paddingHorizontal: 4,
   },
@@ -290,12 +296,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: Colors.text,
-    marginHorizontal: 16,
     marginBottom: 16,
   },
   stationsScroll: {
     marginBottom: 16,
-    paddingHorizontal: 16,
   },
   stationsContainer: {
     paddingHorizontal: 4,
@@ -333,7 +337,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.card,
     borderRadius: 12,
     padding: 16,
-    marginHorizontal: 16,
     marginBottom: 12,
   },
   selectedLine: {
@@ -355,18 +358,15 @@ const styles = StyleSheet.create({
   },
   statusContainer: {
     flex: 1,
+  },
+  statusInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  statusDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginRight: 8,
   },
   statusText: {
     fontSize: 14,
     color: Colors.text,
-    flex: 1,
-  },
+    marginLeft: 8,
 });
+
+export default TransitScreen;

@@ -1,6 +1,6 @@
 // geofencing.test.tsx
 
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react';
 
 // --- Mock Safe Zone Store ---
 jest.mock('@/stores/safeZoneStore', () => {

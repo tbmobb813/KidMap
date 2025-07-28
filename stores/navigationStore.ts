@@ -23,6 +23,7 @@ type NavigationState = {
   destination: Place | null;
   availableRoutes: Route[];
   selectedRoute: Route | null;
+  activeRoute: any | null;
   searchQuery: string;
   accessibilitySettings: AccessibilitySettings;
   photoCheckIns: PhotoCheckIn[];
@@ -39,6 +40,7 @@ type NavigationState = {
   findRoutes: () => void;
   selectRoute: (route: Route) => void;
   clearRoute: () => void;
+  clearActiveRoute: () => void;
   updateAccessibilitySettings: (settings: Partial<AccessibilitySettings>) => void;
   addPhotoCheckIn: (checkIn: Omit<PhotoCheckIn, 'id'>) => void;
   setWeatherInfo: (weather: WeatherInfo) => void;
@@ -51,6 +53,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
   destination: null,
   availableRoutes: [],
   selectedRoute: null,
+  activeRoute: null,
   searchQuery: '',
   accessibilitySettings: {
     largeText: false,
@@ -134,4 +137,6 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
     })),
 
   setWeatherInfo: (weather) => set({ weatherInfo: weather }),
+
+  clearActiveRoute: () => set({ activeRoute: null }),
 }));

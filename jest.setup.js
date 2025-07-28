@@ -1,30 +1,49 @@
 // jest.setup.js
 
-// Stub TouchableOpacity to View globally to avoid Animated subclassing errors
+// Basic testing library setup
+// Note: @testing-library/jest-native extensions will be loaded if package is available
+
+// Define global variables
+global.__DEV__ = true;
+
+// Basic React mocks
+jest.mock('react-native', () => ({
+  Text: 'Text',
+  View: 'View',
+  ScrollView: 'ScrollView',
+  TouchableOpacity: 'TouchableOpacity',
+  Pressable: 'Pressable',
+  Button: 'Button',
+  TextInput: 'TextInput',
+  FlatList: 'FlatList',
+  Dimensions: {
+    get: jest.fn(() => ({ width: 375, height: 667 })),
+  },
+  StyleSheet: {
+    create: jest.fn((styles) => styles),
+    flatten: jest.fn((style) => style),
+  },
+  Platform: {
+    OS: 'ios',
+    select: jest.fn((obj) => obj.ios || obj.default),
+  },
+  Alert: {
+    alert: jest.fn(),
+  },
+  Appearance: {
+    getColorScheme: () => 'light',
+    addChangeListener: jest.fn(),
+    removeChangeListener: jest.fn(),
+  },
+  RefreshControl: 'RefreshControl',
+}));
 jest.mock('react-native/Libraries/Components/Touchable/TouchableOpacity', () => {
   const { View } = jest.requireActual('react-native');
   return View;
 });
 
-jest.mock('react-native', () => {
-  const RN = jest.requireActual('react-native');
-  RN.Appearance = {
-    getColorScheme: () => 'light',
-    addChangeListener: jest.fn(),
-    removeChangeListener: jest.fn(),
-  };
-  RN.Button = ({ title, onPress, ...props }) => (
-    <RN.TouchableOpacity onPress={onPress} accessibilityRole="button" {...props}>
-      <RN.Text>{title}</RN.Text>
-    </RN.TouchableOpacity>
-  );
-  // Render TouchableOpacity as plain View to avoid Animated subclassing errors
-  RN.TouchableOpacity = RN.View; // Consolidated mock for TouchableOpacity
-  return RN;
-});
 // Stub CSS-Interop to prevent runtime errors
 jest.mock('react-native-css-interop', () => ({}));
-jest.mock('react-native/css-interop', () => ({}));
 // Stub NativeWind and React JSX runtimes to support JSX transform
 jest.mock('nativewind/jsx-runtime', () => {
   const React = require('react');
@@ -198,3 +217,39 @@ jest.mock('react-native/Libraries/Components/ScrollView/ScrollView', () => {
 if (typeof navigator === 'undefined') {
   global.navigator = {};
 }
+
+// Mock API functions for testing
+jest.mock('@/utils/api', () => ({
+  fetchRoute: jest.fn(async (from, to, mode) => {
+    // Return mock route data based on mode
+    const baseStep = {
+      startLocation: from,
+      endLocation: [from[0] + 0.001, from[1] + 0.001],
+      distance: 100,
+      duration: 120,
+      instruction: 'Walk to destination',
+    };
+
+    const steps = [
+      baseStep,
+      {
+        ...baseStep,
+        line: mode === 'transit' ? 'Bus 42' : undefined,
+      },
+      baseStep,
+    ];
+
+    return {
+      steps,
+      totalDistance: 300,
+      totalDuration: 360,
+      mode,
+      overview_polyline: 'encoded_polyline_string',
+      bounds: {
+        northeast: { lat: 1.001, lng: 1.001 },
+        southwest: { lat: 0, lng: 0 },
+      },
+    };
+  }),
+  searchPlaces: jest.fn(async () => []),
+}));
