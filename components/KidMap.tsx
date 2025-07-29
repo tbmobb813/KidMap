@@ -57,10 +57,13 @@ const KidMap: React.FC<KidMapProps> = ({
   // Fit map to show route
   useEffect(() => {
     if (route && mapRef.current) {
-      const coordinates = route.steps.flatMap(step => [
-        step.startLocation,
-        step.endLocation,
-      ]);
+      const coordinates = route.steps.flatMap(step => [{
+        latitude: step.startLocation.lat,
+        longitude: step.startLocation.lng,
+      }, {
+        latitude: step.endLocation.lat,
+        longitude: step.endLocation.lng,
+      }]);
       
       if (coordinates.length > 0) {
         mapRef.current.fitToCoordinates(coordinates, {
@@ -78,7 +81,7 @@ const KidMap: React.FC<KidMapProps> = ({
 
   const decodePolyline = (encoded: string): LatLng[] => {
     // Use @mapbox/polyline for robust decoding
-    return polyline.decode(encoded).map(([latitude, longitude]) => ({
+    return polyline.decode(encoded).map(([latitude, longitude]: [number, number]) => ({
       latitude,
       longitude,
     }));
@@ -126,12 +129,18 @@ const KidMap: React.FC<KidMapProps> = ({
         {nearbyStations.map((station) => (
           <Marker
             key={station.id}
-            coordinate={station.location}
+            coordinate={{
+              latitude: station.location.lat,
+              longitude: station.location.lng,
+            }}
             title={station.name}
             description={`Routes: ${station.routes.join(', ')}`}
             pinColor={Colors.accent}
             identifier={`station-${station.id}`}
-            onPress={() => onMarkerPress?.(station.location)}
+            onPress={() => onMarkerPress?.({
+              latitude: station.location.lat,
+              longitude: station.location.lng,
+            })}
           />
         ))}
 
@@ -151,7 +160,10 @@ const KidMap: React.FC<KidMapProps> = ({
             return (
               <Marker
                 key={`step-${index}`}
-                coordinate={step.startLocation}
+                coordinate={{
+                  latitude: step.startLocation.lat,
+                  longitude: step.startLocation.lng,
+                }}
                 title={step.transitDetails.line}
                 description={`${step.transitDetails.agency} - ${step.transitDetails.vehicle}`}
                 pinColor={step.transitDetails.color || Colors.accent}

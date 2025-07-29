@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
 import Colors from '@/constants/colors';
-import { Home, Map, Train, Settings, Trophy } from 'lucide-react-native';
+import { Home, Map, Train, Settings, Trophy, Shield } from 'lucide-react-native';
 import { Platform } from 'react-native';
 
 export default function TabLayout() {
@@ -52,6 +52,13 @@ export default function TabLayout() {
         options={{
           title: 'Transit',
           tabBarIcon: ({ color }) => <Train size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="safety"
+        options={{
+          title: 'Safety',
+          tabBarIcon: ({ color }) => <Shield size={24} color={color} />,
         }}
       />
       <Tabs.Screen

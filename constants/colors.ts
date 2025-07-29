@@ -1,14 +1,22 @@
 export default {
   primary: '#4A80F0', // Friendly blue
   secondary: '#67D295', // Soft green
+  accent: '#FF6B35', // Orange accent color
   background: '#FFFFFF',
   card: '#F8F9FA',
-  text: '#333333',
+  text: {
+    primary: '#333333',
+    secondary: '#757575',
+    primaryLight: '#9E9E9E',
+  },
   textLight: '#757575',
   border: '#E0E0E0',
   error: '#FF6B6B',
   success: '#4CAF50',
   warning: '#FFC107',
+  white: '#FFFFFF',
+  gray: '#9E9E9E',
+  shadow: '#000000',
 
   // Transit colors
   subway: '#FF9500',

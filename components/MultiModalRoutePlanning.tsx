@@ -59,6 +59,15 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
   const [loading, setLoading] = useState(false);
   const [selectedRoute, setSelectedRoute] = useState<RouteOption | null>(null);
   const [showModeSelector, setShowModeSelector] = useState(false);
+
+  // Helper function to get current time of day
+  const getCurrentTimeOfDay = (): 'morning' | 'afternoon' | 'evening' => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'morning';
+    if (hour < 18) return 'afternoon';
+    return 'evening';
+  };
+
   const [routeOptions, setRouteOptions] = useState<Partial<MultiModalRouteOptions>>({
     childAge,
     parentSupervision,
@@ -74,13 +83,6 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
   // Animation values
   const fadeAnim = new Animated.Value(0);
   const slideAnim = new Animated.Value(300);
-
-  const getCurrentTimeOfDay = (): 'morning' | 'afternoon' | 'evening' => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'morning';
-    if (hour < 18) return 'afternoon';
-    return 'evening';
-  };
 
   useEffect(() => {
     // Animate in
@@ -134,13 +136,6 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
       preferredModes: modes
     }));
     setShowModeSelector(false);
-  };
-
-  const getCurrentTimeOfDay = (): 'morning' | 'afternoon' | 'evening' => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'morning';
-    if (hour < 18) return 'afternoon';
-    return 'evening';
   };
 
   const getWeatherIcon = () => {
@@ -224,7 +219,7 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
               <AccessibleButton
                 title="Select This Route"
                 onPress={() => handleRouteSelect(route)}
-                style={[styles.selectButton, { backgroundColor: Colors.primary }]}
+                style={{...styles.selectButton, backgroundColor: Colors.primary}}
                 textStyle={styles.selectButtonText}
               />
             </View>
@@ -417,7 +412,6 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
               onPress={() => setShowModeSelector(true)}
               style={styles.modeSelectButton}
               textStyle={styles.modeSelectText}
-              leftIcon={<Navigation size={16} color={Colors.primary} />}
             />
           </View>
 
@@ -447,10 +441,17 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
 
           {showModeSelector && (
             <TransportModeSelector
-              onSelectionChange={handleModeSelection}
-              childAge={routeOptions.childAge || 10}
-              weatherCondition={routeOptions.weatherCondition || 'sunny'}
-              onClose={() => setShowModeSelector(false)}
+              selectedMode="combined"
+              onModeSelect={(mode) => {
+                // Handle mode selection
+                setShowModeSelector(false);
+              }}
+              fromLocation={`${from[0]}, ${from[1]}`}
+              toLocation={`${to[0]}, ${to[1]}`}
+              weatherInfo={{
+                condition: routeOptions.weatherCondition || 'sunny',
+                temperature: 20,
+              }}
             />
           )}
 

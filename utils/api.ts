@@ -4,9 +4,9 @@ const GOOGLE_MAPS_API_KEY =
   Constants.expoConfig?.extra?.googleMapsApiKey ||
   Constants.expoConfig?.android?.config?.googleMaps?.apiKey ||
   Constants.expoConfig?.ios?.config?.googleMapsApiKey ||
-  // No fallback: API key must be provided via environment/config
+  'YOUR_API_KEY_HERE'; // Fallback - replace with actual key
 
-// utils/api.ts - Google Maps integration
+// Google Maps integration
 const GOOGLE_MAPS_BASE_URL = 'https://maps.googleapis.com/maps/api';
 
 export type TravelMode = 'walking' | 'bicycling' | 'transit' | 'driving';

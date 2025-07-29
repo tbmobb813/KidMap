@@ -37,7 +37,8 @@ interface DevicePingControlProps {
 }
 
 export default function DevicePingControl({ visible, onClose }: DevicePingControlProps) {
-  const { isAuthenticated } = useParentalControlStore();
+  const { session } = useParentalControlStore();
+  const isAuthenticated = session?.isAuthenticated || false;
   
   const [pendingPings, setPendingPings] = useState<PingRequest[]>([]);
   const [pingHistory, setPingHistory] = useState<PingRequest[]>([]);
@@ -226,7 +227,6 @@ export default function DevicePingControl({ visible, onClose }: DevicePingContro
           onPress={() => showCustomMessageModal('check-in')}
           style={styles.customMessageButton}
           textStyle={styles.customMessageButtonText}
-          leftIcon={<Send size={16} color={Colors.primary} />}
           disabled={isLoading}
         />
       </View>

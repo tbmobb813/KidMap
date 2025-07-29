@@ -1,8 +1,27 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Pressable, Alert, Linking, Platform } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  Alert,
+  Linking,
+  Platform,
+} from 'react-native';
+import { useRouter } from 'expo-router';
 import Colors from '@/constants/colors';
-import { Shield, Phone, MessageCircle, MapPin, AlertTriangle } from 'lucide-react-native';
+import {
+  Shield,
+  Phone,
+  MessageCircle,
+  MapPin,
+  AlertTriangle,
+  Settings,
+  ChevronRight,
+} from 'lucide-react-native';
 import { useGamificationStore } from '@/stores/gamificationStore';
+import { useSafeZoneStore } from '@/stores/safeZoneStore';
+import { useParentalControlStore } from '@/stores/parentalControlStore';
 
 type SafetyPanelProps = {
   currentLocation?: {
@@ -12,8 +31,13 @@ type SafetyPanelProps = {
 };
 
 const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation }) => {
+  const router = useRouter();
   const { safetyContacts } = useGamificationStore();
+  const { safeZones } = useSafeZoneStore();
+  const { childActivity } = useParentalControlStore();
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const safetyStatus = childActivity.isInSafeZone ? 'safe' : 'outside';
 
   const handleEmergencyCall = () => {
     Alert.alert('Emergency Call', 'Do you need to call for help?', [
@@ -86,8 +110,19 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation }) => {
 
           <View style={styles.tipContainer}>
             <AlertTriangle size={16} color={Colors.warning} />
-            <Text style={styles.tipText}>Always stay with a trusted adult when traveling</Text>
+            <Text style={styles.tipText}>
+              Always stay with a trusted adult when traveling
+            </Text>
           </View>
+
+          <Pressable
+            style={styles.dashboardLink}
+            onPress={() => router.push('/tabs/safety')}
+          >
+            <Shield size={16} color={Colors.primary} />
+            <Text style={styles.dashboardText}>Open Safety Center</Text>
+            <ChevronRight size={16} color={Colors.primary} />
+          </Pressable>
         </View>
       )}
     </View>
@@ -125,9 +160,8 @@ const styles = StyleSheet.create({
   },
   buttonRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 12,
     gap: 8,
+    marginBottom: 12,
   },
   safetyButton: {
     flex: 1,
@@ -153,7 +187,22 @@ const styles = StyleSheet.create({
   tipText: {
     flex: 1,
     fontSize: 12,
-    color: Colors.text,
+    color: Colors.textLight,
+  },
+  dashboardLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    marginTop: 8,
+    backgroundColor: Colors.primary + '15',
+    borderRadius: 8,
+    gap: 8,
+  },
+  dashboardText: {
+    flex: 1,
+    fontSize: 14,
+    color: Colors.primary,
+    fontWeight: '500',
   },
 });
 

@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as LocalAuthentication from 'expo-local-authentication';
+import { PendingApproval } from '@/types';
 
 export interface ParentSettings {
   requireAuthentication: boolean;
@@ -44,15 +45,6 @@ export interface ParentSession {
   authenticatedAt: Date;
   sessionTimeout: number; // minutes
   lastActivity: Date;
-}
-
-export interface PendingApproval {
-  id: string;
-  type: 'category' | 'safeZone' | 'route' | 'contact';
-  childRequest: any;
-  requestedAt: Date;
-  status: 'pending' | 'approved' | 'rejected';
-  parentNotes?: string;
 }
 
 interface ParentalControlState {
@@ -142,8 +134,7 @@ export const useParentalControlStore = create<ParentalControlState>()(
           // Check if biometric authentication is requested and available
           if (useBiometric && settings.authenticationMethod !== 'pin') {
             const biometricResult = await LocalAuthentication.authenticateAsync({
-              promptMessage: 'Parent Access Required',
-              subtitle: 'Use your fingerprint or face to access parental controls',
+              promptMessage: 'Parent Access Required - Use your fingerprint or face to access parental controls',
               fallbackLabel: 'Use PIN instead',
               disableDeviceFallback: false,
             });
@@ -205,7 +196,7 @@ export const useParentalControlStore = create<ParentalControlState>()(
         const newApproval: PendingApproval = {
           ...approval,
           id: Date.now().toString(),
-          requestedAt: new Date(),
+          timestamp: Date.now(),
           status: 'pending',
         };
         
@@ -352,3 +343,13 @@ export const useParentalControlStore = create<ParentalControlState>()(
     }
   )
 );
+
+// Add missing interface methods for backward compatibility
+export const useParentalControlStoreWithHelpers = () => {
+  const store = useParentalControlStore();
+  return {
+    ...store,
+    getPendingApprovalsCount: () => store.pendingApprovals?.length || 0,
+    approvalHistory: [], // Placeholder for approval history
+  };
+};

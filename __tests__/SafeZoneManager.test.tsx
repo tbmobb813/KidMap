@@ -5,10 +5,7 @@ import SafeZoneManager from '@/components/SafeZoneManager';
 describe('SafeZoneManager', () => {
   it('should render without crashing', () => {
     const { getByText } = render(
-      <SafeZoneManager 
-        safeZones={[]} 
-        onSafeZonesChange={() => {}} 
-      />
+      <SafeZoneManager />
     );
     // Basic smoke test - component renders
     expect(getByText).toBeDefined();

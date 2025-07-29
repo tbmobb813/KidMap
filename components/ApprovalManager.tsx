@@ -11,6 +11,7 @@ import {
   TextInput,
   Animated,
 } from 'react-native';
+import { PendingApproval } from '@/types';
 import {
   Clock,
   CheckCircle,
@@ -31,7 +32,7 @@ import {
 } from 'lucide-react-native';
 import Colors from '../constants/colors';
 import AccessibleButton from './AccessibleButton';
-import { useParentalControlStore, PendingApproval } from '../stores/parentalControlStore';
+import { useParentalControlStoreWithHelpers } from '@/stores/parentalControlStore';
 
 interface ApprovalManagerProps {
   visible: boolean;
@@ -52,7 +53,7 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
     approveRequest, 
     rejectRequest,
     getPendingApprovalsCount 
-  } = useParentalControlStore();
+  } = useParentalControlStoreWithHelpers();
   
   const [selectedTab, setSelectedTab] = useState<'pending' | 'history'>('pending');
   const [selectedApproval, setSelectedApproval] = useState<PendingApproval | null>(null);
@@ -145,7 +146,7 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
       case 'low':
         return Colors.success;
       default:
-        return Colors.textLight;
+        return Colors.text.primaryLight;
     }
   };
 
@@ -234,9 +235,9 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
           </View>
           <View style={styles.expandIcon}>
             {isExpanded ? (
-              <ChevronUp size={20} color={Colors.textLight} />
+              <ChevronUp size={20} color={Colors.text.primaryLight} />
             ) : (
-              <ChevronDown size={20} color={Colors.textLight} />
+              <ChevronDown size={20} color={Colors.text.primaryLight} />
             )}
           </View>
         </TouchableOpacity>
@@ -265,7 +266,6 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
                   }}
                   style={styles.detailButton}
                   textStyle={styles.detailButtonText}
-                  leftIcon={<Eye size={16} color={Colors.primary} />}
                 />
                 <View style={styles.actionButtons}>
                   <AccessibleButton
@@ -273,14 +273,12 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
                     onPress={() => handleReject(approval.id, 'Quick rejection')}
                     style={styles.rejectButton}
                     textStyle={styles.rejectButtonText}
-                    leftIcon={<XCircle size={16} color={Colors.background} />}
                   />
                   <AccessibleButton
                     title="Approve"
                     onPress={() => handleApprove(approval.id, 'Quick approval')}
                     style={styles.approveButton}
                     textStyle={styles.approveButtonText}
-                    leftIcon={<CheckCircle size={16} color={Colors.background} />}
                   />
                 </View>
               </View>
@@ -315,7 +313,7 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
               onPress={() => setShowDetailModal(false)}
               style={styles.closeButton}
             >
-              <XCircle size={24} color={Colors.textLight} />
+              <XCircle size={24} color={Colors.text.primaryLight} />
             </TouchableOpacity>
           </View>
 
@@ -412,7 +410,7 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <XCircle size={24} color={Colors.textLight} />
+            <XCircle size={24} color={Colors.text.primaryLight} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Approval Center</Text>
           <View style={styles.headerActions}>
@@ -430,7 +428,7 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
             style={[styles.tab, selectedTab === 'pending' && styles.activeTab]}
             onPress={() => setSelectedTab('pending')}
           >
-            <Clock size={16} color={selectedTab === 'pending' ? Colors.primary : Colors.textLight} />
+            <Clock size={16} color={selectedTab === 'pending' ? Colors.primary : Colors.text.primaryLight} />
             <Text style={[styles.tabText, selectedTab === 'pending' && styles.activeTabText]}>
               Pending ({getPendingApprovalsCount()})
             </Text>
@@ -439,7 +437,7 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
             style={[styles.tab, selectedTab === 'history' && styles.activeTab]}
             onPress={() => setSelectedTab('history')}
           >
-            <CheckCircle size={16} color={selectedTab === 'history' ? Colors.primary : Colors.textLight} />
+            <CheckCircle size={16} color={selectedTab === 'history' ? Colors.primary : Colors.text.primaryLight} />
             <Text style={[styles.tabText, selectedTab === 'history' && styles.activeTabText]}>
               History ({approvalHistory.length})
             </Text>
@@ -449,13 +447,13 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
         {showFilters && (
           <View style={styles.filtersContainer}>
             <View style={styles.searchContainer}>
-              <Search size={16} color={Colors.textLight} />
+              <Search size={16} color={Colors.text.primaryLight} />
               <TextInput
                 style={styles.searchInput}
                 placeholder="Search approvals..."
                 value={searchQuery}
                 onChangeText={setSearchQuery}
-                placeholderTextColor={Colors.textLight}
+                placeholderTextColor={Colors.text.primaryLight}
               />
             </View>
           </View>
@@ -468,7 +466,6 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
               onPress={handleBulkApprove}
               style={styles.bulkApproveButton}
               textStyle={styles.bulkApproveText}
-              leftIcon={<CheckCircle size={16} color={Colors.background} />}
             />
           </View>
         )}
@@ -478,7 +475,7 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
             <View style={styles.emptyState}>
               {selectedTab === 'pending' ? (
                 <>
-                  <Clock size={48} color={Colors.textLight} />
+                  <Clock size={48} color={Colors.text.primaryLight} />
                   <Text style={styles.emptyTitle}>No Pending Approvals</Text>
                   <Text style={styles.emptySubtitle}>
                     All requests have been reviewed. New requests will appear here.
@@ -486,7 +483,7 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
                 </>
               ) : (
                 <>
-                  <CheckCircle size={48} color={Colors.textLight} />
+                  <CheckCircle size={48} color={Colors.text.primaryLight} />
                   <Text style={styles.emptyTitle}>No Approval History</Text>
                   <Text style={styles.emptySubtitle}>
                     Previous approval decisions will be shown here.
@@ -525,7 +522,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: Colors.text,
+    color: Colors.text.primary,
   },
   headerActions: {
     flexDirection: 'row',
@@ -564,7 +561,7 @@ const styles = StyleSheet.create({
   tabText: {
     fontSize: 14,
     fontWeight: '500',
-    color: Colors.textLight,
+    color: Colors.text.primaryLight,
   },
   activeTabText: {
     color: Colors.primary,
@@ -584,7 +581,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: Colors.text,
+    color: Colors.text.primary,
     paddingVertical: 12,
   },
   bulkActions: {
@@ -636,7 +633,7 @@ const styles = StyleSheet.create({
   approvalTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: Colors.text,
+    color: Colors.text.primary,
     flex: 1,
     marginRight: 8,
   },
@@ -651,7 +648,7 @@ const styles = StyleSheet.create({
   },
   approvalDescription: {
     fontSize: 14,
-    color: Colors.textLight,
+    color: Colors.text.primaryLight,
     lineHeight: 18,
     marginBottom: 8,
   },
@@ -662,7 +659,7 @@ const styles = StyleSheet.create({
   },
   approvalTime: {
     fontSize: 12,
-    color: Colors.textLight,
+    color: Colors.text.primaryLight,
   },
   statusBadge: {
     paddingHorizontal: 8,
@@ -687,7 +684,7 @@ const styles = StyleSheet.create({
   metadataTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: Colors.text,
+    color: Colors.text.primary,
     marginBottom: 8,
   },
   metadataItem: {
@@ -696,13 +693,13 @@ const styles = StyleSheet.create({
   },
   metadataKey: {
     fontSize: 14,
-    color: Colors.textLight,
+    color: Colors.text.primaryLight,
     fontWeight: '500',
     minWidth: 80,
   },
   metadataValue: {
     fontSize: 14,
-    color: Colors.text,
+    color: Colors.text.primary,
     flex: 1,
   },
   approvalActions: {
@@ -752,12 +749,12 @@ const styles = StyleSheet.create({
   reviewTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: Colors.text,
+    color: Colors.text.primary,
     marginBottom: 4,
   },
   reviewText: {
     fontSize: 14,
-    color: Colors.textLight,
+    color: Colors.text.primaryLight,
     lineHeight: 18,
   },
   emptyState: {
@@ -767,12 +764,12 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: Colors.text,
+    color: Colors.text.primary,
     marginTop: 16,
   },
   emptySubtitle: {
     fontSize: 14,
-    color: Colors.textLight,
+    color: Colors.text.primaryLight,
     textAlign: 'center',
     marginTop: 4,
     lineHeight: 18,
@@ -794,7 +791,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: Colors.text,
+    color: Colors.text.primary,
   },
   modalContent: {
     flex: 1,
@@ -812,18 +809,18 @@ const styles = StyleSheet.create({
   detailTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: Colors.text,
+    color: Colors.text.primary,
     flex: 1,
   },
   detailDescription: {
     fontSize: 16,
-    color: Colors.textLight,
+    color: Colors.text.primaryLight,
     lineHeight: 22,
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: Colors.text,
+    color: Colors.text.primary,
     marginBottom: 12,
   },
   detailRow: {
@@ -832,13 +829,13 @@ const styles = StyleSheet.create({
   },
   detailLabel: {
     fontSize: 14,
-    color: Colors.textLight,
+    color: Colors.text.primaryLight,
     fontWeight: '500',
     minWidth: 100,
   },
   detailValue: {
     fontSize: 14,
-    color: Colors.text,
+    color: Colors.text.primary,
     flex: 1,
   },
   modalActions: {

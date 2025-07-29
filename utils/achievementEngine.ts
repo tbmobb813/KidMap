@@ -247,7 +247,7 @@ export class AchievementEngine {
 
   // Calculate points from achievements
   calculateTotalPoints(unlockedAchievements: Achievement[]): number {
-    return unlockedAchievements.reduce((total, achievement) => total + achievement.points, 0);
+    return unlockedAchievements.reduce((total, achievement) => total + (achievement.points || 0), 0);
   }
 
   // Get achievements by category
