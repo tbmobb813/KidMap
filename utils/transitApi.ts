@@ -157,19 +157,26 @@ class TransitAPI {
    * Generate realistic mock arrivals
    */
   private getMockArrivals(stationId: string): TransitArrival[] {
+    const ARRIVALS_MIN = 2;
+    const ARRIVALS_VARIATION = 2;
+    const MINUTES_BASE = 2;
+    const MINUTES_STEP = 5;
+    const MINUTES_VARIATION = 3;
+    const DELAY_VARIATION = 5;
+
     const routes = this.getRoutesForStation(stationId);
     const arrivals: TransitArrival[] = [];
 
     routes.forEach(route => {
-      // Generate 2-3 arrivals per route
-      for (let i = 0; i < 2 + Math.floor(Math.random() * 2); i++) {
-        const minutes = 2 + (i * 5) + Math.floor(Math.random() * 3);
+      // Generate ARRIVALS_MIN to ARRIVALS_MIN + ARRIVALS_VARIATION - 1 arrivals per route
+      for (let i = 0; i < ARRIVALS_MIN + Math.floor(Math.random() * ARRIVALS_VARIATION); i++) {
+        const minutes = MINUTES_BASE + (i * MINUTES_STEP) + Math.floor(Math.random() * MINUTES_VARIATION);
         arrivals.push({
           route,
           destination: this.getDestinationForRoute(route),
           arrivalTime: `${minutes} min`,
           isRealtime: Math.random() > 0.2, // 80% real-time
-          delay: Math.random() > 0.8 ? Math.floor(Math.random() * 5) : undefined,
+          delay: Math.random() > 0.8 ? Math.floor(Math.random() * DELAY_VARIATION) : undefined,
         });
       }
     });
@@ -248,4 +255,76 @@ export async function getTransitArrivals(stationId: string): Promise<TransitArri
 
 export async function getTransitLineStatus(): Promise<TransitLine[]> {
   return transitAPI.getLineStatus();
+}
+
+/**
+ * Additional interfaces and functions for multi-modal routing
+ */
+export interface TransitDirections {
+  line: string;
+  color: string;
+  duration: number; // minutes
+  distance: number; // meters
+  stops: string[];
+  frequency: number; // minutes between services
+  instructions: string[];
+  accessibilityNotes: string[];
+}
+
+/**
+ * Get transit directions between two stations
+ */
+export async function getTransitDirections(
+  fromStation: TransitStation,
+  toStation: TransitStation
+): Promise<TransitDirections | null> {
+  try {
+    // Find common routes between stations
+    const commonRoutes = fromStation.routes.filter(route => 
+      toStation.routes.includes(route)
+    );
+
+    if (commonRoutes.length === 0) {
+      return null; // No direct connection
+    }
+
+    // Use the first common route for simplicity
+    const selectedRoute = commonRoutes[0];
+    
+    // Calculate approximate duration and distance
+    const distance = transitAPI['calculateDistance'](fromStation.location, toStation.location);
+    const duration = Math.ceil(distance / 500); // Rough estimate: 500m/min for transit
+
+    return {
+      line: selectedRoute,
+      color: getRouteColor(selectedRoute),
+      duration,
+      distance,
+      stops: [fromStation.name, toStation.name],
+      frequency: 10, // Default 10-minute frequency
+      instructions: [
+        `Board the ${selectedRoute} train at ${fromStation.name}`,
+        `Ride for ${duration} minutes`,
+        `Exit at ${toStation.name}`
+      ],
+      accessibilityNotes: ['Hold handrails', 'Stay with adult if traveling with children']
+    };
+  } catch (error) {
+    console.error('Error getting transit directions:', error);
+    return null;
+  }
+}
+
+/**
+ * Get route color for display
+ */
+function getRouteColor(route: string): string {
+  const routeColors: Record<string, string> = {
+    '4': '#00933c', '5': '#00933c', '6': '#00933c',
+    'L': '#a7a9ac',
+    'N': '#fccc0a', 'Q': '#fccc0a', 'R': '#fccc0a', 'W': '#fccc0a',
+    '1': '#ee352e', '2': '#ee352e', '3': '#ee352e',
+    '7': '#b933ad'
+  };
+  return routeColors[route] || '#000000';
 }

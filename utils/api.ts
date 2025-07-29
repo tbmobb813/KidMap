@@ -4,7 +4,7 @@ const GOOGLE_MAPS_API_KEY =
   Constants.expoConfig?.extra?.googleMapsApiKey ||
   Constants.expoConfig?.android?.config?.googleMaps?.apiKey ||
   Constants.expoConfig?.ios?.config?.googleMapsApiKey ||
-  'AIzaSyBguszAGXJZpLfraquYx-RcHjas4UjrWcg'; // Fallback
+  // No fallback: API key must be provided via environment/config
 
 // utils/api.ts - Google Maps integration
 const GOOGLE_MAPS_BASE_URL = 'https://maps.googleapis.com/maps/api';

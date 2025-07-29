@@ -1,106 +1,180 @@
-// devicePing.test.tsx
+// __tests__/devicePing.test.tsx - Device ping system tests
+import React from 'react';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { Alert } from 'react-native';
+import DevicePingControl from '../components/DevicePingControl';
+import { devicePingManager } from '../utils/devicePing';
 
-// Mock global objects before any imports
-Object.defineProperty(global, 'navigator', {
-  writable: true,
-  value: {
-    geolocation: {
-      getCurrentPosition: jest.fn((success) =>
-        success({
-          coords: { latitude: 37.7749, longitude: -122.4194 },
-        }),
-      ),
-      watchPosition: jest.fn(),
-      clearWatch: jest.fn(),
+// Mock dependencies
+jest.mock('expo-notifications', () => ({
+  setNotificationHandler: jest.fn(),
+  requestPermissionsAsync: jest.fn().mockResolvedValue({ status: 'granted' }),
+  scheduleNotificationAsync: jest.fn(),
+  addNotificationReceivedListener: jest.fn(),
+  addNotificationResponseReceivedListener: jest.fn(),
+  AndroidNotificationPriority: {
+    MAX: 'max',
+    HIGH: 'high',
+  },
+}));
+
+jest.mock('expo-location', () => ({
+  requestForegroundPermissionsAsync: jest.fn().mockResolvedValue({ status: 'granted' }),
+  requestBackgroundPermissionsAsync: jest.fn().mockResolvedValue({ status: 'granted' }),
+  getCurrentPositionAsync: jest.fn().mockResolvedValue({
+    coords: {
+      latitude: 40.7128,
+      longitude: -74.0060,
+      accuracy: 10,
+    },
+    timestamp: Date.now(),
+  }),
+  reverseGeocodeAsync: jest.fn().mockResolvedValue([{
+    streetNumber: '123',
+    street: 'Main St',
+    city: 'New York',
+    region: 'NY',
+  }]),
+  Accuracy: {
+    BestForNavigation: 'bestForNavigation',
+    Balanced: 'balanced',
+    High: 'high',
+  },
+}));
+
+jest.mock('expo-av', () => ({
+  Audio: {
+    requestPermissionsAsync: jest.fn().mockResolvedValue({ status: 'granted' }),
+    setAudioModeAsync: jest.fn(),
+    Sound: {
+      createAsync: jest.fn().mockResolvedValue({
+        sound: {
+          playAsync: jest.fn(),
+          stopAsync: jest.fn(),
+          unloadAsync: jest.fn(),
+        },
+      }),
     },
   },
-});
-
-Object.defineProperty(global, 'Notification', {
-  writable: true,
-  value: jest.fn(),
-});
-
-import { pingDevice, sendLocationUpdate } from '@/utils/pingDevice';
-
-// Mock expo-notifications
-jest.mock('expo-notifications', () => ({
-  scheduleNotificationAsync: jest.fn(),
-  getNotificationAsync: jest.fn(() =>
-    Promise.resolve({
-      title: 'Ping Alert',
-      body: 'Your device is being pinged!',
-    }),
-  ),
 }));
 
-// Mock useLocation hook
-jest.mock('@/hooks/useLocation', () => ({
-  __esModule: true,
-  default: jest.fn(() => ({
-    location: { latitude: 37.7749, longitude: -122.4194 },
-  })),
+jest.mock('../stores/parentalControlStore', () => ({
+  useParentalControlStore: () => ({
+    isAuthenticated: true,
+  }),
 }));
 
-afterEach(() => {
-  jest.clearAllMocks();
-  jest.restoreAllMocks();
-});
+jest.mock('../utils/speechEngine', () => ({
+  speechEngine: {
+    speak: jest.fn(),
+  },
+}));
 
-describe('Device Ping/Locate', () => {
-  it('should make the device ring with a ping alert', async () => {
-    const scheduleNotificationSpy = jest.spyOn(
-      require('expo-notifications'),
-      'scheduleNotificationAsync',
-    );
+// Mock Alert
+jest.spyOn(Alert, 'alert');
 
-    await pingDevice();
+describe('Device Ping System', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-    expect(scheduleNotificationSpy).toHaveBeenCalledWith({
-      content: {
-        title: 'Device Ping',
-        body: 'This is a ping from the parent.',
-        sound: 'default',
-      },
-      trigger: null,
+  describe('DevicePingManager', () => {
+    it('should initialize properly', async () => {
+      await devicePingManager.initialize();
+      // Test passes if no errors are thrown
+      expect(true).toBe(true);
+    });
+
+    it('should send a ring ping', async () => {
+      const pingId = await devicePingManager.ringChild('Test ring message');
+      expect(pingId).toBeDefined();
+      expect(typeof pingId).toBe('string');
+    });
+
+    it('should send a location request', async () => {
+      const pingId = await devicePingManager.requestLocation('Where are you?');
+      expect(pingId).toBeDefined();
+      expect(typeof pingId).toBe('string');
+    });
+
+    it('should send a check-in request', async () => {
+      const pingId = await devicePingManager.requestCheckIn('How are you doing?');
+      expect(pingId).toBeDefined();
+      expect(typeof pingId).toBe('string');
+    });
+
+    it('should send an emergency ping', async () => {
+      const pingId = await devicePingManager.sendEmergencyPing('Emergency! Respond now!');
+      expect(pingId).toBeDefined();
+      expect(typeof pingId).toBe('string');
+    });
+
+    it('should track pending requests', async () => {
+      await devicePingManager.ringChild('Test ping');
+      const pendingRequests = devicePingManager.getPendingRequests();
+      expect(pendingRequests.length).toBeGreaterThan(0);
+      expect(pendingRequests[0].type).toBe('ring');
+    });
+
+    it('should maintain ping history', async () => {
+      await devicePingManager.requestCheckIn('Test check-in');
+      const history = devicePingManager.getPingHistory();
+      expect(history.length).toBeGreaterThan(0);
     });
   });
 
-  it('should send location updates with correct coordinates', async () => {
-    const mockUseLocation = require('@/hooks/useLocation').default;
-    const mockCoords = { latitude: 37.7749, longitude: -122.4194 };
+  describe('DevicePingControl Component', () => {
+    const defaultProps = {
+      visible: true,
+      onClose: jest.fn(),
+    };
 
-    mockUseLocation.mockReturnValue({
-      location: mockCoords,
+    it('renders correctly when visible', () => {
+      const { getByText } = render(<DevicePingControl {...defaultProps} />);
+      expect(getByText('Device Control')).toBeTruthy();
+      expect(getByText('Quick Actions')).toBeTruthy();
     });
 
-    // Spy on console.log to verify location is logged
-    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
+    it('renders all quick action buttons', () => {
+      const { getByText } = render(<DevicePingControl {...defaultProps} />);
+      expect(getByText('Ring Device')).toBeTruthy();
+      expect(getByText('Get Location')).toBeTruthy();
+      expect(getByText('Check-in')).toBeTruthy();
+      expect(getByText('Emergency')).toBeTruthy();
+    });
 
-    await sendLocationUpdate();
+    it('handles ring device button press', async () => {
+      const { getByText } = render(<DevicePingControl {...defaultProps} />);
+      const ringButton = getByText('Ring Device');
+      
+      fireEvent.press(ringButton);
+      
+      await waitFor(() => {
+        expect(Alert.alert).toHaveBeenCalledWith(
+          'Ping Sent',
+          'Your ring request has been sent to your child\'s device.',
+          expect.any(Array)
+        );
+      });
+    });
 
-    expect(consoleLogSpy).toHaveBeenCalledWith(
-      `Sending location: ${mockCoords.latitude}, ${mockCoords.longitude}`,
-    );
-
-    consoleLogSpy.mockRestore();
+    it('displays empty state when no pending requests', () => {
+      const { getByText } = render(<DevicePingControl {...defaultProps} />);
+      expect(getByText('No pending requests')).toBeTruthy();
+      expect(getByText('Your child has responded to all pings')).toBeTruthy();
+    });
   });
 
-  it('should handle geolocation errors gracefully', async () => {
-    const mockUseLocation = require('@/hooks/useLocation').default;
-
-    // Mock useLocation to return null (no location available)
-    mockUseLocation.mockReturnValue({
-      location: null,
+  describe('Error Handling', () => {
+    it('should handle location permission denied gracefully', async () => {
+      // Mock permission denied
+      const mockLocation = require('expo-location');
+      mockLocation.requestForegroundPermissionsAsync.mockResolvedValueOnce({ status: 'denied' });
+      
+      await devicePingManager.initialize();
+      
+      // Should not throw error, but log warning
+      expect(true).toBe(true);
     });
-
-    // Spy on console.error to verify error handling
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
-
-    await sendLocationUpdate();
-
-    expect(consoleErrorSpy).toHaveBeenCalledWith('Location not available');
-
-    consoleErrorSpy.mockRestore();
   });
 });

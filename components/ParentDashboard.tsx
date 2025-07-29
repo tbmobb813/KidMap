@@ -11,6 +11,9 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SafeZoneManager from './SafeZoneManager';
+import SafeZoneSettings from './SafeZoneSettings';
+import { SafeZoneAlertHistory } from './SafeZoneAlert';
+import { safeZoneAlertManager } from '@/utils/safeZoneAlerts';
 import { pingDevice, sendLocationUpdate } from '@/utils/pingDevice';
 
 const PIN_KEY = 'parent_pin';
@@ -21,6 +24,7 @@ const ParentDashboard: React.FC = () => {
   const [newPin, setNewPin] = useState('');
   const [confirmPin, setConfirmPin] = useState('');
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<'zones' | 'alerts' | 'settings'>('zones');
 
   const handleChangePin = async () => {
     setLoading(true);
@@ -50,56 +54,103 @@ const ParentDashboard: React.FC = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.header}>Parent Dashboard</Text>
 
-      <Section title="Category Management">
-        <Text style={styles.sectionText}>Add, edit, or approve categories for your child.</Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Manage Categories</Text>
-        </TouchableOpacity>
-      </Section>
-
-      <Section title="Safe Zones">
-        <Text style={styles.sectionText}>Set up geofenced safe zones and receive alerts.</Text>
-        <SafeZoneManager />
-      </Section>
-
-      <Section title="Check-Ins">
-        <Text style={styles.sectionText}>Request or review your child's check-ins.</Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>View Check-Ins</Text>
-        </TouchableOpacity>
-      </Section>
-
-      <Section title="Device Ping / Locate">
-        <Text style={styles.sectionText}>
-          Ping your child's device to ring or request a location update.
-        </Text>
+      {/* Tab Navigation */}
+      <View style={styles.tabContainer}>
         <TouchableOpacity
-          style={styles.button}
-          onPress={async () => {
-            await pingDevice();
-            await sendLocationUpdate();
-          }}
+          style={[styles.tab, activeTab === 'zones' && styles.activeTab]}
+          onPress={() => setActiveTab('zones')}
         >
-          <Text style={styles.buttonText}>Ping Child's Device</Text>
+          <Text style={[styles.tabText, activeTab === 'zones' && styles.activeTabText]}>
+            Safe Zones
+          </Text>
         </TouchableOpacity>
-      </Section>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'alerts' && styles.activeTab]}
+          onPress={() => setActiveTab('alerts')}
+        >
+          <Text style={[styles.tabText, activeTab === 'alerts' && styles.activeTabText]}>
+            Alerts & History
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'settings' && styles.activeTab]}
+          onPress={() => setActiveTab('settings')}
+        >
+          <Text style={[styles.tabText, activeTab === 'settings' && styles.activeTabText]}>
+            Settings
+          </Text>
+        </TouchableOpacity>
+      </View>
 
-      <Section title="Device Settings">
-        <Text style={styles.sectionText}>Manage device permissions and settings.</Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Device Settings</Text>
-        </TouchableOpacity>
-      </Section>
+      {/* Tab Content */}
+      <ScrollView style={styles.tabContent}>
+        {activeTab === 'zones' && (
+          <>
+            <Section title="Safe Zone Management">
+              <Text style={styles.sectionText}>Set up geofenced safe zones and manage locations.</Text>
+              <SafeZoneManager />
+            </Section>
 
-      <Section title="Parent Mode Lock">
-        <Text style={styles.sectionText}>Protect parent mode with PIN or biometrics.</Text>
-        <TouchableOpacity style={styles.button} onPress={() => setShowPinModal(true)}>
-          <Text style={styles.buttonText}>Change PIN</Text>
-        </TouchableOpacity>
-      </Section>
+            <Section title="Category Management">
+              <Text style={styles.sectionText}>Add, edit, or approve categories for your child.</Text>
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>Manage Categories</Text>
+              </TouchableOpacity>
+            </Section>
+
+            <Section title="Device Ping / Locate">
+              <Text style={styles.sectionText}>
+                Ping your child's device to ring or request a location update.
+              </Text>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={async () => {
+                  await pingDevice();
+                  await sendLocationUpdate();
+                }}
+              >
+                <Text style={styles.buttonText}>Ping Child's Device</Text>
+              </TouchableOpacity>
+            </Section>
+          </>
+        )}
+
+        {activeTab === 'alerts' && (
+          <>
+            <SafeZoneAlertHistory events={safeZoneAlertManager.getRecentEvents()} />
+            
+            <Section title="Check-Ins">
+              <Text style={styles.sectionText}>Request or review your child's check-ins.</Text>
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>View Check-Ins</Text>
+              </TouchableOpacity>
+            </Section>
+          </>
+        )}
+
+        {activeTab === 'settings' && (
+          <>
+            <SafeZoneSettings />
+            
+            <Section title="Parent Mode Lock">
+              <Text style={styles.sectionText}>Protect parent mode with PIN or biometrics.</Text>
+              <TouchableOpacity style={styles.button} onPress={() => setShowPinModal(true)}>
+                <Text style={styles.buttonText}>Change PIN</Text>
+              </TouchableOpacity>
+            </Section>
+
+            <Section title="Device Settings">
+              <Text style={styles.sectionText}>Manage device permissions and settings.</Text>
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>Device Settings</Text>
+              </TouchableOpacity>
+            </Section>
+          </>
+        )}
+      </ScrollView>
 
       <Modal visible={showPinModal} animationType="slide" transparent>
         <View style={styles.modalOverlay}>
@@ -141,7 +192,7 @@ const ParentDashboard: React.FC = () => {
           </View>
         </View>
       </Modal>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -239,6 +290,36 @@ const styles = StyleSheet.create({
     color: '#4F8EF7',
     fontSize: 15,
     textDecorationLine: 'underline',
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#F5F7FA',
+    marginHorizontal: 16,
+    marginBottom: 16,
+    borderRadius: 12,
+    padding: 4,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  activeTab: {
+    backgroundColor: '#4F8EF7',
+  },
+  tabText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#5A6B7B',
+  },
+  activeTabText: {
+    color: '#FFFFFF',
+  },
+  tabContent: {
+    flex: 1,
+    paddingHorizontal: 16,
   },
 });
 

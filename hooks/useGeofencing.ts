@@ -1,11 +1,17 @@
 import { useEffect, useRef } from 'react';
 import { useSafeZoneStore } from '@/stores/safeZoneStore';
 import useLocation from '@/hooks/useLocation';
+import { safeZoneAlertManager } from '@/utils/safeZoneAlerts';
 
-export function useGeofencing(onEnterExit: (zoneId: string, event: 'enter' | 'exit') => void) {
+export function useGeofencing(onEnterExit?: (zoneId: string, event: 'enter' | 'exit') => void) {
   const { safeZones } = useSafeZoneStore();
   const { location } = useLocation();
   const prevZoneIds = useRef<Set<string>>(new Set());
+
+  // Initialize alert manager
+  useEffect(() => {
+    safeZoneAlertManager.initialize();
+  }, []);
 
   // Haversine formula for distance in meters
   function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
@@ -23,19 +29,52 @@ export function useGeofencing(onEnterExit: (zoneId: string, event: 'enter' | 'ex
 
   useEffect(() => {
     if (!location) return;
+    
     const insideZones = new Set<string>();
+    const currentLocation = { latitude: location.latitude, longitude: location.longitude };
+    
     safeZones.forEach((zone) => {
-      const d = getDistance(location.latitude, location.longitude, zone.latitude, zone.longitude);
-      if (d <= zone.radius) insideZones.add(zone.id);
+      const distance = getDistance(location.latitude, location.longitude, zone.latitude, zone.longitude);
+      if (distance <= zone.radius) {
+        insideZones.add(zone.id);
+      }
     });
+
     // Detect entry
-    insideZones.forEach((id) => {
-      if (!prevZoneIds.current.has(id)) onEnterExit(id, 'enter');
+    insideZones.forEach((zoneId) => {
+      if (!prevZoneIds.current.has(zoneId)) {
+        const zone = safeZones.find(z => z.id === zoneId);
+        if (zone) {
+          // Trigger callback if provided
+          onEnterExit?.(zoneId, 'enter');
+          
+          // Handle alert system
+          safeZoneAlertManager.handleSafeZoneEvent(zoneId, 'enter', zone, currentLocation);
+        }
+      }
     });
+
     // Detect exit
-    prevZoneIds.current.forEach((id) => {
-      if (!insideZones.has(id)) onEnterExit(id, 'exit');
+    prevZoneIds.current.forEach((zoneId) => {
+      if (!insideZones.has(zoneId)) {
+        const zone = safeZones.find(z => z.id === zoneId);
+        if (zone) {
+          // Trigger callback if provided
+          onEnterExit?.(zoneId, 'exit');
+          
+          // Handle alert system
+          safeZoneAlertManager.handleSafeZoneEvent(zoneId, 'exit', zone, currentLocation);
+        }
+      }
     });
+
     prevZoneIds.current = insideZones;
-  }, [location, safeZones]);
+  }, [location, safeZones, onEnterExit]);
+
+  // Return current zone status
+  return {
+    currentZones: Array.from(prevZoneIds.current),
+    isInSafeZone: prevZoneIds.current.size > 0,
+    safeZoneCount: prevZoneIds.current.size
+  };
 }

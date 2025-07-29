@@ -4,6 +4,7 @@ import MapView, { Marker, Polyline, PROVIDER_GOOGLE, LatLng, Region } from 'reac
 import { RouteResult } from '@/utils/api';
 import { TransitStation } from '@/utils/transitApi';
 import Colors from '@/constants/colors';
+import polyline from '@mapbox/polyline';
 
 const { width, height } = Dimensions.get('window');
 
@@ -76,45 +77,11 @@ const KidMap: React.FC<KidMapProps> = ({
   };
 
   const decodePolyline = (encoded: string): LatLng[] => {
-    // Simple polyline decoding (you might want to use a library for this)
-    const points: LatLng[] = [];
-    let index = 0;
-    let lat = 0;
-    let lng = 0;
-
-    while (index < encoded.length) {
-      let b;
-      let shift = 0;
-      let result = 0;
-
-      do {
-        b = encoded.charCodeAt(index++) - 63;
-        result |= (b & 0x1f) << shift;
-        shift += 5;
-      } while (b >= 0x20);
-
-      const deltaLat = result & 1 ? ~(result >> 1) : result >> 1;
-      lat += deltaLat;
-
-      shift = 0;
-      result = 0;
-
-      do {
-        b = encoded.charCodeAt(index++) - 63;
-        result |= (b & 0x1f) << shift;
-        shift += 5;
-      } while (b >= 0x20);
-
-      const deltaLng = result & 1 ? ~(result >> 1) : result >> 1;
-      lng += deltaLng;
-
-      points.push({
-        latitude: lat / 1e5,
-        longitude: lng / 1e5,
-      });
-    }
-
-    return points;
+    // Use @mapbox/polyline for robust decoding
+    return polyline.decode(encoded).map(([latitude, longitude]) => ({
+      latitude,
+      longitude,
+    }));
   };
 
   const routeCoordinates = route ? decodePolyline(route.overview_polyline) : [];

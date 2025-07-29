@@ -196,7 +196,7 @@ export default function TransitScreen() {
               >
                 {station.name}
               </Text>
-              <Text style={styles.stationDistance}>{((station as any).distance * 1000).toFixed(0)}m</Text>
+              <Text style={styles.stationDistance}>{(station.distance * 1000).toFixed(0)}m</Text>
             </Pressable>
           ))}
         </ScrollView>

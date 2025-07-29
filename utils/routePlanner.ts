@@ -1,6 +1,7 @@
-// utils/routePlanner.ts - Integrated route planning for KidMap
+// utils/routePlanner.ts - Enhanced route planning for KidMap with multi-modal support
 import { fetchRoute, RouteResult, TravelMode } from './api';
-import { getNearbyTransitStations, TransitStation } from './transitApi';
+import { getNearbyTransitStations, TransitStation, getTransitDirections } from './transitApi';
+import { MultiModalRoutePlanner, MultiModalRouteOptions } from './multiModalRoutePlanner';
 
 export interface RouteOption {
   id: string;
@@ -12,11 +13,16 @@ export interface RouteOption {
   kidFriendliness: number; // 1-5 rating
   safety: number; // 1-5 rating
   route?: RouteResult;
+  recommendation?: {
+    score: number;
+    reasons: string[];
+    warnings: string[];
+  };
 }
 
 export interface RouteStep {
   id: string;
-  type: 'walk' | 'transit' | 'wait';
+  type: 'walk' | 'transit' | 'wait' | 'bike';
   instruction: string;
   duration: number; // minutes
   distance?: number; // meters
@@ -26,11 +32,11 @@ export interface RouteStep {
 }
 
 /**
- * Enhanced route planner for kid-friendly navigation
+ * Enhanced route planner for kid-friendly navigation with multi-modal support
  */
-export class RouteePlanner {
+export class RoutePlanner {
   /**
-   * Get multiple route options between two points
+   * Get comprehensive route options using multi-modal planner
    */
   static async getRouteOptions(
     from: [number, number],
@@ -40,7 +46,48 @@ export class RouteePlanner {
       avoidStairs?: boolean;
       maxWalkingDistance?: number; // meters
       timeOfDay?: 'morning' | 'afternoon' | 'evening';
+      childAge?: number;
+      parentSupervision?: boolean;
+      weatherCondition?: 'sunny' | 'rainy' | 'cloudy';
+      preferredModes?: TravelMode[];
     } = {}
+  ): Promise<RouteOption[]> {
+    try {
+      // Use the new multi-modal route planner for comprehensive options
+      const multiModalOptions: Partial<MultiModalRouteOptions> = {
+        maxWalkingDistance: preferences.maxWalkingDistance || 800,
+        preferredModes: preferences.preferredModes || ['walking', 'transit'],
+        avoidStairs: preferences.avoidStairs || false,
+        childAge: preferences.childAge || 10,
+        timeOfDay: preferences.timeOfDay || 'afternoon',
+        weatherCondition: preferences.weatherCondition || 'sunny',
+        parentSupervision: preferences.parentSupervision ?? true,
+      };
+
+      const routes = await MultiModalRoutePlanner.getMultiModalRoutes(
+        from, to, multiModalOptions
+      );
+
+      // Add legacy compatibility and enhanced recommendations
+      return routes.map(route => ({
+        ...route,
+        recommendation: this.generateRecommendation(route, preferences)
+      }));
+
+    } catch (error) {
+      console.error('Error getting multi-modal route options:', error);
+      // Fallback to legacy system
+      return this.getLegacyRouteOptions(from, to, preferences);
+    }
+  }
+
+  /**
+   * Legacy route options for backwards compatibility
+   */
+  private static async getLegacyRouteOptions(
+    from: [number, number],
+    to: [number, number],
+    preferences: any
   ): Promise<RouteOption[]> {
     const options: RouteOption[] = [];
 
@@ -65,9 +112,93 @@ export class RouteePlanner {
       });
 
     } catch (error) {
-      console.error('Error getting route options:', error);
+      console.error('Error getting legacy route options:', error);
       return [];
     }
+  }
+
+  /**
+   * Generate recommendation with scoring and reasons
+   */
+  private static generateRecommendation(
+    route: RouteOption,
+    preferences: any
+  ): RouteOption['recommendation'] {
+    const reasons: string[] = [];
+    const warnings: string[] = [];
+    let score = 0;
+
+    // Safety scoring
+    if (route.safety >= 4) {
+      score += 20;
+      reasons.push('High safety rating');
+    } else if (route.safety <= 2) {
+      warnings.push('Lower safety rating - consider adult supervision');
+      score -= 10;
+    }
+
+    // Kid-friendliness scoring
+    if (route.kidFriendliness >= 4) {
+      score += 15;
+      reasons.push('Very kid-friendly route');
+    } else if (route.kidFriendliness <= 2) {
+      warnings.push('May be challenging for younger children');
+      score -= 5;
+    }
+
+    // Duration considerations
+    if (route.duration <= 15) {
+      score += 10;
+      reasons.push('Quick journey time');
+    } else if (route.duration >= 45) {
+      warnings.push('Long journey - bring entertainment');
+      score -= 5;
+    }
+
+    // Mode-specific recommendations
+    switch (route.mode) {
+      case 'walking':
+        if (preferences.weatherCondition === 'rainy') {
+          warnings.push('Walking in rain - bring umbrella');
+          score -= 5;
+        } else {
+          reasons.push('Great exercise and independence');
+          score += 5;
+        }
+        break;
+      
+      case 'bicycling':
+        if ((preferences.childAge || 10) >= 8) {
+          reasons.push('Fun and eco-friendly option');
+          score += 5;
+        } else {
+          warnings.push('Biking may be too advanced for this age');
+          score -= 15;
+        }
+        break;
+      
+      case 'transit':
+        if (preferences.parentSupervision) {
+          reasons.push('Comfortable with adult guidance');
+          score += 10;
+        } else if ((preferences.childAge || 10) < 10) {
+          warnings.push('Transit requires adult supervision');
+          score -= 20;
+        }
+        break;
+    }
+
+    // Accessibility bonus
+    if (route.accessibility === 'high') {
+      score += 5;
+      reasons.push('Excellent accessibility');
+    }
+
+    return {
+      score: Math.max(0, score),
+      reasons,
+      warnings
+    };
   }
 
   /**
@@ -272,5 +403,5 @@ export async function getKidFriendlyRoutes(
     maxWalkingDistance: (childAge || 10) >= 14 ? 1000 : 500, // Adjust for age
   };
 
-  return RouteePlanner.getRouteOptions(from, to, preferences);
+  return RoutePlanner.getRouteOptions(from, to, preferences);
 }
