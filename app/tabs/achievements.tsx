@@ -5,12 +5,17 @@ import AchievementBadge from '@/components/AchievementBadge';
 import UserStatsCard from '@/components/UserStatsCard';
 import { useGamificationStore } from '@/stores/gamificationStore';
 import { achievementEngine } from '@/utils/achievementEngine';
+import type { UserStats } from '@/types/index';
 import { Trophy, Star, Target, Calendar, Award, TrendingUp } from 'lucide-react-native';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 export default function AchievementsScreen() {
-  const { achievements, userStats, tripJournal } = useGamificationStore();
+  const { achievements, userStats, tripJournal } = useGamificationStore() as {
+    achievements: any[];
+    userStats: UserStats;
+    tripJournal: any[];
+  };
   const [selectedTab, setSelectedTab] = useState<'achievements' | 'progress' | 'journal'>('achievements');
   const [allAchievements, setAllAchievements] = useState(achievementEngine.getAllAchievements());
   const [nextAchievements, setNextAchievements] = useState(achievementEngine.getNextAchievements(userStats));

@@ -8,6 +8,12 @@
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <!-- END OPTIONAL PERMISSIONS -->
+  <meta-data
+  android:name="com.google.android.geo.API_KEY"
+  android:value="AIzaSyBguszAGXJZpLfraquYx-RcHjas4UjrWcg" />
+  <meta-data
+    android:name="com.google.android.gms.version"
+    android:value="@integer/google_play_services_version" />
 
   <queries>
     <!-- Support checking for http(s) links via the Linking API -->

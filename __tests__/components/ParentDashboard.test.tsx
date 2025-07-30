@@ -1,6 +1,8 @@
 import React from 'react';
-import { render, fireEvent, cleanup, waitFor } from '@testing-library/react-native';
+import { fireEvent, cleanup, waitFor } from '@testing-library/react-native';
 import ParentDashboard from '@/components/ParentDashboard';
+import { renderWithProviders } from '../helpers/renderWithProviders';
+import { setupMockAsyncStorage, mockAsyncStorageInstance } from '../helpers/mockAsyncStorage';
 
 // --- Required mocks ---
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
@@ -15,12 +17,14 @@ jest.mock('@/utils/pingDevice', () => ({
   sendLocationUpdate: jest.fn(),
 }));
 
-// Mock AsyncStorage to prevent errors on getItem calls
-jest.mock('@react-native-async-storage/async-storage', () => ({
-  getItem: jest.fn(() => Promise.resolve(null)),
-  setItem: jest.fn(() => Promise.resolve(null)),
-  removeItem: jest.fn(() => Promise.resolve(null)),
-}));
+// Use our comprehensive AsyncStorage mock
+jest.mock('@react-native-async-storage/async-storage', () => 
+  require('../helpers/mockAsyncStorage').createAsyncStorageMock()
+);
+
+beforeEach(() => {
+  setupMockAsyncStorage();
+});
 
 afterEach(() => {
   cleanup();
@@ -30,7 +34,7 @@ afterEach(() => {
 
 describe('UI/UX Testing - ParentDashboard', () => {
   it('renders the Parent Dashboard correctly', () => {
-    const { toJSON, getByText, getAllByText } = render(<ParentDashboard />);
+    const { toJSON, getByText, getAllByText } = renderWithProviders(<ParentDashboard />);
     expect(getByText('Parent Dashboard')).toBeTruthy();
     expect(getByText('Category Management')).toBeTruthy();
     expect(getAllByText('Safe Zones').length).toBeGreaterThan(1);
@@ -42,7 +46,7 @@ describe('UI/UX Testing - ParentDashboard', () => {
   });
 
   it('triggers ping action when "Ping Child\'s Device" is pressed', async () => {
-    const { getByText } = render(<ParentDashboard />);
+    const { getByText } = renderWithProviders(<ParentDashboard />);
     const pingButton = getByText("Ping Child's Device");
     fireEvent.press(pingButton);
     const { pingDevice, sendLocationUpdate } = require('@/utils/pingDevice');
@@ -53,13 +57,13 @@ describe('UI/UX Testing - ParentDashboard', () => {
   });
 
   it('renders Safe Zones component and its controls', () => {
-    const { getAllByText, getByText } = render(<ParentDashboard />);
+    const { getAllByText, getByText } = renderWithProviders(<ParentDashboard />);
     expect(getAllByText('Safe Zones').length).toBeGreaterThan(1);
     expect(getByText('Add Safe Zone')).toBeTruthy();
   });
 
   it('allows entering Safe Zone data and submitting the form', () => {
-    const { getByPlaceholderText, getByText } = render(<ParentDashboard />);
+    const { getByPlaceholderText, getByText } = renderWithProviders(<ParentDashboard />);
     fireEvent.changeText(getByPlaceholderText('Name'), 'School');
     fireEvent.changeText(getByPlaceholderText('Latitude'), '37.7749');
     fireEvent.changeText(getByPlaceholderText('Longitude'), '-122.4194');
@@ -71,18 +75,20 @@ describe('UI/UX Testing - ParentDashboard', () => {
   // Additional tests
 
   it('loads Safe Zones from AsyncStorage on mount', async () => {
-    const AsyncStorage = require('@react-native-async-storage/async-storage');
-    AsyncStorage.getItem.mockResolvedValueOnce(
-      JSON.stringify([{ id: '1', name: 'Home', radius: 100 }])
-    );
-    render(<ParentDashboard />);
+    // Set up mock data using our helper
+    mockAsyncStorageInstance.setStorageData({
+      safe_zones: JSON.stringify([{ id: '1', name: 'Home', radius: 100 }])
+    });
+    
+    renderWithProviders(<ParentDashboard />);
+    
     await waitFor(() => {
-      expect(AsyncStorage.getItem).toHaveBeenCalled();
+      expect(mockAsyncStorageInstance.getItem).toHaveBeenCalledWith('safe_zones');
     });
   });
 
   it('navigates to details screen when a Safe Zone is selected', () => {
-    const { getByText } = render(<ParentDashboard />);
+    const { getByText } = renderWithProviders(<ParentDashboard />);
     // Assuming that tapping on a Safe Zone item triggers navigation
     const safeZoneItem = getByText('Safe Zones');
     fireEvent.press(safeZoneItem);

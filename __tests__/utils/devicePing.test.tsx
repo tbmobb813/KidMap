@@ -1,9 +1,10 @@
 // __tests__/devicePing.test.tsx - Device ping system tests
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { fireEvent, waitFor } from '@testing-library/react-native';
 import { Alert } from 'react-native';
-import DevicePingControl from '../components/DevicePingControl';
-import { devicePingManager } from '../utils/devicePing';
+import DevicePingControl from '../../components/DevicePingControl';
+import { devicePingManager } from '../../utils/devicePing';
+import { renderWithProviders, setupKidMapTests } from '../helpers';
 
 // Mock dependencies
 jest.mock('expo-notifications', () => ({
@@ -58,13 +59,13 @@ jest.mock('expo-av', () => ({
   },
 }));
 
-jest.mock('../stores/parentalControlStore', () => ({
+jest.mock('@/stores/parentalControlStore', () => ({
   useParentalControlStore: () => ({
     isAuthenticated: true,
   }),
 }));
 
-jest.mock('../utils/speechEngine', () => ({
+jest.mock('@/utils/speechEngine', () => ({
   speechEngine: {
     speak: jest.fn(),
   },
@@ -129,14 +130,18 @@ describe('Device Ping System', () => {
       onClose: jest.fn(),
     };
 
+    beforeEach(() => {
+      setupKidMapTests();
+    });
+
     it('renders correctly when visible', () => {
-      const { getByText } = render(<DevicePingControl {...defaultProps} />);
+      const { getByText } = renderWithProviders(<DevicePingControl {...defaultProps} />);
       expect(getByText('Device Control')).toBeTruthy();
       expect(getByText('Quick Actions')).toBeTruthy();
     });
 
     it('renders all quick action buttons', () => {
-      const { getByText } = render(<DevicePingControl {...defaultProps} />);
+      const { getByText } = renderWithProviders(<DevicePingControl {...defaultProps} />);
       expect(getByText('Ring Device')).toBeTruthy();
       expect(getByText('Get Location')).toBeTruthy();
       expect(getByText('Check-in')).toBeTruthy();
@@ -144,7 +149,7 @@ describe('Device Ping System', () => {
     });
 
     it('handles ring device button press', async () => {
-      const { getByText } = render(<DevicePingControl {...defaultProps} />);
+      const { getByText } = renderWithProviders(<DevicePingControl {...defaultProps} />);
       const ringButton = getByText('Ring Device');
       
       fireEvent.press(ringButton);
@@ -159,7 +164,7 @@ describe('Device Ping System', () => {
     });
 
     it('displays empty state when no pending requests', () => {
-      const { getByText } = render(<DevicePingControl {...defaultProps} />);
+      const { getByText } = renderWithProviders(<DevicePingControl {...defaultProps} />);
       expect(getByText('No pending requests')).toBeTruthy();
       expect(getByText('Your child has responded to all pings')).toBeTruthy();
     });

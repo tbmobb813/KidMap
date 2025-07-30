@@ -7,6 +7,7 @@ import SearchWithSuggestions from '@/components/SearchWithSuggestions';
 import PlaceCard from '@/components/PlaceCard';
 import CategoryButton from '@/components/CategoryButton';
 import SafetyPanel from '@/components/SafetyPanel';
+import SafetyErrorBoundary from '@/components/SafetyErrorBoundary';
 import RegionalFunFactCard from '@/components/RegionalFunFactCard';
 import UserStatsCard from '@/components/UserStatsCard';
 import WeatherCard from '@/components/WeatherCard';
@@ -26,7 +27,7 @@ import {
   configureNotificationHandler,
 } from '@/utils/notifications';
 import { trackScreenView, trackUserAction } from '@/utils/analytics';
-import type { SearchSuggestion } from '@/components/SearchWithSuggestions';
+import SearchSuggestion from '@/components/SearchWithSuggestions';
 import type { PlaceCategory, Place } from '@/types/navigation';
 
 export default function HomeScreen() {
@@ -163,7 +164,12 @@ export default function HomeScreen() {
 
         {showFunFact && <RegionalFunFactCard onDismiss={() => setShowFunFact(false)} />}
 
-        <SafetyPanel currentLocation={location} />
+        <SafetyErrorBoundary 
+          componentName="Safety Panel"
+          fallbackMessage="The safety panel is temporarily unavailable. Your safety features can still be accessed through the Safety tab."
+        >
+          <SafetyPanel currentLocation={location} />
+        </SafetyErrorBoundary>
 
         <View style={styles.searchContainer}>
           <SearchWithSuggestions
@@ -212,40 +218,39 @@ export default function HomeScreen() {
     </PullToRefresh>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 16,
     backgroundColor: Colors.background,
   },
   searchContainer: {
-    marginBottom: 24,
-    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
   },
   currentLocationButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 12,
+    marginLeft: 8,
+    paddingHorizontal: 12,
     paddingVertical: 8,
+    backgroundColor: Colors.primaryLight,
+    borderRadius: 8,
   },
   currentLocationText: {
     marginLeft: 8,
-    fontSize: 14,
     color: Colors.primary,
-    fontWeight: '500',
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: '700',
-    color: Colors.text,
-    marginBottom: 16,
-    paddingHorizontal: 16,
+    fontWeight: 'bold',
+    marginVertical: 8,
+    color: Colors.text.primary,
   },
   categoriesContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: 24,
-    paddingHorizontal: 16,
+    gap: 8,
   },
 });

@@ -1,9 +1,10 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { fireEvent, waitFor } from '@testing-library/react-native';
 import RouteDetailScreen from '@/app/route/[id]';
 import * as api from '@/utils/api';
 import { TravelMode } from '@/utils/api';
 import { useNavigationStore } from '@/stores/navigationStore';
+import { renderWithProviders, setupKidMapTests } from '../helpers';
 
 jest.mock('@/stores/navigationStore');
 jest.mock('@/utils/api');
@@ -13,6 +14,7 @@ describe('RouteDetailScreen', () => {
   const destination = { coords: [1, 1], name: 'End' };
 
   beforeEach(() => {
+    setupKidMapTests();
     (useNavigationStore as jest.Mock).mockReturnValue({ origin, destination });
   });
 
@@ -25,7 +27,7 @@ describe('RouteDetailScreen', () => {
     };
     (api.fetchRoute as jest.Mock).mockResolvedValueOnce(stubResult);
 
-    const { getByTestId, queryByText } = render(<RouteDetailScreen />);
+    const { getByTestId, queryByText } = renderWithProviders(<RouteDetailScreen />);
     expect(getByTestId('loading-spinner')).toBeTruthy();
 
     await waitFor(() => {
@@ -38,7 +40,7 @@ describe('RouteDetailScreen', () => {
   it('renders error message on null result', async () => {
     (api.fetchRoute as jest.Mock).mockResolvedValueOnce(null);
 
-    const { getByText } = render(<RouteDetailScreen />);
+    const { getByText } = renderWithProviders(<RouteDetailScreen />);
     await waitFor(() => {
       expect(getByText('Unable to load route')).toBeTruthy();
     });
@@ -51,7 +53,7 @@ describe('RouteDetailScreen', () => {
       totalDuration: 0,
       steps: [],
     });
-    const { getByText } = render(<RouteDetailScreen />);
+    const { getByText } = renderWithProviders(<RouteDetailScreen />);
 
     await waitFor(() => expect(api.fetchRoute).toHaveBeenCalledTimes(1));
     fireEvent.press(getByText('Cycling'));

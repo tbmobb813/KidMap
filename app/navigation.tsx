@@ -446,7 +446,7 @@ const styles = StyleSheet.create({
   instruction: {
     fontSize: 18,
     fontWeight: '600',
-    color: Colors.text,
+    color: Colors.text as string,
     marginBottom: 8,
     lineHeight: 24,
   },

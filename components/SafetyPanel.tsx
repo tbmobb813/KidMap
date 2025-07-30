@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: '600',
-    color: Colors.text,
+    color: Colors.text.primary,
     marginLeft: 8,
   },
   expandIcon: {

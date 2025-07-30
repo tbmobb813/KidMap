@@ -68,8 +68,44 @@ class SafeZoneAlertManager {
           timestamp: new Date(event.timestamp)
         }));
       }
+
+      console.log('SafeZoneAlertManager initialized successfully');
     } catch (error) {
       console.error('Failed to initialize SafeZoneAlertManager:', error);
+      // Don't throw - allow the app to continue with default settings
+      // Could send error report to parent/guardian here
+      this.handleCriticalError('Initialization failed', error as Error);
+    }
+  }
+
+  private handleCriticalError(context: string, error: Error): void {
+    console.error(`SafeZoneAlerts Critical Error [${context}]:`, error);
+    
+    // In a production app, this could:
+    // 1. Send error report to parents/guardians
+    // 2. Log to crash reporting service
+    // 3. Display user-friendly error message
+    // 4. Attempt recovery actions
+    
+    try {
+      // Could integrate with notification system
+      // sendParentNotification(`Safety system error: ${context}`);
+    } catch (notificationError) {
+      console.error('Failed to send error notification:', notificationError);
+    }
+  }
+
+  private async safeAsyncStorageOperation<T>(
+    operation: () => Promise<T>,
+    fallback: T,
+    context: string
+  ): Promise<T> {
+    try {
+      return await operation();
+    } catch (error) {
+      console.error(`AsyncStorage error in ${context}:`, error);
+      this.handleCriticalError(`Storage operation failed: ${context}`, error as Error);
+      return fallback;
     }
   }
 
@@ -79,35 +115,92 @@ class SafeZoneAlertManager {
     zone: SafeZone,
     location: { latitude: number; longitude: number }
   ): Promise<void> {
-    const event: SafeZoneEvent = {
-      id: `${zoneId}-${eventType}-${Date.now()}`,
-      zoneId,
-      zoneName: zone.name,
-      eventType,
-      timestamp: new Date(),
-      location,
-      childName: 'Child' // In a real app, this would come from user profile
-    };
+    try {
+      // Validate inputs
+      if (!zoneId || !eventType || !zone || !location) {
+        throw new Error('Invalid parameters provided to handleSafeZoneEvent');
+      }
 
-    // Add to history
-    this.eventHistory.unshift(event);
+      if (!['enter', 'exit'].includes(eventType)) {
+        throw new Error(`Invalid event type: ${eventType}`);
+      }
+
+      if (typeof location.latitude !== 'number' || typeof location.longitude !== 'number') {
+        throw new Error('Invalid location coordinates');
+      }
+
+      const event: SafeZoneEvent = {
+        id: `${zoneId}-${eventType}-${Date.now()}`,
+        zoneId,
+        zoneName: zone.name || 'Unknown Zone',
+        eventType,
+        timestamp: new Date(),
+        location,
+        childName: 'Child' // In a real app, this would come from user profile
+      };
+
+      // Add to history with error handling
+      try {
+        this.eventHistory.unshift(event);
+        
+        // Keep only last 100 events
+        if (this.eventHistory.length > 100) {
+          this.eventHistory = this.eventHistory.slice(0, 100);
+        }
+
+        // Save to storage with retry logic
+        await this.saveEventHistoryWithRetry();
+      } catch (storageError) {
+        console.error('Failed to save event history:', storageError);
+        // Continue processing even if storage fails
+      }
+
+      // Check if we should send alerts
+      if (this.shouldSendAlert(zoneId, eventType)) {
+        try {
+          await this.sendAlerts(event);
+          this.lastAlertTimes.set(`${zoneId}-${eventType}`, new Date());
+        } catch (alertError) {
+          console.error('Failed to send alerts:', alertError);
+          this.handleCriticalError('Alert sending failed', alertError as Error);
+        }
+      }
+
+      // Update gamification with error handling
+      try {
+        this.updateGamification(event);
+      } catch (gamificationError) {
+        console.error('Failed to update gamification:', gamificationError);
+        // Non-critical error, continue processing
+      }
+
+    } catch (error) {
+      console.error('Critical error in handleSafeZoneEvent:', error);
+      this.handleCriticalError('Safe zone event processing failed', error as Error);
+      throw error; // Re-throw to let caller handle
+    }
+  }
+
+  private async saveEventHistoryWithRetry(maxRetries: number = 3): Promise<void> {
+    let lastError: Error | null = null;
     
-    // Keep only last 100 events
-    if (this.eventHistory.length > 100) {
-      this.eventHistory = this.eventHistory.slice(0, 100);
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        await AsyncStorage.setItem('safe-zone-event-history', JSON.stringify(this.eventHistory));
+        return; // Success
+      } catch (error) {
+        lastError = error as Error;
+        console.warn(`Event history save attempt ${attempt} failed:`, error);
+        
+        if (attempt < maxRetries) {
+          // Wait before retry (exponential backoff)
+          await new Promise(resolve => setTimeout(resolve, attempt * 1000));
+        }
+      }
     }
-
-    // Save to storage
-    await this.saveEventHistory();
-
-    // Check if we should send alerts
-    if (this.shouldSendAlert(zoneId, eventType)) {
-      await this.sendAlerts(event);
-      this.lastAlertTimes.set(`${zoneId}-${eventType}`, new Date());
-    }
-
-    // Update gamification
-    this.updateGamification(event);
+    
+    // All retries failed
+    throw new Error(`Failed to save event history after ${maxRetries} attempts: ${lastError?.message}`);
   }
 
   private shouldSendAlert(zoneId: string, eventType: 'enter' | 'exit'): boolean {
@@ -207,11 +300,38 @@ class SafeZoneAlertManager {
   }
 
   async updateSettings(newSettings: Partial<AlertSettings>): Promise<void> {
-    this.alertSettings = { ...this.alertSettings, ...newSettings };
     try {
-      await AsyncStorage.setItem('safe-zone-alert-settings', JSON.stringify(this.alertSettings));
+      // Validate settings
+      if (newSettings.alertCooldownMinutes !== undefined) {
+        if (typeof newSettings.alertCooldownMinutes !== 'number' || 
+            newSettings.alertCooldownMinutes < 0 || 
+            newSettings.alertCooldownMinutes > 60) {
+          throw new Error('Alert cooldown must be between 0 and 60 minutes');
+        }
+      }
+
+      if (newSettings.quietHours?.start && newSettings.quietHours?.end) {
+        // Validate time format
+        const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
+        if (!timeRegex.test(newSettings.quietHours.start) || 
+            !timeRegex.test(newSettings.quietHours.end)) {
+          throw new Error('Invalid time format for quiet hours');
+        }
+      }
+
+      this.alertSettings = { ...this.alertSettings, ...newSettings };
+      
+      await this.safeAsyncStorageOperation(
+        () => AsyncStorage.setItem('safe-zone-alert-settings', JSON.stringify(this.alertSettings)),
+        undefined,
+        'updateSettings'
+      );
+
+      console.log('Alert settings updated successfully');
     } catch (error) {
-      console.error('Failed to save alert settings:', error);
+      console.error('Failed to update settings:', error);
+      this.handleCriticalError('Settings update failed', error as Error);
+      throw error;
     }
   }
 

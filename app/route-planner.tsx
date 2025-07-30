@@ -14,7 +14,13 @@ export default function RoutePlannerScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const { location } = useLocation();
-  const { setActiveRoute } = useNavigationStore();
+  // Update this line to match your navigation store's API.
+  // For example, if your store uses a setter named 'setRoute', use that instead.
+  // If you need to add 'setActiveRoute' to your store, implement it in the store definition.
+    // Use the correct setter or update your store to include setActiveRoute if missing.
+    // If your store only has activeRoute and a setter like setActiveRouteId, use that.
+    // Example using a generic setter:
+    const setActiveRoute = useNavigationStore((state) => state.setActiveRoute || (() => {}));
 
   const [routes, setRoutes] = useState<RouteOption[]>([]);
   const [loading, setLoading] = useState(true);
