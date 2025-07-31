@@ -1,4 +1,4 @@
-import { RegionConfig } from '@/types/region';
+import { RegionConfig } from '@/types/region'
 
 export const londonConfig: RegionConfig = {
   id: 'london',
@@ -63,7 +63,8 @@ export const londonConfig: RegionConfig = {
     {
       name: 'Hyde Park',
       category: 'park',
-      description: "Large royal park with Speaker's Corner, Serpentine Lake, and playgrounds",
+      description:
+        "Large royal park with Speaker's Corner, Serpentine Lake, and playgrounds",
     },
     {
       name: 'Tower Bridge',
@@ -78,4 +79,4 @@ export const londonConfig: RegionConfig = {
   ],
   transitApiEndpoint: 'https://api.tfl.gov.uk/',
   mapStyle: 'standard',
-};
+}

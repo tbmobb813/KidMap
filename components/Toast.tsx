@@ -1,21 +1,27 @@
-import React, { useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, Animated, Platform } from 'react-native';
-import Colors from '@/constants/colors';
-import { CheckCircle, AlertCircle, Info, X } from 'lucide-react-native';
+import React, { useEffect, useRef } from 'react'
+import { StyleSheet, Text, View, Animated, Platform } from 'react-native'
+import Colors from '@/constants/colors'
+import { CheckCircle, AlertCircle, Info, X } from 'lucide-react-native'
 
-type ToastType = 'success' | 'error' | 'info' | 'warning';
+type ToastType = 'success' | 'error' | 'info' | 'warning'
 
 type ToastProps = {
-  message: string;
-  type: ToastType;
-  visible: boolean;
-  onHide: () => void;
-  duration?: number;
-};
+  message: string
+  type: ToastType
+  visible: boolean
+  onHide: () => void
+  duration?: number
+}
 
-const Toast: React.FC<ToastProps> = ({ message, type, visible, onHide, duration = 3000 }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(-100)).current;
+const Toast: React.FC<ToastProps> = ({
+  message,
+  type,
+  visible,
+  onHide,
+  duration = 3000,
+}) => {
+  const fadeAnim = useRef(new Animated.Value(0)).current
+  const slideAnim = useRef(new Animated.Value(-100)).current
 
   useEffect(() => {
     if (visible) {
@@ -30,15 +36,15 @@ const Toast: React.FC<ToastProps> = ({ message, type, visible, onHide, duration 
           duration: 300,
           useNativeDriver: Platform.OS !== 'web',
         }),
-      ]).start();
+      ]).start()
 
       const timer = setTimeout(() => {
-        hideToast();
-      }, duration);
+        hideToast()
+      }, duration)
 
-      return () => clearTimeout(timer);
+      return () => clearTimeout(timer)
     }
-  }, [visible]);
+  }, [visible])
 
   const hideToast = () => {
     Animated.parallel([
@@ -53,37 +59,37 @@ const Toast: React.FC<ToastProps> = ({ message, type, visible, onHide, duration 
         useNativeDriver: Platform.OS !== 'web',
       }),
     ]).start(() => {
-      onHide();
-    });
-  };
+      onHide()
+    })
+  }
 
   const getIcon = () => {
     switch (type) {
       case 'success':
-        return <CheckCircle size={20} color={Colors.success} />;
+        return <CheckCircle size={20} color={Colors.success} />
       case 'error':
-        return <X size={20} color={Colors.error} />;
+        return <X size={20} color={Colors.error} />
       case 'warning':
-        return <AlertCircle size={20} color={Colors.warning} />;
+        return <AlertCircle size={20} color={Colors.warning} />
       case 'info':
-        return <Info size={20} color={Colors.primary} />;
+        return <Info size={20} color={Colors.primary} />
     }
-  };
+  }
 
   const getBackgroundColor = () => {
     switch (type) {
       case 'success':
-        return '#F0FFF4';
+        return '#F0FFF4'
       case 'error':
-        return '#FFF5F5';
+        return '#FFF5F5'
       case 'warning':
-        return '#FFFBF0';
+        return '#FFFBF0'
       case 'info':
-        return '#F0F4FF';
+        return '#F0F4FF'
     }
-  };
+  }
 
-  if (!visible) return null;
+  if (!visible) return null
 
   return (
     <Animated.View
@@ -99,8 +105,8 @@ const Toast: React.FC<ToastProps> = ({ message, type, visible, onHide, duration 
       {getIcon()}
       <Text style={styles.message}>{message}</Text>
     </Animated.View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -126,6 +132,6 @@ const styles = StyleSheet.create({
     color: Colors.text,
     fontWeight: '500',
   },
-});
+})
 
-export default Toast;
+export default Toast

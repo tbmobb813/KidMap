@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
-import Colors from '@/constants/colors';
-import SearchBar from './SearchBar';
-import { MapPin, Clock, Star } from 'lucide-react-native';
-import { useDebounce } from '@/hooks/useDebounce';
-import { Place } from '@/types/navigation';
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native'
+import Colors from '@/constants/colors'
+import SearchBar from './SearchBar'
+import { MapPin, Clock, Star } from 'lucide-react-native'
+import { useDebounce } from '@/hooks/useDebounce'
+import { Place } from '@/types/navigation'
 
 type SearchSuggestion = {
-  id: string;
-  text: string;
-  type: 'recent' | 'popular' | 'place';
-  place?: Place;
-};
+  id: string
+  text: string
+  type: 'recent' | 'popular' | 'place'
+  place?: Place
+}
 
 type SearchWithSuggestionsProps = {
-  value: string;
-  onChangeText: (text: string) => void;
-  onSelectSuggestion: (suggestion: SearchSuggestion) => void;
-  placeholder?: string;
-  suggestions?: SearchSuggestion[];
-};
+  value: string
+  onChangeText: (text: string) => void
+  onSelectSuggestion: (suggestion: SearchSuggestion) => void
+  placeholder?: string
+  suggestions?: SearchSuggestion[]
+}
 
 const SearchWithSuggestions: React.FC<SearchWithSuggestionsProps> = ({
   value,
@@ -28,32 +28,32 @@ const SearchWithSuggestions: React.FC<SearchWithSuggestionsProps> = ({
   placeholder,
   suggestions = [],
 }) => {
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const debouncedValue = useDebounce(value, 300);
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const debouncedValue = useDebounce(value, 300)
 
   useEffect(() => {
-    setShowSuggestions(debouncedValue.length > 0 && suggestions.length > 0);
-  }, [debouncedValue, suggestions]);
+    setShowSuggestions(debouncedValue.length > 0 && suggestions.length > 0)
+  }, [debouncedValue, suggestions])
 
   const getSuggestionIcon = (type: string) => {
     switch (type) {
       case 'recent':
-        return <Clock size={16} color={Colors.textLight} />;
+        return <Clock size={16} color={Colors.textLight} />
       case 'popular':
-        return <Star size={16} color={Colors.warning} />;
+        return <Star size={16} color={Colors.warning} />
       case 'place':
-        return <MapPin size={16} color={Colors.primary} />;
+        return <MapPin size={16} color={Colors.primary} />
       default:
-        return <MapPin size={16} color={Colors.textLight} />;
+        return <MapPin size={16} color={Colors.textLight} />
     }
-  };
+  }
 
   const renderSuggestion = ({ item }: { item: SearchSuggestion }) => (
     <Pressable
       style={styles.suggestionItem}
       onPress={() => {
-        onSelectSuggestion(item);
-        setShowSuggestions(false);
+        onSelectSuggestion(item)
+        setShowSuggestions(false)
       }}
       accessible={true}
       accessibilityRole="button"
@@ -65,7 +65,7 @@ const SearchWithSuggestions: React.FC<SearchWithSuggestionsProps> = ({
         {item.text}
       </Text>
     </Pressable>
-  );
+  )
 
   return (
     <View style={styles.container}>
@@ -73,8 +73,8 @@ const SearchWithSuggestions: React.FC<SearchWithSuggestionsProps> = ({
         value={value}
         onChangeText={onChangeText}
         onClear={() => {
-          onChangeText('');
-          setShowSuggestions(false);
+          onChangeText('')
+          setShowSuggestions(false)
         }}
         placeholder={placeholder}
       />
@@ -91,8 +91,8 @@ const SearchWithSuggestions: React.FC<SearchWithSuggestionsProps> = ({
         </View>
       )}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -128,6 +128,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.text,
   },
-});
+})
 
-export default SearchWithSuggestions;
+export default SearchWithSuggestions

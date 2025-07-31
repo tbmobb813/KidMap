@@ -1,72 +1,66 @@
 // components/RouteIntegration.tsx - Integration component for multi-modal routing
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import { 
   Navigation,
   Route as RouteIcon,
   MapPin,
   Settings,
   Clock,
-  Star
-} from 'lucide-react-native';
-import { Colors } from '../constants/colors';
-import { AccessibleButton } from './AccessibleButton';
-import { MultiModalRoutePlanning } from './MultiModalRoutePlanning';
-import { TransportModeSelector } from './TransportModeSelector';
-import { RouteOption } from '../utils/routePlanner';
-import { TravelMode } from '../utils/api';
+  Star,
+} from 'lucide-react-native'
+import { Colors } from '../constants/colors'
+import { AccessibleButton } from './AccessibleButton'
+import { MultiModalRoutePlanning } from './MultiModalRoutePlanning'
+import { TransportModeSelector } from './TransportModeSelector'
+import { RouteOption } from '../utils/routePlanner'
+import { TravelMode } from '../utils/api'
 
 interface RouteIntegrationProps {
   /**
    * Origin coordinates [lat, lng]
    */
-  from: [number, number];
-  
+  from: [number, number]
+
   /**
    * Destination coordinates [lat, lng]
    */
-  to: [number, number];
-  
+  to: [number, number]
+
   /**
    * Origin address string
    */
-  fromAddress: string;
-  
+  fromAddress: string
+
   /**
    * Destination address string
    */
-  toAddress: string;
-  
+  toAddress: string
+
   /**
    * Child's age for age-appropriate recommendations
    */
-  childAge?: number;
-  
+  childAge?: number
+
   /**
    * Whether adult supervision is available
    */
-  parentSupervision?: boolean;
-  
+  parentSupervision?: boolean
+
   /**
    * Callback when a route is selected
    */
-  onRouteSelected: (route: RouteOption) => void;
-  
+  onRouteSelected: (route: RouteOption) => void
+
   /**
    * Callback when route planning is cancelled
    */
-  onCancel?: () => void;
-  
+  onCancel?: () => void
+
   /**
    * Initial display mode
    */
-  initialMode?: 'summary' | 'planning' | 'modeSelector';
+  initialMode?: 'summary' | 'planning' | 'modeSelector'
 }
 
 export const RouteIntegration: React.FC<RouteIntegrationProps> = ({
@@ -78,62 +72,73 @@ export const RouteIntegration: React.FC<RouteIntegrationProps> = ({
   parentSupervision = true,
   onRouteSelected,
   onCancel,
-  initialMode = 'summary'
+  initialMode = 'summary',
 }) => {
-  const [currentMode, setCurrentMode] = useState<'summary' | 'planning' | 'modeSelector'>(initialMode);
-  const [selectedRoute, setSelectedRoute] = useState<RouteOption | null>(null);
-  const [quickModes, setQuickModes] = useState<TravelMode[]>(['walking', 'transit']);
+  const [currentMode, setCurrentMode] = useState<
+    'summary' | 'planning' | 'modeSelector'
+  >(initialMode)
+  const [selectedRoute, setSelectedRoute] = useState<RouteOption | null>(null)
+  const [quickModes, setQuickModes] = useState<TravelMode[]>([
+    'walking',
+    'transit',
+  ])
 
   /**
    * Handle quick route request
    */
-  const handleQuickRoute = useCallback(async (mode: TravelMode) => {
-    try {
-      // This would use the route planner to get a quick route of the specified mode
-      const { RoutePlanner } = await import('../utils/routePlanner');
-      
-      const routes = await RoutePlanner.getRouteOptions(from, to, {
-        preferredModes: [mode],
-        childAge,
-        parentSupervision,
-      });
+  const handleQuickRoute = useCallback(
+    async (mode: TravelMode) => {
+      try {
+        // This would use the route planner to get a quick route of the specified mode
+        const { RoutePlanner } = await import('../utils/routePlanner')
 
-      if (routes.length > 0) {
-        const bestRoute = routes[0];
-        setSelectedRoute(bestRoute);
-        onRouteSelected(bestRoute);
-      } else {
-        Alert.alert(
-          'No Route Found',
-          `Couldn't find a ${mode} route. Try multi-modal planning for more options.`,
-          [
-            { text: 'Cancel', style: 'cancel' },
-            { text: 'Plan Route', onPress: () => setCurrentMode('planning') }
-          ]
-        );
+        const routes = await RoutePlanner.getRouteOptions(from, to, {
+          preferredModes: [mode],
+          childAge,
+          parentSupervision,
+        })
+
+        if (routes.length > 0) {
+          const bestRoute = routes[0]
+          setSelectedRoute(bestRoute)
+          onRouteSelected(bestRoute)
+        } else {
+          Alert.alert(
+            'No Route Found',
+            `Couldn't find a ${mode} route. Try multi-modal planning for more options.`,
+            [
+              { text: 'Cancel', style: 'cancel' },
+              { text: 'Plan Route', onPress: () => setCurrentMode('planning') },
+            ],
+          )
+        }
+      } catch (error) {
+        console.error('Error getting quick route:', error)
+        Alert.alert('Route Error', 'Failed to find route. Please try again.')
       }
-    } catch (error) {
-      console.error('Error getting quick route:', error);
-      Alert.alert('Route Error', 'Failed to find route. Please try again.');
-    }
-  }, [from, to, childAge, parentSupervision, onRouteSelected]);
+    },
+    [from, to, childAge, parentSupervision, onRouteSelected],
+  )
 
   /**
    * Handle route selection from multi-modal planner
    */
-  const handleRoutePlanningSelection = useCallback((route: RouteOption) => {
-    setSelectedRoute(route);
-    setCurrentMode('summary');
-    onRouteSelected(route);
-  }, [onRouteSelected]);
+  const handleRoutePlanningSelection = useCallback(
+    (route: RouteOption) => {
+      setSelectedRoute(route)
+      setCurrentMode('summary')
+      onRouteSelected(route)
+    },
+    [onRouteSelected],
+  )
 
   /**
    * Handle transport mode selection
    */
   const handleModeSelection = useCallback((modes: TravelMode[]) => {
-    setQuickModes(modes);
-    setCurrentMode('summary');
-  }, []);
+    setQuickModes(modes)
+    setCurrentMode('summary')
+  }, [])
 
   /**
    * Render route summary with quick actions
@@ -174,33 +179,41 @@ export const RouteIntegration: React.FC<RouteIntegrationProps> = ({
             <Text style={styles.selectedRouteTitle}>Current Route</Text>
             <View style={styles.selectedRouteMetrics}>
               <Clock size={16} color={Colors.success} />
-              <Text style={styles.selectedRouteTime}>{selectedRoute.duration} min</Text>
+              <Text style={styles.selectedRouteTime}>
+                {selectedRoute.duration} min
+              </Text>
               <View style={styles.routeRating}>
                 <Star size={12} color={Colors.warning} fill={Colors.warning} />
-                <Text style={styles.routeRatingText}>{selectedRoute.kidFriendliness}</Text>
+                <Text style={styles.routeRatingText}>
+                  {selectedRoute.kidFriendliness}
+                </Text>
               </View>
             </View>
           </View>
           <Text style={styles.selectedRouteMode}>
             {formatTravelMode(selectedRoute.mode)} Route
           </Text>
-          {selectedRoute.recommendation && selectedRoute.recommendation.reasons.length > 0 && (
-            <Text style={styles.selectedRouteReason}>
-              {selectedRoute.recommendation.reasons[0]}
-            </Text>
-          )}
+          {selectedRoute.recommendation &&
+            selectedRoute.recommendation.reasons.length > 0 && (
+              <Text style={styles.selectedRouteReason}>
+                {selectedRoute.recommendation.reasons[0]}
+              </Text>
+            )}
         </View>
       )}
 
       <View style={styles.quickActions}>
         <Text style={styles.sectionTitle}>Quick Routes</Text>
         <View style={styles.quickButtons}>
-          {quickModes.map(mode => (
+          {quickModes.map((mode) => (
             <AccessibleButton
               key={mode}
               title={formatTravelMode(mode)}
               onPress={() => handleQuickRoute(mode)}
-              style={[styles.quickButton, { backgroundColor: getModeColor(mode) }]}
+              style={[
+                styles.quickButton,
+                { backgroundColor: getModeColor(mode) },
+              ]}
               textStyle={styles.quickButtonText}
               leftIcon={getModeIcon(mode)}
             />
@@ -216,7 +229,7 @@ export const RouteIntegration: React.FC<RouteIntegrationProps> = ({
           textStyle={styles.planButtonText}
           leftIcon={<RouteIcon size={16} color={Colors.primary} />}
         />
-        
+
         {onCancel && (
           <AccessibleButton
             title="Cancel"
@@ -227,7 +240,7 @@ export const RouteIntegration: React.FC<RouteIntegrationProps> = ({
         )}
       </View>
     </View>
-  );
+  )
 
   /**
    * Render based on current mode
@@ -245,7 +258,7 @@ export const RouteIntegration: React.FC<RouteIntegrationProps> = ({
           onRouteSelected={handleRoutePlanningSelection}
           onClose={() => setCurrentMode('summary')}
         />
-      );
+      )
 
     case 'modeSelector':
       return (
@@ -256,12 +269,12 @@ export const RouteIntegration: React.FC<RouteIntegrationProps> = ({
           onClose={() => setCurrentMode('summary')}
           initialSelection={quickModes}
         />
-      );
+      )
 
     default:
-      return renderRouteSummary();
+      return renderRouteSummary()
   }
-};
+}
 
 // Helper functions
 const formatTravelMode = (mode: TravelMode): string => {
@@ -269,25 +282,25 @@ const formatTravelMode = (mode: TravelMode): string => {
     walking: 'Walk',
     bicycling: 'Bike',
     transit: 'Transit',
-    driving: 'Drive'
-  };
-  return modes[mode] || mode;
-};
+    driving: 'Drive',
+  }
+  return modes[mode] || mode
+}
 
 const getModeColor = (mode: TravelMode): string => {
   const colors = {
     walking: Colors.success,
     bicycling: Colors.primary,
     transit: Colors.warning,
-    driving: Colors.error
-  };
-  return colors[mode] || Colors.gray;
-};
+    driving: Colors.error,
+  }
+  return colors[mode] || Colors.gray
+}
 
 const getModeIcon = (mode: TravelMode) => {
   // In a real implementation, these would be proper icons
-  return <Navigation size={16} color={Colors.white} />;
-};
+  return <Navigation size={16} color={Colors.white} />
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -434,4 +447,4 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     color: Colors.text.secondary,
   },
-});
+})

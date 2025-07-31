@@ -2,30 +2,30 @@
 // This file makes it easy to import all helpers from one place
 
 // AsyncStorage helpers
-export * from './mockAsyncStorage';
+export * from './mockAsyncStorage'
 
 // Trip data and related mocks
-export * from './mockTripData';
+export * from './mockTripData'
 
 // Render utilities
-export * from './renderWithProviders';
+export * from './renderWithProviders'
 
 // Safe zone specific helpers
-export * from './safeZoneTestHelpers';
+export * from './safeZoneTestHelpers'
 
 // General test utilities
-export * from './testUtils';
+export * from './testUtils'
 
 // Common test setup function
 export const setupKidMapTests = () => {
   // Import all setup functions
-  const { setupMockAsyncStorage } = require('./mockAsyncStorage');
-  const { setupMocks } = require('./testUtils');
-  
+  const { setupMockAsyncStorage } = require('./mockAsyncStorage')
+  const { setupMocks } = require('./testUtils')
+
   // Run all setup
-  setupMockAsyncStorage();
-  setupMocks();
-};
+  setupMockAsyncStorage()
+  setupMocks()
+}
 
 // Re-export commonly used testing library functions for convenience
 export {
@@ -35,4 +35,4 @@ export {
   act,
   cleanup,
   screen,
-} from '@testing-library/react-native';
+} from '@testing-library/react-native'

@@ -1,14 +1,14 @@
-import React from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import { Achievement } from '@/types/gamification';
-import Colors from '@/constants/colors';
-import { Star, Lock } from 'lucide-react-native';
+import React from 'react'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
+import { Achievement } from '@/types/gamification'
+import Colors from '@/constants/colors'
+import { Star, Lock } from 'lucide-react-native'
 
 type AchievementBadgeProps = {
-  achievement: Achievement;
-  onPress?: () => void;
-  size?: 'small' | 'medium' | 'large';
-};
+  achievement: Achievement
+  onPress?: () => void
+  size?: 'small' | 'medium' | 'large'
+}
 
 const AchievementBadge: React.FC<AchievementBadgeProps> = ({
   achievement,
@@ -18,15 +18,15 @@ const AchievementBadge: React.FC<AchievementBadgeProps> = ({
   const getDimensions = () => {
     switch (size) {
       case 'small':
-        return { width: 60, height: 60, fontSize: 20, textSize: 10 };
+        return { width: 60, height: 60, fontSize: 20, textSize: 10 }
       case 'medium':
-        return { width: 80, height: 80, fontSize: 28, textSize: 12 };
+        return { width: 80, height: 80, fontSize: 28, textSize: 12 }
       case 'large':
-        return { width: 100, height: 100, fontSize: 36, textSize: 14 };
+        return { width: 100, height: 100, fontSize: 36, textSize: 14 }
     }
-  };
+  }
 
-  const dimensions = getDimensions();
+  const dimensions = getDimensions()
 
   return (
     <Pressable
@@ -35,7 +35,9 @@ const AchievementBadge: React.FC<AchievementBadgeProps> = ({
         {
           width: dimensions.width,
           height: dimensions.height,
-          backgroundColor: achievement.unlocked ? Colors.secondary : Colors.border,
+          backgroundColor: achievement.unlocked
+            ? Colors.secondary
+            : Colors.border,
         },
         pressed && styles.pressed,
       ]}
@@ -44,7 +46,9 @@ const AchievementBadge: React.FC<AchievementBadgeProps> = ({
     >
       {achievement.unlocked ? (
         <>
-          <Text style={[styles.icon, { fontSize: dimensions.fontSize }]}>{achievement.icon}</Text>
+          <Text style={[styles.icon, { fontSize: dimensions.fontSize }]}>
+            {achievement.icon}
+          </Text>
           <Star size={16} color="#FFD700" style={styles.star} />
         </>
       ) : (
@@ -68,8 +72,8 @@ const AchievementBadge: React.FC<AchievementBadgeProps> = ({
         </Text>
       )}
     </Pressable>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -110,6 +114,6 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     fontWeight: '700',
   },
-});
+})
 
-export default AchievementBadge;
+export default AchievementBadge

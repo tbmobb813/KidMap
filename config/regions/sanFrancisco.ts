@@ -1,4 +1,4 @@
-import { RegionConfig } from '@/types/region';
+import { RegionConfig } from '@/types/region'
 
 export const sanFranciscoConfig: RegionConfig = {
   id: 'sf',
@@ -73,4 +73,4 @@ export const sanFranciscoConfig: RegionConfig = {
   ],
   transitApiEndpoint: 'https://api.511.org/',
   mapStyle: 'standard',
-};
+}

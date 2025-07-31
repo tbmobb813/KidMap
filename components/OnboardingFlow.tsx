@@ -1,38 +1,48 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native';
-import Colors from '@/constants/colors';
-import RegionSelector from './RegionSelector';
-import { useRegionStore } from '@/stores/regionStore';
-import { MapPin, Settings, Shield, CheckCircle } from 'lucide-react-native';
+import React, { useState } from 'react'
+import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native'
+import Colors from '@/constants/colors'
+import RegionSelector from './RegionSelector'
+import { useRegionStore } from '@/stores/regionStore'
+import { MapPin, Settings, Shield, CheckCircle } from 'lucide-react-native'
 
-type OnboardingStep = 'welcome' | 'region' | 'preferences' | 'safety' | 'complete';
+type OnboardingStep =
+  | 'welcome'
+  | 'region'
+  | 'preferences'
+  | 'safety'
+  | 'complete'
 
 type OnboardingFlowProps = {
-  onComplete: () => void;
-};
+  onComplete: () => void
+}
 
 const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
-  const [currentStep, setCurrentStep] = useState<OnboardingStep>('welcome');
-  const { availableRegions, userPreferences, setRegion, updatePreferences, completeOnboarding } =
-    useRegionStore();
+  const [currentStep, setCurrentStep] = useState<OnboardingStep>('welcome')
+  const {
+    availableRegions,
+    userPreferences,
+    setRegion,
+    updatePreferences,
+    completeOnboarding,
+  } = useRegionStore()
 
   const handleRegionSelect = (regionId: string) => {
-    setRegion(regionId);
-    setCurrentStep('preferences');
-  };
+    setRegion(regionId)
+    setCurrentStep('preferences')
+  }
 
   const handlePreferencesComplete = () => {
-    setCurrentStep('safety');
-  };
+    setCurrentStep('safety')
+  }
 
   const handleSafetyComplete = () => {
-    setCurrentStep('complete');
-  };
+    setCurrentStep('complete')
+  }
 
   const handleComplete = () => {
-    completeOnboarding();
-    onComplete();
-  };
+    completeOnboarding()
+    onComplete()
+  }
 
   const renderWelcome = () => (
     <View style={styles.stepContainer}>
@@ -41,14 +51,17 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
       </View>
       <Text style={styles.stepTitle}>Welcome to KidMap!</Text>
       <Text style={styles.stepDescription}>
-        KidMap helps kids navigate public transportation safely and confidently. Let's set up your
-        app for your city and preferences.
+        KidMap helps kids navigate public transportation safely and confidently.
+        Let's set up your app for your city and preferences.
       </Text>
-      <Pressable style={styles.primaryButton} onPress={() => setCurrentStep('region')}>
+      <Pressable
+        style={styles.primaryButton}
+        onPress={() => setCurrentStep('region')}
+      >
         <Text style={styles.buttonText}>Get Started</Text>
       </Pressable>
     </View>
-  );
+  )
 
   const renderRegionSelection = () => (
     <RegionSelector
@@ -56,7 +69,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
       selectedRegion={userPreferences.selectedRegion}
       onSelectRegion={handleRegionSelect}
     />
-  );
+  )
 
   const renderPreferences = () => (
     <ScrollView
@@ -77,14 +90,16 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
           <Pressable
             style={[
               styles.optionButton,
-              userPreferences.preferredUnits === 'imperial' && styles.selectedOption,
+              userPreferences.preferredUnits === 'imperial' &&
+                styles.selectedOption,
             ]}
             onPress={() => updatePreferences({ preferredUnits: 'imperial' })}
           >
             <Text
               style={[
                 styles.optionText,
-                userPreferences.preferredUnits === 'imperial' && styles.selectedOptionText,
+                userPreferences.preferredUnits === 'imperial' &&
+                  styles.selectedOptionText,
               ]}
             >
               Imperial (miles, °F)
@@ -93,14 +108,16 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
           <Pressable
             style={[
               styles.optionButton,
-              userPreferences.preferredUnits === 'metric' && styles.selectedOption,
+              userPreferences.preferredUnits === 'metric' &&
+                styles.selectedOption,
             ]}
             onPress={() => updatePreferences({ preferredUnits: 'metric' })}
           >
             <Text
               style={[
                 styles.optionText,
-                userPreferences.preferredUnits === 'metric' && styles.selectedOptionText,
+                userPreferences.preferredUnits === 'metric' &&
+                  styles.selectedOptionText,
               ]}
             >
               Metric (km, °C)
@@ -112,7 +129,10 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
       <View style={styles.preferenceSection}>
         <Text style={styles.sectionTitle}>Accessibility</Text>
         <Pressable
-          style={[styles.toggleOption, userPreferences.accessibilityMode && styles.selectedToggle]}
+          style={[
+            styles.toggleOption,
+            userPreferences.accessibilityMode && styles.selectedToggle,
+          ]}
           onPress={() =>
             updatePreferences({
               accessibilityMode: !userPreferences.accessibilityMode,
@@ -120,15 +140,20 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
           }
         >
           <Text style={styles.toggleText}>Enable accessibility features</Text>
-          {userPreferences.accessibilityMode && <CheckCircle size={20} color={Colors.success} />}
+          {userPreferences.accessibilityMode && (
+            <CheckCircle size={20} color={Colors.success} />
+          )}
         </Pressable>
       </View>
 
-      <Pressable style={styles.primaryButton} onPress={handlePreferencesComplete}>
+      <Pressable
+        style={styles.primaryButton}
+        onPress={handlePreferencesComplete}
+      >
         <Text style={styles.buttonText}>Continue</Text>
       </Pressable>
     </ScrollView>
-  );
+  )
 
   const renderSafety = () => (
     <ScrollView
@@ -160,7 +185,10 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
 
       <View style={styles.preferenceSection}>
         <Pressable
-          style={[styles.toggleOption, userPreferences.parentalControls && styles.selectedToggle]}
+          style={[
+            styles.toggleOption,
+            userPreferences.parentalControls && styles.selectedToggle,
+          ]}
           onPress={() =>
             updatePreferences({
               parentalControls: !userPreferences.parentalControls,
@@ -168,7 +196,9 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
           }
         >
           <Text style={styles.toggleText}>Enable parental controls</Text>
-          {userPreferences.parentalControls && <CheckCircle size={20} color={Colors.success} />}
+          {userPreferences.parentalControls && (
+            <CheckCircle size={20} color={Colors.success} />
+          )}
         </Pressable>
       </View>
 
@@ -176,7 +206,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
         <Text style={styles.buttonText}>Continue</Text>
       </Pressable>
     </ScrollView>
-  );
+  )
 
   const renderComplete = () => (
     <View style={styles.stepContainer}>
@@ -185,31 +215,32 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
       </View>
       <Text style={styles.stepTitle}>You're All Set!</Text>
       <Text style={styles.stepDescription}>
-        KidMap is now configured for your region and preferences. Start exploring your city safely!
+        KidMap is now configured for your region and preferences. Start
+        exploring your city safely!
       </Text>
       <Pressable style={styles.primaryButton} onPress={handleComplete}>
         <Text style={styles.buttonText}>Start Using KidMap</Text>
       </Pressable>
     </View>
-  );
+  )
 
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 'welcome':
-        return renderWelcome();
+        return renderWelcome()
       case 'region':
-        return renderRegionSelection();
+        return renderRegionSelection()
       case 'preferences':
-        return renderPreferences();
+        return renderPreferences()
       case 'safety':
-        return renderSafety();
+        return renderSafety()
       case 'complete':
-        return renderComplete();
+        return renderComplete()
     }
-  };
+  }
 
-  return <View style={styles.container}>{renderCurrentStep()}</View>;
-};
+  return <View style={styles.container}>{renderCurrentStep()}</View>
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -328,6 +359,6 @@ const styles = StyleSheet.create({
     color: Colors.text,
     fontWeight: '500',
   },
-});
+})
 
-export default OnboardingFlow;
+export default OnboardingFlow

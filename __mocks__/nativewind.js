@@ -1,2 +1,2 @@
 // Stub for nativewind package
-module.exports = {};
+module.exports = {}

@@ -1,13 +1,15 @@
-import React from 'react';
-import { StyleSheet, View, Text, Dimensions } from 'react-native';
-import Colors from '@/constants/colors';
-import { MapPin } from 'lucide-react-native';
+import React from 'react'
+import { StyleSheet, View, Text, Dimensions } from 'react-native'
+import Colors from '@/constants/colors'
+import { MapPin } from 'lucide-react-native'
 
 type MapPlaceholderProps = {
-  message?: string;
-};
+  message?: string
+}
 
-const MapPlaceholder: React.FC<MapPlaceholderProps> = ({ message = 'Map will appear here' }) => {
+const MapPlaceholder: React.FC<MapPlaceholderProps> = ({
+  message = 'Map will appear here',
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
@@ -15,8 +17,8 @@ const MapPlaceholder: React.FC<MapPlaceholderProps> = ({ message = 'Map will app
       </View>
       <Text style={styles.message}>{message}</Text>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -46,6 +48,6 @@ const styles = StyleSheet.create({
     color: Colors.text,
     fontWeight: '500',
   },
-});
+})
 
-export default MapPlaceholder;
+export default MapPlaceholder

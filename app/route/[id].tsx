@@ -1,63 +1,68 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { fetchRoute, TravelMode, RouteResult } from '@/utils/api';
-import Colors from '@/constants/colors';
-import DirectionStep from '@/components/DirectionStep';
-import MapPlaceholder from '@/components/MapPlaceholder';
-import { useNavigationStore } from '@/stores/navigationStore';
-import { Clock, Navigation, MapPin } from 'lucide-react-native';
-import VoiceNavigation from '@/components/VoiceNavigation';
-import FunFactCard from '@/components/FunFactCard';
-import { getRandomFunFact } from '@/mocks/funFacts';
-import LoadingSpinner from '@/components/LoadingSpinner';
-import MapView, { Polyline, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native'
+import { useLocalSearchParams, useRouter } from 'expo-router'
+import { fetchRoute, TravelMode, RouteResult } from '@/utils/api'
+import Colors from '@/constants/colors'
+import DirectionStep from '@/components/DirectionStep'
+import MapPlaceholder from '@/components/MapPlaceholder'
+import { useNavigationStore } from '@/stores/navigationStore'
+import { Clock, Navigation, MapPin } from 'lucide-react-native'
+import VoiceNavigation from '@/components/VoiceNavigation'
+import FunFactCard from '@/components/FunFactCard'
+import { getRandomFunFact } from '@/mocks/funFacts'
+import LoadingSpinner from '@/components/LoadingSpinner'
+import MapView, { Polyline, Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 
 export default function RouteDetailScreen() {
-  const router = useRouter();
-  const { id } = useLocalSearchParams();
-  const { origin, destination } = useNavigationStore();
+  const router = useRouter()
+  const { id } = useLocalSearchParams()
+  const { origin, destination } = useNavigationStore()
 
   // Enhanced mode selector & fetch state
-  const [mode, setMode] = useState<TravelMode>('walking');
-  const [routeResult, setRouteResult] = useState<RouteResult | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [mode, setMode] = useState<TravelMode>('walking')
+  const [routeResult, setRouteResult] = useState<RouteResult | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!origin || !destination) return;
+    if (!origin || !destination) return
     // Use AbortController for cancellation
-    const abortController = new AbortController();
+    const abortController = new AbortController()
 
     async function loadRoute() {
-      setLoading(true);
-      setError(null);
+      setLoading(true)
+      setError(null)
       try {
         // Pass the abort signal to fetchRoute (ensure fetchRoute supports cancellation)
-        const result = await fetchRoute(origin.location, destination.location, mode, abortController.signal);
+        const result = await fetchRoute(
+          origin.location,
+          destination.location,
+          mode,
+          abortController.signal,
+        )
         if (result) {
-          setRouteResult(result);
+          setRouteResult(result)
         } else {
-          setError('Unable to load route');
+          setError('Unable to load route')
         }
       } catch (err: any) {
         if (!abortController.signal.aborted) {
-          console.error('Error fetching route:', err);
-          setError(err.message || 'An error occurred while fetching the route.');
+          console.error('Error fetching route:', err)
+          setError(err.message || 'An error occurred while fetching the route.')
         }
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     }
-    loadRoute();
+    loadRoute()
 
     return () => {
-      abortController.abort();
-    };
-  }, [origin, destination, mode]);
+      abortController.abort()
+    }
+  }, [origin, destination, mode])
 
-  const displayDistance = routeResult?.distance ?? 0;
-  const displayDuration = routeResult?.duration ?? 0;
+  const displayDistance = routeResult?.distance ?? 0
+  const displayDuration = routeResult?.duration ?? 0
 
   return (
     <View style={styles.container}>
@@ -69,7 +74,9 @@ export default function RouteDetailScreen() {
             style={[styles.modeButton, mode === m && styles.modeButtonActive]}
             onPress={() => setMode(m)}
           >
-            <Text style={[styles.modeText, mode === m && styles.modeTextActive]}>
+            <Text
+              style={[styles.modeText, mode === m && styles.modeTextActive]}
+            >
               {m.charAt(0).toUpperCase() + m.slice(1)}
             </Text>
           </Pressable>
@@ -98,7 +105,9 @@ export default function RouteDetailScreen() {
       {routeResult && (
         <View style={styles.headerContainer}>
           <Text style={styles.headerText}>Distance: {displayDistance} m</Text>
-          <Text style={styles.headerText}>Duration: {Math.round(displayDuration / 60)} min</Text>
+          <Text style={styles.headerText}>
+            Duration: {Math.round(displayDuration / 60)} min
+          </Text>
         </View>
       )}
 
@@ -147,14 +156,14 @@ export default function RouteDetailScreen() {
           {routeResult.legs.flatMap((leg) =>
             leg.steps.map((step, idx) => (
               <DirectionStep key={`${leg.summary}-${idx}`} step={step} />
-            ))
+            )),
           )}
         </ScrollView>
       )}
 
       {/* Optional integration for VoiceNavigation and FunFactCard can go here */}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -343,4 +352,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   map: { flex: 1, marginBottom: 16 },
-});
+})

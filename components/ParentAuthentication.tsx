@@ -1,5 +1,5 @@
 // components/ParentAuthentication.tsx - Parent login/authentication screen
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   Modal,
   Vibration,
-} from 'react-native';
+} from 'react-native'
 import {
   Shield,
   Lock,
@@ -20,18 +20,18 @@ import {
   AlertCircle,
   CheckCircle,
   X,
-} from 'lucide-react-native';
-import Colors from '../constants/colors';
-import AccessibleButton from './AccessibleButton';
-import { useParentalControlStore } from '../stores/parentalControlStore';
-import * as LocalAuthentication from 'expo-local-authentication';
+} from 'lucide-react-native'
+import Colors from '../constants/colors'
+import AccessibleButton from './AccessibleButton'
+import { useParentalControlStore } from '../stores/parentalControlStore'
+import * as LocalAuthentication from 'expo-local-authentication'
 
 interface ParentAuthenticationProps {
-  visible: boolean;
-  onAuthenticated: () => void;
-  onCancel: () => void;
-  title?: string;
-  subtitle?: string;
+  visible: boolean
+  onAuthenticated: () => void
+  onCancel: () => void
+  title?: string
+  subtitle?: string
 }
 
 export default function ParentAuthentication({
@@ -39,25 +39,21 @@ export default function ParentAuthentication({
   onAuthenticated,
   onCancel,
   title = 'Parent Access Required',
-  subtitle = 'Please authenticate to access parental controls'
+  subtitle = 'Please authenticate to access parental controls',
 }: ParentAuthenticationProps) {
-  const {
-    settings,
-    authenticateParent,
-    session,
-    isSessionValid,
-  } = useParentalControlStore();
+  const { settings, authenticateParent, session, isSessionValid } =
+    useParentalControlStore()
 
-  const [pin, setPin] = useState('');
-  const [showPin, setShowPin] = useState(false);
-  const [isAuthenticating, setIsAuthenticating] = useState(false);
-  const [attemptCount, setAttemptCount] = useState(0);
-  const [biometricAvailable, setBiometricAvailable] = useState(false);
-  const [authMethod, setAuthMethod] = useState<'pin' | 'biometric'>('pin');
-  
+  const [pin, setPin] = useState('')
+  const [showPin, setShowPin] = useState(false)
+  const [isAuthenticating, setIsAuthenticating] = useState(false)
+  const [attemptCount, setAttemptCount] = useState(0)
+  const [biometricAvailable, setBiometricAvailable] = useState(false)
+  const [authMethod, setAuthMethod] = useState<'pin' | 'biometric'>('pin')
+
   // Animation values
-  const shakeAnimation = new Animated.Value(0);
-  const scaleAnimation = new Animated.Value(0);
+  const shakeAnimation = new Animated.Value(0)
+  const scaleAnimation = new Animated.Value(0)
 
   useEffect(() => {
     if (visible) {
@@ -67,73 +63,77 @@ export default function ParentAuthentication({
         useNativeDriver: true,
         tension: 50,
         friction: 8,
-      }).start();
+      }).start()
 
       // Check if session is already valid
       if (isSessionValid()) {
-        onAuthenticated();
-        return;
+        onAuthenticated()
+        return
       }
 
       // Check biometric availability
-      checkBiometricAvailability();
-      
+      checkBiometricAvailability()
+
       // Reset state
-      setPin('');
-      setAttemptCount(0);
-      
+      setPin('')
+      setAttemptCount(0)
+
       // Auto-trigger biometric if available and preferred
       if (settings.authenticationMethod !== 'pin') {
         setTimeout(() => {
-          handleBiometricAuth();
-        }, 500);
+          handleBiometricAuth()
+        }, 500)
       }
     } else {
-      scaleAnimation.setValue(0);
+      scaleAnimation.setValue(0)
     }
-  }, [visible]);
+  }, [visible])
 
   const checkBiometricAvailability = async () => {
     try {
-      const hasHardware = await LocalAuthentication.hasHardwareAsync();
-      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-      setBiometricAvailable(hasHardware && isEnrolled);
-      
-      if (hasHardware && isEnrolled && settings.authenticationMethod !== 'pin') {
-        setAuthMethod('biometric');
+      const hasHardware = await LocalAuthentication.hasHardwareAsync()
+      const isEnrolled = await LocalAuthentication.isEnrolledAsync()
+      setBiometricAvailable(hasHardware && isEnrolled)
+
+      if (
+        hasHardware &&
+        isEnrolled &&
+        settings.authenticationMethod !== 'pin'
+      ) {
+        setAuthMethod('biometric')
       }
     } catch (error) {
-      console.error('Error checking biometric availability:', error);
-      setBiometricAvailable(false);
+      console.error('Error checking biometric availability:', error)
+      setBiometricAvailable(false)
     }
-  };
+  }
 
   const handlePinDigit = (digit: string) => {
     if (pin.length < 6) {
-      const newPin = pin + digit;
-      setPin(newPin);
-      
+      const newPin = pin + digit
+      setPin(newPin)
+
       // Auto-submit when PIN reaches expected length
       if (newPin.length === (settings.pin?.length || 4)) {
-        setTimeout(() => handlePinAuth(newPin), 100);
+        setTimeout(() => handlePinAuth(newPin), 100)
       }
     }
-  };
+  }
 
   const handlePinDelete = () => {
-    setPin(pin.slice(0, -1));
-  };
+    setPin(pin.slice(0, -1))
+  }
 
   const handlePinAuth = async (pinToCheck?: string) => {
-    const pinValue = pinToCheck || pin;
-    
-    if (pinValue.length === 0) return;
+    const pinValue = pinToCheck || pin
 
-    setIsAuthenticating(true);
-    
+    if (pinValue.length === 0) return
+
+    setIsAuthenticating(true)
+
     try {
-      const success = await authenticateParent(pinValue, false);
-      
+      const success = await authenticateParent(pinValue, false)
+
       if (success) {
         // Success animation
         Animated.sequence([
@@ -147,73 +147,89 @@ export default function ParentAuthentication({
             duration: 150,
             useNativeDriver: true,
           }),
-        ]).start();
-        
+        ]).start()
+
         setTimeout(() => {
-          onAuthenticated();
-          setPin('');
-        }, 300);
+          onAuthenticated()
+          setPin('')
+        }, 300)
       } else {
         // Failed authentication
-        setAttemptCount(prev => prev + 1);
-        setPin('');
-        
+        setAttemptCount((prev) => prev + 1)
+        setPin('')
+
         // Shake animation
         Animated.sequence([
-          Animated.timing(shakeAnimation, { toValue: 10, duration: 100, useNativeDriver: true }),
-          Animated.timing(shakeAnimation, { toValue: -10, duration: 100, useNativeDriver: true }),
-          Animated.timing(shakeAnimation, { toValue: 10, duration: 100, useNativeDriver: true }),
-          Animated.timing(shakeAnimation, { toValue: 0, duration: 100, useNativeDriver: true }),
-        ]).start();
-        
+          Animated.timing(shakeAnimation, {
+            toValue: 10,
+            duration: 100,
+            useNativeDriver: true,
+          }),
+          Animated.timing(shakeAnimation, {
+            toValue: -10,
+            duration: 100,
+            useNativeDriver: true,
+          }),
+          Animated.timing(shakeAnimation, {
+            toValue: 10,
+            duration: 100,
+            useNativeDriver: true,
+          }),
+          Animated.timing(shakeAnimation, {
+            toValue: 0,
+            duration: 100,
+            useNativeDriver: true,
+          }),
+        ]).start()
+
         // Vibrate on error
-        Vibration.vibrate(200);
-        
+        Vibration.vibrate(200)
+
         if (attemptCount >= 2) {
           Alert.alert(
             'Authentication Failed',
             'Too many failed attempts. Please try again later or use biometric authentication.',
-            [{ text: 'OK' }]
-          );
+            [{ text: 'OK' }],
+          )
         }
       }
     } catch (error) {
-      console.error('PIN authentication error:', error);
-      Alert.alert('Error', 'Authentication failed. Please try again.');
+      console.error('PIN authentication error:', error)
+      Alert.alert('Error', 'Authentication failed. Please try again.')
     } finally {
-      setIsAuthenticating(false);
+      setIsAuthenticating(false)
     }
-  };
+  }
 
   const handleBiometricAuth = async () => {
     if (!biometricAvailable) {
-      setAuthMethod('pin');
-      return;
+      setAuthMethod('pin')
+      return
     }
 
-    setIsAuthenticating(true);
-    
+    setIsAuthenticating(true)
+
     try {
-      const success = await authenticateParent(undefined, true);
-      
+      const success = await authenticateParent(undefined, true)
+
       if (success) {
-        onAuthenticated();
+        onAuthenticated()
       } else {
         // Fallback to PIN if biometric fails
-        setAuthMethod('pin');
+        setAuthMethod('pin')
       }
     } catch (error) {
-      console.error('Biometric authentication error:', error);
-      setAuthMethod('pin');
+      console.error('Biometric authentication error:', error)
+      setAuthMethod('pin')
     } finally {
-      setIsAuthenticating(false);
+      setIsAuthenticating(false)
     }
-  };
+  }
 
   const renderPinKeypad = () => (
     <View style={styles.keypad}>
       <View style={styles.keypadRow}>
-        {[1, 2, 3].map(num => (
+        {[1, 2, 3].map((num) => (
           <TouchableOpacity
             key={num}
             style={styles.keypadButton}
@@ -225,7 +241,7 @@ export default function ParentAuthentication({
         ))}
       </View>
       <View style={styles.keypadRow}>
-        {[4, 5, 6].map(num => (
+        {[4, 5, 6].map((num) => (
           <TouchableOpacity
             key={num}
             style={styles.keypadButton}
@@ -237,7 +253,7 @@ export default function ParentAuthentication({
         ))}
       </View>
       <View style={styles.keypadRow}>
-        {[7, 8, 9].map(num => (
+        {[7, 8, 9].map((num) => (
           <TouchableOpacity
             key={num}
             style={styles.keypadButton}
@@ -276,7 +292,7 @@ export default function ParentAuthentication({
         </TouchableOpacity>
       </View>
     </View>
-  );
+  )
 
   const renderPinDisplay = () => (
     <View style={styles.pinDisplay}>
@@ -286,7 +302,8 @@ export default function ParentAuthentication({
           style={[
             styles.pinDot,
             {
-              backgroundColor: index < pin.length ? Colors.primary : Colors.border,
+              backgroundColor:
+                index < pin.length ? Colors.primary : Colors.border,
             },
           ]}
         >
@@ -296,7 +313,7 @@ export default function ParentAuthentication({
         </View>
       ))}
     </View>
-  );
+  )
 
   const renderBiometricPrompt = () => (
     <View style={styles.biometricContainer}>
@@ -311,11 +328,13 @@ export default function ParentAuthentication({
         ) : (
           <>
             <Fingerprint size={64} color={Colors.primary} />
-            <Text style={styles.biometricText}>Tap to use biometric authentication</Text>
+            <Text style={styles.biometricText}>
+              Tap to use biometric authentication
+            </Text>
           </>
         )}
       </TouchableOpacity>
-      
+
       {settings.authenticationMethod === 'both' && (
         <TouchableOpacity
           style={styles.switchMethodButton}
@@ -325,9 +344,9 @@ export default function ParentAuthentication({
         </TouchableOpacity>
       )}
     </View>
-  );
+  )
 
-  if (!visible) return null;
+  if (!visible) return null
 
   return (
     <Modal
@@ -354,7 +373,7 @@ export default function ParentAuthentication({
             </View>
             <Text style={styles.title}>{title}</Text>
             <Text style={styles.subtitle}>{subtitle}</Text>
-            
+
             <TouchableOpacity
               style={styles.closeButton}
               onPress={onCancel}
@@ -381,19 +400,22 @@ export default function ParentAuthentication({
                 <Lock size={24} color={Colors.primary} />
                 <Text style={styles.pinTitle}>Enter Parent PIN</Text>
               </View>
-              
+
               {renderPinDisplay()}
               {renderPinKeypad()}
-              
-              {settings.authenticationMethod === 'both' && biometricAvailable && (
-                <TouchableOpacity
-                  style={styles.switchMethodButton}
-                  onPress={() => setAuthMethod('biometric')}
-                >
-                  <Fingerprint size={16} color={Colors.primary} />
-                  <Text style={styles.switchMethodText}>Use biometric instead</Text>
-                </TouchableOpacity>
-              )}
+
+              {settings.authenticationMethod === 'both' &&
+                biometricAvailable && (
+                  <TouchableOpacity
+                    style={styles.switchMethodButton}
+                    onPress={() => setAuthMethod('biometric')}
+                  >
+                    <Fingerprint size={16} color={Colors.primary} />
+                    <Text style={styles.switchMethodText}>
+                      Use biometric instead
+                    </Text>
+                  </TouchableOpacity>
+                )}
             </View>
           )}
 
@@ -406,7 +428,7 @@ export default function ParentAuthentication({
         </Animated.View>
       </View>
     </Modal>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -577,4 +599,4 @@ const styles = StyleSheet.create({
     color: Colors.text,
     marginTop: 12,
   },
-});
+})

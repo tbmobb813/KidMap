@@ -8,8 +8,9 @@ if (!fs.existsSync(logsDir)) {
 }
 
 module.exports = {
-  preset: 'jest-expo',
-  setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect', '<rootDir>/jest.setup.js'],
+  // Use basic React Native preset instead of jest-expo for now
+  preset: 'react-native',
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
 
   // Enable verbose logging
   verbose: true,

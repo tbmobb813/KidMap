@@ -1,4 +1,4 @@
-import { LiveArrival } from '@/components/LiveArrivalsCard';
+import { LiveArrival } from '@/components/LiveArrivalsCard'
 
 export const mockLiveArrivals: Record<string, LiveArrival[]> = {
   'main-st-station': [
@@ -135,7 +135,7 @@ export const mockLiveArrivals: Record<string, LiveArrival[]> = {
       type: 'subway',
     },
   ],
-};
+}
 
 export const nearbyStations = [
   {
@@ -162,4 +162,4 @@ export const nearbyStations = [
     distance: '12 min walk',
     lines: ['G'],
   },
-];
+]

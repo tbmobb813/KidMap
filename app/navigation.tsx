@@ -1,140 +1,171 @@
 // app/navigation.tsx - Active navigation for kids
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Pressable, Alert, Dimensions } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import Colors from '@/constants/colors';
-import { RouteOption } from '@/utils/routePlanner';
-import KidMap from '@/components/KidMap';
-import VoiceNavigation from '@/components/VoiceNavigation';
-import SafeZoneAlert from '@/components/SafeZoneAlert';
-import { MapPin, Navigation, Phone, Home, AlertTriangle, Pause, Play } from 'lucide-react-native';
-import AccessibleButton from '@/components/AccessibleButton';
-import useLocation from '@/hooks/useLocation';
-import { useGeofencing } from '@/hooks/useGeofencing';
-import { useNavigationStore } from '@/stores/navigationStore';
-import { useGamificationStore } from '@/stores/gamificationStore';
-import { speechEngine } from '@/utils/speechEngine';
-import { safeZoneAlertManager, SafeZoneEvent } from '@/utils/safeZoneAlerts';
+import React, { useState, useEffect } from 'react'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  Alert,
+  Dimensions,
+} from 'react-native'
+import { useRouter, useLocalSearchParams } from 'expo-router'
+import Colors from '@/constants/colors'
+import { RouteOption } from '@/utils/routePlanner'
+import KidMap from '@/components/KidMap'
+import VoiceNavigation from '@/components/VoiceNavigation'
+import SafeZoneAlert from '@/components/SafeZoneAlert'
+import {
+  MapPin,
+  Navigation,
+  Phone,
+  Home,
+  AlertTriangle,
+  Pause,
+  Play,
+} from 'lucide-react-native'
+import AccessibleButton from '@/components/AccessibleButton'
+import useLocation from '@/hooks/useLocation'
+import { useGeofencing } from '@/hooks/useGeofencing'
+import { useNavigationStore } from '@/stores/navigationStore'
+import { useGamificationStore } from '@/stores/gamificationStore'
+import { speechEngine } from '@/utils/speechEngine'
+import { safeZoneAlertManager, SafeZoneEvent } from '@/utils/safeZoneAlerts'
 
-const { height: screenHeight } = Dimensions.get('window');
+const { height: screenHeight } = Dimensions.get('window')
 
 export default function NavigationScreen() {
-  const router = useRouter();
-  const params = useLocalSearchParams();
-  const { location } = useLocation();
-  const { activeRoute, clearActiveRoute } = useNavigationStore();
-  const { safetyContacts, completeTrip } = useGamificationStore();
+  const router = useRouter()
+  const params = useLocalSearchParams()
+  const { location } = useLocation()
+  const { activeRoute, clearActiveRoute } = useNavigationStore()
+  const { safetyContacts, completeTrip } = useGamificationStore()
 
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [showEmergencyOptions, setShowEmergencyOptions] = useState(false);
-  const [showVoiceControls, setShowVoiceControls] = useState(false);
-  const [currentSafeZoneAlert, setCurrentSafeZoneAlert] = useState<SafeZoneEvent | null>(null);
-  const [startTime] = useState(new Date());
+  const [currentStepIndex, setCurrentStepIndex] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+  const [showEmergencyOptions, setShowEmergencyOptions] = useState(false)
+  const [showVoiceControls, setShowVoiceControls] = useState(false)
+  const [currentSafeZoneAlert, setCurrentSafeZoneAlert] =
+    useState<SafeZoneEvent | null>(null)
+  const [startTime] = useState(new Date())
 
   // Geofencing integration
   const geofencingStatus = useGeofencing((zoneId, event) => {
-    console.log(`Safe zone ${event}: ${zoneId}`);
-  });
+    console.log(`Safe zone ${event}: ${zoneId}`)
+  })
 
   // Parse route from params if not in store
-  const route: RouteOption | null = activeRoute || 
-    (params.route ? JSON.parse(params.route as string) : null);
+  const route: RouteOption | null =
+    activeRoute || (params.route ? JSON.parse(params.route as string) : null)
 
-  const currentStep = route?.steps[currentStepIndex];
-  const isLastStep = currentStepIndex === (route?.steps.length || 0) - 1;
+  const currentStep = route?.steps[currentStepIndex]
+  const isLastStep = currentStepIndex === (route?.steps.length || 0) - 1
 
   // Initialize speech engine with navigation context
   useEffect(() => {
     if (route) {
       // Initialize speech engine
-      speechEngine.initialize();
-      
+      speechEngine.initialize()
+
       // Announce start of navigation
-      speechEngine.speak("Navigation started! I'll guide you safely to your destination. You can ask me for help anytime by saying 'help me'.");
+      speechEngine.speak(
+        "Navigation started! I'll guide you safely to your destination. You can ask me for help anytime by saying 'help me'.",
+      )
     }
-  }, [route, currentStepIndex, isPaused, location]);
+  }, [route, currentStepIndex, isPaused, location])
 
   // Listen for safe zone events from alert manager
   useEffect(() => {
     const checkForAlerts = () => {
-      const recentEvents = safeZoneAlertManager.getRecentEvents(0.1); // Last 6 minutes
+      const recentEvents = safeZoneAlertManager.getRecentEvents(0.1) // Last 6 minutes
       if (recentEvents.length > 0) {
-        const latestEvent = recentEvents[0];
+        const latestEvent = recentEvents[0]
         // Only show if it's different from current alert
-        if (!currentSafeZoneAlert || currentSafeZoneAlert.id !== latestEvent.id) {
-          setCurrentSafeZoneAlert(latestEvent);
+        if (
+          !currentSafeZoneAlert ||
+          currentSafeZoneAlert.id !== latestEvent.id
+        ) {
+          setCurrentSafeZoneAlert(latestEvent)
         }
       }
-    };
+    }
 
-    const interval = setInterval(checkForAlerts, 2000);
-    return () => clearInterval(interval);
-  }, [currentSafeZoneAlert]);
+    const interval = setInterval(checkForAlerts, 2000)
+    return () => clearInterval(interval)
+  }, [currentSafeZoneAlert])
 
   useEffect(() => {
     // Auto-advance steps based on location (simplified for demo)
     const interval = setInterval(() => {
       if (!isPaused && route && currentStepIndex < route.steps.length - 1) {
         // In a real app, this would be based on GPS proximity to step completion
-        if (Math.random() > 0.9) { // Simulate step completion
-          setCurrentStepIndex(prev => {
-            const newIndex = prev + 1;
-            const nextStep = route.steps[newIndex];
+        if (Math.random() > 0.9) {
+          // Simulate step completion
+          setCurrentStepIndex((prev) => {
+            const newIndex = prev + 1
+            const nextStep = route.steps[newIndex]
             if (nextStep) {
               setTimeout(() => {
-                speechEngine.speak(`New instruction: ${nextStep.instruction}`);
-              }, 1000);
+                speechEngine.speak(`New instruction: ${nextStep.instruction}`)
+              }, 1000)
             }
-            return newIndex;
-          });
+            return newIndex
+          })
         }
       }
-    }, 5000);
+    }, 5000)
 
-    return () => clearInterval(interval);
-  }, [isPaused, currentStepIndex, route]);
+    return () => clearInterval(interval)
+  }, [isPaused, currentStepIndex, route])
 
   // Handle pause/resume voice feedback
   const handlePauseToggle = () => {
-    const newPauseState = !isPaused;
-    setIsPaused(newPauseState);
-    
+    const newPauseState = !isPaused
+    setIsPaused(newPauseState)
+
     if (newPauseState) {
-      speechEngine.speak("Navigation paused. Say 'resume' when you're ready to continue!");
+      speechEngine.speak(
+        "Navigation paused. Say 'resume' when you're ready to continue!",
+      )
     } else {
-      speechEngine.speak("Navigation resumed! Let's keep going!");
+      speechEngine.speak("Navigation resumed! Let's keep going!")
     }
-  };
+  }
 
   const handleStepComplete = () => {
-    speechEngine.speak("Great job! Let's keep going!");
-    
+    speechEngine.speak("Great job! Let's keep going!")
+
     if (isLastStep) {
-      handleTripComplete();
+      handleTripComplete()
     } else {
-      setCurrentStepIndex(prev => prev + 1);
+      setCurrentStepIndex((prev) => prev + 1)
       // Announce next step
-      const nextStep = route?.steps[currentStepIndex + 1];
+      const nextStep = route?.steps[currentStepIndex + 1]
       if (nextStep) {
         setTimeout(() => {
-          speechEngine.speak(`Next step: ${nextStep.instruction}`);
-        }, 1500);
+          speechEngine.speak(`Next step: ${nextStep.instruction}`)
+        }, 1500)
       }
     }
-  };
+  }
 
   const handleTripComplete = () => {
-    const tripDuration = Math.round((new Date().getTime() - startTime.getTime()) / 60000);
-    
-    speechEngine.speak("Congratulations! You made it safely to your destination! You're awesome!");
-    
+    const tripDuration = Math.round(
+      (new Date().getTime() - startTime.getTime()) / 60000,
+    )
+
+    speechEngine.speak(
+      "Congratulations! You made it safely to your destination! You're awesome!",
+    )
+
     completeTrip({
       destination: 'destination', // Would get from route
       duration: tripDuration,
-      mode: route?.mode === 'bicycling' ? 'walking' : (route?.mode || 'walking') as 'walking' | 'transit' | 'combined',
+      mode:
+        route?.mode === 'bicycling'
+          ? 'walking'
+          : ((route?.mode || 'walking') as 'walking' | 'transit' | 'combined'),
       safety: route?.safety || 3,
-    });
+    })
 
     Alert.alert(
       '🎉 Great Job!',
@@ -143,35 +174,36 @@ export default function NavigationScreen() {
         {
           text: 'Awesome!',
           onPress: () => {
-            clearActiveRoute();
-            router.replace('/tabs/');
+            clearActiveRoute()
+            router.replace('/tabs/')
           },
         },
-      ]
-    );
-  };
+      ],
+    )
+  }
 
   const handleEmergency = () => {
-    speechEngine.speak("Emergency options are now available. You can call for help or cancel your trip.");
-    setShowEmergencyOptions(!showEmergencyOptions);
-  };
+    speechEngine.speak(
+      'Emergency options are now available. You can call for help or cancel your trip.',
+    )
+    setShowEmergencyOptions(!showEmergencyOptions)
+  }
 
   const callEmergencyContact = (contact: any) => {
-    Alert.alert(
-      'Call Emergency Contact',
-      `Call ${contact.name}?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { 
-          text: 'Call', 
-          onPress: () => {
-            // In a real app, would initiate phone call
-            Alert.alert('Calling...', `Calling ${contact.name} at ${contact.phone}`);
-          }
+    Alert.alert('Call Emergency Contact', `Call ${contact.name}?`, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Call',
+        onPress: () => {
+          // In a real app, would initiate phone call
+          Alert.alert(
+            'Calling...',
+            `Calling ${contact.name} at ${contact.phone}`,
+          )
         },
-      ]
-    );
-  };
+      },
+    ])
+  }
 
   if (!route) {
     return (
@@ -183,7 +215,7 @@ export default function NavigationScreen() {
           variant="primary"
         />
       </View>
-    );
+    )
   }
 
   return (
@@ -191,20 +223,21 @@ export default function NavigationScreen() {
       {/* Map View */}
       <View style={styles.mapContainer}>
         <KidMap
-          userLocation={location ? {
-            latitude: location.latitude,
-            longitude: location.longitude,
-          } : undefined}
+          userLocation={
+            location
+              ? {
+                  latitude: location.latitude,
+                  longitude: location.longitude,
+                }
+              : undefined
+          }
           route={route.route}
           showUserLocation={true}
           followUserLocation={true}
         />
-        
+
         {/* Emergency Button Overlay */}
-        <Pressable
-          style={styles.emergencyButton}
-          onPress={handleEmergency}
-        >
+        <Pressable style={styles.emergencyButton} onPress={handleEmergency}>
           <AlertTriangle size={24} color="#FFFFFF" />
         </Pressable>
 
@@ -238,29 +271,25 @@ export default function NavigationScreen() {
             <Text style={styles.stepCounter}>
               Step {currentStepIndex + 1} of {route.steps.length}
             </Text>
-            <Pressable
-              style={styles.pauseButton}
-              onPress={handlePauseToggle}
-            >
-              {isPaused ? 
-                <Play size={16} color={Colors.primary} /> :
+            <Pressable style={styles.pauseButton} onPress={handlePauseToggle}>
+              {isPaused ? (
+                <Play size={16} color={Colors.primary} />
+              ) : (
                 <Pause size={16} color={Colors.primary} />
-              }
+              )}
             </Pressable>
           </View>
-          
+
           <Text style={styles.instruction}>
             {currentStep?.instruction || 'Loading...'}
           </Text>
-          
+
           <View style={styles.stepDetails}>
             <Text style={styles.stepDuration}>
               {currentStep?.duration} minutes
             </Text>
             {currentStep?.distance && (
-              <Text style={styles.stepDistance}>
-                {currentStep.distance}m
-              </Text>
+              <Text style={styles.stepDistance}>{currentStep.distance}m</Text>
             )}
             {currentStep?.transitLine && (
               <View style={styles.transitBadge}>
@@ -275,22 +304,25 @@ export default function NavigationScreen() {
         {/* Progress Bar */}
         <View style={styles.progressContainer}>
           <View style={styles.progressBar}>
-            <View 
+            <View
               style={[
-                styles.progressFill, 
-                { width: `${((currentStepIndex + 1) / route.steps.length) * 100}%` }
-              ]} 
+                styles.progressFill,
+                {
+                  width: `${((currentStepIndex + 1) / route.steps.length) * 100}%`,
+                },
+              ]}
             />
           </View>
           <Text style={styles.progressText}>
-            {Math.round(((currentStepIndex + 1) / route.steps.length) * 100)}% Complete
+            {Math.round(((currentStepIndex + 1) / route.steps.length) * 100)}%
+            Complete
           </Text>
         </View>
 
         {/* Action Buttons */}
         <View style={styles.actions}>
           <AccessibleButton
-            title={isLastStep ? "I'm Here!" : "Next Step"}
+            title={isLastStep ? "I'm Here!" : 'Next Step'}
             onPress={handleStepComplete}
             variant="primary"
             style={styles.nextButton}
@@ -303,14 +335,16 @@ export default function NavigationScreen() {
         <View style={styles.emergencyModal}>
           <View style={styles.emergencyContent}>
             <Text style={styles.emergencyTitle}>Emergency Options</Text>
-            
+
             <View style={styles.emergencyButtons}>
               <AccessibleButton
                 title="Call Home"
-                onPress={() => callEmergencyContact({ name: 'Home', phone: '000-000-0000' })}
+                onPress={() =>
+                  callEmergencyContact({ name: 'Home', phone: '000-000-0000' })
+                }
                 variant="outline"
               />
-              
+
               {safetyContacts.slice(0, 2).map((contact, index) => (
                 <AccessibleButton
                   key={index}
@@ -319,7 +353,7 @@ export default function NavigationScreen() {
                   variant="outline"
                 />
               ))}
-              
+
               <AccessibleButton
                 title="Cancel Trip"
                 onPress={() => {
@@ -328,22 +362,22 @@ export default function NavigationScreen() {
                     'Are you sure you want to cancel navigation?',
                     [
                       { text: 'No', style: 'cancel' },
-                      { 
-                        text: 'Yes', 
+                      {
+                        text: 'Yes',
                         style: 'destructive',
                         onPress: () => {
-                          clearActiveRoute();
-                          router.replace('/tabs/');
-                        }
+                          clearActiveRoute()
+                          router.replace('/tabs/')
+                        },
                       },
-                    ]
-                  );
+                    ],
+                  )
                 }}
                 variant="outline"
                 style={styles.cancelButton}
               />
             </View>
-            
+
             <AccessibleButton
               title="Close"
               onPress={() => setShowEmergencyOptions(false)}
@@ -353,7 +387,7 @@ export default function NavigationScreen() {
         </View>
       )}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -537,4 +571,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 20,
   },
-});
+})

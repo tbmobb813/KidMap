@@ -1,18 +1,35 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable, TextInput, Alert } from 'react-native';
-import Colors from '@/constants/colors';
-import { Search, Plus, MapPin, Trash2, Edit3, Globe, Clock, Phone } from 'lucide-react-native';
-import { useRegionStore } from '@/stores/regionStore';
-import { RegionConfig } from '@/types/region';
+import React, { useState } from 'react'
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Pressable,
+  TextInput,
+  Alert,
+} from 'react-native'
+import Colors from '@/constants/colors'
+import {
+  Search,
+  Plus,
+  MapPin,
+  Trash2,
+  Edit3,
+  Globe,
+  Clock,
+  Phone,
+} from 'lucide-react-native'
+import { useRegionStore } from '@/stores/regionStore'
+import { RegionConfig } from '@/types/region'
 
 type CityManagementProps = {
-  onBack: () => void;
-};
+  onBack: () => void
+}
 
 export default function CityManagement({ onBack }: CityManagementProps) {
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [showAddForm, setShowAddForm] = useState<boolean>(false);
-  const [editingRegion, setEditingRegion] = useState<RegionConfig | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('')
+  const [showAddForm, setShowAddForm] = useState<boolean>(false)
+  const [editingRegion, setEditingRegion] = useState<RegionConfig | null>(null)
 
   const {
     availableRegions,
@@ -23,17 +40,24 @@ export default function CityManagement({ onBack }: CityManagementProps) {
     updateRegionTransitData,
     searchRegions,
     getRegionsByCountry,
-  } = useRegionStore();
+  } = useRegionStore()
 
-  const filteredRegions = searchQuery ? searchRegions(searchQuery) : availableRegions;
+  const filteredRegions = searchQuery
+    ? searchRegions(searchQuery)
+    : availableRegions
 
-  const usRegions = getRegionsByCountry('United States');
-  const internationalRegions = availableRegions.filter((r) => r.country !== 'United States');
+  const usRegions = getRegionsByCountry('United States')
+  const internationalRegions = availableRegions.filter(
+    (r) => r.country !== 'United States',
+  )
 
   const handleDeleteRegion = (regionId: string) => {
     if (regionId === currentRegion.id) {
-      Alert.alert('Cannot Delete', 'You cannot delete the currently selected region.');
-      return;
+      Alert.alert(
+        'Cannot Delete',
+        'You cannot delete the currently selected region.',
+      )
+      return
     }
 
     Alert.alert(
@@ -47,8 +71,8 @@ export default function CityManagement({ onBack }: CityManagementProps) {
           onPress: () => removeRegion(regionId),
         },
       ],
-    );
-  };
+    )
+  }
 
   const handleUpdateTransitData = (regionId: string) => {
     Alert.alert(
@@ -60,16 +84,24 @@ export default function CityManagement({ onBack }: CityManagementProps) {
           text: 'Update',
           onPress: () => {
             // In a real app, this would make API calls to update transit data
-            Alert.alert('Success', 'Transit data updated successfully!');
+            Alert.alert('Success', 'Transit data updated successfully!')
           },
         },
       ],
-    );
-  };
+    )
+  }
 
   const RegionCard = ({ region }: { region: RegionConfig }) => (
-    <View style={[styles.regionCard, region.id === currentRegion.id && styles.currentRegionCard]}>
-      <Pressable style={styles.regionHeader} onPress={() => setRegion(region.id)}>
+    <View
+      style={[
+        styles.regionCard,
+        region.id === currentRegion.id && styles.currentRegionCard,
+      ]}
+    >
+      <Pressable
+        style={styles.regionHeader}
+        onPress={() => setRegion(region.id)}
+      >
         <View style={styles.regionInfo}>
           <View style={styles.regionTitleRow}>
             <MapPin size={20} color={Colors.primary} />
@@ -102,10 +134,16 @@ export default function CityManagement({ onBack }: CityManagementProps) {
       </Pressable>
 
       <View style={styles.regionActions}>
-        <Pressable style={styles.actionButton} onPress={() => handleUpdateTransitData(region.id)}>
+        <Pressable
+          style={styles.actionButton}
+          onPress={() => handleUpdateTransitData(region.id)}
+        >
           <Text style={styles.actionButtonText}>Update Transit</Text>
         </Pressable>
-        <Pressable style={styles.actionButton} onPress={() => setEditingRegion(region)}>
+        <Pressable
+          style={styles.actionButton}
+          onPress={() => setEditingRegion(region)}
+        >
           <Edit3 size={16} color={Colors.primary} />
         </Pressable>
         <Pressable
@@ -116,7 +154,7 @@ export default function CityManagement({ onBack }: CityManagementProps) {
         </Pressable>
       </View>
     </View>
-  );
+  )
 
   if (showAddForm || editingRegion) {
     return (
@@ -124,19 +162,19 @@ export default function CityManagement({ onBack }: CityManagementProps) {
         region={editingRegion}
         onSave={(region) => {
           if (editingRegion) {
-            updateRegionTransitData(region.id, region);
+            updateRegionTransitData(region.id, region)
           } else {
-            addCustomRegion(region);
+            addCustomRegion(region)
           }
-          setShowAddForm(false);
-          setEditingRegion(null);
+          setShowAddForm(false)
+          setEditingRegion(null)
         }}
         onCancel={() => {
-          setShowAddForm(false);
-          setEditingRegion(null);
+          setShowAddForm(false)
+          setEditingRegion(null)
         }}
       />
-    );
+    )
   }
 
   return (
@@ -146,7 +184,10 @@ export default function CityManagement({ onBack }: CityManagementProps) {
           <Text style={styles.backButtonText}>← Back</Text>
         </Pressable>
         <Text style={styles.title}>City Management</Text>
-        <Pressable style={styles.addButton} onPress={() => setShowAddForm(true)}>
+        <Pressable
+          style={styles.addButton}
+          onPress={() => setShowAddForm(true)}
+        >
           <Plus size={20} color="#FFFFFF" />
           <Text style={styles.addButtonText}>Add City</Text>
         </Pressable>
@@ -164,7 +205,9 @@ export default function CityManagement({ onBack }: CityManagementProps) {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>United States ({usRegions.length})</Text>
+        <Text style={styles.sectionTitle}>
+          United States ({usRegions.length})
+        </Text>
         {(searchQuery
           ? filteredRegions.filter((r) => r.country === 'United States')
           : usRegions
@@ -174,7 +217,9 @@ export default function CityManagement({ onBack }: CityManagementProps) {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>International ({internationalRegions.length})</Text>
+        <Text style={styles.sectionTitle}>
+          International ({internationalRegions.length})
+        </Text>
         {(searchQuery
           ? filteredRegions.filter((r) => r.country !== 'United States')
           : internationalRegions
@@ -186,25 +231,30 @@ export default function CityManagement({ onBack }: CityManagementProps) {
       <View style={styles.infoSection}>
         <Text style={styles.infoTitle}>Transit Data Updates</Text>
         <Text style={styles.infoText}>
-          Transit schedules and route information are automatically updated when available. You can
-          manually refresh data for any city by tapping "Update Transit".
+          Transit schedules and route information are automatically updated when
+          available. You can manually refresh data for any city by tapping
+          "Update Transit".
         </Text>
         <Text style={styles.infoText}>
-          Custom cities can be added with their own transit API endpoints for real-time data
-          integration.
+          Custom cities can be added with their own transit API endpoints for
+          real-time data integration.
         </Text>
       </View>
     </ScrollView>
-  );
+  )
 }
 
 type AddEditRegionFormProps = {
-  region?: RegionConfig | null;
-  onSave: (region: RegionConfig) => void;
-  onCancel: () => void;
-};
+  region?: RegionConfig | null
+  onSave: (region: RegionConfig) => void
+  onCancel: () => void
+}
 
-function AddEditRegionForm({ region, onSave, onCancel }: AddEditRegionFormProps) {
+function AddEditRegionForm({
+  region,
+  onSave,
+  onCancel,
+}: AddEditRegionFormProps) {
   const [formData, setFormData] = useState<Partial<RegionConfig>>({
     id: region?.id || '',
     name: region?.name || '',
@@ -220,16 +270,16 @@ function AddEditRegionForm({ region, onSave, onCancel }: AddEditRegionFormProps)
     safetyTips: region?.safetyTips || [],
     funFacts: region?.funFacts || [],
     popularPlaces: region?.popularPlaces || [],
-  });
+  })
 
   const handleSave = () => {
     if (!formData.id || !formData.name || !formData.country) {
-      Alert.alert('Error', 'Please fill in all required fields.');
-      return;
+      Alert.alert('Error', 'Please fill in all required fields.')
+      return
     }
 
-    onSave(formData as RegionConfig);
-  };
+    onSave(formData as RegionConfig)
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -279,7 +329,9 @@ function AddEditRegionForm({ region, onSave, onCancel }: AddEditRegionFormProps)
         <TextInput
           style={styles.formInput}
           value={formData.transitApiEndpoint}
-          onChangeText={(text) => setFormData({ ...formData, transitApiEndpoint: text })}
+          onChangeText={(text) =>
+            setFormData({ ...formData, transitApiEndpoint: text })
+          }
           placeholder="https://api.example.com/"
         />
       </View>
@@ -289,17 +341,20 @@ function AddEditRegionForm({ region, onSave, onCancel }: AddEditRegionFormProps)
         <TextInput
           style={styles.formInput}
           value={formData.emergencyNumber}
-          onChangeText={(text) => setFormData({ ...formData, emergencyNumber: text })}
+          onChangeText={(text) =>
+            setFormData({ ...formData, emergencyNumber: text })
+          }
           placeholder="911"
         />
       </View>
 
       <Text style={styles.infoText}>
-        Additional configuration options like transit systems, coordinates, and local information
-        can be added through the advanced settings or by importing from a configuration file.
+        Additional configuration options like transit systems, coordinates, and
+        local information can be added through the advanced settings or by
+        importing from a configuration file.
       </Text>
     </ScrollView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -494,4 +549,4 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
   },
-});
+})

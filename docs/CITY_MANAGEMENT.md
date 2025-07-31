@@ -189,17 +189,17 @@ export const newCityConfig: RegionConfig = {
   ],
   transitApiEndpoint: 'https://api.newcity.gov/',
   mapStyle: 'standard',
-};
+}
 ```
 
 ### Updating Transit Data
 
 ```typescript
 // Update single city
-const result = await transitDataUpdater.updateRegionTransitData('nyc');
+const result = await transitDataUpdater.updateRegionTransitData('nyc')
 
 // Update all cities
-const results = await transitDataUpdater.updateAllRegions();
+const results = await transitDataUpdater.updateAllRegions()
 ```
 
 This system provides a solid foundation for a production-ready transit app that can easily scale to support cities worldwide while maintaining up-to-date transit information and regional customization.

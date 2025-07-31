@@ -1,78 +1,100 @@
 // app/route-planner.tsx - Route planning interface for kids
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable, Alert } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import Colors from '@/constants/colors';
-import { RouteOption, getKidFriendlyRoutes } from '@/utils/routePlanner';
-import { MapPin, Clock, Shield, Star, Navigation, AlertTriangle } from 'lucide-react-native';
-import AccessibleButton from '@/components/AccessibleButton';
-import LoadingSpinner from '@/components/LoadingSpinner';
-import useLocation from '@/hooks/useLocation';
-import { useNavigationStore } from '@/stores/navigationStore';
+import React, { useState, useEffect } from 'react'
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Pressable,
+  Alert,
+} from 'react-native'
+import { useRouter, useLocalSearchParams } from 'expo-router'
+import Colors from '@/constants/colors'
+import { RouteOption, getKidFriendlyRoutes } from '@/utils/routePlanner'
+import {
+  MapPin,
+  Clock,
+  Shield,
+  Star,
+  Navigation,
+  AlertTriangle,
+} from 'lucide-react-native'
+import AccessibleButton from '@/components/AccessibleButton'
+import LoadingSpinner from '@/components/LoadingSpinner'
+import useLocation from '@/hooks/useLocation'
+import { useNavigationStore } from '@/stores/navigationStore'
 
 export default function RoutePlannerScreen() {
-  const router = useRouter();
-  const params = useLocalSearchParams();
-  const { location } = useLocation();
+  const router = useRouter()
+  const params = useLocalSearchParams()
+  const { location } = useLocation()
   // Update this line to match your navigation store's API.
   // For example, if your store uses a setter named 'setRoute', use that instead.
   // If you need to add 'setActiveRoute' to your store, implement it in the store definition.
-    // Use the correct setter or update your store to include setActiveRoute if missing.
-    // If your store only has activeRoute and a setter like setActiveRouteId, use that.
-    // Example using a generic setter:
-    const setActiveRoute = useNavigationStore((state) => state.setActiveRoute || (() => {}));
+  // Use the correct setter or update your store to include setActiveRoute if missing.
+  // If your store only has activeRoute and a setter like setActiveRouteId, use that.
+  // Example using a generic setter:
+  const setActiveRoute = useNavigationStore(
+    (state) => state.setActiveRoute || (() => {}),
+  )
 
-  const [routes, setRoutes] = useState<RouteOption[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedRoute, setSelectedRoute] = useState<RouteOption | null>(null);
+  const [routes, setRoutes] = useState<RouteOption[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedRoute, setSelectedRoute] = useState<RouteOption | null>(null)
 
   // Parse destination from params
-  const destination = params.destination ? JSON.parse(params.destination as string) : null;
-  const fromCoords: [number, number] = location ? [location.latitude, location.longitude] : [0, 0];
-  const toCoords: [number, number] = destination ? [destination.lat, destination.lng] : [0, 0];
+  const destination = params.destination
+    ? JSON.parse(params.destination as string)
+    : null
+  const fromCoords: [number, number] = location
+    ? [location.latitude, location.longitude]
+    : [0, 0]
+  const toCoords: [number, number] = destination
+    ? [destination.lat, destination.lng]
+    : [0, 0]
 
   useEffect(() => {
     if (location && destination) {
-      loadRoutes();
+      loadRoutes()
     }
-  }, [location, destination]);
+  }, [location, destination])
 
   const loadRoutes = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const routeOptions = await getKidFriendlyRoutes(fromCoords, toCoords, 10); // Assume age 10
-      setRoutes(routeOptions);
-      
+      const routeOptions = await getKidFriendlyRoutes(fromCoords, toCoords, 10) // Assume age 10
+      setRoutes(routeOptions)
+
       // Auto-select the best route
       if (routeOptions.length > 0) {
-        setSelectedRoute(routeOptions[0]);
+        setSelectedRoute(routeOptions[0])
       }
     } catch (error) {
-      console.error('Error loading routes:', error);
-      Alert.alert('Error', 'Could not load route options. Please try again.');
+      console.error('Error loading routes:', error)
+      Alert.alert('Error', 'Could not load route options. Please try again.')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleStartNavigation = () => {
-    if (!selectedRoute) return;
+    if (!selectedRoute) return
 
-    setActiveRoute(selectedRoute);
+    setActiveRoute(selectedRoute)
     router.push({
       pathname: '/navigation',
       params: {
         routeId: selectedRoute.id,
         route: JSON.stringify(selectedRoute),
       },
-    });
-  };
+    })
+  }
 
   const getSafetyIcon = (level: number) => {
-    if (level >= 4) return <Shield size={16} color={Colors.success} />;
-    if (level >= 3) return <Shield size={16} color={Colors.warning} />;
-    return <AlertTriangle size={16} color={Colors.error} />;
-  };
+    if (level >= 4) return <Shield size={16} color={Colors.success} />
+    if (level >= 3) return <Shield size={16} color={Colors.warning} />
+    return <AlertTriangle size={16} color={Colors.error} />
+  }
 
   const getKidFriendlinessStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
@@ -82,8 +104,8 @@ export default function RoutePlannerScreen() {
         color={i < rating ? Colors.warning : Colors.border}
         fill={i < rating ? Colors.warning : 'transparent'}
       />
-    ));
-  };
+    ))
+  }
 
   const renderRouteCard = (route: RouteOption) => (
     <Pressable
@@ -97,8 +119,11 @@ export default function RoutePlannerScreen() {
       <View style={styles.routeHeader}>
         <View style={styles.routeTitle}>
           <Text style={styles.routeMode}>
-            {route.mode === 'walking' ? '🚶‍♀️ Walking' : 
-             route.mode === 'transit' ? '🚇 Transit' : '🚌 Mixed'}
+            {route.mode === 'walking'
+              ? '🚶‍♀️ Walking'
+              : route.mode === 'transit'
+                ? '🚇 Transit'
+                : '🚌 Mixed'}
           </Text>
           <View style={styles.routeRatings}>
             {getSafetyIcon(route.safety)}
@@ -107,7 +132,7 @@ export default function RoutePlannerScreen() {
             </View>
           </View>
         </View>
-        
+
         <View style={styles.routeStats}>
           <View style={styles.stat}>
             <Clock size={14} color={Colors.textLight} />
@@ -115,7 +140,9 @@ export default function RoutePlannerScreen() {
           </View>
           <View style={styles.stat}>
             <MapPin size={14} color={Colors.textLight} />
-            <Text style={styles.statText}>{(route.distance / 1000).toFixed(1)} km</Text>
+            <Text style={styles.statText}>
+              {(route.distance / 1000).toFixed(1)} km
+            </Text>
           </View>
         </View>
       </View>
@@ -133,31 +160,47 @@ export default function RoutePlannerScreen() {
           </View>
         ))}
         {route.steps.length > 3 && (
-          <Text style={styles.moreSteps}>+ {route.steps.length - 3} more steps</Text>
+          <Text style={styles.moreSteps}>
+            + {route.steps.length - 3} more steps
+          </Text>
         )}
       </View>
 
       <View style={styles.routeFeatures}>
-        <View style={[styles.accessibilityBadge, {
-          backgroundColor: route.accessibility === 'high' ? Colors.success : 
-                          route.accessibility === 'medium' ? Colors.warning : Colors.error,
-        }]}>
+        <View
+          style={[
+            styles.accessibilityBadge,
+            {
+              backgroundColor:
+                route.accessibility === 'high'
+                  ? Colors.success
+                  : route.accessibility === 'medium'
+                    ? Colors.warning
+                    : Colors.error,
+            },
+          ]}
+        >
           <Text style={styles.badgeText}>
-            {route.accessibility === 'high' ? 'Easy Access' :
-             route.accessibility === 'medium' ? 'Some Stairs' : 'Difficult'}
+            {route.accessibility === 'high'
+              ? 'Easy Access'
+              : route.accessibility === 'medium'
+                ? 'Some Stairs'
+                : 'Difficult'}
           </Text>
         </View>
       </View>
     </Pressable>
-  );
+  )
 
   if (loading) {
     return (
       <View style={styles.container}>
         <LoadingSpinner />
-        <Text style={styles.loadingText}>Finding the best routes for you...</Text>
+        <Text style={styles.loadingText}>
+          Finding the best routes for you...
+        </Text>
       </View>
-    );
+    )
   }
 
   if (!destination) {
@@ -170,7 +213,7 @@ export default function RoutePlannerScreen() {
           variant="primary"
         />
       </View>
-    );
+    )
   }
 
   return (
@@ -178,13 +221,14 @@ export default function RoutePlannerScreen() {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Choose Your Route</Text>
-        <Text style={styles.headerSubtitle}>
-          Going to {destination.name}
-        </Text>
+        <Text style={styles.headerSubtitle}>Going to {destination.name}</Text>
       </View>
 
       {/* Routes List */}
-      <ScrollView style={styles.routesList} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.routesList}
+        showsVerticalScrollIndicator={false}
+      >
         {routes.length === 0 ? (
           <View style={styles.noRoutes}>
             <MapPin size={48} color={Colors.textLight} />
@@ -216,7 +260,7 @@ export default function RoutePlannerScreen() {
         />
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -386,4 +430,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 24,
   },
-});
+})

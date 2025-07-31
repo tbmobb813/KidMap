@@ -1,15 +1,25 @@
-import React from 'react';
-import { StyleSheet, Text, View, Switch, ScrollView, Pressable } from 'react-native';
-import Colors from '@/constants/colors';
-import { Eye, Volume2, Zap, Settings, ArrowLeft } from 'lucide-react-native';
-import { useNavigationStore } from '@/stores/navigationStore';
+import React from 'react'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Switch,
+  ScrollView,
+  Pressable,
+} from 'react-native'
+import Colors from '@/constants/colors'
+import { Eye, Volume2, Zap, Settings, ArrowLeft } from 'lucide-react-native'
+import { useNavigationStore } from '@/stores/navigationStore'
 
 type AccessibilitySettingsProps = {
-  onBack?: () => void;
-};
+  onBack?: () => void
+}
 
-const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({ onBack }) => {
-  const { accessibilitySettings, updateAccessibilitySettings } = useNavigationStore();
+const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({
+  onBack,
+}) => {
+  const { accessibilitySettings, updateAccessibilitySettings } =
+    useNavigationStore()
 
   const SettingItem = ({
     icon,
@@ -18,16 +28,21 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({ onBack })
     value,
     onValueChange,
   }: {
-    icon: React.ReactNode;
-    title: string;
-    description: string;
-    value: boolean;
-    onValueChange: (value: boolean) => void;
+    icon: React.ReactNode
+    title: string
+    description: string
+    value: boolean
+    onValueChange: (value: boolean) => void
   }) => (
     <View style={styles.settingItem}>
       <View style={styles.settingIcon}>{icon}</View>
       <View style={styles.settingContent}>
-        <Text style={[styles.settingTitle, accessibilitySettings.largeText && styles.largeText]}>
+        <Text
+          style={[
+            styles.settingTitle,
+            accessibilitySettings.largeText && styles.largeText,
+          ]}
+        >
           {title}
         </Text>
         <Text
@@ -46,7 +61,7 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({ onBack })
         thumbColor="#FFFFFF"
       />
     </View>
-  );
+  )
 
   return (
     <ScrollView style={styles.container}>
@@ -58,7 +73,10 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({ onBack })
       )}
 
       <Text
-        style={[styles.sectionTitle, accessibilitySettings.largeText && styles.largeSectionTitle]}
+        style={[
+          styles.sectionTitle,
+          accessibilitySettings.largeText && styles.largeSectionTitle,
+        ]}
       >
         Accessibility Settings
       </Text>
@@ -68,7 +86,9 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({ onBack })
         title="Large Text"
         description="Make text bigger and easier to read"
         value={accessibilitySettings.largeText}
-        onValueChange={(value) => updateAccessibilitySettings({ largeText: value })}
+        onValueChange={(value) =>
+          updateAccessibilitySettings({ largeText: value })
+        }
       />
 
       <SettingItem
@@ -76,7 +96,9 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({ onBack })
         title="High Contrast"
         description="Use colors that are easier to see"
         value={accessibilitySettings.highContrast}
-        onValueChange={(value) => updateAccessibilitySettings({ highContrast: value })}
+        onValueChange={(value) =>
+          updateAccessibilitySettings({ highContrast: value })
+        }
       />
 
       <SettingItem
@@ -84,7 +106,9 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({ onBack })
         title="Voice Descriptions"
         description="Hear descriptions of what's on screen"
         value={accessibilitySettings.voiceDescriptions}
-        onValueChange={(value) => updateAccessibilitySettings({ voiceDescriptions: value })}
+        onValueChange={(value) =>
+          updateAccessibilitySettings({ voiceDescriptions: value })
+        }
       />
 
       <SettingItem
@@ -92,11 +116,13 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({ onBack })
         title="Simplified Mode"
         description="Show only the most important features"
         value={accessibilitySettings.simplifiedMode}
-        onValueChange={(value) => updateAccessibilitySettings({ simplifiedMode: value })}
+        onValueChange={(value) =>
+          updateAccessibilitySettings({ simplifiedMode: value })
+        }
       />
     </ScrollView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -162,6 +188,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginLeft: 8,
   },
-});
+})
 
-export default AccessibilitySettings;
+export default AccessibilitySettings

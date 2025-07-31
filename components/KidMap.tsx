@@ -1,23 +1,29 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { StyleSheet, View, Dimensions, Platform } from 'react-native';
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE, LatLng, Region } from 'react-native-maps';
-import { RouteResult } from '@/utils/api';
-import { TransitStation } from '@/utils/transitApi';
-import Colors from '@/constants/colors';
-import polyline from '@mapbox/polyline';
+import React, { useRef, useEffect, useState } from 'react'
+import { StyleSheet, View, Dimensions, Platform } from 'react-native'
+import MapView, {
+  Marker,
+  Polyline,
+  PROVIDER_GOOGLE,
+  LatLng,
+  Region,
+} from 'react-native-maps'
+import { RouteResult } from '@/utils/api'
+import { TransitStation } from '@/utils/transitApi'
+import Colors from '@/constants/colors'
+import polyline from '@mapbox/polyline'
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window')
 
 interface KidMapProps {
-  initialRegion?: Region;
-  userLocation?: LatLng;
-  destination?: LatLng;
-  route?: RouteResult;
-  nearbyStations?: TransitStation[];
-  onRegionChange?: (region: Region) => void;
-  onMarkerPress?: (location: LatLng) => void;
-  showUserLocation?: boolean;
-  followUserLocation?: boolean;
+  initialRegion?: Region
+  userLocation?: LatLng
+  destination?: LatLng
+  route?: RouteResult
+  nearbyStations?: TransitStation[]
+  onRegionChange?: (region: Region) => void
+  onMarkerPress?: (location: LatLng) => void
+  showUserLocation?: boolean
+  followUserLocation?: boolean
 }
 
 const KidMap: React.FC<KidMapProps> = ({
@@ -31,15 +37,15 @@ const KidMap: React.FC<KidMapProps> = ({
   showUserLocation = true,
   followUserLocation = false,
 }) => {
-  const mapRef = useRef<MapView>(null);
+  const mapRef = useRef<MapView>(null)
   const [mapRegion, setMapRegion] = useState<Region>(
     initialRegion || {
       latitude: 40.7589, // NYC default
       longitude: -73.9851,
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
-    }
-  );
+    },
+  )
 
   // Update region when user location changes
   useEffect(() => {
@@ -48,46 +54,51 @@ const KidMap: React.FC<KidMapProps> = ({
         ...mapRegion,
         latitude: userLocation.latitude,
         longitude: userLocation.longitude,
-      };
-      setMapRegion(newRegion);
-      mapRef.current.animateToRegion(newRegion, 1000);
+      }
+      setMapRegion(newRegion)
+      mapRef.current.animateToRegion(newRegion, 1000)
     }
-  }, [userLocation, followUserLocation]);
+  }, [userLocation, followUserLocation])
 
   // Fit map to show route
   useEffect(() => {
     if (route && mapRef.current) {
-      const coordinates = route.steps.flatMap(step => [{
-        latitude: step.startLocation.lat,
-        longitude: step.startLocation.lng,
-      }, {
-        latitude: step.endLocation.lat,
-        longitude: step.endLocation.lng,
-      }]);
-      
+      const coordinates = route.steps.flatMap((step) => [
+        {
+          latitude: step.startLocation.lat,
+          longitude: step.startLocation.lng,
+        },
+        {
+          latitude: step.endLocation.lat,
+          longitude: step.endLocation.lng,
+        },
+      ])
+
       if (coordinates.length > 0) {
         mapRef.current.fitToCoordinates(coordinates, {
           edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
           animated: true,
-        });
+        })
       }
     }
-  }, [route]);
+  }, [route])
 
   const handleRegionChange = (region: Region) => {
-    setMapRegion(region);
-    onRegionChange?.(region);
-  };
+    setMapRegion(region)
+    onRegionChange?.(region)
+  }
 
   const decodePolyline = (encoded: string): LatLng[] => {
     // Use @mapbox/polyline for robust decoding
-    return polyline.decode(encoded).map(([latitude, longitude]: [number, number]) => ({
-      latitude,
-      longitude,
-    }));
-  };
+    return polyline
+      .decode(encoded)
+      .map(([latitude, longitude]: [number, number]) => ({
+        latitude,
+        longitude,
+      }))
+  }
 
-  const routeCoordinates = route ? decodePolyline(route.overview_polyline) : [];
+  const routeCoordinates = route ? decodePolyline(route.overview_polyline) : []
 
   return (
     <View style={styles.container}>
@@ -137,10 +148,12 @@ const KidMap: React.FC<KidMapProps> = ({
             description={`Routes: ${station.routes.join(', ')}`}
             pinColor={Colors.accent}
             identifier={`station-${station.id}`}
-            onPress={() => onMarkerPress?.({
-              latitude: station.location.lat,
-              longitude: station.location.lng,
-            })}
+            onPress={() =>
+              onMarkerPress?.({
+                latitude: station.location.lat,
+                longitude: station.location.lng,
+              })
+            }
           />
         ))}
 
@@ -169,14 +182,14 @@ const KidMap: React.FC<KidMapProps> = ({
                 pinColor={step.transitDetails.color || Colors.accent}
                 identifier={`step-${index}`}
               />
-            );
+            )
           }
-          return null;
+          return null
         })}
       </MapView>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -186,6 +199,6 @@ const styles = StyleSheet.create({
     width: width,
     height: height,
   },
-});
+})
 
-export default KidMap;
+export default KidMap

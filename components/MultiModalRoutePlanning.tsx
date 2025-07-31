@@ -1,5 +1,5 @@
 // components/MultiModalRoutePlanning.tsx - Complete multi-modal route planning interface
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
@@ -9,12 +9,12 @@ import {
   Alert,
   ActivityIndicator,
   Animated,
-  Modal
-} from 'react-native';
-import { 
-  MapPin, 
-  Navigation, 
-  Clock, 
+  Modal,
+} from 'react-native'
+import {
+  MapPin,
+  Navigation,
+  Clock,
   Route,
   Star,
   AlertTriangle,
@@ -24,27 +24,32 @@ import {
   Users,
   Cloud,
   Sun,
-  CloudRain
-} from 'lucide-react-native';
-import Colors from '../constants/colors';
-import AccessibleButton from './AccessibleButton';
-import TransportModeSelector from './TransportModeSelector';
-import { MultiModalRoutePlanner, MultiModalRouteOptions } from '../utils/multiModalRoutePlanner';
-import { RouteOption } from '../utils/routePlanner';
-import { TravelMode } from '../utils/api';
+  CloudRain,
+} from 'lucide-react-native'
+import Colors from '../constants/colors'
+import AccessibleButton from './AccessibleButton'
+import TransportModeSelector from './TransportModeSelector'
+import {
+  MultiModalRoutePlanner,
+  MultiModalRouteOptions,
+} from '../utils/multiModalRoutePlanner'
+import { RouteOption } from '../utils/routePlanner'
+import { TravelMode } from '../utils/api'
 
 interface MultiModalRoutePlanningProps {
-  from: [number, number];
-  to: [number, number];
-  fromAddress: string;
-  toAddress: string;
-  onRouteSelected: (route: RouteOption) => void;
-  onClose: () => void;
-  childAge?: number;
-  parentSupervision?: boolean;
+  from: [number, number]
+  to: [number, number]
+  fromAddress: string
+  toAddress: string
+  onRouteSelected: (route: RouteOption) => void
+  onClose: () => void
+  childAge?: number
+  parentSupervision?: boolean
 }
 
-export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = ({
+export const MultiModalRoutePlanning: React.FC<
+  MultiModalRoutePlanningProps
+> = ({
   from,
   to,
   fromAddress,
@@ -52,37 +57,39 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
   onRouteSelected,
   onClose,
   childAge = 10,
-  parentSupervision = true
+  parentSupervision = true,
 }) => {
   // State management
-  const [routes, setRoutes] = useState<RouteOption[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [selectedRoute, setSelectedRoute] = useState<RouteOption | null>(null);
-  const [showModeSelector, setShowModeSelector] = useState(false);
+  const [routes, setRoutes] = useState<RouteOption[]>([])
+  const [loading, setLoading] = useState(false)
+  const [selectedRoute, setSelectedRoute] = useState<RouteOption | null>(null)
+  const [showModeSelector, setShowModeSelector] = useState(false)
 
   // Helper function to get current time of day
   const getCurrentTimeOfDay = (): 'morning' | 'afternoon' | 'evening' => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'morning';
-    if (hour < 18) return 'afternoon';
-    return 'evening';
-  };
+    const hour = new Date().getHours()
+    if (hour < 12) return 'morning'
+    if (hour < 18) return 'afternoon'
+    return 'evening'
+  }
 
-  const [routeOptions, setRouteOptions] = useState<Partial<MultiModalRouteOptions>>({
+  const [routeOptions, setRouteOptions] = useState<
+    Partial<MultiModalRouteOptions>
+  >({
     childAge,
     parentSupervision,
     timeOfDay: getCurrentTimeOfDay(),
     weatherCondition: 'sunny', // Would be fetched from weather API
     preferredModes: ['walking', 'transit'],
     maxWalkingDistance: 800,
-    avoidStairs: false
-  });
-  const [showSettings, setShowSettings] = useState(false);
-  const [expandedRoute, setExpandedRoute] = useState<string | null>(null);
+    avoidStairs: false,
+  })
+  const [showSettings, setShowSettings] = useState(false)
+  const [expandedRoute, setExpandedRoute] = useState<string | null>(null)
 
   // Animation values
-  const fadeAnim = new Animated.Value(0);
-  const slideAnim = new Animated.Value(300);
+  const fadeAnim = new Animated.Value(0)
+  const slideAnim = new Animated.Value(300)
 
   useEffect(() => {
     // Animate in
@@ -96,60 +103,78 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
         toValue: 0,
         duration: 300,
         useNativeDriver: true,
-      })
-    ]).start();
+      }),
+    ]).start()
 
     // Load initial routes
-    loadRoutes();
-  }, []);
+    loadRoutes()
+  }, [])
 
   useEffect(() => {
     // Reload routes when options change
     if (routes.length > 0) {
-      loadRoutes();
+      loadRoutes()
     }
-  }, [routeOptions]);
+  }, [routeOptions])
 
   const loadRoutes = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
       const multiModalRoutes = await MultiModalRoutePlanner.getMultiModalRoutes(
-        from, to, routeOptions
-      );
-      setRoutes(multiModalRoutes);
+        from,
+        to,
+        routeOptions,
+      )
+      setRoutes(multiModalRoutes)
     } catch (error) {
-      console.error('Error loading routes:', error);
-      Alert.alert('Route Error', 'Failed to load route options. Please try again.');
+      console.error('Error loading routes:', error)
+      Alert.alert(
+        'Route Error',
+        'Failed to load route options. Please try again.',
+      )
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleRouteSelect = (route: RouteOption) => {
-    setSelectedRoute(route);
-    onRouteSelected(route);
-  };
+    setSelectedRoute(route)
+    onRouteSelected(route)
+  }
 
   const handleModeSelection = (modes: TravelMode[]) => {
-    setRouteOptions(prev => ({
+    setRouteOptions((prev) => ({
       ...prev,
-      preferredModes: modes
-    }));
-    setShowModeSelector(false);
-  };
+      preferredModes: modes,
+    }))
+    setShowModeSelector(false)
+  }
 
   const getWeatherIcon = () => {
     switch (routeOptions.weatherCondition) {
-      case 'sunny': return <Sun size={20} color={Colors.primary} />;
-      case 'rainy': return <CloudRain size={20} color={Colors.primary} />;
-      default: return <Cloud size={20} color={Colors.primary} />;
+      case 'sunny':
+        return <Sun size={20} color={Colors.primary} />
+      case 'rainy':
+        return <CloudRain size={20} color={Colors.primary} />
+      default:
+        return <Cloud size={20} color={Colors.primary} />
     }
-  };
+  }
 
   const renderRouteCard = (route: RouteOption) => {
-    const isExpanded = expandedRoute === route.id;
-    const safetyColor = route.safety >= 4 ? Colors.success : route.safety >= 3 ? Colors.warning : Colors.error;
-    const kidFriendlinessColor = route.kidFriendliness >= 4 ? Colors.success : route.kidFriendliness >= 3 ? Colors.warning : Colors.error;
+    const isExpanded = expandedRoute === route.id
+    const safetyColor =
+      route.safety >= 4
+        ? Colors.success
+        : route.safety >= 3
+          ? Colors.warning
+          : Colors.error
+    const kidFriendlinessColor =
+      route.kidFriendliness >= 4
+        ? Colors.success
+        : route.kidFriendliness >= 3
+          ? Colors.warning
+          : Colors.error
 
     return (
       <View key={route.id} style={styles.routeCard}>
@@ -160,7 +185,12 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
           accessibilityHint="Tap to expand route details"
         >
           <View style={styles.routeHeaderLeft}>
-            <View style={[styles.modeIcon, { backgroundColor: getModeColor(route.mode) }]}>
+            <View
+              style={[
+                styles.modeIcon,
+                { backgroundColor: getModeColor(route.mode) },
+              ]}
+            >
               {getModeIcon(route.mode)}
             </View>
             <View style={styles.routeInfo}>
@@ -168,22 +198,28 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
               <View style={styles.routeMetrics}>
                 <Clock size={14} color={Colors.text.secondary} />
                 <Text style={styles.routeTime}>{route.duration} min</Text>
-                <Route size={14} color={Colors.text.secondary} style={{ marginLeft: 8 }} />
-                <Text style={styles.routeDistance}>{(route.distance / 1000).toFixed(1)} km</Text>
+                <Route
+                  size={14}
+                  color={Colors.text.secondary}
+                  style={{ marginLeft: 8 }}
+                />
+                <Text style={styles.routeDistance}>
+                  {(route.distance / 1000).toFixed(1)} km
+                </Text>
               </View>
             </View>
           </View>
-          
+
           <View style={styles.routeRatings}>
-            <RatingIndicator 
-              label="Safety" 
-              value={route.safety} 
+            <RatingIndicator
+              label="Safety"
+              value={route.safety}
               color={safetyColor}
               size="small"
             />
-            <RatingIndicator 
-              label="Kid-Friendly" 
-              value={route.kidFriendliness} 
+            <RatingIndicator
+              label="Kid-Friendly"
+              value={route.kidFriendliness}
               color={kidFriendlinessColor}
               size="small"
             />
@@ -200,10 +236,14 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
                     <Text style={styles.stepNumber}>{index + 1}</Text>
                   </View>
                   <View style={styles.stepContent}>
-                    <Text style={styles.stepInstruction}>{step.instruction}</Text>
+                    <Text style={styles.stepInstruction}>
+                      {step.instruction}
+                    </Text>
                     <Text style={styles.stepDuration}>{step.duration} min</Text>
                     {step.accessibilityNote && (
-                      <Text style={styles.stepNote}>{step.accessibilityNote}</Text>
+                      <Text style={styles.stepNote}>
+                        {step.accessibilityNote}
+                      </Text>
                     )}
                   </View>
                 </View>
@@ -219,15 +259,18 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
               <AccessibleButton
                 title="Select This Route"
                 onPress={() => handleRouteSelect(route)}
-                style={{...styles.selectButton, backgroundColor: Colors.primary}}
+                style={{
+                  ...styles.selectButton,
+                  backgroundColor: Colors.primary,
+                }}
                 textStyle={styles.selectButtonText}
               />
             </View>
           </Animated.View>
         )}
       </View>
-    );
-  };
+    )
+  }
 
   const renderSettings = () => (
     <Modal
@@ -249,19 +292,24 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
             <View style={styles.settingGroup}>
               <Text style={styles.settingLabel}>Child Age</Text>
               <View style={styles.ageSelector}>
-                {[6, 8, 10, 12, 14].map(age => (
+                {[6, 8, 10, 12, 14].map((age) => (
                   <TouchableOpacity
                     key={age}
                     style={[
                       styles.ageButton,
-                      routeOptions.childAge === age && styles.ageButtonSelected
+                      routeOptions.childAge === age && styles.ageButtonSelected,
                     ]}
-                    onPress={() => setRouteOptions(prev => ({ ...prev, childAge: age }))}
+                    onPress={() =>
+                      setRouteOptions((prev) => ({ ...prev, childAge: age }))
+                    }
                   >
-                    <Text style={[
-                      styles.ageButtonText,
-                      routeOptions.childAge === age && styles.ageButtonTextSelected
-                    ]}>
+                    <Text
+                      style={[
+                        styles.ageButtonText,
+                        routeOptions.childAge === age &&
+                          styles.ageButtonTextSelected,
+                      ]}
+                    >
                       {age}
                     </Text>
                   </TouchableOpacity>
@@ -275,19 +323,33 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
                 <TouchableOpacity
                   style={[
                     styles.toggleButton,
-                    routeOptions.parentSupervision && styles.toggleButtonActive
+                    routeOptions.parentSupervision && styles.toggleButtonActive,
                   ]}
-                  onPress={() => setRouteOptions(prev => ({ 
-                    ...prev, 
-                    parentSupervision: !prev.parentSupervision 
-                  }))}
+                  onPress={() =>
+                    setRouteOptions((prev) => ({
+                      ...prev,
+                      parentSupervision: !prev.parentSupervision,
+                    }))
+                  }
                 >
-                  <Users size={16} color={routeOptions.parentSupervision ? Colors.white : Colors.text.secondary} />
-                  <Text style={[
-                    styles.toggleButtonText,
-                    routeOptions.parentSupervision && styles.toggleButtonTextActive
-                  ]}>
-                    {routeOptions.parentSupervision ? 'With Adult' : 'Independent'}
+                  <Users
+                    size={16}
+                    color={
+                      routeOptions.parentSupervision
+                        ? Colors.white
+                        : Colors.text.secondary
+                    }
+                  />
+                  <Text
+                    style={[
+                      styles.toggleButtonText,
+                      routeOptions.parentSupervision &&
+                        styles.toggleButtonTextActive,
+                    ]}
+                  >
+                    {routeOptions.parentSupervision
+                      ? 'With Adult'
+                      : 'Independent'}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -296,21 +358,30 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
             <View style={styles.settingGroup}>
               <Text style={styles.settingLabel}>Weather Condition</Text>
               <View style={styles.weatherSelector}>
-                {['sunny', 'cloudy', 'rainy'].map(weather => (
+                {['sunny', 'cloudy', 'rainy'].map((weather) => (
                   <TouchableOpacity
                     key={weather}
                     style={[
                       styles.weatherButton,
-                      routeOptions.weatherCondition === weather && styles.weatherButtonSelected
+                      routeOptions.weatherCondition === weather &&
+                        styles.weatherButtonSelected,
                     ]}
-                    onPress={() => setRouteOptions(prev => ({ 
-                      ...prev, 
-                      weatherCondition: weather as any 
-                    }))}
+                    onPress={() =>
+                      setRouteOptions((prev) => ({
+                        ...prev,
+                        weatherCondition: weather as any,
+                      }))
+                    }
                   >
-                    {weather === 'sunny' && <Sun size={16} color={Colors.primary} />}
-                    {weather === 'cloudy' && <Cloud size={16} color={Colors.primary} />}
-                    {weather === 'rainy' && <CloudRain size={16} color={Colors.primary} />}
+                    {weather === 'sunny' && (
+                      <Sun size={16} color={Colors.primary} />
+                    )}
+                    {weather === 'cloudy' && (
+                      <Cloud size={16} color={Colors.primary} />
+                    )}
+                    {weather === 'rainy' && (
+                      <CloudRain size={16} color={Colors.primary} />
+                    )}
                     <Text style={styles.weatherButtonText}>
                       {weather.charAt(0).toUpperCase() + weather.slice(1)}
                     </Text>
@@ -322,22 +393,28 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
             <View style={styles.settingGroup}>
               <Text style={styles.settingLabel}>Maximum Walking Distance</Text>
               <View style={styles.distanceSelector}>
-                {[400, 600, 800, 1000].map(distance => (
+                {[400, 600, 800, 1000].map((distance) => (
                   <TouchableOpacity
                     key={distance}
                     style={[
                       styles.distanceButton,
-                      routeOptions.maxWalkingDistance === distance && styles.distanceButtonSelected
+                      routeOptions.maxWalkingDistance === distance &&
+                        styles.distanceButtonSelected,
                     ]}
-                    onPress={() => setRouteOptions(prev => ({ 
-                      ...prev, 
-                      maxWalkingDistance: distance 
-                    }))}
+                    onPress={() =>
+                      setRouteOptions((prev) => ({
+                        ...prev,
+                        maxWalkingDistance: distance,
+                      }))
+                    }
                   >
-                    <Text style={[
-                      styles.distanceButtonText,
-                      routeOptions.maxWalkingDistance === distance && styles.distanceButtonTextSelected
-                    ]}>
+                    <Text
+                      style={[
+                        styles.distanceButtonText,
+                        routeOptions.maxWalkingDistance === distance &&
+                          styles.distanceButtonTextSelected,
+                      ]}
+                    >
                       {distance}m
                     </Text>
                   </TouchableOpacity>
@@ -350,8 +427,8 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
             <AccessibleButton
               title="Apply Settings"
               onPress={() => {
-                setShowSettings(false);
-                loadRoutes();
+                setShowSettings(false)
+                loadRoutes()
               }}
               style={styles.applyButton}
             />
@@ -359,7 +436,7 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
         </View>
       </View>
     </Modal>
-  );
+  )
 
   return (
     <Modal
@@ -369,7 +446,9 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
       onRequestClose={onClose}
     >
       <Animated.View style={[styles.overlay, { opacity: fadeAnim }]}>
-        <Animated.View style={[styles.container, { transform: [{ translateY: slideAnim }] }]}>
+        <Animated.View
+          style={[styles.container, { transform: [{ translateY: slideAnim }] }]}
+        >
           <View style={styles.header}>
             <View style={styles.headerLeft}>
               <View style={styles.locationInfo}>
@@ -377,17 +456,21 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
                 <Text style={styles.headerTitle}>Route Planning</Text>
               </View>
               <View style={styles.routeSummary}>
-                <Text style={styles.addresses}>{fromAddress} → {toAddress}</Text>
+                <Text style={styles.addresses}>
+                  {fromAddress} → {toAddress}
+                </Text>
                 <View style={styles.contextInfo}>
                   {getWeatherIcon()}
-                  <Text style={styles.contextText}>Age {routeOptions.childAge}</Text>
+                  <Text style={styles.contextText}>
+                    Age {routeOptions.childAge}
+                  </Text>
                   {routeOptions.parentSupervision && (
                     <Users size={16} color={Colors.primary} />
                   )}
                 </View>
               </View>
             </View>
-            
+
             <View style={styles.headerActions}>
               <TouchableOpacity
                 onPress={() => setShowSettings(true)}
@@ -415,7 +498,10 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
             />
           </View>
 
-          <ScrollView style={styles.routesList} showsVerticalScrollIndicator={false}>
+          <ScrollView
+            style={styles.routesList}
+            showsVerticalScrollIndicator={false}
+          >
             {loading ? (
               <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color={Colors.primary} />
@@ -426,7 +512,8 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
                 <AlertTriangle size={48} color={Colors.warning} />
                 <Text style={styles.emptyTitle}>No Routes Found</Text>
                 <Text style={styles.emptyDescription}>
-                  Try adjusting your settings or selecting different transport modes.
+                  Try adjusting your settings or selecting different transport
+                  modes.
                 </Text>
                 <AccessibleButton
                   title="Adjust Settings"
@@ -444,7 +531,7 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
               selectedMode="combined"
               onModeSelect={(mode) => {
                 // Handle mode selection
-                setShowModeSelector(false);
+                setShowModeSelector(false)
               }}
               fromLocation={`${from[0]}, ${from[1]}`}
               toLocation={`${to[0]}, ${to[1]}`}
@@ -459,22 +546,24 @@ export const MultiModalRoutePlanning: React.FC<MultiModalRoutePlanningProps> = (
         </Animated.View>
       </Animated.View>
     </Modal>
-  );
-};
+  )
+}
 
 // Helper components
 const RatingIndicator: React.FC<{
-  label: string;
-  value: number;
-  color: string;
-  size?: 'small' | 'large';
+  label: string
+  value: number
+  color: string
+  size?: 'small' | 'large'
 }> = ({ label, value, color, size = 'large' }) => (
   <View style={styles.ratingIndicator}>
-    <Text style={[styles.ratingLabel, size === 'small' && styles.ratingLabelSmall]}>
+    <Text
+      style={[styles.ratingLabel, size === 'small' && styles.ratingLabelSmall]}
+    >
       {label}
     </Text>
     <View style={styles.ratingStars}>
-      {[1, 2, 3, 4, 5].map(star => (
+      {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
           size={size === 'small' ? 10 : 12}
@@ -484,7 +573,7 @@ const RatingIndicator: React.FC<{
       ))}
     </View>
   </View>
-);
+)
 
 // Helper functions
 const getModeColor = (mode: TravelMode): string => {
@@ -492,25 +581,25 @@ const getModeColor = (mode: TravelMode): string => {
     walking: Colors.success,
     bicycling: Colors.primary,
     transit: Colors.warning,
-    driving: Colors.error
-  };
-  return colors[mode] || Colors.gray;
-};
+    driving: Colors.error,
+  }
+  return colors[mode] || Colors.gray
+}
 
 const getModeIcon = (mode: TravelMode) => {
   // Return appropriate icon for each mode
-  return <Navigation size={16} color={Colors.white} />;
-};
+  return <Navigation size={16} color={Colors.white} />
+}
 
 const formatMode = (mode: TravelMode): string => {
   const formats = {
     walking: 'Walking',
     bicycling: 'Biking',
     transit: 'Public Transit',
-    driving: 'Driving'
-  };
-  return formats[mode] || mode;
-};
+    driving: 'Driving',
+  }
+  return formats[mode] || mode
+}
 
 const styles = StyleSheet.create({
   overlay: {
@@ -910,4 +999,4 @@ const styles = StyleSheet.create({
   applyButton: {
     backgroundColor: Colors.primary,
   },
-});
+})

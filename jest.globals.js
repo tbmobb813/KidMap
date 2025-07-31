@@ -1,1 +1,1 @@
-global.__DEV__ = true;
+global.__DEV__ = true

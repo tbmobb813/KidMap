@@ -1,131 +1,142 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable, Dimensions, RefreshControl } from 'react-native';
-import Colors from '@/constants/colors';
-import SearchBar from '@/components/SearchBar';
-import { Clock, AlertCircle, RefreshCw } from 'lucide-react-native';
-import LiveArrivalsCard from '@/components/LiveArrivalsCard';
-import useLocation from '@/hooks/useLocation';
-import { 
-  getNearbyTransitStations, 
-  getTransitLineStatus, 
-  TransitStation, 
-  TransitLine 
-} from '@/utils/transitApi';
+import React, { useState, useEffect } from 'react'
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Pressable,
+  Dimensions,
+  RefreshControl,
+} from 'react-native'
+import Colors from '@/constants/colors'
+import SearchBar from '@/components/SearchBar'
+import { Clock, AlertCircle, RefreshCw } from 'lucide-react-native'
+import LiveArrivalsCard from '@/components/LiveArrivalsCard'
+import useLocation from '@/hooks/useLocation'
+import {
+  getNearbyTransitStations,
+  getTransitLineStatus,
+  TransitStation,
+  TransitLine,
+} from '@/utils/transitApi'
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window')
 
 const TransitScreen = () => {
-  const { location } = useLocation();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedLine, setSelectedLine] = useState<string | null>(null);
-  const [selectedStation, setSelectedStation] = useState<string | null>(null);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [lastRefresh, setLastRefresh] = useState(new Date());
+  const { location } = useLocation()
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedLine, setSelectedLine] = useState<string | null>(null)
+  const [selectedStation, setSelectedStation] = useState<string | null>(null)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [lastRefresh, setLastRefresh] = useState(new Date())
 
-  const [transitLines, setTransitLines] = useState<TransitLine[]>([]);
-  const [nearbyStations, setNearbyStations] = useState<TransitStation[]>([]);
-  const [loadingLines, setLoadingLines] = useState(true);
-  const [loadingStations, setLoadingStations] = useState(true);
+  const [transitLines, setTransitLines] = useState<TransitLine[]>([])
+  const [nearbyStations, setNearbyStations] = useState<TransitStation[]>([])
+  const [loadingLines, setLoadingLines] = useState(true)
+  const [loadingStations, setLoadingStations] = useState(true)
 
   useEffect(() => {
-    loadTransitData();
-  }, []);
+    loadTransitData()
+  }, [])
 
   useEffect(() => {
     if (location) {
-      loadNearbyStations();
+      loadNearbyStations()
     }
-  }, [location]);
+  }, [location])
 
   useEffect(() => {
     const interval = setInterval(() => {
-      handleRefreshArrivals();
-    }, 30000);
-    return () => clearInterval(interval);
-  }, []);
+      handleRefreshArrivals()
+    }, 30000)
+    return () => clearInterval(interval)
+  }, [])
 
   const loadTransitData = async () => {
-    setLoadingLines(true);
+    setLoadingLines(true)
     try {
-      const lines = await getTransitLineStatus();
-      setTransitLines(lines);
+      const lines = await getTransitLineStatus()
+      setTransitLines(lines)
     } catch (error) {
-      console.error('Error loading transit lines:', error);
+      console.error('Error loading transit lines:', error)
     } finally {
-      setLoadingLines(false);
+      setLoadingLines(false)
     }
-  };
+  }
 
   const loadNearbyStations = async () => {
-    if (!location) return;
-    setLoadingStations(true);
+    if (!location) return
+    setLoadingStations(true)
     try {
       const stations = await getNearbyTransitStations(
         { lat: location.latitude, lng: location.longitude },
-        1000
-      );
-      setNearbyStations(stations);
+        1000,
+      )
+      setNearbyStations(stations)
       if (stations.length > 0 && !selectedStation) {
-        setSelectedStation(stations[0].id);
+        setSelectedStation(stations[0].id)
       }
     } catch (error) {
-      console.error('Error loading nearby stations:', error);
+      console.error('Error loading nearby stations:', error)
     } finally {
-      setLoadingStations(false);
+      setLoadingStations(false)
     }
-  };
+  }
 
   const handleRefreshArrivals = async () => {
-    setIsRefreshing(true);
-    setLastRefresh(new Date());
+    setIsRefreshing(true)
+    setLastRefresh(new Date())
     try {
-      await Promise.all([loadTransitData(), loadNearbyStations()]);
+      await Promise.all([loadTransitData(), loadNearbyStations()])
     } catch (error) {
-      console.error('Error refreshing transit data:', error);
+      console.error('Error refreshing transit data:', error)
     } finally {
       setTimeout(() => {
-        setIsRefreshing(false);
-      }, 1000);
+        setIsRefreshing(false)
+      }, 1000)
     }
-  };
+  }
 
   const getTimeAgo = (date: Date) => {
-    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
-    if (seconds < 60) return `${seconds} sec ago`;
-    const minutes = Math.floor(seconds / 60);
-    return `${minutes} min ago`;
-  };
+    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000)
+    if (seconds < 60) return `${seconds} sec ago`
+    const minutes = Math.floor(seconds / 60)
+    return `${minutes} min ago`
+  }
 
   const getStatusIcon = (status: string) => {
     const colorMap = {
       normal: Colors.success,
       delayed: Colors.warning,
       alert: Colors.error,
-      suspended: Colors.error
-    };
-    const color = colorMap[status] || Colors.textLight;
-    const Icon = status === 'alert' || status === 'suspended' ? AlertCircle : Clock;
-    return <Icon size={16} color={color} />;
-  };
+      suspended: Colors.error,
+    }
+    const color = colorMap[status] || Colors.textLight
+    const Icon =
+      status === 'alert' || status === 'suspended' ? AlertCircle : Clock
+    return <Icon size={16} color={color} />
+  }
 
-  const filteredLines = transitLines.filter(line =>
-    line.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredLines = transitLines.filter((line) =>
+    line.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
 
-  const selectedStationData = nearbyStations.find(station => station.id === selectedStation);
+  const selectedStationData = nearbyStations.find(
+    (station) => station.id === selectedStation,
+  )
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Transit</Text>
-        <Pressable 
+        <Pressable
           style={styles.refreshButton}
           onPress={handleRefreshArrivals}
           disabled={isRefreshing}
         >
-          <RefreshCw 
-            size={20} 
-            color={Colors.primary} 
+          <RefreshCw
+            size={20}
+            color={Colors.primary}
             style={{ opacity: isRefreshing ? 0.5 : 1 }}
           />
         </Pressable>
@@ -167,18 +178,24 @@ const TransitScreen = () => {
           {nearbyStations.map((station) => (
             <Pressable
               key={station.id}
-              style={[styles.stationButton, selectedStation === station.id && styles.selectedStationButton]}
+              style={[
+                styles.stationButton,
+                selectedStation === station.id && styles.selectedStationButton,
+              ]}
               onPress={() => setSelectedStation(station.id)}
             >
               <Text
                 style={[
                   styles.stationButtonText,
-                  selectedStation === station.id && styles.selectedStationButtonText,
+                  selectedStation === station.id &&
+                    styles.selectedStationButtonText,
                 ]}
               >
                 {station.name}
               </Text>
-              <Text style={styles.stationDistance}>{(station.distance * 1000).toFixed(0)}m</Text>
+              <Text style={styles.stationDistance}>
+                {(station.distance * 1000).toFixed(0)}m
+              </Text>
             </Pressable>
           ))}
         </ScrollView>
@@ -197,7 +214,10 @@ const TransitScreen = () => {
         {filteredLines.map((line) => (
           <Pressable
             key={line.id}
-            style={[styles.lineItem, selectedLine === line.id && styles.selectedLine]}
+            style={[
+              styles.lineItem,
+              selectedLine === line.id && styles.selectedLine,
+            ]}
             onPress={() => setSelectedLine(line.id)}
           >
             <View style={[styles.lineCircle, { backgroundColor: line.color }]}>
@@ -213,8 +233,8 @@ const TransitScreen = () => {
         ))}
       </ScrollView>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
@@ -240,7 +260,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   lastUpdatedText: { fontSize: 12, color: Colors.textLight, marginLeft: 4 },
-  sectionTitle: { fontSize: 18, fontWeight: '700', color: Colors.text, marginBottom: 16 },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: Colors.text,
+    marginBottom: 16,
+  },
   stationsScroll: { marginBottom: 16 },
   stationsContainer: { paddingHorizontal: 4, gap: 12 },
   stationButton: {
@@ -252,7 +277,10 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
     minWidth: 140,
   },
-  selectedStationButton: { backgroundColor: Colors.primary, borderColor: Colors.primary },
+  selectedStationButton: {
+    backgroundColor: Colors.primary,
+    borderColor: Colors.primary,
+  },
   stationButtonText: {
     fontSize: 14,
     fontWeight: '600',
@@ -282,6 +310,6 @@ const styles = StyleSheet.create({
   statusContainer: { flex: 1 },
   statusInfo: { flexDirection: 'row', alignItems: 'center' },
   statusText: { fontSize: 14, color: Colors.text, marginLeft: 8 },
-});
+})
 
-export default TransitScreen;
+export default TransitScreen

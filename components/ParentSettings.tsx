@@ -1,5 +1,5 @@
 // components/ParentSettings.tsx - Comprehensive parent settings management
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react'
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
   Switch,
   TextInput,
   Modal,
-} from 'react-native';
+} from 'react-native'
 import {
   Settings,
   Shield,
@@ -30,44 +30,63 @@ import {
   X,
   AlertTriangle,
   CheckCircle,
-} from 'lucide-react-native';
-import Colors from '../constants/colors';
-import AccessibleButton from './AccessibleButton';
-import { useParentalControlStore, ParentSettings, EmergencyContact } from '../stores/parentalControlStore';
-import * as LocalAuthentication from 'expo-local-authentication';
+} from 'lucide-react-native'
+import Colors from '../constants/colors'
+import AccessibleButton from './AccessibleButton'
+import {
+  useParentalControlStore,
+  ParentSettings,
+  EmergencyContact,
+} from '../stores/parentalControlStore'
+import * as LocalAuthentication from 'expo-local-authentication'
 
 interface ParentSettingsProps {
-  visible: boolean;
-  onClose: () => void;
+  visible: boolean
+  onClose: () => void
 }
 
-export default function ParentSettings({ visible, onClose }: ParentSettingsProps) {
-  const { settings, updateSettings } = useParentalControlStore();
-  
-  const [editingSettings, setEditingSettings] = useState<ParentSettings>(settings);
-  const [showPinSetup, setShowPinSetup] = useState(false);
-  const [showContactModal, setShowContactModal] = useState(false);
-  const [editingContact, setEditingContact] = useState<EmergencyContact | null>(null);
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+export default function ParentSettings({
+  visible,
+  onClose,
+}: ParentSettingsProps) {
+  const { settings, updateSettings } = useParentalControlStore()
 
-  const handleSettingChange = useCallback((key: keyof ParentSettings, value: any) => {
-    setEditingSettings(prev => ({ ...prev, [key]: value }));
-    setHasUnsavedChanges(true);
-  }, []);
+  const [editingSettings, setEditingSettings] =
+    useState<ParentSettings>(settings)
+  const [showPinSetup, setShowPinSetup] = useState(false)
+  const [showContactModal, setShowContactModal] = useState(false)
+  const [editingContact, setEditingContact] = useState<EmergencyContact | null>(
+    null,
+  )
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
-  const handleNestedSettingChange = useCallback((parentKey: keyof ParentSettings, key: string, value: any) => {
-    setEditingSettings(prev => ({
-      ...prev,
-      [parentKey]: { ...prev[parentKey] as any, [key]: value }
-    }));
-    setHasUnsavedChanges(true);
-  }, []);
+  const handleSettingChange = useCallback(
+    (key: keyof ParentSettings, value: any) => {
+      setEditingSettings((prev) => ({ ...prev, [key]: value }))
+      setHasUnsavedChanges(true)
+    },
+    [],
+  )
+
+  const handleNestedSettingChange = useCallback(
+    (parentKey: keyof ParentSettings, key: string, value: any) => {
+      setEditingSettings((prev) => ({
+        ...prev,
+        [parentKey]: { ...(prev[parentKey] as any), [key]: value },
+      }))
+      setHasUnsavedChanges(true)
+    },
+    [],
+  )
 
   const handleSaveSettings = () => {
-    updateSettings(editingSettings);
-    setHasUnsavedChanges(false);
-    Alert.alert('Settings Saved', 'Your parental control settings have been updated.');
-  };
+    updateSettings(editingSettings)
+    setHasUnsavedChanges(false)
+    Alert.alert(
+      'Settings Saved',
+      'Your parental control settings have been updated.',
+    )
+  }
 
   const handleDiscardChanges = () => {
     if (hasUnsavedChanges) {
@@ -80,37 +99,44 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
             text: 'Discard',
             style: 'destructive',
             onPress: () => {
-              setEditingSettings(settings);
-              setHasUnsavedChanges(false);
-              onClose();
-            }
-          }
-        ]
-      );
+              setEditingSettings(settings)
+              setHasUnsavedChanges(false)
+              onClose()
+            },
+          },
+        ],
+      )
     } else {
-      onClose();
+      onClose()
     }
-  };
+  }
 
   const renderAuthenticationSettings = () => (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Authentication & Security</Text>
-      
+
       <View style={styles.settingItem}>
         <View style={styles.settingInfo}>
           <Shield size={20} color={Colors.primary} />
           <View style={styles.settingText}>
             <Text style={styles.settingLabel}>Require Authentication</Text>
             <Text style={styles.settingDescription}>
-              Require PIN or biometric authentication to access parental controls
+              Require PIN or biometric authentication to access parental
+              controls
             </Text>
           </View>
         </View>
         <Switch
           value={editingSettings.requireAuthentication}
-          onValueChange={(value) => handleSettingChange('requireAuthentication', value)}
+          onValueChange={(value) =>
+            handleSettingChange('requireAuthentication', value)
+          }
           trackColor={{ false: Colors.border, true: Colors.primary + '30' }}
-          thumbColor={editingSettings.requireAuthentication ? Colors.primary : Colors.textLight}
+          thumbColor={
+            editingSettings.requireAuthentication
+              ? Colors.primary
+              : Colors.textLight
+          }
         />
       </View>
 
@@ -127,31 +153,69 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
               </View>
             </View>
           </View>
-          
+
           <View style={styles.authMethodSelector}>
-            {['pin', 'biometric', 'both'].map(method => (
+            {['pin', 'biometric', 'both'].map((method) => (
               <TouchableOpacity
                 key={method}
                 style={[
                   styles.authMethodButton,
-                  editingSettings.authenticationMethod === method && styles.authMethodButtonActive
+                  editingSettings.authenticationMethod === method &&
+                    styles.authMethodButtonActive,
                 ]}
-                onPress={() => handleSettingChange('authenticationMethod', method)}
+                onPress={() =>
+                  handleSettingChange('authenticationMethod', method)
+                }
               >
-                {method === 'pin' && <Lock size={16} color={editingSettings.authenticationMethod === method ? Colors.background : Colors.textLight} />}
-                {method === 'biometric' && <Fingerprint size={16} color={editingSettings.authenticationMethod === method ? Colors.background : Colors.textLight} />}
-                {method === 'both' && <Shield size={16} color={editingSettings.authenticationMethod === method ? Colors.background : Colors.textLight} />}
-                <Text style={[
-                  styles.authMethodText,
-                  editingSettings.authenticationMethod === method && styles.authMethodTextActive
-                ]}>
-                  {method === 'pin' ? 'PIN Only' : method === 'biometric' ? 'Biometric Only' : 'PIN + Biometric'}
+                {method === 'pin' && (
+                  <Lock
+                    size={16}
+                    color={
+                      editingSettings.authenticationMethod === method
+                        ? Colors.background
+                        : Colors.textLight
+                    }
+                  />
+                )}
+                {method === 'biometric' && (
+                  <Fingerprint
+                    size={16}
+                    color={
+                      editingSettings.authenticationMethod === method
+                        ? Colors.background
+                        : Colors.textLight
+                    }
+                  />
+                )}
+                {method === 'both' && (
+                  <Shield
+                    size={16}
+                    color={
+                      editingSettings.authenticationMethod === method
+                        ? Colors.background
+                        : Colors.textLight
+                    }
+                  />
+                )}
+                <Text
+                  style={[
+                    styles.authMethodText,
+                    editingSettings.authenticationMethod === method &&
+                      styles.authMethodTextActive,
+                  ]}
+                >
+                  {method === 'pin'
+                    ? 'PIN Only'
+                    : method === 'biometric'
+                      ? 'Biometric Only'
+                      : 'PIN + Biometric'}
                 </Text>
               </TouchableOpacity>
             ))}
           </View>
 
-          {(editingSettings.authenticationMethod === 'pin' || editingSettings.authenticationMethod === 'both') && (
+          {(editingSettings.authenticationMethod === 'pin' ||
+            editingSettings.authenticationMethod === 'both') && (
             <AccessibleButton
               title={editingSettings.pin ? 'Change PIN' : 'Set PIN'}
               onPress={() => setShowPinSetup(true)}
@@ -162,12 +226,12 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
         </>
       )}
     </View>
-  );
+  )
 
   const renderChildPermissions = () => (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Child Permissions</Text>
-      
+
       <View style={styles.settingItem}>
         <View style={styles.settingInfo}>
           <Plus size={20} color={Colors.primary} />
@@ -180,9 +244,15 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
         </View>
         <Switch
           value={editingSettings.allowChildCategoryCreation}
-          onValueChange={(value) => handleSettingChange('allowChildCategoryCreation', value)}
+          onValueChange={(value) =>
+            handleSettingChange('allowChildCategoryCreation', value)
+          }
           trackColor={{ false: Colors.border, true: Colors.primary + '30' }}
-          thumbColor={editingSettings.allowChildCategoryCreation ? Colors.primary : Colors.textLight}
+          thumbColor={
+            editingSettings.allowChildCategoryCreation
+              ? Colors.primary
+              : Colors.textLight
+          }
         />
       </View>
 
@@ -199,9 +269,15 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
           </View>
           <Switch
             value={editingSettings.requireApprovalForNewCategories}
-            onValueChange={(value) => handleSettingChange('requireApprovalForNewCategories', value)}
+            onValueChange={(value) =>
+              handleSettingChange('requireApprovalForNewCategories', value)
+            }
             trackColor={{ false: Colors.border, true: Colors.primary + '30' }}
-            thumbColor={editingSettings.requireApprovalForNewCategories ? Colors.primary : Colors.textLight}
+            thumbColor={
+              editingSettings.requireApprovalForNewCategories
+                ? Colors.primary
+                : Colors.textLight
+            }
           />
         </View>
       )}
@@ -218,18 +294,24 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
         </View>
         <Switch
           value={editingSettings.allowChildSafeZoneModification}
-          onValueChange={(value) => handleSettingChange('allowChildSafeZoneModification', value)}
+          onValueChange={(value) =>
+            handleSettingChange('allowChildSafeZoneModification', value)
+          }
           trackColor={{ false: Colors.border, true: Colors.primary + '30' }}
-          thumbColor={editingSettings.allowChildSafeZoneModification ? Colors.primary : Colors.textLight}
+          thumbColor={
+            editingSettings.allowChildSafeZoneModification
+              ? Colors.primary
+              : Colors.textLight
+          }
         />
       </View>
     </View>
-  );
+  )
 
   const renderSafetySettings = () => (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Safety & Monitoring</Text>
-      
+
       <View style={styles.settingItem}>
         <View style={styles.settingInfo}>
           <MapPin size={20} color={Colors.primary} />
@@ -245,8 +327,11 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
             style={styles.numberInputField}
             value={editingSettings.maxSafeZoneDistance.toString()}
             onChangeText={(text) => {
-              const value = parseInt(text) || 0;
-              handleSettingChange('maxSafeZoneDistance', Math.max(50, Math.min(2000, value)));
+              const value = parseInt(text) || 0
+              handleSettingChange(
+                'maxSafeZoneDistance',
+                Math.max(50, Math.min(2000, value)),
+              )
             }}
             keyboardType="numeric"
             maxLength={4}
@@ -267,9 +352,13 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
         </View>
         <Switch
           value={editingSettings.checkInReminders}
-          onValueChange={(value) => handleSettingChange('checkInReminders', value)}
+          onValueChange={(value) =>
+            handleSettingChange('checkInReminders', value)
+          }
           trackColor={{ false: Colors.border, true: Colors.primary + '30' }}
-          thumbColor={editingSettings.checkInReminders ? Colors.primary : Colors.textLight}
+          thumbColor={
+            editingSettings.checkInReminders ? Colors.primary : Colors.textLight
+          }
         />
       </View>
 
@@ -289,8 +378,11 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
               style={styles.numberInputField}
               value={editingSettings.checkInInterval.toString()}
               onChangeText={(text) => {
-                const value = parseInt(text) || 0;
-                handleSettingChange('checkInInterval', Math.max(15, Math.min(480, value)));
+                const value = parseInt(text) || 0
+                handleSettingChange(
+                  'checkInInterval',
+                  Math.max(15, Math.min(480, value)),
+                )
               }}
               keyboardType="numeric"
               maxLength={3}
@@ -312,18 +404,24 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
         </View>
         <Switch
           value={editingSettings.locationSharing.enabled}
-          onValueChange={(value) => handleNestedSettingChange('locationSharing', 'enabled', value)}
+          onValueChange={(value) =>
+            handleNestedSettingChange('locationSharing', 'enabled', value)
+          }
           trackColor={{ false: Colors.border, true: Colors.primary + '30' }}
-          thumbColor={editingSettings.locationSharing.enabled ? Colors.primary : Colors.textLight}
+          thumbColor={
+            editingSettings.locationSharing.enabled
+              ? Colors.primary
+              : Colors.textLight
+          }
         />
       </View>
     </View>
-  );
+  )
 
   const renderRestrictedHours = () => (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Restricted Hours</Text>
-      
+
       <View style={styles.settingItem}>
         <View style={styles.settingInfo}>
           <Clock size={20} color={Colors.primary} />
@@ -336,9 +434,15 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
         </View>
         <Switch
           value={editingSettings.restrictedHours.enabled}
-          onValueChange={(value) => handleNestedSettingChange('restrictedHours', 'enabled', value)}
+          onValueChange={(value) =>
+            handleNestedSettingChange('restrictedHours', 'enabled', value)
+          }
           trackColor={{ false: Colors.border, true: Colors.primary + '30' }}
-          thumbColor={editingSettings.restrictedHours.enabled ? Colors.primary : Colors.textLight}
+          thumbColor={
+            editingSettings.restrictedHours.enabled
+              ? Colors.primary
+              : Colors.textLight
+          }
         />
       </View>
 
@@ -350,7 +454,9 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
               <TextInput
                 style={styles.timeInputField}
                 value={editingSettings.restrictedHours.start}
-                onChangeText={(text) => handleNestedSettingChange('restrictedHours', 'start', text)}
+                onChangeText={(text) =>
+                  handleNestedSettingChange('restrictedHours', 'start', text)
+                }
                 placeholder="HH:MM"
                 maxLength={5}
               />
@@ -361,7 +467,9 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
               <TextInput
                 style={styles.timeInputField}
                 value={editingSettings.restrictedHours.end}
-                onChangeText={(text) => handleNestedSettingChange('restrictedHours', 'end', text)}
+                onChangeText={(text) =>
+                  handleNestedSettingChange('restrictedHours', 'end', text)
+                }
                 placeholder="HH:MM"
                 maxLength={5}
               />
@@ -380,15 +488,25 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
             </View>
             <Switch
               value={editingSettings.restrictedHours.allowEmergencyAccess}
-              onValueChange={(value) => handleNestedSettingChange('restrictedHours', 'allowEmergencyAccess', value)}
+              onValueChange={(value) =>
+                handleNestedSettingChange(
+                  'restrictedHours',
+                  'allowEmergencyAccess',
+                  value,
+                )
+              }
               trackColor={{ false: Colors.border, true: Colors.warning + '30' }}
-              thumbColor={editingSettings.restrictedHours.allowEmergencyAccess ? Colors.warning : Colors.textLight}
+              thumbColor={
+                editingSettings.restrictedHours.allowEmergencyAccess
+                  ? Colors.warning
+                  : Colors.textLight
+              }
             />
           </View>
         </>
       )}
     </View>
-  );
+  )
 
   const renderEmergencyContacts = () => (
     <View style={styles.section}>
@@ -397,8 +515,8 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
         <AccessibleButton
           title="Add Contact"
           onPress={() => {
-            setEditingContact(null);
-            setShowContactModal(true);
+            setEditingContact(null)
+            setShowContactModal(true)
           }}
           style={styles.addContactButton}
           textStyle={styles.addContactText}
@@ -409,7 +527,9 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
       {editingSettings.emergencyContacts.length === 0 ? (
         <View style={styles.emptyContacts}>
           <Users size={48} color={Colors.textLight} />
-          <Text style={styles.emptyContactsText}>No emergency contacts added</Text>
+          <Text style={styles.emptyContactsText}>
+            No emergency contacts added
+          </Text>
           <Text style={styles.emptyContactsSubtext}>
             Add trusted contacts who can receive emergency alerts
           </Text>
@@ -417,7 +537,7 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
       ) : (
         editingSettings.emergencyContacts
           .sort((a, b) => a.priority - b.priority)
-          .map(contact => (
+          .map((contact) => (
             <View key={contact.id} style={styles.contactItem}>
               <View style={styles.contactInfo}>
                 <Text style={styles.contactName}>{contact.name}</Text>
@@ -425,16 +545,20 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
                   {contact.relationship} • {contact.phone}
                 </Text>
                 <View style={styles.contactPermissions}>
-                  {contact.canReceiveAlerts && <Text style={styles.contactPermission}>Alerts</Text>}
-                  {contact.canViewLocation && <Text style={styles.contactPermission}>Location</Text>}
+                  {contact.canReceiveAlerts && (
+                    <Text style={styles.contactPermission}>Alerts</Text>
+                  )}
+                  {contact.canViewLocation && (
+                    <Text style={styles.contactPermission}>Location</Text>
+                  )}
                 </View>
               </View>
               <View style={styles.contactActions}>
                 <TouchableOpacity
                   style={styles.editContactButton}
                   onPress={() => {
-                    setEditingContact(contact);
-                    setShowContactModal(true);
+                    setEditingContact(contact)
+                    setShowContactModal(true)
                   }}
                 >
                   <Edit3 size={16} color={Colors.primary} />
@@ -442,8 +566,11 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
                 <TouchableOpacity
                   style={styles.deleteContactButton}
                   onPress={() => {
-                    const updatedContacts = editingSettings.emergencyContacts.filter(c => c.id !== contact.id);
-                    handleSettingChange('emergencyContacts', updatedContacts);
+                    const updatedContacts =
+                      editingSettings.emergencyContacts.filter(
+                        (c) => c.id !== contact.id,
+                      )
+                    handleSettingChange('emergencyContacts', updatedContacts)
                   }}
                 >
                   <Trash2 size={16} color={Colors.error} />
@@ -453,24 +580,37 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
           ))
       )}
     </View>
-  );
+  )
 
-  if (!visible) return null;
+  if (!visible) return null
 
   return (
-    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
+    <Modal
+      visible={visible}
+      animationType="slide"
+      presentationStyle="pageSheet"
+    >
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={handleDiscardChanges} style={styles.headerButton}>
+          <TouchableOpacity
+            onPress={handleDiscardChanges}
+            style={styles.headerButton}
+          >
             <X size={24} color={Colors.textLight} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Parent Settings</Text>
           <TouchableOpacity
             onPress={handleSaveSettings}
-            style={[styles.headerButton, hasUnsavedChanges && styles.saveButtonActive]}
+            style={[
+              styles.headerButton,
+              hasUnsavedChanges && styles.saveButtonActive,
+            ]}
             disabled={!hasUnsavedChanges}
           >
-            <Save size={24} color={hasUnsavedChanges ? Colors.primary : Colors.textLight} />
+            <Save
+              size={24}
+              color={hasUnsavedChanges ? Colors.primary : Colors.textLight}
+            />
           </TouchableOpacity>
         </View>
 
@@ -484,7 +624,9 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
 
         {hasUnsavedChanges && (
           <View style={styles.unsavedChangesBar}>
-            <Text style={styles.unsavedChangesText}>You have unsaved changes</Text>
+            <Text style={styles.unsavedChangesText}>
+              You have unsaved changes
+            </Text>
             <AccessibleButton
               title="Save Changes"
               onPress={handleSaveSettings}
@@ -495,7 +637,7 @@ export default function ParentSettings({ visible, onClose }: ParentSettingsProps
         )}
       </View>
     </Modal>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -756,4 +898,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-});
+})

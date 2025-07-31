@@ -1,52 +1,82 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable, Dimensions, Platform, FlatList } from 'react-native';
-import Colors from '@/constants/colors';
-import AchievementBadge from '@/components/AchievementBadge';
-import UserStatsCard from '@/components/UserStatsCard';
-import { useGamificationStore } from '@/stores/gamificationStore';
-import { achievementEngine } from '@/utils/achievementEngine';
-import type { UserStats } from '@/types/index';
-import { Trophy, Star, Target, Calendar, Award, TrendingUp } from 'lucide-react-native';
+import React, { useState, useEffect } from 'react'
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Pressable,
+  Dimensions,
+  Platform,
+  FlatList,
+} from 'react-native'
+import Colors from '@/constants/colors'
+import AchievementBadge from '@/components/AchievementBadge'
+import UserStatsCard from '@/components/UserStatsCard'
+import { useGamificationStore } from '@/stores/gamificationStore'
+import { achievementEngine } from '@/utils/achievementEngine'
+import type { UserStats } from '@/types/index'
+import {
+  Trophy,
+  Star,
+  Target,
+  Calendar,
+  Award,
+  TrendingUp,
+} from 'lucide-react-native'
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window')
 
 export default function AchievementsScreen() {
   const { achievements, userStats, tripJournal } = useGamificationStore() as {
-    achievements: any[];
-    userStats: UserStats;
-    tripJournal: any[];
-  };
-  const [selectedTab, setSelectedTab] = useState<'achievements' | 'progress' | 'journal'>('achievements');
-  const [allAchievements, setAllAchievements] = useState(achievementEngine.getAllAchievements());
-  const [nextAchievements, setNextAchievements] = useState(achievementEngine.getNextAchievements(userStats));
+    achievements: any[]
+    userStats: UserStats
+    tripJournal: any[]
+  }
+  const [selectedTab, setSelectedTab] = useState<
+    'achievements' | 'progress' | 'journal'
+  >('achievements')
+  const [allAchievements, setAllAchievements] = useState(
+    achievementEngine.getAllAchievements(),
+  )
+  const [nextAchievements, setNextAchievements] = useState(
+    achievementEngine.getNextAchievements(userStats),
+  )
 
   useEffect(() => {
-    setAllAchievements(achievementEngine.getAllAchievements());
-    setNextAchievements(achievementEngine.getNextAchievements(userStats));
-  }, [userStats]);
+    setAllAchievements(achievementEngine.getAllAchievements())
+    setNextAchievements(achievementEngine.getNextAchievements(userStats))
+  }, [userStats])
 
-  const unlockedAchievements = allAchievements.filter((a) => a.unlocked);
-  const lockedAchievements = allAchievements.filter((a) => !a.unlocked);
-  const totalPoints = achievementEngine.calculateTotalPoints(unlockedAchievements);
+  const unlockedAchievements = allAchievements.filter((a) => a.unlocked)
+  const lockedAchievements = allAchievements.filter((a) => !a.unlocked)
+  const totalPoints =
+    achievementEngine.calculateTotalPoints(unlockedAchievements)
 
   const renderAchievementCard = (achievement: any, progressValue?: number) => (
-    <View key={achievement.id} style={[
-      styles.achievementCard,
-      achievement.unlocked ? styles.unlockedCard : styles.lockedCard
-    ]}>
+    <View
+      key={achievement.id}
+      style={[
+        styles.achievementCard,
+        achievement.unlocked ? styles.unlockedCard : styles.lockedCard,
+      ]}
+    >
       <View style={styles.achievementHeader}>
         <Text style={styles.achievementIcon}>{achievement.icon}</Text>
         <View style={styles.achievementInfo}>
-          <Text style={[
-            styles.achievementTitle,
-            !achievement.unlocked && styles.lockedText
-          ]}>
+          <Text
+            style={[
+              styles.achievementTitle,
+              !achievement.unlocked && styles.lockedText,
+            ]}
+          >
             {achievement.title}
           </Text>
-          <Text style={[
-            styles.achievementDescription,
-            !achievement.unlocked && styles.lockedText
-          ]}>
+          <Text
+            style={[
+              styles.achievementDescription,
+              !achievement.unlocked && styles.lockedText,
+            ]}
+          >
             {achievement.description}
           </Text>
         </View>
@@ -54,12 +84,15 @@ export default function AchievementsScreen() {
           <Text style={styles.pointsText}>{achievement.points}pts</Text>
         </View>
       </View>
-      
+
       {progressValue && !achievement.unlocked && (
         <View style={styles.progressSection}>
           <View style={styles.progressBar}>
-            <View 
-              style={[styles.progressFill, { width: `${(progressValue * 100)}%` }]} 
+            <View
+              style={[
+                styles.progressFill,
+                { width: `${progressValue * 100}%` },
+              ]}
             />
           </View>
           <Text style={styles.progressText}>
@@ -67,15 +100,17 @@ export default function AchievementsScreen() {
           </Text>
         </View>
       )}
-      
+
       <Text style={styles.requirementText}>{achievement.requirement}</Text>
     </View>
-  );
+  )
 
   const renderJournalEntry = ({ item }: { item: (typeof tripJournal)[0] }) => (
     <View style={styles.journalEntry}>
       <View style={styles.journalHeader}>
-        <Text style={styles.journalDate}>{new Date(item.date).toLocaleDateString()}</Text>
+        <Text style={styles.journalDate}>
+          {new Date(item.date).toLocaleDateString()}
+        </Text>
         <View style={styles.ratingContainer}>
           {[1, 2, 3, 4, 5].map((star) => (
             <Star
@@ -105,7 +140,7 @@ export default function AchievementsScreen() {
         </View>
       )}
     </View>
-  );
+  )
 
   return (
     <ScrollView
@@ -118,11 +153,22 @@ export default function AchievementsScreen() {
 
       <View style={styles.tabContainer}>
         <Pressable
-          style={[styles.tab, selectedTab === 'achievements' && styles.activeTab]}
+          style={[
+            styles.tab,
+            selectedTab === 'achievements' && styles.activeTab,
+          ]}
           onPress={() => setSelectedTab('achievements')}
         >
-          <Trophy size={20} color={selectedTab === 'achievements' ? '#FFFFFF' : Colors.primary} />
-          <Text style={[styles.tabText, selectedTab === 'achievements' && styles.activeTabText]}>
+          <Trophy
+            size={20}
+            color={selectedTab === 'achievements' ? '#FFFFFF' : Colors.primary}
+          />
+          <Text
+            style={[
+              styles.tabText,
+              selectedTab === 'achievements' && styles.activeTabText,
+            ]}
+          >
             Achievements
           </Text>
         </Pressable>
@@ -131,8 +177,16 @@ export default function AchievementsScreen() {
           style={[styles.tab, selectedTab === 'progress' && styles.activeTab]}
           onPress={() => setSelectedTab('progress')}
         >
-          <TrendingUp size={20} color={selectedTab === 'progress' ? '#FFFFFF' : Colors.primary} />
-          <Text style={[styles.tabText, selectedTab === 'progress' && styles.activeTabText]}>
+          <TrendingUp
+            size={20}
+            color={selectedTab === 'progress' ? '#FFFFFF' : Colors.primary}
+          />
+          <Text
+            style={[
+              styles.tabText,
+              selectedTab === 'progress' && styles.activeTabText,
+            ]}
+          >
             Progress
           </Text>
         </Pressable>
@@ -141,8 +195,16 @@ export default function AchievementsScreen() {
           style={[styles.tab, selectedTab === 'journal' && styles.activeTab]}
           onPress={() => setSelectedTab('journal')}
         >
-          <Calendar size={20} color={selectedTab === 'journal' ? '#FFFFFF' : Colors.primary} />
-          <Text style={[styles.tabText, selectedTab === 'journal' && styles.activeTabText]}>
+          <Calendar
+            size={20}
+            color={selectedTab === 'journal' ? '#FFFFFF' : Colors.primary}
+          />
+          <Text
+            style={[
+              styles.tabText,
+              selectedTab === 'journal' && styles.activeTabText,
+            ]}
+          >
             Journal
           </Text>
         </Pressable>
@@ -152,17 +214,22 @@ export default function AchievementsScreen() {
         {selectedTab === 'achievements' ? (
           <>
             <View style={styles.statsOverview}>
-              <Text style={styles.pointsTotal}>🏆 {totalPoints} Total Points</Text>
+              <Text style={styles.pointsTotal}>
+                🏆 {totalPoints} Total Points
+              </Text>
               <Text style={styles.achievementCount}>
-                {unlockedAchievements.length} of {allAchievements.length} Unlocked
+                {unlockedAchievements.length} of {allAchievements.length}{' '}
+                Unlocked
               </Text>
             </View>
 
             {unlockedAchievements.length > 0 && (
               <>
-                <Text style={styles.sectionTitle}>🌟 Unlocked Achievements</Text>
-                {unlockedAchievements.map((achievement) => 
-                  renderAchievementCard(achievement)
+                <Text style={styles.sectionTitle}>
+                  🌟 Unlocked Achievements
+                </Text>
+                {unlockedAchievements.map((achievement) =>
+                  renderAchievementCard(achievement),
                 )}
               </>
             )}
@@ -170,47 +237,53 @@ export default function AchievementsScreen() {
             {lockedAchievements.length > 0 && (
               <>
                 <Text style={styles.sectionTitle}>🔒 Locked Achievements</Text>
-                {lockedAchievements.slice(0, 6).map((achievement) => 
-                  renderAchievementCard(achievement)
-                )}
+                {lockedAchievements
+                  .slice(0, 6)
+                  .map((achievement) => renderAchievementCard(achievement))}
               </>
             )}
           </>
         ) : selectedTab === 'progress' ? (
           <>
             <Text style={styles.sectionTitle}>📈 Your Progress</Text>
-            
+
             {nextAchievements.length > 0 && (
               <>
                 <Text style={styles.subsectionTitle}>Almost There!</Text>
-                {nextAchievements.map(({ achievement, progress }) => 
-                  renderAchievementCard(achievement, progress)
+                {nextAchievements.map(({ achievement, progress }) =>
+                  renderAchievementCard(achievement, progress),
                 )}
               </>
             )}
 
             <View style={styles.categoryProgress}>
               <Text style={styles.subsectionTitle}>Categories</Text>
-              {['milestone', 'safety', 'fitness', 'transit'].map(category => {
-                const categoryAchievements = achievementEngine.getAchievementsByCategory(category);
-                const unlockedCount = categoryAchievements.filter(a => a.unlocked).length;
-                const progress = unlockedCount / categoryAchievements.length;
-                
+              {['milestone', 'safety', 'fitness', 'transit'].map((category) => {
+                const categoryAchievements =
+                  achievementEngine.getAchievementsByCategory(category)
+                const unlockedCount = categoryAchievements.filter(
+                  (a) => a.unlocked,
+                ).length
+                const progress = unlockedCount / categoryAchievements.length
+
                 return (
                   <View key={category} style={styles.categoryCard}>
                     <Text style={styles.categoryName}>
                       {category.charAt(0).toUpperCase() + category.slice(1)}
                     </Text>
                     <View style={styles.categoryProgressBar}>
-                      <View 
-                        style={[styles.categoryProgressFill, { width: `${progress * 100}%` }]} 
+                      <View
+                        style={[
+                          styles.categoryProgressFill,
+                          { width: `${progress * 100}%` },
+                        ]}
                       />
                     </View>
                     <Text style={styles.categoryText}>
                       {unlockedCount}/{categoryAchievements.length}
                     </Text>
                   </View>
-                );
+                )
               })}
             </View>
           </>
@@ -219,7 +292,10 @@ export default function AchievementsScreen() {
             {tripJournal.length > 0 ? (
               <View style={styles.journalContainer}>
                 {tripJournal
-                  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                  .sort(
+                    (a, b) =>
+                      new Date(b.date).getTime() - new Date(a.date).getTime(),
+                  )
                   .map((item) => (
                     <View key={item.id}>{renderJournalEntry({ item })}</View>
                   ))}
@@ -236,7 +312,7 @@ export default function AchievementsScreen() {
         )}
       </View>
     </ScrollView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -501,4 +577,4 @@ const styles = StyleSheet.create({
     color: Colors.textLight,
     textAlign: 'center',
   },
-});
+})

@@ -1,4 +1,4 @@
-import { RegionConfig } from '@/types/region';
+import { RegionConfig } from '@/types/region'
 
 export const atlantaConfig: RegionConfig = {
   id: 'atlanta',
@@ -51,7 +51,8 @@ export const atlantaConfig: RegionConfig = {
     {
       name: 'Georgia Aquarium',
       category: 'attraction',
-      description: 'One of the largest aquariums in the world with whale sharks',
+      description:
+        'One of the largest aquariums in the world with whale sharks',
     },
     {
       name: 'Centennial Olympic Park',
@@ -66,4 +67,4 @@ export const atlantaConfig: RegionConfig = {
   ],
   transitApiEndpoint: 'https://api.itsmarta.com/',
   mapStyle: 'standard',
-};
+}

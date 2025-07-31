@@ -1,7 +1,7 @@
-import React from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import { Place } from '@/types/navigation';
-import Colors from '@/constants/colors';
+import React from 'react'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
+import { Place } from '@/types/navigation'
+import Colors from '@/constants/colors'
 import {
   Home,
   School,
@@ -12,36 +12,36 @@ import {
   Users,
   Heart,
   MapPin,
-} from 'lucide-react-native';
+} from 'lucide-react-native'
 
 type PlaceCardProps = {
-  place: Place;
-  onPress: (place: Place) => void;
-};
+  place: Place
+  onPress: (place: Place) => void
+}
 
 const PlaceCard: React.FC<PlaceCardProps> = ({ place, onPress }) => {
   const getIcon = () => {
     switch (place.category) {
       case 'home':
-        return <Home size={24} color={Colors.primary} />;
+        return <Home size={24} color={Colors.primary} />
       case 'school':
-        return <School size={24} color={Colors.primary} />;
+        return <School size={24} color={Colors.primary} />
       case 'library':
-        return <BookOpen size={24} color={Colors.primary} />;
+        return <BookOpen size={24} color={Colors.primary} />
       case 'park':
-        return <Trees size={24} color={Colors.primary} />;
+        return <Trees size={24} color={Colors.primary} />
       case 'store':
-        return <Store size={24} color={Colors.primary} />;
+        return <Store size={24} color={Colors.primary} />
       case 'restaurant':
-        return <Utensils size={24} color={Colors.primary} />;
+        return <Utensils size={24} color={Colors.primary} />
       case 'friend':
-        return <Users size={24} color={Colors.primary} />;
+        return <Users size={24} color={Colors.primary} />
       case 'family':
-        return <Heart size={24} color={Colors.primary} />;
+        return <Heart size={24} color={Colors.primary} />
       default:
-        return <MapPin size={24} color={Colors.primary} />;
+        return <MapPin size={24} color={Colors.primary} />
     }
-  };
+  }
 
   return (
     <Pressable
@@ -60,8 +60,8 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, onPress }) => {
         </Text>
       </View>
     </Pressable>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -103,6 +103,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.textLight,
   },
-});
+})
 
-export default PlaceCard;
+export default PlaceCard

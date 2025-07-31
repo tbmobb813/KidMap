@@ -1,5 +1,5 @@
 // components/SafetyDashboard.tsx - Unified safety control center
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Alert,
   RefreshControl,
-} from 'react-native';
+} from 'react-native'
 import {
   Shield,
   MapPin,
@@ -22,80 +22,84 @@ import {
   Zap,
   Heart,
   Navigation,
-} from 'lucide-react-native';
-import Colors from '../constants/colors';
-import AccessibleButton from './AccessibleButton';
-import ParentAuthentication from './ParentAuthentication';
-import ParentalDashboard from './ParentalDashboard';
-import DevicePingControl from './DevicePingControl';
-import SafeZoneManager from './SafeZoneManager';
-import ApprovalManager from './ApprovalManager';
-import ParentSettings from './ParentSettings';
-import CategoryCreator from './CategoryCreator';
-import VoiceNavigation from './VoiceNavigation';
-import { useParentalControlStore } from '../stores/parentalControlStore';
-import { useSafeZoneStore } from '../stores/safeZoneStore';
-import { useCategoryStore } from '../stores/categoryStore';
+} from 'lucide-react-native'
+import Colors from '../constants/colors'
+import AccessibleButton from './AccessibleButton'
+import ParentAuthentication from './ParentAuthentication'
+import ParentalDashboard from './ParentalDashboard'
+import DevicePingControl from './DevicePingControl'
+import SafeZoneManager from './SafeZoneManager'
+import ApprovalManager from './ApprovalManager'
+import ParentSettings from './ParentSettings'
+import CategoryCreator from './CategoryCreator'
+import VoiceNavigation from './VoiceNavigation'
+import { useParentalControlStore } from '../stores/parentalControlStore'
+import { useSafeZoneStore } from '../stores/safeZoneStore'
+import { useCategoryStore } from '../stores/categoryStore'
 
 interface SafetyDashboardProps {
-  visible: boolean;
-  onClose: () => void;
+  visible: boolean
+  onClose: () => void
 }
 
-type DashboardMode = 'child' | 'parent' | 'auth';
-type ParentView = 'dashboard' | 'ping' | 'safezones' | 'approvals' | 'settings';
+type DashboardMode = 'child' | 'parent' | 'auth'
+type ParentView = 'dashboard' | 'ping' | 'safezones' | 'approvals' | 'settings'
 
-export default function SafetyDashboard({ visible, onClose }: SafetyDashboardProps) {
-  const { session, childActivity, pendingApprovals } = useParentalControlStore();
-  const { safeZones } = useSafeZoneStore();
-  const { getPendingCategories, initializeDefaultCategories } = useCategoryStore();
-  
-  const [mode, setMode] = useState<DashboardMode>('child');
-  const [parentView, setParentView] = useState<ParentView>('dashboard');
-  const [showCategoryCreator, setShowCategoryCreator] = useState(false);
-  const [showVoiceNav, setShowVoiceNav] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
+export default function SafetyDashboard({
+  visible,
+  onClose,
+}: SafetyDashboardProps) {
+  const { session, childActivity, pendingApprovals } = useParentalControlStore()
+  const { safeZones } = useSafeZoneStore()
+  const { getPendingCategories, initializeDefaultCategories } =
+    useCategoryStore()
+
+  const [mode, setMode] = useState<DashboardMode>('child')
+  const [parentView, setParentView] = useState<ParentView>('dashboard')
+  const [showCategoryCreator, setShowCategoryCreator] = useState(false)
+  const [showVoiceNav, setShowVoiceNav] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
 
   useEffect(() => {
     // Initialize default categories on first load
-    initializeDefaultCategories();
-  }, []);
+    initializeDefaultCategories()
+  }, [])
 
   const handleRefresh = async () => {
-    setRefreshing(true);
+    setRefreshing(true)
     // Simulate refresh operations
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setRefreshing(false);
-  };
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    setRefreshing(false)
+  }
 
   const handleParentAccess = () => {
     if (session?.isAuthenticated) {
-      setMode('parent');
-      setParentView('dashboard');
+      setMode('parent')
+      setParentView('dashboard')
     } else {
-      setMode('auth');
+      setMode('auth')
     }
-  };
+  }
 
   const handleAuthSuccess = () => {
-    setMode('parent');
-    setParentView('dashboard');
-  };
+    setMode('parent')
+    setParentView('dashboard')
+  }
 
   const handleBackToChild = () => {
-    setMode('child');
-    setParentView('dashboard');
-  };
+    setMode('child')
+    setParentView('dashboard')
+  }
 
-  const pendingApprovalsCount = pendingApprovals?.length || 0;
-  const pendingCategories = getPendingCategories().length;
-  const currentSafeZone = safeZones?.[0] || null; // Get first active safe zone
-  const isInSafeZone = childActivity.isInSafeZone;
+  const pendingApprovalsCount = pendingApprovals?.length || 0
+  const pendingCategories = getPendingCategories().length
+  const currentSafeZone = safeZones?.[0] || null // Get first active safe zone
+  const isInSafeZone = childActivity.isInSafeZone
 
   // Child Safety Dashboard
   const renderChildDashboard = () => (
-    <ScrollView 
-      style={styles.content} 
+    <ScrollView
+      style={styles.content}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
       }
@@ -104,17 +108,21 @@ export default function SafetyDashboard({ visible, onClose }: SafetyDashboardPro
       {/* Safety Status */}
       <View style={styles.statusCard}>
         <View style={styles.statusHeader}>
-          <Shield size={24} color={isInSafeZone ? Colors.success : Colors.warning} />
+          <Shield
+            size={24}
+            color={isInSafeZone ? Colors.success : Colors.warning}
+          />
           <Text style={styles.statusTitle}>Safety Status</Text>
         </View>
-        <Text style={[
-          styles.statusText,
-          { color: isInSafeZone ? Colors.success : Colors.warning }
-        ]}>
-          {isInSafeZone 
-            ? `✅ You're in ${currentSafeZone || 'a safe zone'}!` 
-            : '⚠️ You\'re outside your safe zones'
-          }
+        <Text
+          style={[
+            styles.statusText,
+            { color: isInSafeZone ? Colors.success : Colors.warning },
+          ]}
+        >
+          {isInSafeZone
+            ? `✅ You're in ${currentSafeZone || 'a safe zone'}!`
+            : "⚠️ You're outside your safe zones"}
         </Text>
         {!isInSafeZone && (
           <Text style={styles.statusSubtext}>
@@ -127,36 +135,38 @@ export default function SafetyDashboard({ visible, onClose }: SafetyDashboardPro
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         <View style={styles.quickActions}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.quickAction}
             onPress={() => setShowVoiceNav(true)}
           >
             <Navigation size={24} color={Colors.primary} />
             <Text style={styles.quickActionText}>Voice Help</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity 
+
+          <TouchableOpacity
             style={styles.quickAction}
             onPress={() => setShowCategoryCreator(true)}
           >
             <Plus size={24} color={Colors.success} />
             <Text style={styles.quickActionText}>New Category</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity 
+
+          <TouchableOpacity
             style={styles.quickAction}
             onPress={() => {
-              Alert.alert(
-                'Check In', 
-                'Let your parent know you\'re safe!',
-                [
-                  { text: 'Cancel', style: 'cancel' },
-                  { text: 'Send Check-in', onPress: () => {
+              Alert.alert('Check In', "Let your parent know you're safe!", [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                  text: 'Send Check-in',
+                  onPress: () => {
                     // Trigger check-in logic
-                    Alert.alert('Check-in Sent!', 'Your parent has been notified that you\'re safe! 💚');
-                  }}
-                ]
-              );
+                    Alert.alert(
+                      'Check-in Sent!',
+                      "Your parent has been notified that you're safe! 💚",
+                    )
+                  },
+                },
+              ])
             }}
           >
             <Heart size={24} color={Colors.error} />
@@ -177,8 +187,10 @@ export default function SafetyDashboard({ visible, onClose }: SafetyDashboardPro
 
       {/* Current Safe Zones */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Your Safe Zones ({safeZones.length})</Text>
-        {safeZones.slice(0, 3).map(zone => (
+        <Text style={styles.sectionTitle}>
+          Your Safe Zones ({safeZones.length})
+        </Text>
+        {safeZones.slice(0, 3).map((zone) => (
           <View key={zone.id} style={styles.safeZoneItem}>
             <MapPin size={16} color={Colors.success} />
             <Text style={styles.safeZoneText}>{zone.name}</Text>
@@ -186,29 +198,46 @@ export default function SafetyDashboard({ visible, onClose }: SafetyDashboardPro
           </View>
         ))}
         {safeZones.length > 3 && (
-          <Text style={styles.moreText}>+{safeZones.length - 3} more safe zones</Text>
+          <Text style={styles.moreText}>
+            +{safeZones.length - 3} more safe zones
+          </Text>
         )}
       </View>
     </ScrollView>
-  );
+  )
 
   // Parent Dashboard Views
   const renderParentContent = () => {
     switch (parentView) {
       case 'ping':
-        return <DevicePingControl visible={true} onClose={() => setParentView('dashboard')} />;
+        return (
+          <DevicePingControl
+            visible={true}
+            onClose={() => setParentView('dashboard')}
+          />
+        )
       case 'safezones':
-        return <SafeZoneManager />;
+        return <SafeZoneManager />
       case 'approvals':
-        return <ApprovalManager visible={true} onClose={() => setParentView('dashboard')} />;
+        return (
+          <ApprovalManager
+            visible={true}
+            onClose={() => setParentView('dashboard')}
+          />
+        )
       case 'settings':
-        return <ParentSettings visible={true} onClose={() => setParentView('dashboard')} />;
+        return (
+          <ParentSettings
+            visible={true}
+            onClose={() => setParentView('dashboard')}
+          />
+        )
       default:
-        return <ParentalDashboard visible={true} onClose={handleBackToChild} />;
+        return <ParentalDashboard visible={true} onClose={handleBackToChild} />
     }
-  };
+  }
 
-  if (!visible) return null;
+  if (!visible) return null
 
   // Authentication Mode
   if (mode === 'auth') {
@@ -218,7 +247,7 @@ export default function SafetyDashboard({ visible, onClose }: SafetyDashboardPro
         onAuthenticated={handleAuthSuccess}
         onCancel={() => setMode('child')}
       />
-    );
+    )
   }
 
   // Parent Mode
@@ -230,7 +259,10 @@ export default function SafetyDashboard({ visible, onClose }: SafetyDashboardPro
         ) : (
           <View style={styles.container}>
             <View style={styles.parentHeader}>
-              <TouchableOpacity onPress={() => setParentView('dashboard')} style={styles.backButton}>
+              <TouchableOpacity
+                onPress={() => setParentView('dashboard')}
+                style={styles.backButton}
+              >
                 <Text style={styles.backText}>← Back</Text>
               </TouchableOpacity>
               <Text style={styles.parentTitle}>
@@ -239,7 +271,10 @@ export default function SafetyDashboard({ visible, onClose }: SafetyDashboardPro
                 {parentView === 'approvals' && 'Approvals'}
                 {parentView === 'settings' && 'Settings'}
               </Text>
-              <TouchableOpacity onPress={handleBackToChild} style={styles.closeButton}>
+              <TouchableOpacity
+                onPress={handleBackToChild}
+                style={styles.closeButton}
+              >
                 <Text style={styles.closeText}>✕</Text>
               </TouchableOpacity>
             </View>
@@ -247,7 +282,7 @@ export default function SafetyDashboard({ visible, onClose }: SafetyDashboardPro
           </View>
         )}
       </View>
-    );
+    )
   }
 
   // Child Mode (Default)
@@ -261,7 +296,9 @@ export default function SafetyDashboard({ visible, onClose }: SafetyDashboardPro
         <View style={styles.notificationBadge}>
           {(pendingApprovalsCount > 0 || pendingCategories > 0) && (
             <View style={styles.badge}>
-              <Text style={styles.badgeText}>{pendingApprovalsCount + pendingCategories}</Text>
+              <Text style={styles.badgeText}>
+                {pendingApprovalsCount + pendingCategories}
+              </Text>
             </View>
           )}
         </View>
@@ -274,13 +311,13 @@ export default function SafetyDashboard({ visible, onClose }: SafetyDashboardPro
         visible={showCategoryCreator}
         onClose={() => setShowCategoryCreator(false)}
       />
-      
+
       <VoiceNavigation
         currentStep="Safety Dashboard"
         isNavigationPaused={!showVoiceNav}
       />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -445,4 +482,4 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.text.primary,
   },
-});
+})

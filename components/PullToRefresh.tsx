@@ -1,28 +1,28 @@
-import React, { useState } from 'react';
-import { ScrollView, RefreshControl, Platform } from 'react-native';
-import Colors from '@/constants/colors';
+import React, { useState } from 'react'
+import { ScrollView, RefreshControl, Platform } from 'react-native'
+import Colors from '@/constants/colors'
 
 type PullToRefreshProps = {
-  children: React.ReactNode;
-  onRefresh: () => Promise<void>;
-  refreshing?: boolean;
-};
+  children: React.ReactNode
+  onRefresh: () => Promise<void>
+  refreshing?: boolean
+}
 
 const PullToRefresh: React.FC<PullToRefreshProps> = ({
   children,
   onRefresh,
   refreshing = false,
 }) => {
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
   const handleRefresh = async () => {
-    setIsRefreshing(true);
+    setIsRefreshing(true)
     try {
-      await onRefresh();
+      await onRefresh()
     } finally {
-      setIsRefreshing(false);
+      setIsRefreshing(false)
     }
-  };
+  }
 
   return (
     <ScrollView
@@ -42,7 +42,7 @@ const PullToRefresh: React.FC<PullToRefreshProps> = ({
     >
       {children}
     </ScrollView>
-  );
-};
+  )
+}
 
-export default PullToRefresh;
+export default PullToRefresh

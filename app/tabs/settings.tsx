@@ -1,6 +1,13 @@
-import React from 'react';
-import { StyleSheet, Text, View, Switch, ScrollView, Pressable } from 'react-native';
-import Colors from '@/constants/colors';
+import React from 'react'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Switch,
+  ScrollView,
+  Pressable,
+} from 'react-native'
+import Colors from '@/constants/colors'
 import {
   Bell,
   Shield,
@@ -13,37 +20,38 @@ import {
   Globe,
   Settings,
   RefreshCw,
-} from 'lucide-react-native';
-import AccessibilitySettings from '@/components/AccessibilitySettings';
-import RegionSwitcher from '@/components/RegionSwitcher';
-import RegionalTransitCard from '@/components/RegionalTransitCard';
-import CityManagement from '@/components/CityManagement';
-import { useRegionStore } from '@/stores/regionStore';
-import { transitDataUpdater } from '@/utils/transitDataUpdater';
+} from 'lucide-react-native'
+import AccessibilitySettings from '@/components/AccessibilitySettings'
+import RegionSwitcher from '@/components/RegionSwitcher'
+import RegionalTransitCard from '@/components/RegionalTransitCard'
+import CityManagement from '@/components/CityManagement'
+import { useRegionStore } from '@/stores/regionStore'
+import { transitDataUpdater } from '@/utils/transitDataUpdater'
 
 type SettingItemProps = {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  value: boolean;
-  onValueChange: (value: boolean) => void;
-};
+  icon: React.ReactNode
+  title: string
+  description: string
+  value: boolean
+  onValueChange: (value: boolean) => void
+}
 
 type LinkItemProps = {
-  icon: React.ReactNode;
-  title: string;
-  onPress: () => void;
-};
+  icon: React.ReactNode
+  title: string
+  onPress: () => void
+}
 
 export default function SettingsScreen() {
-  const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
-  const [safetyAlertsEnabled, setSafetyAlertsEnabled] = React.useState(true);
-  const [locationHistoryEnabled, setLocationHistoryEnabled] = React.useState(false);
-  const [simplifiedDirections, setSimplifiedDirections] = React.useState(true);
-  const [showAccessibility, setShowAccessibility] = React.useState(false);
-  const [showCityManagement, setShowCityManagement] = React.useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = React.useState(true)
+  const [safetyAlertsEnabled, setSafetyAlertsEnabled] = React.useState(true)
+  const [locationHistoryEnabled, setLocationHistoryEnabled] =
+    React.useState(false)
+  const [simplifiedDirections, setSimplifiedDirections] = React.useState(true)
+  const [showAccessibility, setShowAccessibility] = React.useState(false)
+  const [showCityManagement, setShowCityManagement] = React.useState(false)
 
-  const { currentRegion, userPreferences, updatePreferences } = useRegionStore();
+  const { currentRegion, userPreferences, updatePreferences } = useRegionStore()
 
   const SettingItem: React.FC<SettingItemProps> = ({
     icon,
@@ -65,41 +73,50 @@ export default function SettingsScreen() {
         thumbColor="#FFFFFF"
       />
     </View>
-  );
+  )
 
   const LinkItem: React.FC<LinkItemProps> = ({ icon, title, onPress }) => (
     <Pressable
-      style={({ pressed }) => [styles.linkItem, pressed && styles.linkItemPressed]}
+      style={({ pressed }) => [
+        styles.linkItem,
+        pressed && styles.linkItemPressed,
+      ]}
       onPress={onPress}
     >
       <View style={styles.settingIcon}>{icon}</View>
       <Text style={styles.linkTitle}>{title}</Text>
       <ChevronRight size={20} color={Colors.textLight} />
     </Pressable>
-  );
+  )
 
   const handleTransitDataUpdate = async () => {
     try {
-      console.log('Starting transit data update for all regions...');
-      const results = await transitDataUpdater.updateAllRegions();
+      console.log('Starting transit data update for all regions...')
+      const results = await transitDataUpdater.updateAllRegions()
 
-      const successCount = results.filter((r) => r.success).length;
-      const totalCount = results.length;
+      const successCount = results.filter((r) => r.success).length
+      const totalCount = results.length
 
       if (successCount === totalCount) {
-        console.log(`Successfully updated transit data for all ${totalCount} regions`);
+        console.log(
+          `Successfully updated transit data for all ${totalCount} regions`,
+        )
       } else {
-        console.log(`Updated ${successCount}/${totalCount} regions successfully`);
+        console.log(
+          `Updated ${successCount}/${totalCount} regions successfully`,
+        )
         results
           .filter((r) => !r.success)
           .forEach((result) => {
-            console.error(`Failed to update ${result.regionId}: ${result.message}`);
-          });
+            console.error(
+              `Failed to update ${result.regionId}: ${result.message}`,
+            )
+          })
       }
     } catch (error) {
-      console.error('Failed to update transit data:', error);
+      console.error('Failed to update transit data:', error)
     }
-  };
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -170,7 +187,7 @@ export default function SettingsScreen() {
               onPress={() => {
                 // Use your navigation method here. If using Expo Router, use router.push:
                 if (typeof window !== 'undefined' && window.location) {
-                  window.location.href = '/parent-dashboard';
+                  window.location.href = '/parent-dashboard'
                 }
               }}
             />
@@ -187,14 +204,18 @@ export default function SettingsScreen() {
                   <Pressable
                     style={[
                       styles.unitButton,
-                      userPreferences.preferredUnits === 'imperial' && styles.activeUnit,
+                      userPreferences.preferredUnits === 'imperial' &&
+                        styles.activeUnit,
                     ]}
-                    onPress={() => updatePreferences({ preferredUnits: 'imperial' })}
+                    onPress={() =>
+                      updatePreferences({ preferredUnits: 'imperial' })
+                    }
                   >
                     <Text
                       style={[
                         styles.unitText,
-                        userPreferences.preferredUnits === 'imperial' && styles.activeUnitText,
+                        userPreferences.preferredUnits === 'imperial' &&
+                          styles.activeUnitText,
                       ]}
                     >
                       Imperial
@@ -203,14 +224,18 @@ export default function SettingsScreen() {
                   <Pressable
                     style={[
                       styles.unitButton,
-                      userPreferences.preferredUnits === 'metric' && styles.activeUnit,
+                      userPreferences.preferredUnits === 'metric' &&
+                        styles.activeUnit,
                     ]}
-                    onPress={() => updatePreferences({ preferredUnits: 'metric' })}
+                    onPress={() =>
+                      updatePreferences({ preferredUnits: 'metric' })
+                    }
                   >
                     <Text
                       style={[
                         styles.unitText,
-                        userPreferences.preferredUnits === 'metric' && styles.activeUnitText,
+                        userPreferences.preferredUnits === 'metric' &&
+                          styles.activeUnitText,
                       ]}
                     >
                       Metric
@@ -249,12 +274,14 @@ export default function SettingsScreen() {
 
           <View style={styles.versionContainer}>
             <Text style={styles.versionText}>KidMap v1.0.0</Text>
-            <Text style={styles.regionText}>Configured for {currentRegion.name}</Text>
+            <Text style={styles.regionText}>
+              Configured for {currentRegion.name}
+            </Text>
           </View>
         </>
       )}
     </ScrollView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -378,4 +405,4 @@ const styles = StyleSheet.create({
     color: Colors.textLight,
     marginTop: 4,
   },
-});
+})

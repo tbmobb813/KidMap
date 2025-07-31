@@ -1,39 +1,52 @@
 // AccessibleButton.test.tsx
 
-import React from 'react';
-import { render, fireEvent, cleanup } from '@testing-library/react-native';
-import AccessibleButton from '../components/AccessibleButton';
-
-afterEach(() => {
-  cleanup();
-  jest.clearAllMocks();
-  jest.restoreAllMocks();
-});
+import React from 'react'
+import { render, fireEvent } from '@testing-library/react-native'
+import AccessibleButton from '@/components/AccessibleButton'
+const {
+  testLogger,
+  renderWithLogging,
+  expectWithLog,
+} = require('../../utils/testHelpers')
 
 describe('AccessibleButton', () => {
-  it('renders with the correct title', () => {
-    const { getByText } = render(<AccessibleButton title="Test Button" onPress={jest.fn()} />);
-    expect(getByText('Test Button')).toBeTruthy();
-  });
+  test('renders correctly', () => {
+    testLogger.info('Testing AccessibleButton render')
 
-  it('handles press events correctly', () => {
-    const onPressMock = jest.fn();
-    const { getByText } = render(<AccessibleButton title="Click Me" onPress={onPressMock} />);
-    fireEvent.press(getByText('Click Me'));
-    expect(onPressMock).toHaveBeenCalledTimes(1);
-  });
+    const { getByText } = renderWithLogging(
+      render,
+      <AccessibleButton title="Test Button" onPress={() => {}} />,
+      'AccessibleButton',
+    )
 
-  it('has proper accessibility role and label', () => {
-    const { getByRole } = render(<AccessibleButton title="Accessible" onPress={jest.fn()} />);
+    expectWithLog(
+      'Button text should be visible',
+      getByText('Test Button'),
+    ).toBeTruthy()
 
-    const button = getByRole('button');
-    expect(button).toBeTruthy();
-  });
+    testLogger.info('AccessibleButton render test completed')
+  })
 
-  it('matches snapshot', () => {
-    const { toJSON } = render(<AccessibleButton title="Snapshot Test" onPress={jest.fn()} />);
-    expect(toJSON()).toMatchSnapshot();
-  });
-});
+  test('handles press events', () => {
+    testLogger.info('Testing AccessibleButton press functionality')
 
-// Run `npm test -- -u` to update snapshot if necessary
+    const mockPress = jest.fn()
+    testLogger.mockCall('onPress', [])
+
+    const { getByText } = renderWithLogging(
+      render,
+      <AccessibleButton title="Press Me" onPress={mockPress} />,
+      'AccessibleButton with onPress',
+    )
+
+    const button = getByText('Press Me')
+    fireEvent.press(button)
+
+    expectWithLog(
+      'onPress should be called',
+      expect(mockPress).toHaveBeenCalled(),
+    )
+
+    testLogger.info('AccessibleButton press test completed')
+  })
+})

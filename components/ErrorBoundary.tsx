@@ -1,41 +1,46 @@
-import React from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import Colors from '@/constants/colors';
-import { AlertTriangle, RefreshCw } from 'lucide-react-native';
+import React from 'react'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
+import Colors from '@/constants/colors'
+import { AlertTriangle, RefreshCw } from 'lucide-react-native'
 
 type ErrorBoundaryState = {
-  hasError: boolean;
-  error: Error | null;
-};
+  hasError: boolean
+  error: Error | null
+}
 
 type ErrorBoundaryProps = {
-  children: React.ReactNode;
-  fallback?: React.ComponentType<{ error: Error; retry: () => void }>;
-};
+  children: React.ReactNode
+  fallback?: React.ComponentType<{ error: Error; retry: () => void }>
+}
 
-class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+class ErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = { hasError: false, error: null };
+    super(props)
+    this.state = { hasError: false, error: null }
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error };
+    return { hasError: true, error }
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
+    console.error('Error caught by boundary:', error, errorInfo)
   }
 
   retry = () => {
-    this.setState({ hasError: false, error: null });
-  };
+    this.setState({ hasError: false, error: null })
+  }
 
   render() {
     if (this.state.hasError) {
       if (this.props.fallback) {
-        const FallbackComponent = this.props.fallback;
-        return <FallbackComponent error={this.state.error!} retry={this.retry} />;
+        const FallbackComponent = this.props.fallback
+        return (
+          <FallbackComponent error={this.state.error!} retry={this.retry} />
+        )
       }
 
       return (
@@ -50,10 +55,10 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
             <Text style={styles.retryText}>Try Again</Text>
           </Pressable>
         </View>
-      );
+      )
     }
 
-    return this.props.children;
+    return this.props.children
   }
 }
 
@@ -94,6 +99,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-});
+})
 
-export default ErrorBoundary;
+export default ErrorBoundary

@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
-import Colors from '@/constants/colors';
-import TransitStepIndicator from './TransitStepIndicator';
-import { Clock, MapPin, RefreshCw, Bell } from 'lucide-react-native';
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native'
+import Colors from '@/constants/colors'
+import TransitStepIndicator from './TransitStepIndicator'
+import { Clock, MapPin, RefreshCw, Bell } from 'lucide-react-native'
 
 export type LiveArrival = {
-  id: string;
-  line: string;
-  color: string;
-  destination: string;
-  arrivalTime: number; // minutes
-  platform?: string;
-  type: 'subway' | 'train' | 'bus';
-};
+  id: string
+  line: string
+  color: string
+  destination: string
+  arrivalTime: number // minutes
+  platform?: string
+  type: 'subway' | 'train' | 'bus'
+}
 
 type LiveArrivalsCardProps = {
-  stationName: string;
-  arrivals: LiveArrival[];
-  lastUpdated?: string;
-  onRefresh?: () => void;
-  isRefreshing?: boolean;
-};
+  stationName: string
+  arrivals: LiveArrival[]
+  lastUpdated?: string
+  onRefresh?: () => void
+  isRefreshing?: boolean
+}
 
 const LiveArrivalsCard: React.FC<LiveArrivalsCardProps> = ({
   stationName,
@@ -29,31 +29,36 @@ const LiveArrivalsCard: React.FC<LiveArrivalsCardProps> = ({
   onRefresh,
   isRefreshing = false,
 }) => {
-  const [alertedArrivals, setAlertedArrivals] = useState<Set<string>>(new Set());
+  const [alertedArrivals, setAlertedArrivals] = useState<Set<string>>(new Set())
 
   // Alert for trains arriving soon
   useEffect(() => {
     arrivals.forEach((arrival) => {
       if (arrival.arrivalTime <= 1 && !alertedArrivals.has(arrival.id)) {
-        setAlertedArrivals((prev) => new Set([...prev, arrival.id]));
+        setAlertedArrivals((prev) => new Set([...prev, arrival.id]))
       }
-    });
-  }, [arrivals]);
+    })
+  }, [arrivals])
 
   const getArrivalTimeColor = (minutes: number) => {
-    if (minutes === 0) return Colors.error;
-    if (minutes <= 2) return Colors.warning;
-    return Colors.primary;
-  };
+    if (minutes === 0) return Colors.error
+    if (minutes <= 2) return Colors.warning
+    return Colors.primary
+  }
 
   const getArrivalTimeText = (minutes: number) => {
-    if (minutes === 0) return 'Arriving';
-    if (minutes === 1) return '1 min';
-    return `${minutes} min`;
-  };
+    if (minutes === 0) return 'Arriving'
+    if (minutes === 1) return '1 min'
+    return `${minutes} min`
+  }
 
   const renderArrival = ({ item }: { item: LiveArrival }) => (
-    <View style={[styles.arrivalItem, item.arrivalTime <= 1 && styles.urgentArrival]}>
+    <View
+      style={[
+        styles.arrivalItem,
+        item.arrivalTime <= 1 && styles.urgentArrival,
+      ]}
+    >
       <TransitStepIndicator
         step={{
           id: item.id,
@@ -70,18 +75,25 @@ const LiveArrivalsCard: React.FC<LiveArrivalsCardProps> = ({
         <Text style={styles.destinationText} numberOfLines={1}>
           {item.destination}
         </Text>
-        {item.platform && <Text style={styles.platformText}>Platform {item.platform}</Text>}
+        {item.platform && (
+          <Text style={styles.platformText}>Platform {item.platform}</Text>
+        )}
       </View>
       <View style={styles.timeContainer}>
         {item.arrivalTime <= 1 && (
           <Bell size={14} color={Colors.warning} style={styles.alertIcon} />
         )}
-        <Text style={[styles.arrivalTime, { color: getArrivalTimeColor(item.arrivalTime) }]}>
+        <Text
+          style={[
+            styles.arrivalTime,
+            { color: getArrivalTimeColor(item.arrivalTime) },
+          ]}
+        >
           {getArrivalTimeText(item.arrivalTime)}
         </Text>
       </View>
     </View>
-  );
+  )
 
   return (
     <View style={styles.container}>
@@ -96,7 +108,11 @@ const LiveArrivalsCard: React.FC<LiveArrivalsCardProps> = ({
             <Text style={styles.updateText}>{lastUpdated}</Text>
           </View>
           {onRefresh && (
-            <Pressable style={styles.refreshButton} onPress={onRefresh} disabled={isRefreshing}>
+            <Pressable
+              style={styles.refreshButton}
+              onPress={onRefresh}
+              disabled={isRefreshing}
+            >
               <RefreshCw
                 size={16}
                 color={Colors.primary}
@@ -121,8 +137,8 @@ const LiveArrivalsCard: React.FC<LiveArrivalsCardProps> = ({
         </View>
       )}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -235,6 +251,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.textLight,
   },
-});
+})
 
-export default LiveArrivalsCard;
+export default LiveArrivalsCard

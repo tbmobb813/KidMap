@@ -1,30 +1,32 @@
-import React from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import Colors from '@/constants/colors';
-import { WifiOff, Wifi, RefreshCw } from 'lucide-react-native';
-import { useNetworkStatus } from '@/hooks/useNetworkStatus';
+import React from 'react'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
+import Colors from '@/constants/colors'
+import { WifiOff, Wifi, RefreshCw } from 'lucide-react-native'
+import { useNetworkStatus } from '@/hooks/useNetworkStatus'
 
 type NetworkStatusBarProps = {
-  onRetry?: () => void;
-};
+  onRetry?: () => void
+}
 
 const NetworkStatusBar: React.FC<NetworkStatusBarProps> = ({ onRetry }) => {
-  const { isConnected, isInternetReachable } = useNetworkStatus();
+  const { isConnected, isInternetReachable } = useNetworkStatus()
 
-  if (isConnected && isInternetReachable) return null;
+  if (isConnected && isInternetReachable) return null
 
   return (
     <View style={styles.container}>
       <WifiOff size={16} color="#FFFFFF" />
-      <Text style={styles.text}>{!isConnected ? 'No connection' : 'Limited connectivity'}</Text>
+      <Text style={styles.text}>
+        {!isConnected ? 'No connection' : 'Limited connectivity'}
+      </Text>
       {onRetry && (
         <Pressable style={styles.retryButton} onPress={onRetry}>
           <RefreshCw size={14} color="#FFFFFF" />
         </Pressable>
       )}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -46,6 +48,6 @@ const styles = StyleSheet.create({
   retryButton: {
     padding: 4,
   },
-});
+})
 
-export default NetworkStatusBar;
+export default NetworkStatusBar

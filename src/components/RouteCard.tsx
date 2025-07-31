@@ -1,17 +1,21 @@
-import React from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import { Route } from '@/types/navigation';
-import Colors from '@/constants/colors';
-import { Clock, ArrowRight } from 'lucide-react-native';
-import TransitStepIndicator from './TransitStepIndicator';
+import React from 'react'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
+import { Route } from '@/types/navigation'
+import Colors from '@/constants/colors'
+import { Clock, ArrowRight } from 'lucide-react-native'
+import TransitStepIndicator from './TransitStepIndicator'
 
 type RouteCardProps = {
-  route: Route;
-  onPress: (route: Route) => void;
-  isSelected?: boolean;
-};
+  route: Route
+  onPress: (route: Route) => void
+  isSelected?: boolean
+}
 
-const RouteCard: React.FC<RouteCardProps> = ({ route, onPress, isSelected = false }) => {
+const RouteCard: React.FC<RouteCardProps> = ({
+  route,
+  onPress,
+  isSelected = false,
+}) => {
   return (
     <Pressable
       style={({ pressed }) => [
@@ -36,14 +40,18 @@ const RouteCard: React.FC<RouteCardProps> = ({ route, onPress, isSelected = fals
           <View key={step.id} style={styles.stepRow}>
             <TransitStepIndicator step={step} />
             {index < route.steps.length - 1 && (
-              <ArrowRight size={14} color={Colors.textLight} style={styles.arrowIcon} />
+              <ArrowRight
+                size={14}
+                color={Colors.textLight}
+                style={styles.arrowIcon}
+              />
             )}
           </View>
         ))}
       </View>
     </Pressable>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -98,6 +106,6 @@ const styles = StyleSheet.create({
   arrowIcon: {
     marginHorizontal: 4,
   },
-});
+})
 
-export default RouteCard;
+export default RouteCard

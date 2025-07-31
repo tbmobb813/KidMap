@@ -1,5 +1,5 @@
 // components/TransportModeSelector.tsx - Multi-modal transport selection for KidMap
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -8,38 +8,38 @@ import {
   ScrollView,
   Animated,
   Dimensions,
-} from 'react-native';
-import { 
-  Footprints, 
-  Bike, 
-  Bus, 
-  Train, 
-  MapPin, 
-  Clock, 
+} from 'react-native'
+import {
+  Footprints,
+  Bike,
+  Bus,
+  Train,
+  MapPin,
+  Clock,
   Shield,
   Users,
   Battery,
   Sun,
-  Moon
-} from 'lucide-react-native';
-import Colors from '@/constants/colors';
-import { TravelMode } from '@/utils/api';
+  Moon,
+} from 'lucide-react-native'
+import Colors from '@/constants/colors'
+import { TravelMode } from '@/utils/api'
 
 export interface TransportMode {
-  id: TravelMode | 'combined';
-  name: string;
-  icon: React.ReactNode;
-  description: string;
-  kidFriendly: number; // 1-5 rating
-  safety: number; // 1-5 rating
-  speed: number; // 1-5 rating
-  cost: number; // 1-5 rating (lower is cheaper)
-  independence: number; // 1-5 rating (how much supervision needed)
-  weatherDependent: boolean;
-  ageRecommendation: string;
-  pros: string[];
-  cons: string[];
-  color: string;
+  id: TravelMode | 'combined'
+  name: string
+  icon: React.ReactNode
+  description: string
+  kidFriendly: number // 1-5 rating
+  safety: number // 1-5 rating
+  speed: number // 1-5 rating
+  cost: number // 1-5 rating (lower is cheaper)
+  independence: number // 1-5 rating (how much supervision needed)
+  weatherDependent: boolean
+  ageRecommendation: string
+  pros: string[]
+  cons: string[]
+  color: string
 }
 
 const transportModes: TransportMode[] = [
@@ -55,9 +55,14 @@ const transportModes: TransportMode[] = [
     independence: 4,
     weatherDependent: true,
     ageRecommendation: '5+ years',
-    pros: ['Great exercise', 'No cost', 'Explore neighborhood', 'Build confidence'],
+    pros: [
+      'Great exercise',
+      'No cost',
+      'Explore neighborhood',
+      'Build confidence',
+    ],
     cons: ['Takes longer', 'Weather dependent', 'Can be tiring'],
-    color: '#4CAF50'
+    color: '#4CAF50',
   },
   {
     id: 'bicycling',
@@ -71,9 +76,19 @@ const transportModes: TransportMode[] = [
     independence: 3,
     weatherDependent: true,
     ageRecommendation: '8+ years',
-    pros: ['Fun and fast', 'Good exercise', 'Environmentally friendly', 'Builds skills'],
-    cons: ['Need bike', 'Weather dependent', 'Requires supervision', 'Traffic awareness needed'],
-    color: '#FF9800'
+    pros: [
+      'Fun and fast',
+      'Good exercise',
+      'Environmentally friendly',
+      'Builds skills',
+    ],
+    cons: [
+      'Need bike',
+      'Weather dependent',
+      'Requires supervision',
+      'Traffic awareness needed',
+    ],
+    color: '#FF9800',
   },
   {
     id: 'transit',
@@ -87,9 +102,14 @@ const transportModes: TransportMode[] = [
     independence: 2,
     weatherDependent: false,
     ageRecommendation: '10+ years',
-    pros: ['Weather protected', 'Faster for long distances', 'Social experience', 'Learn city navigation'],
+    pros: [
+      'Weather protected',
+      'Faster for long distances',
+      'Social experience',
+      'Learn city navigation',
+    ],
     cons: ['Costs money', 'Need supervision', 'Fixed schedules', 'Crowds'],
-    color: '#2196F3'
+    color: '#2196F3',
   },
   {
     id: 'combined',
@@ -103,29 +123,39 @@ const transportModes: TransportMode[] = [
     independence: 2,
     weatherDependent: false,
     ageRecommendation: '12+ years',
-    pros: ['Most efficient', 'Flexible options', 'Learn different transport', 'Optimized for conditions'],
-    cons: ['More complex', 'Need planning', 'Multiple considerations', 'Requires experience'],
-    color: '#9C27B0'
-  }
-];
+    pros: [
+      'Most efficient',
+      'Flexible options',
+      'Learn different transport',
+      'Optimized for conditions',
+    ],
+    cons: [
+      'More complex',
+      'Need planning',
+      'Multiple considerations',
+      'Requires experience',
+    ],
+    color: '#9C27B0',
+  },
+]
 
 interface TransportModeSelectorProps {
-  selectedMode: TravelMode | 'combined';
-  onModeSelect: (mode: TravelMode | 'combined') => void;
-  fromLocation: string;
-  toLocation: string;
+  selectedMode: TravelMode | 'combined'
+  onModeSelect: (mode: TravelMode | 'combined') => void
+  fromLocation: string
+  toLocation: string
   estimatedTimes?: {
-    walking?: number;
-    bicycling?: number;
-    transit?: number;
-    combined?: number;
-  };
+    walking?: number
+    bicycling?: number
+    transit?: number
+    combined?: number
+  }
   weatherInfo?: {
-    condition: 'sunny' | 'rainy' | 'cloudy';
-    temperature: number;
-  };
-  childAge?: number;
-  style?: any;
+    condition: 'sunny' | 'rainy' | 'cloudy'
+    temperature: number
+  }
+  childAge?: number
+  style?: any
 }
 
 export default function TransportModeSelector({
@@ -136,53 +166,54 @@ export default function TransportModeSelector({
   estimatedTimes,
   weatherInfo,
   childAge = 10,
-  style
+  style,
 }: TransportModeSelectorProps) {
-  const [expandedMode, setExpandedMode] = useState<string | null>(null);
-  const [showDetails, setShowDetails] = useState(false);
+  const [expandedMode, setExpandedMode] = useState<string | null>(null)
+  const [showDetails, setShowDetails] = useState(false)
 
   const getRecommendationScore = (mode: TransportMode): number => {
-    let score = 0;
-    
+    let score = 0
+
     // Age appropriateness
-    const minAge = parseInt(mode.ageRecommendation);
-    if (childAge >= minAge) score += 2;
-    else if (childAge >= minAge - 2) score += 1;
-    
+    const minAge = parseInt(mode.ageRecommendation)
+    if (childAge >= minAge) score += 2
+    else if (childAge >= minAge - 2) score += 1
+
     // Weather consideration
     if (weatherInfo) {
       if (mode.weatherDependent && weatherInfo.condition === 'rainy') {
-        score -= 2;
+        score -= 2
       } else if (!mode.weatherDependent || weatherInfo.condition === 'sunny') {
-        score += 1;
+        score += 1
       }
     }
-    
+
     // General kid-friendliness and safety
-    score += mode.kidFriendly + mode.safety;
-    
-    return Math.max(0, score);
-  };
+    score += mode.kidFriendly + mode.safety
+
+    return Math.max(0, score)
+  }
 
   const getRecommendedModes = () => {
     return transportModes
-      .map(mode => ({ ...mode, score: getRecommendationScore(mode) }))
-      .sort((a, b) => b.score - a.score);
-  };
+      .map((mode) => ({ ...mode, score: getRecommendationScore(mode) }))
+      .sort((a, b) => b.score - a.score)
+  }
 
   const formatTime = (minutes?: number) => {
-    if (!minutes) return '...';
-    if (minutes < 60) return `${minutes}m`;
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${hours}h ${mins}m`;
-  };
+    if (!minutes) return '...'
+    if (minutes < 60) return `${minutes}m`
+    const hours = Math.floor(minutes / 60)
+    const mins = minutes % 60
+    return `${hours}h ${mins}m`
+  }
 
   const renderModeCard = (mode: TransportMode & { score?: number }) => {
-    const isSelected = selectedMode === mode.id;
-    const isExpanded = expandedMode === mode.id;
-    const estimatedTime = estimatedTimes?.[mode.id as keyof typeof estimatedTimes];
-    const isRecommended = mode.score && mode.score >= 6;
+    const isSelected = selectedMode === mode.id
+    const isExpanded = expandedMode === mode.id
+    const estimatedTime =
+      estimatedTimes?.[mode.id as keyof typeof estimatedTimes]
+    const isRecommended = mode.score && mode.score >= 6
 
     return (
       <TouchableOpacity
@@ -193,8 +224,8 @@ export default function TransportModeSelector({
           isRecommended && styles.recommendedCard,
         ]}
         onPress={() => {
-          onModeSelect(mode.id);
-          setExpandedMode(isExpanded ? null : mode.id);
+          onModeSelect(mode.id)
+          setExpandedMode(isExpanded ? null : mode.id)
         }}
         activeOpacity={0.7}
       >
@@ -203,10 +234,12 @@ export default function TransportModeSelector({
           <View style={[styles.modeIcon, { backgroundColor: mode.color }]}>
             {mode.icon}
           </View>
-          
+
           <View style={styles.modeInfo}>
             <View style={styles.modeTitleRow}>
-              <Text style={[styles.modeName, isSelected && styles.selectedText]}>
+              <Text
+                style={[styles.modeName, isSelected && styles.selectedText]}
+              >
                 {mode.name}
               </Text>
               {isRecommended && (
@@ -216,7 +249,7 @@ export default function TransportModeSelector({
               )}
             </View>
             <Text style={styles.modeDescription}>{mode.description}</Text>
-            
+
             <View style={styles.modeStats}>
               <View style={styles.statItem}>
                 <Clock size={14} color={Colors.textLight} />
@@ -228,7 +261,9 @@ export default function TransportModeSelector({
               </View>
               <View style={styles.statItem}>
                 <Users size={14} color={Colors.textLight} />
-                <Text style={styles.statText}>Age: {mode.ageRecommendation}</Text>
+                <Text style={styles.statText}>
+                  Age: {mode.ageRecommendation}
+                </Text>
               </View>
             </View>
           </View>
@@ -251,13 +286,17 @@ export default function TransportModeSelector({
               <View style={styles.prosConsColumn}>
                 <Text style={styles.prosConsTitle}>👍 Pros:</Text>
                 {mode.pros.map((pro, index) => (
-                  <Text key={index} style={styles.prosConsItem}>• {pro}</Text>
+                  <Text key={index} style={styles.prosConsItem}>
+                    • {pro}
+                  </Text>
                 ))}
               </View>
               <View style={styles.prosConsColumn}>
                 <Text style={styles.prosConsTitle}>👎 Consider:</Text>
                 {mode.cons.map((con, index) => (
-                  <Text key={index} style={styles.prosConsItem}>• {con}</Text>
+                  <Text key={index} style={styles.prosConsItem}>
+                    • {con}
+                  </Text>
                 ))}
               </View>
             </View>
@@ -269,7 +308,15 @@ export default function TransportModeSelector({
                   <Text style={styles.ratingLabel}>Kid-Friendly</Text>
                   <View style={styles.ratingStars}>
                     {[...Array(5)].map((_, i) => (
-                      <Text key={i} style={[styles.star, i < mode.kidFriendly && styles.activeStar]}>★</Text>
+                      <Text
+                        key={i}
+                        style={[
+                          styles.star,
+                          i < mode.kidFriendly && styles.activeStar,
+                        ]}
+                      >
+                        ★
+                      </Text>
                     ))}
                   </View>
                 </View>
@@ -277,7 +324,15 @@ export default function TransportModeSelector({
                   <Text style={styles.ratingLabel}>Speed</Text>
                   <View style={styles.ratingStars}>
                     {[...Array(5)].map((_, i) => (
-                      <Text key={i} style={[styles.star, i < mode.speed && styles.activeStar]}>★</Text>
+                      <Text
+                        key={i}
+                        style={[
+                          styles.star,
+                          i < mode.speed && styles.activeStar,
+                        ]}
+                      >
+                        ★
+                      </Text>
                     ))}
                   </View>
                 </View>
@@ -286,28 +341,30 @@ export default function TransportModeSelector({
           </Animated.View>
         )}
       </TouchableOpacity>
-    );
-  };
+    )
+  }
 
-  const recommendedModes = getRecommendedModes();
+  const recommendedModes = getRecommendedModes()
 
   return (
     <View style={[styles.container, style]}>
       <View style={styles.header}>
         <Text style={styles.title}>Choose Your Journey</Text>
-        <Text style={styles.subtitle}>From {fromLocation} to {toLocation}</Text>
-        
+        <Text style={styles.subtitle}>
+          From {fromLocation} to {toLocation}
+        </Text>
+
         {weatherInfo && (
           <View style={styles.weatherInfo}>
             <Text style={styles.weatherText}>
-              {weatherInfo.condition === 'sunny' ? '☀️' : '🌧️'} 
+              {weatherInfo.condition === 'sunny' ? '☀️' : '🌧️'}
               {weatherInfo.temperature}°C - {weatherInfo.condition}
             </Text>
           </View>
         )}
       </View>
 
-      <ScrollView 
+      <ScrollView
         style={styles.modesContainer}
         showsVerticalScrollIndicator={false}
       >
@@ -317,12 +374,16 @@ export default function TransportModeSelector({
       {selectedMode && (
         <View style={styles.selectionSummary}>
           <Text style={styles.summaryText}>
-            Ready to go by {transportModes.find(m => m.id === selectedMode)?.name.toLowerCase()}!
+            Ready to go by{' '}
+            {transportModes
+              .find((m) => m.id === selectedMode)
+              ?.name.toLowerCase()}
+            !
           </Text>
         </View>
       )}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -511,4 +572,4 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#FFFFFF',
   },
-});
+})

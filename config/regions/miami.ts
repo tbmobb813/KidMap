@@ -1,4 +1,4 @@
-import { RegionConfig } from '@/types/region';
+import { RegionConfig } from '@/types/region'
 
 export const miamiConfig: RegionConfig = {
   id: 'miami',
@@ -67,4 +67,4 @@ export const miamiConfig: RegionConfig = {
   ],
   transitApiEndpoint: 'https://api.miamidade.gov/',
   mapStyle: 'standard',
-};
+}

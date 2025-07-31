@@ -3,18 +3,18 @@
  * Handles geolocation for both web and native platforms.
  * Returns current location and loading/error state.
  */
-import { useState, useEffect } from 'react';
-import * as Location from 'expo-location';
-import { Platform, Alert } from 'react-native';
+import { useState, useEffect } from 'react'
+import * as Location from 'expo-location'
+import { Platform, Alert } from 'react-native'
 
 /**
  * Location data type returned by the hook.
  */
 type LocationData = {
-  latitude: number;
-  longitude: number;
-  error: string | null;
-};
+  latitude: number
+  longitude: number
+  error: string | null
+}
 
 export default function useLocation() {
   /**
@@ -25,13 +25,13 @@ export default function useLocation() {
     latitude: 40.7128,
     longitude: -74.006,
     error: null,
-  });
-  const [loading, setLoading] = useState(true);
+  })
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       try {
-        setLoading(true);
+        setLoading(true)
 
         if (Platform.OS === 'web') {
           // Web geolocation API
@@ -42,23 +42,23 @@ export default function useLocation() {
                   latitude: position.coords.latitude,
                   longitude: position.coords.longitude,
                   error: null,
-                });
-                setLoading(false);
+                })
+                setLoading(false)
               },
               (error) => {
                 setLocation((prev) => ({
                   ...prev,
                   error: 'Could not get your location',
-                }));
-                setLoading(false);
+                }))
+                setLoading(false)
               },
-            );
+            )
           }
-          return;
+          return
         }
 
         // Request permissions for mobile platforms
-        const { status } = await Location.requestForegroundPermissionsAsync();
+        const { status } = await Location.requestForegroundPermissionsAsync()
 
         if (status !== 'granted') {
           // Android-specific permission handling
@@ -75,19 +75,19 @@ export default function useLocation() {
                     Alert.alert(
                       'Enable Location',
                       'Go to Settings > Apps > KidMap > Permissions > Location',
-                    );
+                    )
                   },
                 },
               ],
-            );
+            )
           }
 
           setLocation((prev) => ({
             ...prev,
             error: 'Permission to access location was denied',
-          }));
-          setLoading(false);
-          return;
+          }))
+          setLoading(false)
+          return
         }
 
         // Get current location with Android-optimized settings
@@ -100,26 +100,27 @@ export default function useLocation() {
               }
             : {
                 accuracy: Location.Accuracy.Balanced,
-              };
+              }
 
-        const currentLocation = await Location.getCurrentPositionAsync(locationOptions);
+        const currentLocation =
+          await Location.getCurrentPositionAsync(locationOptions)
 
         setLocation({
           latitude: currentLocation.coords.latitude,
           longitude: currentLocation.coords.longitude,
           error: null,
-        });
+        })
       } catch (error) {
-        console.log('Location error:', error);
+        console.log('Location error:', error)
         setLocation((prev) => ({
           ...prev,
           error: 'Could not get your location',
-        }));
+        }))
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    })();
-  }, []);
+    })()
+  }, [])
 
-  return { location, loading };
+  return { location, loading }
 }

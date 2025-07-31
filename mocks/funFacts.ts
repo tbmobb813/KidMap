@@ -29,7 +29,7 @@ export const locationFunFacts: Record<string, string[]> = {
     'Parks are home to many animals that live in cities.',
     'Playing in parks helps kids learn better in school!',
   ],
-};
+}
 
 export const transitFunFacts = [
   'The first subway was built in London in 1863 and used steam trains!',
@@ -40,13 +40,13 @@ export const transitFunFacts = [
   'Some subway cars are powered by electricity from solar panels.',
   'The oldest subway car still in use is over 50 years old.',
   'Subway systems help reduce traffic and air pollution in cities.',
-];
+]
 
 export const getRandomFunFact = (category?: string): string => {
   if (category && locationFunFacts[category]) {
-    const facts = locationFunFacts[category];
-    return facts[Math.floor(Math.random() * facts.length)];
+    const facts = locationFunFacts[category]
+    return facts[Math.floor(Math.random() * facts.length)]
   }
 
-  return transitFunFacts[Math.floor(Math.random() * transitFunFacts.length)];
-};
+  return transitFunFacts[Math.floor(Math.random() * transitFunFacts.length)]
+}

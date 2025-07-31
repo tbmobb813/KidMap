@@ -1,5 +1,5 @@
 // screens/ParentLockScreen.tsx
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -8,87 +8,78 @@ import {
   TextInput,
   Alert,
   SafeAreaView,
-} from 'react-native';
-import { useParentalControlStore } from '@/stores/parentalControlStore';
+} from 'react-native'
+import { useParentalControlStore } from '@/stores/parentalControlStore'
 
 const ParentLockScreen: React.FC = () => {
-  const { isLocked, unlockScreen } = useParentalControlStore();
-  const [pin, setPin] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLocked, unlockScreen } = useParentalControlStore()
+  const [pin, setPin] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   // Don't render if not locked
   if (!isLocked) {
-    return null;
+    return null
   }
 
   const handleUnlock = async () => {
-    setIsLoading(true);
-    
+    setIsLoading(true)
+
     try {
       // For now, we'll use a simple PIN check
       // In a real app, this would validate against stored PIN or use biometric auth
       if (pin === '1234' || pin.length >= 4) {
-        unlockScreen();
-        setPin('');
+        unlockScreen()
+        setPin('')
       } else {
         Alert.alert(
           'Invalid PIN',
-          'Please enter the correct PIN to unlock parental controls.'
-        );
+          'Please enter the correct PIN to unlock parental controls.',
+        )
       }
     } catch (error) {
-      Alert.alert(
-        'Error',
-        'Failed to unlock. Please try again.'
-      );
+      Alert.alert('Error', 'Failed to unlock. Please try again.')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handlePinInput = (digit: string) => {
     if (pin.length < 4) {
-      setPin(prev => prev + digit);
+      setPin((prev) => prev + digit)
     }
-  };
+  }
 
   const handleClearPin = () => {
-    setPin('');
-  };
+    setPin('')
+  }
 
   const renderPinDots = () => {
     return (
       <View style={styles.pinContainer}>
-        {[0, 1, 2, 3].map(index => (
+        {[0, 1, 2, 3].map((index) => (
           <View
             key={index}
-            style={[
-              styles.pinDot,
-              index < pin.length && styles.pinDotFilled
-            ]}
+            style={[styles.pinDot, index < pin.length && styles.pinDotFilled]}
           />
         ))}
       </View>
-    );
-  };
+    )
+  }
 
   const renderNumberPad = () => {
-    const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, 'clear'];
-    
+    const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, 'clear']
+
     return (
       <View style={styles.numberPad}>
         {numbers.map((num, index) => (
           <TouchableOpacity
             key={index}
-            style={[
-              styles.numberButton,
-              num === '' && styles.emptyButton
-            ]}
+            style={[styles.numberButton, num === '' && styles.emptyButton]}
             onPress={() => {
               if (num === 'clear') {
-                handleClearPin();
+                handleClearPin()
               } else if (num !== '') {
-                handlePinInput(num.toString());
+                handlePinInput(num.toString())
               }
             }}
             disabled={num === '' || isLoading}
@@ -99,8 +90,8 @@ const ParentLockScreen: React.FC = () => {
           </TouchableOpacity>
         ))}
       </View>
-    );
-  };
+    )
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -125,8 +116,8 @@ const ParentLockScreen: React.FC = () => {
           onPress={() => {
             Alert.alert(
               'Alternative Unlock',
-              'In a full implementation, this would use biometric authentication or recovery options.'
-            );
+              'In a full implementation, this would use biometric authentication or recovery options.',
+            )
           }}
         >
           <Text style={styles.alternativeButtonText}>
@@ -146,8 +137,8 @@ const ParentLockScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
     </SafeAreaView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -248,6 +239,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-});
+})
 
-export default ParentLockScreen;
+export default ParentLockScreen

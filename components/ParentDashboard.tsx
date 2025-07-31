@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -8,50 +8,52 @@ import {
   Modal,
   TextInput,
   Alert,
-} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import SafeZoneManager from './SafeZoneManager';
-import SafeZoneSettings from './SafeZoneSettings';
-import { SafeZoneAlertHistory } from './SafeZoneAlert';
-import { safeZoneAlertManager } from '@/utils/safeZoneAlerts';
-import { pingDevice, sendLocationUpdate } from '@/utils/pingDevice';
+} from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import SafeZoneManager from './SafeZoneManager'
+import SafeZoneSettings from './SafeZoneSettings'
+import { SafeZoneAlertHistory } from './SafeZoneAlert'
+import { safeZoneAlertManager } from '@/utils/safeZoneAlerts'
+import { pingDevice, sendLocationUpdate } from '@/utils/pingDevice'
 
-const PIN_KEY = 'parent_pin';
+const PIN_KEY = 'parent_pin'
 
 const ParentDashboard: React.FC = () => {
-  const [showPinModal, setShowPinModal] = useState(false);
-  const [currentPin, setCurrentPin] = useState('');
-  const [newPin, setNewPin] = useState('');
-  const [confirmPin, setConfirmPin] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<'zones' | 'alerts' | 'settings'>('zones');
+  const [showPinModal, setShowPinModal] = useState(false)
+  const [currentPin, setCurrentPin] = useState('')
+  const [newPin, setNewPin] = useState('')
+  const [confirmPin, setConfirmPin] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [activeTab, setActiveTab] = useState<'zones' | 'alerts' | 'settings'>(
+    'zones',
+  )
 
   const handleChangePin = async () => {
-    setLoading(true);
-    const storedPin = await AsyncStorage.getItem(PIN_KEY);
+    setLoading(true)
+    const storedPin = await AsyncStorage.getItem(PIN_KEY)
     if (currentPin !== storedPin) {
-      Alert.alert('Incorrect PIN', 'Current PIN is incorrect.');
-      setLoading(false);
-      return;
+      Alert.alert('Incorrect PIN', 'Current PIN is incorrect.')
+      setLoading(false)
+      return
     }
     if (newPin.length < 4) {
-      Alert.alert('PIN too short', 'PIN must be at least 4 digits.');
-      setLoading(false);
-      return;
+      Alert.alert('PIN too short', 'PIN must be at least 4 digits.')
+      setLoading(false)
+      return
     }
     if (newPin !== confirmPin) {
-      Alert.alert('PINs do not match', 'Please re-enter your new PIN.');
-      setLoading(false);
-      return;
+      Alert.alert('PINs do not match', 'Please re-enter your new PIN.')
+      setLoading(false)
+      return
     }
-    await AsyncStorage.setItem(PIN_KEY, newPin);
-    setShowPinModal(false);
-    setCurrentPin('');
-    setNewPin('');
-    setConfirmPin('');
-    setLoading(false);
-    Alert.alert('PIN Changed', 'Your parent PIN has been updated.');
-  };
+    await AsyncStorage.setItem(PIN_KEY, newPin)
+    setShowPinModal(false)
+    setCurrentPin('')
+    setNewPin('')
+    setConfirmPin('')
+    setLoading(false)
+    Alert.alert('PIN Changed', 'Your parent PIN has been updated.')
+  }
 
   return (
     <View style={styles.container}>
@@ -63,7 +65,12 @@ const ParentDashboard: React.FC = () => {
           style={[styles.tab, activeTab === 'zones' && styles.activeTab]}
           onPress={() => setActiveTab('zones')}
         >
-          <Text style={[styles.tabText, activeTab === 'zones' && styles.activeTabText]}>
+          <Text
+            style={[
+              styles.tabText,
+              activeTab === 'zones' && styles.activeTabText,
+            ]}
+          >
             Safe Zones
           </Text>
         </TouchableOpacity>
@@ -71,7 +78,12 @@ const ParentDashboard: React.FC = () => {
           style={[styles.tab, activeTab === 'alerts' && styles.activeTab]}
           onPress={() => setActiveTab('alerts')}
         >
-          <Text style={[styles.tabText, activeTab === 'alerts' && styles.activeTabText]}>
+          <Text
+            style={[
+              styles.tabText,
+              activeTab === 'alerts' && styles.activeTabText,
+            ]}
+          >
             Alerts & History
           </Text>
         </TouchableOpacity>
@@ -79,7 +91,12 @@ const ParentDashboard: React.FC = () => {
           style={[styles.tab, activeTab === 'settings' && styles.activeTab]}
           onPress={() => setActiveTab('settings')}
         >
-          <Text style={[styles.tabText, activeTab === 'settings' && styles.activeTabText]}>
+          <Text
+            style={[
+              styles.tabText,
+              activeTab === 'settings' && styles.activeTabText,
+            ]}
+          >
             Settings
           </Text>
         </TouchableOpacity>
@@ -90,12 +107,16 @@ const ParentDashboard: React.FC = () => {
         {activeTab === 'zones' && (
           <>
             <Section title="Safe Zone Management">
-              <Text style={styles.sectionText}>Set up geofenced safe zones and manage locations.</Text>
+              <Text style={styles.sectionText}>
+                Set up geofenced safe zones and manage locations.
+              </Text>
               <SafeZoneManager />
             </Section>
 
             <Section title="Category Management">
-              <Text style={styles.sectionText}>Add, edit, or approve categories for your child.</Text>
+              <Text style={styles.sectionText}>
+                Add, edit, or approve categories for your child.
+              </Text>
               <TouchableOpacity style={styles.button}>
                 <Text style={styles.buttonText}>Manage Categories</Text>
               </TouchableOpacity>
@@ -108,8 +129,8 @@ const ParentDashboard: React.FC = () => {
               <TouchableOpacity
                 style={styles.button}
                 onPress={async () => {
-                  await pingDevice();
-                  await sendLocationUpdate();
+                  await pingDevice()
+                  await sendLocationUpdate()
                 }}
               >
                 <Text style={styles.buttonText}>Ping Child's Device</Text>
@@ -120,10 +141,14 @@ const ParentDashboard: React.FC = () => {
 
         {activeTab === 'alerts' && (
           <>
-            <SafeZoneAlertHistory events={safeZoneAlertManager.getRecentEvents()} />
-            
+            <SafeZoneAlertHistory
+              events={safeZoneAlertManager.getRecentEvents()}
+            />
+
             <Section title="Check-Ins">
-              <Text style={styles.sectionText}>Request or review your child's check-ins.</Text>
+              <Text style={styles.sectionText}>
+                Request or review your child's check-ins.
+              </Text>
               <TouchableOpacity style={styles.button}>
                 <Text style={styles.buttonText}>View Check-Ins</Text>
               </TouchableOpacity>
@@ -134,16 +159,23 @@ const ParentDashboard: React.FC = () => {
         {activeTab === 'settings' && (
           <>
             <SafeZoneSettings />
-            
+
             <Section title="Parent Mode Lock">
-              <Text style={styles.sectionText}>Protect parent mode with PIN or biometrics.</Text>
-              <TouchableOpacity style={styles.button} onPress={() => setShowPinModal(true)}>
+              <Text style={styles.sectionText}>
+                Protect parent mode with PIN or biometrics.
+              </Text>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => setShowPinModal(true)}
+              >
                 <Text style={styles.buttonText}>Change PIN</Text>
               </TouchableOpacity>
             </Section>
 
             <Section title="Device Settings">
-              <Text style={styles.sectionText}>Manage device permissions and settings.</Text>
+              <Text style={styles.sectionText}>
+                Manage device permissions and settings.
+              </Text>
               <TouchableOpacity style={styles.button}>
                 <Text style={styles.buttonText}>Device Settings</Text>
               </TouchableOpacity>
@@ -183,25 +215,37 @@ const ParentDashboard: React.FC = () => {
               onChangeText={setConfirmPin}
               maxLength={8}
             />
-            <TouchableOpacity style={styles.button} onPress={handleChangePin} disabled={loading}>
-              <Text style={styles.buttonText}>{loading ? 'Changing...' : 'Change PIN'}</Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleChangePin}
+              disabled={loading}
+            >
+              <Text style={styles.buttonText}>
+                {loading ? 'Changing...' : 'Change PIN'}
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.link} onPress={() => setShowPinModal(false)}>
+            <TouchableOpacity
+              style={styles.link}
+              onPress={() => setShowPinModal(false)}
+            >
               <Text style={styles.linkText}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
     </View>
-  );
-};
+  )
+}
 
-const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
+const Section: React.FC<{ title: string; children: React.ReactNode }> = ({
+  title,
+  children,
+}) => (
   <View style={styles.section}>
     <Text style={styles.sectionTitle}>{title}</Text>
     {children}
   </View>
-);
+)
 
 const styles = StyleSheet.create({
   container: {
@@ -321,6 +365,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
   },
-});
+})
 
-export default ParentDashboard;
+export default ParentDashboard

@@ -1,5 +1,5 @@
 // components/ParentalDashboard.tsx - Main parental control dashboard
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
   Alert,
   RefreshControl,
   Dimensions,
-} from 'react-native';
+} from 'react-native'
 import {
   Shield,
   MapPin,
@@ -27,23 +27,23 @@ import {
   Eye,
   Lock,
   Unlock,
-} from 'lucide-react-native';
-import Colors from '../constants/colors';
-import AccessibleButton from './AccessibleButton';
-import ParentAuthentication from './ParentAuthentication';
-import { useParentalControlStore } from '../stores/parentalControlStore';
-import { useSafeZoneStore } from '../stores/safeZoneStore';
+} from 'lucide-react-native'
+import Colors from '../constants/colors'
+import AccessibleButton from './AccessibleButton'
+import ParentAuthentication from './ParentAuthentication'
+import { useParentalControlStore } from '../stores/parentalControlStore'
+import { useSafeZoneStore } from '../stores/safeZoneStore'
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get('window')
 
 interface ParentalDashboardProps {
-  visible: boolean;
-  onClose: () => void;
+  visible: boolean
+  onClose: () => void
 }
 
 export default function ParentalDashboard({
   visible,
-  onClose
+  onClose,
 }: ParentalDashboardProps) {
   const {
     session,
@@ -55,45 +55,47 @@ export default function ParentalDashboard({
     locateChild,
     triggerEmergencyAlert,
     settings,
-  } = useParentalControlStore();
+  } = useParentalControlStore()
 
-  const { safeZones } = useSafeZoneStore();
+  const { safeZones } = useSafeZoneStore()
 
-  const [showAuth, setShowAuth] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'activity' | 'approvals' | 'settings'>('overview');
+  const [showAuth, setShowAuth] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
+  const [activeTab, setActiveTab] = useState<
+    'overview' | 'activity' | 'approvals' | 'settings'
+  >('overview')
 
   useEffect(() => {
     if (visible) {
-      checkAuthentication();
+      checkAuthentication()
     }
-  }, [visible]);
+  }, [visible])
 
   const checkAuthentication = () => {
     if (!isSessionValid()) {
-      setShowAuth(true);
+      setShowAuth(true)
     } else {
-      extendSession();
+      extendSession()
     }
-  };
+  }
 
   const handleAuthenticated = () => {
-    setShowAuth(false);
-  };
+    setShowAuth(false)
+  }
 
   const handleRefresh = useCallback(async () => {
-    setRefreshing(true);
-    
+    setRefreshing(true)
+
     try {
       // Refresh child activity, location, etc.
       // In a real implementation, this would fetch from API
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000))
     } catch (error) {
-      console.error('Refresh error:', error);
+      console.error('Refresh error:', error)
     } finally {
-      setRefreshing(false);
+      setRefreshing(false)
     }
-  }, []);
+  }, [])
 
   const handleEmergencyAction = (action: 'locate' | 'checkin' | 'alert') => {
     Alert.alert(
@@ -108,30 +110,45 @@ export default function ParentalDashboard({
             try {
               switch (action) {
                 case 'locate':
-                  const location = await locateChild();
+                  const location = await locateChild()
                   if (location) {
-                    Alert.alert('Child Located', `Current location: ${location[0].toFixed(6)}, ${location[1].toFixed(6)}`);
+                    Alert.alert(
+                      'Child Located',
+                      `Current location: ${location[0].toFixed(6)}, ${location[1].toFixed(6)}`,
+                    )
                   } else {
-                    Alert.alert('Location Unavailable', 'Unable to get current location. The child may need to enable location services.');
+                    Alert.alert(
+                      'Location Unavailable',
+                      'Unable to get current location. The child may need to enable location services.',
+                    )
                   }
-                  break;
+                  break
                 case 'checkin':
-                  await requestChildCheckIn();
-                  Alert.alert('Check-in Requested', 'Your child will receive a notification to check in.');
-                  break;
+                  await requestChildCheckIn()
+                  Alert.alert(
+                    'Check-in Requested',
+                    'Your child will receive a notification to check in.',
+                  )
+                  break
                 case 'alert':
-                  await triggerEmergencyAlert();
-                  Alert.alert('Emergency Alert Sent', 'Emergency contacts have been notified.');
-                  break;
+                  await triggerEmergencyAlert()
+                  Alert.alert(
+                    'Emergency Alert Sent',
+                    'Emergency contacts have been notified.',
+                  )
+                  break
               }
             } catch (error) {
-              Alert.alert('Action Failed', 'Unable to complete the requested action. Please try again.');
+              Alert.alert(
+                'Action Failed',
+                'Unable to complete the requested action. Please try again.',
+              )
             }
-          }
-        }
-      ]
-    );
-  };
+          },
+        },
+      ],
+    )
+  }
 
   const renderQuickActions = () => (
     <View style={styles.quickActions}>
@@ -145,7 +162,7 @@ export default function ParentalDashboard({
           <MapPin size={24} color={Colors.background} />
           <Text style={styles.actionButtonText}>Locate</Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity
           style={[styles.actionButton, styles.checkinButton]}
           onPress={() => handleEmergencyAction('checkin')}
@@ -154,7 +171,7 @@ export default function ParentalDashboard({
           <MessageSquare size={24} color={Colors.background} />
           <Text style={styles.actionButtonText}>Check In</Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity
           style={[styles.actionButton, styles.emergencyButton]}
           onPress={() => handleEmergencyAction('alert')}
@@ -165,12 +182,19 @@ export default function ParentalDashboard({
         </TouchableOpacity>
       </View>
     </View>
-  );
+  )
 
   const renderChildStatus = () => {
-    const isOnline = childActivity.lastSeen && (Date.now() - childActivity.lastSeen.getTime()) < 5 * 60 * 1000;
-    const batteryLevel = childActivity.batteryLevel || 0;
-    const batteryColor = batteryLevel > 20 ? Colors.success : batteryLevel > 10 ? Colors.warning : Colors.error;
+    const isOnline =
+      childActivity.lastSeen &&
+      Date.now() - childActivity.lastSeen.getTime() < 5 * 60 * 1000
+    const batteryLevel = childActivity.batteryLevel || 0
+    const batteryColor =
+      batteryLevel > 20
+        ? Colors.success
+        : batteryLevel > 10
+          ? Colors.warning
+          : Colors.error
 
     return (
       <View style={styles.statusCard}>
@@ -178,15 +202,28 @@ export default function ParentalDashboard({
           <View style={styles.statusInfo}>
             <Text style={styles.statusTitle}>Child Status</Text>
             <View style={styles.statusIndicator}>
-              <View style={[styles.statusDot, { backgroundColor: isOnline ? Colors.success : Colors.warning }]} />
-              <Text style={styles.statusText}>{isOnline ? 'Online' : 'Last seen ' + getTimeAgo(childActivity.lastSeen)}</Text>
+              <View
+                style={[
+                  styles.statusDot,
+                  {
+                    backgroundColor: isOnline ? Colors.success : Colors.warning,
+                  },
+                ]}
+              />
+              <Text style={styles.statusText}>
+                {isOnline
+                  ? 'Online'
+                  : 'Last seen ' + getTimeAgo(childActivity.lastSeen)}
+              </Text>
             </View>
           </View>
-          
+
           {childActivity.batteryLevel !== null && (
             <View style={styles.batteryInfo}>
               <Battery size={16} color={batteryColor} />
-              <Text style={[styles.batteryText, { color: batteryColor }]}>{batteryLevel}%</Text>
+              <Text style={[styles.batteryText, { color: batteryColor }]}>
+                {batteryLevel}%
+              </Text>
             </View>
           )}
         </View>
@@ -195,7 +232,8 @@ export default function ParentalDashboard({
           <View style={styles.safeZoneInfo}>
             <CheckCircle size={16} color={Colors.success} />
             <Text style={styles.safeZoneText}>
-              Currently in safe zone: {childActivity.currentSafeZone || 'Unknown'}
+              Currently in safe zone:{' '}
+              {childActivity.currentSafeZone || 'Unknown'}
             </Text>
           </View>
         )}
@@ -204,17 +242,20 @@ export default function ParentalDashboard({
           <View style={styles.locationInfo}>
             <MapPin size={16} color={Colors.primary} />
             <Text style={styles.locationText}>
-              {childActivity.currentLocation[0].toFixed(4)}, {childActivity.currentLocation[1].toFixed(4)}
+              {childActivity.currentLocation[0].toFixed(4)},{' '}
+              {childActivity.currentLocation[1].toFixed(4)}
             </Text>
           </View>
         )}
       </View>
-    );
-  };
+    )
+  }
 
   const renderPendingApprovals = () => {
-    const pending = pendingApprovals.filter(approval => approval.status === 'pending');
-    
+    const pending = pendingApprovals.filter(
+      (approval) => approval.status === 'pending',
+    )
+
     if (pending.length === 0) {
       return (
         <View style={styles.approvalCard}>
@@ -222,10 +263,12 @@ export default function ParentalDashboard({
           <View style={styles.emptyState}>
             <CheckCircle size={48} color={Colors.success} />
             <Text style={styles.emptyStateText}>All caught up!</Text>
-            <Text style={styles.emptyStateSubtext}>No pending approvals at this time.</Text>
+            <Text style={styles.emptyStateSubtext}>
+              No pending approvals at this time.
+            </Text>
           </View>
         </View>
-      );
+      )
     }
 
     return (
@@ -236,12 +279,17 @@ export default function ParentalDashboard({
             <Text style={styles.approvalBadgeText}>{pending.length}</Text>
           </View>
         </View>
-        
-        {pending.slice(0, 3).map(approval => (
+
+        {pending.slice(0, 3).map((approval) => (
           <View key={approval.id} style={styles.approvalItem}>
             <View style={styles.approvalInfo}>
-              <Text style={styles.approvalType}>{approval.type.charAt(0).toUpperCase() + approval.type.slice(1)} Request</Text>
-              <Text style={styles.approvalTime}>{getTimeAgo(approval.requestedAt)}</Text>
+              <Text style={styles.approvalType}>
+                {approval.type.charAt(0).toUpperCase() + approval.type.slice(1)}{' '}
+                Request
+              </Text>
+              <Text style={styles.approvalTime}>
+                {getTimeAgo(approval.requestedAt)}
+              </Text>
             </View>
             <View style={styles.approvalActions}>
               <TouchableOpacity style={styles.approveButton}>
@@ -253,15 +301,17 @@ export default function ParentalDashboard({
             </View>
           </View>
         ))}
-        
+
         {pending.length > 3 && (
           <TouchableOpacity style={styles.viewAllButton}>
-            <Text style={styles.viewAllText}>View all {pending.length} approvals</Text>
+            <Text style={styles.viewAllText}>
+              View all {pending.length} approvals
+            </Text>
           </TouchableOpacity>
         )}
       </View>
-    );
-  };
+    )
+  }
 
   const renderSafeZoneOverview = () => (
     <View style={styles.safeZoneCard}>
@@ -272,7 +322,9 @@ export default function ParentalDashboard({
           <Text style={styles.statLabel}>Total Zones</Text>
         </View>
         <View style={styles.statItem}>
-          <Text style={styles.statNumber}>{safeZones.filter(zone => zone.isActive).length}</Text>
+          <Text style={styles.statNumber}>
+            {safeZones.filter((zone) => zone.isActive).length}
+          </Text>
           <Text style={styles.statLabel}>Active</Text>
         </View>
         <View style={styles.statItem}>
@@ -283,7 +335,7 @@ export default function ParentalDashboard({
         </View>
       </View>
     </View>
-  );
+  )
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -295,32 +347,38 @@ export default function ParentalDashboard({
             {renderPendingApprovals()}
             {renderSafeZoneOverview()}
           </>
-        );
+        )
       case 'activity':
         return (
           <View style={styles.tabContent}>
             <Text style={styles.tabTitle}>Activity Monitor</Text>
-            <Text style={styles.tabSubtitle}>Detailed activity tracking coming soon...</Text>
+            <Text style={styles.tabSubtitle}>
+              Detailed activity tracking coming soon...
+            </Text>
           </View>
-        );
+        )
       case 'approvals':
         return (
           <View style={styles.tabContent}>
             <Text style={styles.tabTitle}>Approval Management</Text>
-            <Text style={styles.tabSubtitle}>Detailed approval management coming soon...</Text>
+            <Text style={styles.tabSubtitle}>
+              Detailed approval management coming soon...
+            </Text>
           </View>
-        );
+        )
       case 'settings':
         return (
           <View style={styles.tabContent}>
             <Text style={styles.tabTitle}>Parent Settings</Text>
-            <Text style={styles.tabSubtitle}>Settings configuration coming soon...</Text>
+            <Text style={styles.tabSubtitle}>
+              Settings configuration coming soon...
+            </Text>
           </View>
-        );
+        )
       default:
-        return null;
+        return null
     }
-  };
+  }
 
   const renderTabs = () => (
     <View style={styles.tabBar}>
@@ -329,10 +387,10 @@ export default function ParentalDashboard({
         { key: 'activity', label: 'Activity', icon: Eye },
         { key: 'approvals', label: 'Approvals', icon: CheckCircle },
         { key: 'settings', label: 'Settings', icon: Settings },
-      ].map(tab => {
-        const Icon = tab.icon;
-        const isActive = activeTab === tab.key;
-        
+      ].map((tab) => {
+        const Icon = tab.icon
+        const isActive = activeTab === tab.key
+
         return (
           <TouchableOpacity
             key={tab.key}
@@ -340,24 +398,32 @@ export default function ParentalDashboard({
             onPress={() => setActiveTab(tab.key as any)}
             accessibilityLabel={`${tab.label} tab`}
           >
-            <Icon size={20} color={isActive ? Colors.primary : Colors.textLight} />
+            <Icon
+              size={20}
+              color={isActive ? Colors.primary : Colors.textLight}
+            />
             <Text style={[styles.tabText, isActive && styles.activeTabText]}>
               {tab.label}
             </Text>
-            {tab.key === 'approvals' && pendingApprovals.filter(a => a.status === 'pending').length > 0 && (
-              <View style={styles.tabBadge}>
-                <Text style={styles.tabBadgeText}>
-                  {pendingApprovals.filter(a => a.status === 'pending').length}
-                </Text>
-              </View>
-            )}
+            {tab.key === 'approvals' &&
+              pendingApprovals.filter((a) => a.status === 'pending').length >
+                0 && (
+                <View style={styles.tabBadge}>
+                  <Text style={styles.tabBadgeText}>
+                    {
+                      pendingApprovals.filter((a) => a.status === 'pending')
+                        .length
+                    }
+                  </Text>
+                </View>
+              )}
           </TouchableOpacity>
-        );
+        )
       })}
     </View>
-  );
+  )
 
-  if (!visible) return null;
+  if (!visible) return null
 
   return (
     <>
@@ -391,26 +457,26 @@ export default function ParentalDashboard({
         onCancel={onClose}
       />
     </>
-  );
+  )
 }
 
 // Helper function
 const getTimeAgo = (date: Date | null): string => {
-  if (!date) return 'unknown';
-  
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  
-  if (diffMins < 1) return 'just now';
-  if (diffMins < 60) return `${diffMins}m ago`;
-  
-  const diffHours = Math.floor(diffMins / 60);
-  if (diffHours < 24) return `${diffHours}h ago`;
-  
-  const diffDays = Math.floor(diffHours / 24);
-  return `${diffDays}d ago`;
-};
+  if (!date) return 'unknown'
+
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+
+  if (diffMins < 1) return 'just now'
+  if (diffMins < 60) return `${diffMins}m ago`
+
+  const diffHours = Math.floor(diffMins / 60)
+  if (diffHours < 24) return `${diffHours}h ago`
+
+  const diffDays = Math.floor(diffHours / 24)
+  return `${diffDays}d ago`
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -718,4 +784,4 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.textLight,
   },
-});
+})

@@ -1,40 +1,46 @@
-import { RegionConfig } from '@/types/region';
+import { RegionConfig } from '@/types/region'
 
 export const formatCurrency = (amount: number, currency: string): string => {
   try {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: currency,
-    }).format(amount);
+    }).format(amount)
   } catch {
-    return `${currency} ${amount.toFixed(2)}`;
+    return `${currency} ${amount.toFixed(2)}`
   }
-};
+}
 
-export const formatDistance = (meters: number, units: 'metric' | 'imperial'): string => {
+export const formatDistance = (
+  meters: number,
+  units: 'metric' | 'imperial',
+): string => {
   if (units === 'imperial') {
-    const feet = meters * 3.28084;
+    const feet = meters * 3.28084
     if (feet < 1000) {
-      return `${Math.round(feet)} ft`;
+      return `${Math.round(feet)} ft`
     }
-    const miles = feet / 5280;
-    return `${miles.toFixed(1)} mi`;
+    const miles = feet / 5280
+    return `${miles.toFixed(1)} mi`
   } else {
     if (meters < 1000) {
-      return `${Math.round(meters)} m`;
+      return `${Math.round(meters)} m`
     }
-    const kilometers = meters / 1000;
-    return `${kilometers.toFixed(1)} km`;
+    const kilometers = meters / 1000
+    return `${kilometers.toFixed(1)} km`
   }
-};
+}
 
-export const formatTemperature = (celsius: number, units: 'metric' | 'imperial'): string => {
+export const formatTemperature = (
+  celsius: number,
+  units: 'metric' | 'imperial',
+): string => {
   if (units === 'imperial') {
-    const fahrenheit = (celsius * 9) / 5 + 32;
-    return `${Math.round(fahrenheit)}°F`;
+    const fahrenheit = (celsius * 9) / 5 + 32
+    return `${Math.round(fahrenheit)}°F`
   }
-  return `${Math.round(celsius)}°C`;
-};
+  return `${Math.round(celsius)}°C`
+}
 
 export const getLocalizedTime = (date: Date, timezone: string): string => {
   try {
@@ -43,11 +49,11 @@ export const getLocalizedTime = (date: Date, timezone: string): string => {
       hour: 'numeric',
       minute: '2-digit',
       hour12: true,
-    }).format(date);
+    }).format(date)
   } catch {
-    return date.toLocaleTimeString();
+    return date.toLocaleTimeString()
   }
-};
+}
 
 export const validateRegionConfig = (config: RegionConfig): boolean => {
   const required = [
@@ -60,13 +66,13 @@ export const validateRegionConfig = (config: RegionConfig): boolean => {
     'coordinates',
     'transitSystems',
     'emergencyNumber',
-  ];
+  ]
 
   return required.every((field) => {
-    const value = (config as any)[field];
-    return value !== undefined && value !== null && value !== '';
-  });
-};
+    const value = (config as any)[field]
+    return value !== undefined && value !== null && value !== ''
+  })
+}
 
 export const generateRegionFromTemplate = (
   name: string,
@@ -105,7 +111,7 @@ export const generateRegionFromTemplate = (
     popularPlaces: [],
     mapStyle: 'standard',
     ...customizations,
-  };
+  }
 
-  return baseConfig;
-};
+  return baseConfig
+}

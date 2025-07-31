@@ -1,2 +1,2 @@
 // Stub for react-native-css-interop
-module.exports = {};
+module.exports = {}

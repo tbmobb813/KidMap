@@ -1,4 +1,4 @@
-import { RegionConfig } from '@/types/region';
+import { RegionConfig } from '@/types/region'
 
 export const seattleConfig: RegionConfig = {
   id: 'seattle',
@@ -56,7 +56,8 @@ export const seattleConfig: RegionConfig = {
     {
       name: 'Pike Place Market',
       category: 'landmark',
-      description: 'Historic market with fresh food, crafts, and street performers',
+      description:
+        'Historic market with fresh food, crafts, and street performers',
     },
     {
       name: 'Seattle Center',
@@ -71,4 +72,4 @@ export const seattleConfig: RegionConfig = {
   ],
   transitApiEndpoint: 'https://api.pugetsound.onebusaway.org/',
   mapStyle: 'standard',
-};
+}

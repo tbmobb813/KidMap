@@ -3,10 +3,13 @@
  * Provides a Pressable button with accessibility props and visual variants.
  * Ensures proper labeling and hints for screen readers.
  */
-import React from 'react';
-import { Pressable, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
-import Colors from '@/constants/colors';
-import { getAccessibilityLabel, getAccessibilityHint } from '@/utils/accessibility';
+import React from 'react'
+import { Pressable, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native'
+import Colors from '@/constants/colors'
+import {
+  getAccessibilityLabel,
+  getAccessibilityHint,
+} from '@/utils/accessibility'
 
 /**
  * Props for AccessibleButton.
@@ -20,15 +23,15 @@ import { getAccessibilityLabel, getAccessibilityHint } from '@/utils/accessibili
  * - variant: Visual style variant
  */
 type AccessibleButtonProps = {
-  title: string;
-  onPress: () => void;
-  style?: ViewStyle;
-  textStyle?: TextStyle;
-  disabled?: boolean;
-  accessibilityLabel?: string;
-  accessibilityHint?: string;
-  variant?: 'primary' | 'secondary' | 'outline';
-};
+  title: string
+  onPress: () => void
+  style?: ViewStyle
+  textStyle?: TextStyle
+  disabled?: boolean
+  accessibilityLabel?: string
+  accessibilityHint?: string
+  variant?: 'primary' | 'secondary' | 'outline'
+}
 
 /**
  * Renders a visually styled, accessible button for the app.
@@ -46,24 +49,24 @@ const AccessibleButton: React.FC<AccessibleButtonProps> = ({
   const getButtonStyle = () => {
     switch (variant) {
       case 'primary':
-        return styles.primaryButton;
+        return styles.primaryButton
       case 'secondary':
-        return styles.secondaryButton;
+        return styles.secondaryButton
       case 'outline':
-        return styles.outlineButton;
+        return styles.outlineButton
     }
-  };
+  }
 
   const getTextStyle = () => {
     switch (variant) {
       case 'primary':
-        return styles.primaryText;
+        return styles.primaryText
       case 'secondary':
-        return styles.secondaryText;
+        return styles.secondaryText
       case 'outline':
-        return styles.outlineText;
+        return styles.outlineText
     }
-  };
+  }
 
   return (
     <Pressable
@@ -82,10 +85,14 @@ const AccessibleButton: React.FC<AccessibleButtonProps> = ({
       accessibilityHint={accessibilityHint || getAccessibilityHint('activate')}
       accessibilityState={{ disabled }}
     >
-      <Text style={[getTextStyle(), disabled && styles.disabledText, textStyle]}>{title}</Text>
+      <Text
+        style={[getTextStyle(), disabled && styles.disabledText, textStyle]}
+      >
+        {title}
+      </Text>
     </Pressable>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   button: {
@@ -131,6 +138,6 @@ const styles = StyleSheet.create({
   disabledText: {
     color: Colors.textLight,
   },
-});
+})
 
-export default AccessibleButton;
+export default AccessibleButton

@@ -1,5 +1,5 @@
 // components/SafeZoneSettings.tsx - Safe zone alert configuration
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
@@ -9,84 +9,99 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-} from 'react-native';
-import { Settings, Volume2, Bell, Clock, Shield, Save } from 'lucide-react-native';
-import Colors from '@/constants/colors';
-import AccessibleButton from './AccessibleButton';
-import { safeZoneAlertManager, AlertSettings } from '@/utils/safeZoneAlerts';
+} from 'react-native'
+import {
+  Settings,
+  Volume2,
+  Bell,
+  Clock,
+  Shield,
+  Save,
+} from 'lucide-react-native'
+import Colors from '@/constants/colors'
+import AccessibleButton from './AccessibleButton'
+import { safeZoneAlertManager, AlertSettings } from '@/utils/safeZoneAlerts'
 
 interface SafeZoneSettingsProps {
-  onSettingsUpdate?: (settings: AlertSettings) => void;
+  onSettingsUpdate?: (settings: AlertSettings) => void
 }
 
-export default function SafeZoneSettings({ onSettingsUpdate }: SafeZoneSettingsProps) {
+export default function SafeZoneSettings({
+  onSettingsUpdate,
+}: SafeZoneSettingsProps) {
   const [settings, setSettings] = useState<AlertSettings>({
     enableVoiceAlerts: true,
     enableVisualAlerts: true,
     enableParentNotifications: true,
     alertCooldownMinutes: 5,
     quietHours: {
-      start: "22:00",
-      end: "07:00",
-      enabled: true
-    }
-  });
+      start: '22:00',
+      end: '07:00',
+      enabled: true,
+    },
+  })
 
-  const [startTime, setStartTime] = useState("22:00");
-  const [endTime, setEndTime] = useState("07:00");
-  const [cooldownInput, setCooldownInput] = useState("5");
+  const [startTime, setStartTime] = useState('22:00')
+  const [endTime, setEndTime] = useState('07:00')
+  const [cooldownInput, setCooldownInput] = useState('5')
 
   useEffect(() => {
-    loadSettings();
-  }, []);
+    loadSettings()
+  }, [])
 
   const loadSettings = async () => {
     try {
-      const currentSettings = safeZoneAlertManager.getSettings();
-      setSettings(currentSettings);
-      setStartTime(currentSettings.quietHours.start);
-      setEndTime(currentSettings.quietHours.end);
-      setCooldownInput(currentSettings.alertCooldownMinutes.toString());
+      const currentSettings = safeZoneAlertManager.getSettings()
+      setSettings(currentSettings)
+      setStartTime(currentSettings.quietHours.start)
+      setEndTime(currentSettings.quietHours.end)
+      setCooldownInput(currentSettings.alertCooldownMinutes.toString())
     } catch (error) {
-      console.error('Failed to load settings:', error);
+      console.error('Failed to load settings:', error)
     }
-  };
+  }
 
   const updateSetting = <K extends keyof AlertSettings>(
     key: K,
-    value: AlertSettings[K]
+    value: AlertSettings[K],
   ) => {
-    const newSettings = { ...settings, [key]: value };
-    setSettings(newSettings);
-  };
+    const newSettings = { ...settings, [key]: value }
+    setSettings(newSettings)
+  }
 
-  const updateQuietHours = (key: keyof AlertSettings['quietHours'], value: any) => {
+  const updateQuietHours = (
+    key: keyof AlertSettings['quietHours'],
+    value: any,
+  ) => {
     const newSettings = {
       ...settings,
       quietHours: {
         ...settings.quietHours,
-        [key]: value
-      }
-    };
-    setSettings(newSettings);
-  };
+        [key]: value,
+      },
+    }
+    setSettings(newSettings)
+  }
 
   const validateTimeFormat = (time: string): boolean => {
-    const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
-    return timeRegex.test(time);
-  };
+    const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/
+    return timeRegex.test(time)
+  }
 
   const handleSaveSettings = async () => {
     // Validate inputs
     if (!validateTimeFormat(startTime) || !validateTimeFormat(endTime)) {
-      Alert.alert('Invalid Time', 'Please enter time in HH:MM format (24-hour)');
-      return;
+      Alert.alert('Invalid Time', 'Please enter time in HH:MM format (24-hour)')
+      return
     }
 
-    const cooldown = parseInt(cooldownInput);
+    const cooldown = parseInt(cooldownInput)
     if (isNaN(cooldown) || cooldown < 1 || cooldown > 60) {
-      Alert.alert('Invalid Cooldown', 'Cooldown must be between 1 and 60 minutes');
-      return;
+      Alert.alert(
+        'Invalid Cooldown',
+        'Cooldown must be between 1 and 60 minutes',
+      )
+      return
     }
 
     try {
@@ -96,20 +111,23 @@ export default function SafeZoneSettings({ onSettingsUpdate }: SafeZoneSettingsP
         quietHours: {
           ...settings.quietHours,
           start: startTime,
-          end: endTime
-        }
-      };
+          end: endTime,
+        },
+      }
 
-      await safeZoneAlertManager.updateSettings(finalSettings);
-      setSettings(finalSettings);
-      onSettingsUpdate?.(finalSettings);
-      
-      Alert.alert('Settings Saved', 'Safe zone alert settings have been updated successfully.');
+      await safeZoneAlertManager.updateSettings(finalSettings)
+      setSettings(finalSettings)
+      onSettingsUpdate?.(finalSettings)
+
+      Alert.alert(
+        'Settings Saved',
+        'Safe zone alert settings have been updated successfully.',
+      )
     } catch (error) {
-      Alert.alert('Error', 'Failed to save settings. Please try again.');
-      console.error('Failed to save settings:', error);
+      Alert.alert('Error', 'Failed to save settings. Please try again.')
+      console.error('Failed to save settings:', error)
     }
-  };
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -122,7 +140,11 @@ export default function SafeZoneSettings({ onSettingsUpdate }: SafeZoneSettingsP
         {/* Voice Alerts */}
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Volume2 size={18} color={Colors.textLight} style={styles.settingIcon} />
+            <Volume2
+              size={18}
+              color={Colors.textLight}
+              style={styles.settingIcon}
+            />
             <View style={styles.settingText}>
               <Text style={styles.settingLabel}>Voice Alerts</Text>
               <Text style={styles.settingDescription}>
@@ -134,14 +156,20 @@ export default function SafeZoneSettings({ onSettingsUpdate }: SafeZoneSettingsP
             value={settings.enableVoiceAlerts}
             onValueChange={(value) => updateSetting('enableVoiceAlerts', value)}
             trackColor={{ false: Colors.border, true: Colors.primary }}
-            thumbColor={settings.enableVoiceAlerts ? Colors.primary : Colors.textLight}
+            thumbColor={
+              settings.enableVoiceAlerts ? Colors.primary : Colors.textLight
+            }
           />
         </View>
 
         {/* Visual Alerts */}
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Bell size={18} color={Colors.textLight} style={styles.settingIcon} />
+            <Bell
+              size={18}
+              color={Colors.textLight}
+              style={styles.settingIcon}
+            />
             <View style={styles.settingText}>
               <Text style={styles.settingLabel}>Visual Alerts</Text>
               <Text style={styles.settingDescription}>
@@ -151,16 +179,24 @@ export default function SafeZoneSettings({ onSettingsUpdate }: SafeZoneSettingsP
           </View>
           <Switch
             value={settings.enableVisualAlerts}
-            onValueChange={(value) => updateSetting('enableVisualAlerts', value)}
+            onValueChange={(value) =>
+              updateSetting('enableVisualAlerts', value)
+            }
             trackColor={{ false: Colors.border, true: Colors.primary }}
-            thumbColor={settings.enableVisualAlerts ? Colors.primary : Colors.textLight}
+            thumbColor={
+              settings.enableVisualAlerts ? Colors.primary : Colors.textLight
+            }
           />
         </View>
 
         {/* Parent Notifications */}
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Settings size={18} color={Colors.textLight} style={styles.settingIcon} />
+            <Settings
+              size={18}
+              color={Colors.textLight}
+              style={styles.settingIcon}
+            />
             <View style={styles.settingText}>
               <Text style={styles.settingLabel}>Parent Notifications</Text>
               <Text style={styles.settingDescription}>
@@ -170,9 +206,15 @@ export default function SafeZoneSettings({ onSettingsUpdate }: SafeZoneSettingsP
           </View>
           <Switch
             value={settings.enableParentNotifications}
-            onValueChange={(value) => updateSetting('enableParentNotifications', value)}
+            onValueChange={(value) =>
+              updateSetting('enableParentNotifications', value)
+            }
             trackColor={{ false: Colors.border, true: Colors.primary }}
-            thumbColor={settings.enableParentNotifications ? Colors.primary : Colors.textLight}
+            thumbColor={
+              settings.enableParentNotifications
+                ? Colors.primary
+                : Colors.textLight
+            }
           />
         </View>
       </View>
@@ -216,7 +258,9 @@ export default function SafeZoneSettings({ onSettingsUpdate }: SafeZoneSettingsP
             value={settings.quietHours.enabled}
             onValueChange={(value) => updateQuietHours('enabled', value)}
             trackColor={{ false: Colors.border, true: Colors.primary }}
-            thumbColor={settings.quietHours.enabled ? Colors.primary : Colors.textLight}
+            thumbColor={
+              settings.quietHours.enabled ? Colors.primary : Colors.textLight
+            }
           />
         </View>
 
@@ -261,27 +305,27 @@ export default function SafeZoneSettings({ onSettingsUpdate }: SafeZoneSettingsP
         />
       </View>
     </ScrollView>
-  );
+  )
 }
 
 // Statistics component
 function SafeZoneStatistics() {
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<any>(null)
 
   useEffect(() => {
-    loadStatistics();
-  }, []);
+    loadStatistics()
+  }, [])
 
   const loadStatistics = () => {
     try {
-      const statistics = safeZoneAlertManager.getStatistics();
-      setStats(statistics);
+      const statistics = safeZoneAlertManager.getStatistics()
+      setStats(statistics)
     } catch (error) {
-      console.error('Failed to load statistics:', error);
+      console.error('Failed to load statistics:', error)
     }
-  };
+  }
 
-  if (!stats) return null;
+  if (!stats) return null
 
   return (
     <View style={styles.section}>
@@ -306,7 +350,7 @@ function SafeZoneStatistics() {
         </Text>
       )}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -434,4 +478,4 @@ const styles = StyleSheet.create({
   saveButton: {
     marginTop: 8,
   },
-});
+})

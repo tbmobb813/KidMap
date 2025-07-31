@@ -1,14 +1,14 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { TransitStep } from '@/types/navigation';
-import Colors from '@/constants/colors';
-import TransitStepIndicator from './TransitStepIndicator';
-import { Clock, ArrowRight } from 'lucide-react-native';
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import { TransitStep } from '@/types/navigation'
+import Colors from '@/constants/colors'
+import TransitStepIndicator from './TransitStepIndicator'
+import { Clock, ArrowRight } from 'lucide-react-native'
 
 type DirectionStepProps = {
-  step: TransitStep;
-  isLast: boolean;
-};
+  step: TransitStep
+  isLast: boolean
+}
 
 const DirectionStep: React.FC<DirectionStepProps> = ({ step, isLast }) => {
   return (
@@ -41,7 +41,11 @@ const DirectionStep: React.FC<DirectionStepProps> = ({ step, isLast }) => {
 
         {step.departureTime && step.arrivalTime && (
           <View style={styles.timeContainer}>
-            <Clock size={14} color={Colors.textLight} style={styles.clockIcon} />
+            <Clock
+              size={14}
+              color={Colors.textLight}
+              style={styles.clockIcon}
+            />
             <Text style={styles.timeText}>
               {step.departureTime} - {step.arrivalTime}
             </Text>
@@ -54,8 +58,8 @@ const DirectionStep: React.FC<DirectionStepProps> = ({ step, isLast }) => {
         )}
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -129,6 +133,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.textLight,
   },
-});
+})
 
-export default DirectionStep;
+export default DirectionStep

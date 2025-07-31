@@ -1,14 +1,14 @@
-import React from 'react';
-import { StyleSheet, TextInput, View, Pressable } from 'react-native';
-import { Search, X } from 'lucide-react-native';
-import Colors from '@/constants/colors';
+import React from 'react'
+import { StyleSheet, TextInput, View, Pressable } from 'react-native'
+import { Search, X } from 'lucide-react-native'
+import Colors from '@/constants/colors'
 
 type SearchBarProps = {
-  value: string;
-  onChangeText: (text: string) => void;
-  onClear: () => void;
-  placeholder?: string;
-};
+  value: string
+  onChangeText: (text: string) => void
+  onClear: () => void
+  placeholder?: string
+}
 
 const SearchBar: React.FC<SearchBarProps> = ({
   value,
@@ -44,8 +44,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
         </Pressable>
       )}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -72,6 +72,6 @@ const styles = StyleSheet.create({
   clearButton: {
     padding: 4,
   },
-});
+})
 
-export default SearchBar;
+export default SearchBar

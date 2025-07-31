@@ -1,24 +1,24 @@
 type AnalyticsEvent = {
-  name: string;
-  properties?: Record<string, any>;
-  timestamp?: number;
-};
+  name: string
+  properties?: Record<string, any>
+  timestamp?: number
+}
 
 class Analytics {
-  private events: AnalyticsEvent[] = [];
-  private isEnabled = true;
+  private events: AnalyticsEvent[] = []
+  private isEnabled = true
 
   track(name: string, properties?: Record<string, any>) {
-    if (!this.isEnabled) return;
+    if (!this.isEnabled) return
 
     const event: AnalyticsEvent = {
       name,
       properties,
       timestamp: Date.now(),
-    };
+    }
 
-    this.events.push(event);
-    console.log('Analytics:', event);
+    this.events.push(event)
+    console.log('Analytics:', event)
 
     // In a real app, you'd send this to your analytics service
     // this.sendToAnalytics(event);
@@ -28,14 +28,14 @@ class Analytics {
     this.track('screen_view', {
       screen_name: screenName,
       ...properties,
-    });
+    })
   }
 
   userAction(action: string, properties?: Record<string, any>) {
     this.track('user_action', {
       action,
       ...properties,
-    });
+    })
   }
 
   error(error: Error, context?: string) {
@@ -43,33 +43,36 @@ class Analytics {
       error_message: error.message,
       error_stack: error.stack,
       context,
-    });
+    })
   }
 
   setEnabled(enabled: boolean) {
-    this.isEnabled = enabled;
+    this.isEnabled = enabled
   }
 
   getEvents() {
-    return [...this.events];
+    return [...this.events]
   }
 
   clearEvents() {
-    this.events = [];
+    this.events = []
   }
 }
 
-export const analytics = new Analytics();
+export const analytics = new Analytics()
 
 // Common tracking functions
 export const trackScreenView = (screenName: string) => {
-  analytics.screen(screenName);
-};
+  analytics.screen(screenName)
+}
 
-export const trackUserAction = (action: string, properties?: Record<string, any>) => {
-  analytics.userAction(action, properties);
-};
+export const trackUserAction = (
+  action: string,
+  properties?: Record<string, any>,
+) => {
+  analytics.userAction(action, properties)
+}
 
 export const trackError = (error: Error, context?: string) => {
-  analytics.error(error, context);
-};
+  analytics.error(error, context)
+}

@@ -1,5 +1,5 @@
 // components/EmergencyContactModal.tsx - Emergency contact management
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react'
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
   Modal,
   Alert,
   Switch,
-} from 'react-native';
+} from 'react-native'
 import {
   User,
   Phone,
@@ -25,16 +25,16 @@ import {
   Users,
   Plus,
   Edit3,
-} from 'lucide-react-native';
-import Colors from '../constants/colors';
-import AccessibleButton from './AccessibleButton';
-import { EmergencyContact } from '../stores/parentalControlStore';
+} from 'lucide-react-native'
+import Colors from '../constants/colors'
+import AccessibleButton from './AccessibleButton'
+import { EmergencyContact } from '../stores/parentalControlStore'
 
 interface EmergencyContactModalProps {
-  visible: boolean;
-  contact: EmergencyContact | null;
-  onSave: (contact: EmergencyContact) => void;
-  onClose: () => void;
+  visible: boolean
+  contact: EmergencyContact | null
+  onSave: (contact: EmergencyContact) => void
+  onClose: () => void
 }
 
 const RELATIONSHIP_OPTIONS = [
@@ -46,8 +46,8 @@ const RELATIONSHIP_OPTIONS = [
   'Neighbor',
   'Teacher',
   'Coach',
-  'Other'
-];
+  'Other',
+]
 
 export default function EmergencyContactModal({
   visible,
@@ -55,8 +55,8 @@ export default function EmergencyContactModal({
   onSave,
   onClose,
 }: EmergencyContactModalProps) {
-  const isEditing = contact !== null;
-  
+  const isEditing = contact !== null
+
   const [formData, setFormData] = useState<Partial<EmergencyContact>>({
     id: contact?.id || Date.now().toString(),
     name: contact?.name || '',
@@ -68,36 +68,40 @@ export default function EmergencyContactModal({
     canViewLocation: contact?.canViewLocation ?? false,
     address: contact?.address || '',
     notes: contact?.notes || '',
-  });
+  })
 
-  const [showRelationshipPicker, setShowRelationshipPicker] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [showRelationshipPicker, setShowRelationshipPicker] = useState(false)
+  const [validationErrors, setValidationErrors] = useState<string[]>([])
 
   const validateForm = useCallback(() => {
-    const errors: string[] = [];
-    
+    const errors: string[] = []
+
     if (!formData.name?.trim()) {
-      errors.push('Name is required');
+      errors.push('Name is required')
     }
-    
+
     if (!formData.phone?.trim()) {
-      errors.push('Phone number is required');
-    } else if (!/^[\+]?[\s\-\(\)]*([0-9][\s\-\(\)]*){10,}$/.test(formData.phone.replace(/\s/g, ''))) {
-      errors.push('Please enter a valid phone number');
+      errors.push('Phone number is required')
+    } else if (
+      !/^[\+]?[\s\-\(\)]*([0-9][\s\-\(\)]*){10,}$/.test(
+        formData.phone.replace(/\s/g, ''),
+      )
+    ) {
+      errors.push('Please enter a valid phone number')
     }
-    
+
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errors.push('Please enter a valid email address');
+      errors.push('Please enter a valid email address')
     }
-    
-    setValidationErrors(errors);
-    return errors.length === 0;
-  }, [formData]);
+
+    setValidationErrors(errors)
+    return errors.length === 0
+  }, [formData])
 
   const handleSave = useCallback(() => {
     if (!validateForm()) {
-      Alert.alert('Validation Error', validationErrors.join('\n'));
-      return;
+      Alert.alert('Validation Error', validationErrors.join('\n'))
+      return
     }
 
     const contactToSave: EmergencyContact = {
@@ -111,26 +115,28 @@ export default function EmergencyContactModal({
       canViewLocation: formData.canViewLocation!,
       address: formData.address?.trim() || '',
       notes: formData.notes?.trim() || '',
-    };
+    }
 
-    onSave(contactToSave);
-    onClose();
-  }, [formData, validateForm, validationErrors, onSave, onClose]);
+    onSave(contactToSave)
+    onClose()
+  }, [formData, validateForm, validationErrors, onSave, onClose])
 
   const handleClose = useCallback(() => {
     // Check if form has been modified
-    const hasChanges = JSON.stringify(formData) !== JSON.stringify({
-      id: contact?.id || Date.now().toString(),
-      name: contact?.name || '',
-      phone: contact?.phone || '',
-      email: contact?.email || '',
-      relationship: contact?.relationship || 'Parent',
-      priority: contact?.priority || 1,
-      canReceiveAlerts: contact?.canReceiveAlerts ?? true,
-      canViewLocation: contact?.canViewLocation ?? false,
-      address: contact?.address || '',
-      notes: contact?.notes || '',
-    });
+    const hasChanges =
+      JSON.stringify(formData) !==
+      JSON.stringify({
+        id: contact?.id || Date.now().toString(),
+        name: contact?.name || '',
+        phone: contact?.phone || '',
+        email: contact?.email || '',
+        relationship: contact?.relationship || 'Parent',
+        priority: contact?.priority || 1,
+        canReceiveAlerts: contact?.canReceiveAlerts ?? true,
+        canViewLocation: contact?.canViewLocation ?? false,
+        address: contact?.address || '',
+        notes: contact?.notes || '',
+      })
 
     if (hasChanges) {
       Alert.alert(
@@ -143,17 +149,20 @@ export default function EmergencyContactModal({
             style: 'destructive',
             onPress: onClose,
           },
-        ]
-      );
+        ],
+      )
     } else {
-      onClose();
+      onClose()
     }
-  }, [formData, contact, onClose]);
+  }, [formData, contact, onClose])
 
-  const updateFormData = useCallback((key: keyof EmergencyContact, value: any) => {
-    setFormData(prev => ({ ...prev, [key]: value }));
-    setValidationErrors([]);
-  }, []);
+  const updateFormData = useCallback(
+    (key: keyof EmergencyContact, value: any) => {
+      setFormData((prev) => ({ ...prev, [key]: value }))
+      setValidationErrors([])
+    },
+    [],
+  )
 
   const renderRelationshipPicker = () => (
     <Modal
@@ -173,23 +182,30 @@ export default function EmergencyContactModal({
               <X size={20} color={Colors.textLight} />
             </TouchableOpacity>
           </View>
-          <ScrollView style={styles.pickerContent} showsVerticalScrollIndicator={false}>
-            {RELATIONSHIP_OPTIONS.map(relationship => (
+          <ScrollView
+            style={styles.pickerContent}
+            showsVerticalScrollIndicator={false}
+          >
+            {RELATIONSHIP_OPTIONS.map((relationship) => (
               <TouchableOpacity
                 key={relationship}
                 style={[
                   styles.pickerOption,
-                  formData.relationship === relationship && styles.pickerOptionSelected
+                  formData.relationship === relationship &&
+                    styles.pickerOptionSelected,
                 ]}
                 onPress={() => {
-                  updateFormData('relationship', relationship);
-                  setShowRelationshipPicker(false);
+                  updateFormData('relationship', relationship)
+                  setShowRelationshipPicker(false)
                 }}
               >
-                <Text style={[
-                  styles.pickerOptionText,
-                  formData.relationship === relationship && styles.pickerOptionTextSelected
-                ]}>
+                <Text
+                  style={[
+                    styles.pickerOptionText,
+                    formData.relationship === relationship &&
+                      styles.pickerOptionTextSelected,
+                  ]}
+                >
                   {relationship}
                 </Text>
                 {formData.relationship === relationship && (
@@ -203,12 +219,16 @@ export default function EmergencyContactModal({
         </View>
       </View>
     </Modal>
-  );
+  )
 
-  if (!visible) return null;
+  if (!visible) return null
 
   return (
-    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
+    <Modal
+      visible={visible}
+      animationType="slide"
+      presentationStyle="pageSheet"
+    >
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={handleClose} style={styles.headerButton}>
@@ -226,7 +246,7 @@ export default function EmergencyContactModal({
           {/* Basic Information */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Basic Information</Text>
-            
+
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Full Name *</Text>
               <View style={styles.inputContainer}>
@@ -279,7 +299,9 @@ export default function EmergencyContactModal({
                 onPress={() => setShowRelationshipPicker(true)}
               >
                 <Users size={20} color={Colors.textLight} />
-                <Text style={styles.relationshipText}>{formData.relationship}</Text>
+                <Text style={styles.relationshipText}>
+                  {formData.relationship}
+                </Text>
                 <View style={styles.relationshipArrow}>
                   <Text style={styles.arrowText}>▼</Text>
                 </View>
@@ -293,26 +315,38 @@ export default function EmergencyContactModal({
             <Text style={styles.sectionDescription}>
               Higher priority contacts will be contacted first in emergencies
             </Text>
-            
+
             <View style={styles.prioritySelector}>
-              {[1, 2, 3, 4, 5].map(priority => (
+              {[1, 2, 3, 4, 5].map((priority) => (
                 <TouchableOpacity
                   key={priority}
                   style={[
                     styles.priorityButton,
-                    formData.priority === priority && styles.priorityButtonActive
+                    formData.priority === priority &&
+                      styles.priorityButtonActive,
                   ]}
                   onPress={() => updateFormData('priority', priority)}
                 >
                   <Star
                     size={16}
-                    color={formData.priority === priority ? Colors.background : Colors.textLight}
-                    fill={formData.priority === priority ? Colors.background : 'transparent'}
+                    color={
+                      formData.priority === priority
+                        ? Colors.background
+                        : Colors.textLight
+                    }
+                    fill={
+                      formData.priority === priority
+                        ? Colors.background
+                        : 'transparent'
+                    }
                   />
-                  <Text style={[
-                    styles.priorityText,
-                    formData.priority === priority && styles.priorityTextActive
-                  ]}>
+                  <Text
+                    style={[
+                      styles.priorityText,
+                      formData.priority === priority &&
+                        styles.priorityTextActive,
+                    ]}
+                  >
                     {priority}
                   </Text>
                 </TouchableOpacity>
@@ -323,12 +357,14 @@ export default function EmergencyContactModal({
           {/* Permissions */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Permissions</Text>
-            
+
             <View style={styles.permissionItem}>
               <View style={styles.permissionInfo}>
                 <Bell size={20} color={Colors.primary} />
                 <View style={styles.permissionText}>
-                  <Text style={styles.permissionLabel}>Receive Emergency Alerts</Text>
+                  <Text style={styles.permissionLabel}>
+                    Receive Emergency Alerts
+                  </Text>
                   <Text style={styles.permissionDescription}>
                     Get notified when your child needs help or is in danger
                   </Text>
@@ -336,9 +372,16 @@ export default function EmergencyContactModal({
               </View>
               <Switch
                 value={formData.canReceiveAlerts}
-                onValueChange={(value) => updateFormData('canReceiveAlerts', value)}
-                trackColor={{ false: Colors.border, true: Colors.primary + '30' }}
-                thumbColor={formData.canReceiveAlerts ? Colors.primary : Colors.textLight}
+                onValueChange={(value) =>
+                  updateFormData('canReceiveAlerts', value)
+                }
+                trackColor={{
+                  false: Colors.border,
+                  true: Colors.primary + '30',
+                }}
+                thumbColor={
+                  formData.canReceiveAlerts ? Colors.primary : Colors.textLight
+                }
               />
             </View>
 
@@ -346,7 +389,9 @@ export default function EmergencyContactModal({
               <View style={styles.permissionInfo}>
                 <Eye size={20} color={Colors.primary} />
                 <View style={styles.permissionText}>
-                  <Text style={styles.permissionLabel}>View Child's Location</Text>
+                  <Text style={styles.permissionLabel}>
+                    View Child's Location
+                  </Text>
                   <Text style={styles.permissionDescription}>
                     Access real-time location information during emergencies
                   </Text>
@@ -354,9 +399,16 @@ export default function EmergencyContactModal({
               </View>
               <Switch
                 value={formData.canViewLocation}
-                onValueChange={(value) => updateFormData('canViewLocation', value)}
-                trackColor={{ false: Colors.border, true: Colors.primary + '30' }}
-                thumbColor={formData.canViewLocation ? Colors.primary : Colors.textLight}
+                onValueChange={(value) =>
+                  updateFormData('canViewLocation', value)
+                }
+                trackColor={{
+                  false: Colors.border,
+                  true: Colors.primary + '30',
+                }}
+                thumbColor={
+                  formData.canViewLocation ? Colors.primary : Colors.textLight
+                }
               />
             </View>
           </View>
@@ -364,7 +416,7 @@ export default function EmergencyContactModal({
           {/* Additional Information */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Additional Information</Text>
-            
+
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Address</Text>
               <View style={styles.inputContainer}>
@@ -400,9 +452,13 @@ export default function EmergencyContactModal({
           {/* Validation Errors */}
           {validationErrors.length > 0 && (
             <View style={styles.errorContainer}>
-              <Text style={styles.errorTitle}>Please fix the following errors:</Text>
+              <Text style={styles.errorTitle}>
+                Please fix the following errors:
+              </Text>
               {validationErrors.map((error, index) => (
-                <Text key={index} style={styles.errorText}>• {error}</Text>
+                <Text key={index} style={styles.errorText}>
+                  • {error}
+                </Text>
               ))}
             </View>
           )}
@@ -413,7 +469,7 @@ export default function EmergencyContactModal({
         {renderRelationshipPicker()}
       </View>
     </Modal>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -669,4 +725,4 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
   },
-});
+})

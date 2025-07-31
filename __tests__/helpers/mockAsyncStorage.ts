@@ -1,5 +1,5 @@
 // __tests__/helpers/mockAsyncStorage.ts - Comprehensive AsyncStorage mock for KidMap testing
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 // Storage keys used throughout the app
 export const STORAGE_KEYS = {
@@ -17,7 +17,7 @@ export const STORAGE_KEYS = {
   FAVORITE_PLACES: 'favorite_places',
   ROUTE_HISTORY: 'route_history',
   SAFETY_SETTINGS: 'safety_settings',
-} as const;
+} as const
 
 // Default mock data for different storage keys
 export const DEFAULT_STORAGE_DATA = {
@@ -39,7 +39,7 @@ export const DEFAULT_STORAGE_DATA = {
     weatherConditions: ['sunny', 'cloudy'],
     consecutiveDays: 3,
   }),
-  
+
   [STORAGE_KEYS.ACHIEVEMENTS]: JSON.stringify([
     {
       id: 'first_step',
@@ -63,26 +63,26 @@ export const DEFAULT_STORAGE_DATA = {
       requirement: 'Complete 10 trips',
     },
   ]),
-  
+
   [STORAGE_KEYS.SAFE_ZONES]: JSON.stringify([
     {
       id: 'zone-home',
       name: 'Home',
       latitude: 40.7128,
-      longitude: -74.0060,
+      longitude: -74.006,
       radius: 100,
       isActive: true,
     },
     {
       id: 'zone-school',
       name: 'Lincoln Elementary',
-      latitude: 40.7580,
+      latitude: 40.758,
       longitude: -73.9855,
       radius: 150,
       isActive: true,
     },
   ]),
-  
+
   [STORAGE_KEYS.TRIP_JOURNAL]: JSON.stringify([
     {
       id: 'trip-1',
@@ -105,7 +105,7 @@ export const DEFAULT_STORAGE_DATA = {
       funFacts: ['The New York Public Library has over 50 million items!'],
     },
   ]),
-  
+
   [STORAGE_KEYS.SAFETY_CONTACTS]: JSON.stringify([
     {
       id: 'contact-1',
@@ -122,7 +122,7 @@ export const DEFAULT_STORAGE_DATA = {
       isPrimary: false,
     },
   ]),
-  
+
   [STORAGE_KEYS.USER_PREFERENCES]: JSON.stringify({
     theme: 'auto',
     soundEnabled: true,
@@ -132,14 +132,14 @@ export const DEFAULT_STORAGE_DATA = {
     defaultTransitMode: 'walking',
     language: 'en',
   }),
-  
+
   [STORAGE_KEYS.ACCESSIBILITY_SETTINGS]: JSON.stringify({
     largeText: false,
     highContrast: false,
     voiceDescriptions: true,
     simplifiedMode: false,
   }),
-  
+
   [STORAGE_KEYS.REGION_SETTINGS]: JSON.stringify({
     selectedRegion: 'nyc',
     availableRegions: ['nyc', 'sf', 'la'],
@@ -148,130 +148,167 @@ export const DEFAULT_STORAGE_DATA = {
       sf: 'test-bart-key',
     },
   }),
-};
+}
 
 // Mock storage implementation
 class MockAsyncStorage {
-  private storage: Record<string, string> = { ...DEFAULT_STORAGE_DATA };
-  private shouldFail = false;
-  private failureError = new Error('MockAsyncStorage: Simulated failure');
+  private storage: Record<string, string> = { ...DEFAULT_STORAGE_DATA }
+  private shouldFail = false
+  private failureError = new Error('MockAsyncStorage: Simulated failure')
 
   // Test control methods
   setFailureMode(shouldFail: boolean, error?: Error) {
-    this.shouldFail = shouldFail;
+    this.shouldFail = shouldFail
     if (error) {
-      this.failureError = error;
+      this.failureError = error
     }
   }
 
   resetToDefaults() {
-    this.storage = { ...DEFAULT_STORAGE_DATA };
-    this.shouldFail = false;
+    this.storage = { ...DEFAULT_STORAGE_DATA }
+    this.shouldFail = false
   }
 
   clear() {
-    this.storage = {};
+    this.storage = {}
   }
 
   // AsyncStorage interface implementation
   async getItem(key: string): Promise<string | null> {
     if (this.shouldFail) {
-      throw this.failureError;
+      throw this.failureError
     }
-    return this.storage[key] || null;
+    return this.storage[key] || null
   }
 
   async setItem(key: string, value: string): Promise<void> {
     if (this.shouldFail) {
-      throw this.failureError;
+      throw this.failureError
     }
-    this.storage[key] = value;
+    this.storage[key] = value
   }
 
   async removeItem(key: string): Promise<void> {
     if (this.shouldFail) {
-      throw this.failureError;
+      throw this.failureError
     }
-    delete this.storage[key];
+    delete this.storage[key]
   }
 
   async multiGet(keys: string[]): Promise<Array<[string, string | null]>> {
     if (this.shouldFail) {
-      throw this.failureError;
+      throw this.failureError
     }
-    return keys.map(key => [key, this.storage[key] || null]);
+    return keys.map((key) => [key, this.storage[key] || null])
   }
 
   async multiSet(keyValuePairs: Array<[string, string]>): Promise<void> {
     if (this.shouldFail) {
-      throw this.failureError;
+      throw this.failureError
     }
     keyValuePairs.forEach(([key, value]) => {
-      this.storage[key] = value;
-    });
+      this.storage[key] = value
+    })
   }
 
   async multiRemove(keys: string[]): Promise<void> {
     if (this.shouldFail) {
-      throw this.failureError;
+      throw this.failureError
     }
-    keys.forEach(key => {
-      delete this.storage[key];
-    });
+    keys.forEach((key) => {
+      delete this.storage[key]
+    })
   }
 
   async getAllKeys(): Promise<string[]> {
     if (this.shouldFail) {
-      throw this.failureError;
+      throw this.failureError
     }
-    return Object.keys(this.storage);
+    return Object.keys(this.storage)
   }
 
   // Test utility methods
   getStorageSnapshot(): Record<string, string> {
-    return { ...this.storage };
+    return { ...this.storage }
   }
 
   setStorageData(data: Record<string, string>) {
-    this.storage = { ...data };
+    this.storage = { ...data }
   }
 }
 
 // Create singleton instance
-export const mockAsyncStorageInstance = new MockAsyncStorage();
+export const mockAsyncStorageInstance = new MockAsyncStorage()
 
 // Jest mock factory function
 export const createAsyncStorageMock = () => ({
-  getItem: jest.fn().mockImplementation(mockAsyncStorageInstance.getItem.bind(mockAsyncStorageInstance)),
-  setItem: jest.fn().mockImplementation(mockAsyncStorageInstance.setItem.bind(mockAsyncStorageInstance)),
-  removeItem: jest.fn().mockImplementation(mockAsyncStorageInstance.removeItem.bind(mockAsyncStorageInstance)),
-  multiGet: jest.fn().mockImplementation(mockAsyncStorageInstance.multiGet.bind(mockAsyncStorageInstance)),
-  multiSet: jest.fn().mockImplementation(mockAsyncStorageInstance.multiSet.bind(mockAsyncStorageInstance)),
-  multiRemove: jest.fn().mockImplementation(mockAsyncStorageInstance.multiRemove.bind(mockAsyncStorageInstance)),
-  getAllKeys: jest.fn().mockImplementation(mockAsyncStorageInstance.getAllKeys.bind(mockAsyncStorageInstance)),
-  clear: jest.fn().mockImplementation(mockAsyncStorageInstance.clear.bind(mockAsyncStorageInstance)),
-});
+  getItem: jest
+    .fn()
+    .mockImplementation(
+      mockAsyncStorageInstance.getItem.bind(mockAsyncStorageInstance),
+    ),
+  setItem: jest
+    .fn()
+    .mockImplementation(
+      mockAsyncStorageInstance.setItem.bind(mockAsyncStorageInstance),
+    ),
+  removeItem: jest
+    .fn()
+    .mockImplementation(
+      mockAsyncStorageInstance.removeItem.bind(mockAsyncStorageInstance),
+    ),
+  multiGet: jest
+    .fn()
+    .mockImplementation(
+      mockAsyncStorageInstance.multiGet.bind(mockAsyncStorageInstance),
+    ),
+  multiSet: jest
+    .fn()
+    .mockImplementation(
+      mockAsyncStorageInstance.multiSet.bind(mockAsyncStorageInstance),
+    ),
+  multiRemove: jest
+    .fn()
+    .mockImplementation(
+      mockAsyncStorageInstance.multiRemove.bind(mockAsyncStorageInstance),
+    ),
+  getAllKeys: jest
+    .fn()
+    .mockImplementation(
+      mockAsyncStorageInstance.getAllKeys.bind(mockAsyncStorageInstance),
+    ),
+  clear: jest
+    .fn()
+    .mockImplementation(
+      mockAsyncStorageInstance.clear.bind(mockAsyncStorageInstance),
+    ),
+})
 
 // Default export for jest.mock usage
-export default createAsyncStorageMock();
+export default createAsyncStorageMock()
 
 // Helper functions for test setup
 export const setupMockAsyncStorage = () => {
-  mockAsyncStorageInstance.resetToDefaults();
-  jest.clearAllMocks();
-};
+  mockAsyncStorageInstance.resetToDefaults()
+  jest.clearAllMocks()
+}
 
 export const setupFailingAsyncStorage = (error?: Error) => {
-  mockAsyncStorageInstance.setFailureMode(true, error);
-};
+  mockAsyncStorageInstance.setFailureMode(true, error)
+}
 
 export const setupEmptyAsyncStorage = () => {
-  mockAsyncStorageInstance.clear();
-};
+  mockAsyncStorageInstance.clear()
+}
 
 // Specific data getters for common test scenarios
-export const getMockUserStats = () => JSON.parse(DEFAULT_STORAGE_DATA[STORAGE_KEYS.USER_STATS]);
-export const getMockAchievements = () => JSON.parse(DEFAULT_STORAGE_DATA[STORAGE_KEYS.ACHIEVEMENTS]);
-export const getMockSafeZones = () => JSON.parse(DEFAULT_STORAGE_DATA[STORAGE_KEYS.SAFE_ZONES]);
-export const getMockTripJournal = () => JSON.parse(DEFAULT_STORAGE_DATA[STORAGE_KEYS.TRIP_JOURNAL]);
-export const getMockSafetyContacts = () => JSON.parse(DEFAULT_STORAGE_DATA[STORAGE_KEYS.SAFETY_CONTACTS]);
+export const getMockUserStats = () =>
+  JSON.parse(DEFAULT_STORAGE_DATA[STORAGE_KEYS.USER_STATS])
+export const getMockAchievements = () =>
+  JSON.parse(DEFAULT_STORAGE_DATA[STORAGE_KEYS.ACHIEVEMENTS])
+export const getMockSafeZones = () =>
+  JSON.parse(DEFAULT_STORAGE_DATA[STORAGE_KEYS.SAFE_ZONES])
+export const getMockTripJournal = () =>
+  JSON.parse(DEFAULT_STORAGE_DATA[STORAGE_KEYS.TRIP_JOURNAL])
+export const getMockSafetyContacts = () =>
+  JSON.parse(DEFAULT_STORAGE_DATA[STORAGE_KEYS.SAFETY_CONTACTS])

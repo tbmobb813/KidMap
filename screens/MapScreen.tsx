@@ -1,14 +1,14 @@
-import React, { useEffect, useRef } from 'react';
-import { StyleSheet, View, Button, Platform, Dimensions } from 'react-native';
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
-import { useNavigationStore } from '@/stores/navigationStore';
-import useLocation from '@/hooks/useLocation';
+import React, { useEffect, useRef } from 'react'
+import { StyleSheet, View, Button, Platform, Dimensions } from 'react-native'
+import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps'
+import { useNavigationStore } from '@/stores/navigationStore'
+import useLocation from '@/hooks/useLocation'
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window')
 
 export default function MapScreen() {
-  const mapRef = useRef<MapView>(null);
-  const { location } = useLocation();
+  const mapRef = useRef<MapView>(null)
+  const { location } = useLocation()
 
   const {
     origin,
@@ -19,7 +19,7 @@ export default function MapScreen() {
     setDestination,
     selectRoute,
     clearRoute,
-  } = useNavigationStore();
+  } = useNavigationStore()
 
   // Center map on user location when available
   useEffect(() => {
@@ -29,9 +29,9 @@ export default function MapScreen() {
         longitude: location.longitude,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
-      });
+      })
     }
-  }, [location]);
+  }, [location])
 
   const renderMarkers = () => {
     return (
@@ -43,12 +43,12 @@ export default function MapScreen() {
           <Marker coordinate={destination} title="Destination" pinColor="red" />
         )}
       </>
-    );
-  };
+    )
+  }
 
   const renderRoute = () => {
-    const route = selectedRoute || availableRoutes?.[0];
-    if (!route) return null;
+    const route = selectedRoute || availableRoutes?.[0]
+    if (!route) return null
 
     return (
       <Polyline
@@ -56,8 +56,8 @@ export default function MapScreen() {
         strokeColor="#007AFF"
         strokeWidth={4}
       />
-    );
-  };
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -79,7 +79,7 @@ export default function MapScreen() {
         </View>
       )}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -99,4 +99,4 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     elevation: 5,
   },
-});
+})

@@ -1,29 +1,29 @@
-import { Platform } from 'react-native';
-import React from 'react';
+import { Platform } from 'react-native'
+import React from 'react'
 
 type PerformanceMetric = {
-  name: string;
-  value: number;
-  timestamp: number;
-};
+  name: string
+  value: number
+  timestamp: number
+}
 
 class PerformanceMonitor {
-  private metrics: PerformanceMetric[] = [];
-  private timers: Map<string, number> = new Map();
+  private metrics: PerformanceMetric[] = []
+  private timers: Map<string, number> = new Map()
 
   startTimer(name: string) {
-    this.timers.set(name, Date.now());
+    this.timers.set(name, Date.now())
   }
 
   endTimer(name: string) {
-    const startTime = this.timers.get(name);
+    const startTime = this.timers.get(name)
     if (startTime) {
-      const duration = Date.now() - startTime;
-      this.recordMetric(name, duration);
-      this.timers.delete(name);
-      return duration;
+      const duration = Date.now() - startTime
+      this.recordMetric(name, duration)
+      this.timers.delete(name)
+      return duration
     }
-    return 0;
+    return 0
   }
 
   recordMetric(name: string, value: number) {
@@ -31,18 +31,18 @@ class PerformanceMonitor {
       name,
       value,
       timestamp: Date.now(),
-    };
+    }
 
-    this.metrics.push(metric);
-    console.log(`Performance: ${name} = ${value}ms`);
+    this.metrics.push(metric)
+    console.log(`Performance: ${name} = ${value}ms`)
   }
 
   getMetrics() {
-    return [...this.metrics];
+    return [...this.metrics]
   }
 
   clearMetrics() {
-    this.metrics = [];
+    this.metrics = []
   }
 
   // Memory usage monitoring (mobile only)
@@ -51,18 +51,18 @@ class PerformanceMonitor {
       return {
         used: 0,
         total: 0,
-      };
+      }
     }
 
     // In a real app, you'd use a native module to get memory info
     return {
       used: Math.random() * 100, // Mock data
       total: 512,
-    };
+    }
   }
 }
 
-export const performanceMonitor = new PerformanceMonitor();
+export const performanceMonitor = new PerformanceMonitor()
 
 // HOC for measuring component render time
 export function withPerformanceTracking<T extends object>(
@@ -71,12 +71,12 @@ export function withPerformanceTracking<T extends object>(
 ) {
   return function PerformanceTrackedComponent(props: T) {
     React.useEffect(() => {
-      performanceMonitor.startTimer(`${componentName}_render`);
+      performanceMonitor.startTimer(`${componentName}_render`)
       return () => {
-        performanceMonitor.endTimer(`${componentName}_render`);
-      };
-    });
+        performanceMonitor.endTimer(`${componentName}_render`)
+      }
+    })
 
-    return React.createElement(Component, props);
-  };
+    return React.createElement(Component, props)
+  }
 }

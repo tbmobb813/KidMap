@@ -1,7 +1,7 @@
-import React from 'react';
-import { StyleSheet, Text, Pressable, View } from 'react-native';
-import Colors from '@/constants/colors';
-import { PlaceCategory } from '@/types/navigation';
+import React from 'react'
+import { StyleSheet, Text, Pressable, View } from 'react-native'
+import Colors from '@/constants/colors'
+import { PlaceCategory } from '@/types/navigation'
 import {
   Home,
   School,
@@ -15,70 +15,73 @@ import {
   Pizza,
   IceCream,
   Sandwich,
-} from 'lucide-react-native';
+} from 'lucide-react-native'
 
 type CategoryButtonProps = {
-  category: PlaceCategory;
-  onPress: (category: PlaceCategory) => void;
-};
+  category: PlaceCategory
+  onPress: (category: PlaceCategory) => void
+}
 
-const CategoryButton: React.FC<CategoryButtonProps> = ({ category, onPress }) => {
+const CategoryButton: React.FC<CategoryButtonProps> = ({
+  category,
+  onPress,
+}) => {
   // Use larger, more playful icons for kids
   const getIcon = () => {
     switch (category) {
       case 'home':
-        return <Home size={40} color="#FFF" />;
+        return <Home size={40} color="#FFF" />
       case 'school':
-        return <School size={40} color="#FFF" />;
+        return <School size={40} color="#FFF" />
       case 'library':
-        return <BookOpen size={40} color="#FFF" />;
+        return <BookOpen size={40} color="#FFF" />
       case 'park':
-        return <Trees size={40} color="#FFF" />;
+        return <Trees size={40} color="#FFF" />
       case 'store':
-        return <Store size={40} color="#FFF" />;
+        return <Store size={40} color="#FFF" />
       case 'restaurant':
-        return <Utensils size={40} color="#FFF" />;
+        return <Utensils size={40} color="#FFF" />
       case 'food-pizza':
-        return <Pizza size={40} color="#FFF" />;
+        return <Pizza size={40} color="#FFF" />
       case 'food-burger':
-        return <Sandwich size={40} color="#FFF" />;
+        return <Sandwich size={40} color="#FFF" />
       case 'food-icecream':
-        return <IceCream size={40} color="#FFF" />;
+        return <IceCream size={40} color="#FFF" />
       case 'friend':
-        return <Users size={40} color="#FFF" />;
+        return <Users size={40} color="#FFF" />
       case 'family':
-        return <Heart size={40} color="#FFF" />;
+        return <Heart size={40} color="#FFF" />
       default:
-        return <MapPin size={40} color="#FFF" />;
+        return <MapPin size={40} color="#FFF" />
     }
-  };
+  }
 
   const getCategoryName = () => {
-    return category.charAt(0).toUpperCase() + category.slice(1);
-  };
+    return category.charAt(0).toUpperCase() + category.slice(1)
+  }
 
   const getBackgroundColor = () => {
     switch (category) {
       case 'home':
-        return Colors.primary;
+        return Colors.primary
       case 'school':
-        return '#FF9500';
+        return '#FF9500'
       case 'library':
-        return '#9C27B0';
+        return '#9C27B0'
       case 'park':
-        return Colors.secondary;
+        return Colors.secondary
       case 'store':
-        return '#4285F4';
+        return '#4285F4'
       case 'restaurant':
-        return '#FF6B6B';
+        return '#FF6B6B'
       case 'friend':
-        return '#00BCD4';
+        return '#00BCD4'
       case 'family':
-        return '#FF4081';
+        return '#FF4081'
       default:
-        return Colors.primary;
+        return Colors.primary
     }
-  };
+  }
 
   return (
     <Pressable
@@ -96,8 +99,8 @@ const CategoryButton: React.FC<CategoryButtonProps> = ({ category, onPress }) =>
       <View style={styles.iconContainer}>{getIcon()}</View>
       <Text style={styles.text}>{getCategoryName()}</Text>
     </Pressable>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -129,6 +132,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 4,
   },
-});
+})
 
-export default CategoryButton;
+export default CategoryButton

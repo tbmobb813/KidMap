@@ -1,4 +1,4 @@
-import { RegionConfig } from '@/types/region';
+import { RegionConfig } from '@/types/region'
 
 export const chicagoConfig: RegionConfig = {
   id: 'chicago',
@@ -17,7 +17,16 @@ export const chicagoConfig: RegionConfig = {
       name: 'CTA L Train',
       type: 'subway',
       color: '#0066CC',
-      routes: ['Red', 'Blue', 'Brown', 'Green', 'Orange', 'Pink', 'Purple', 'Yellow'],
+      routes: [
+        'Red',
+        'Blue',
+        'Brown',
+        'Green',
+        'Orange',
+        'Pink',
+        'Purple',
+        'Yellow',
+      ],
     },
     {
       id: 'cta-bus',
@@ -66,4 +75,4 @@ export const chicagoConfig: RegionConfig = {
   ],
   transitApiEndpoint: 'https://api.transitchicago.com/',
   mapStyle: 'standard',
-};
+}

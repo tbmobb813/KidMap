@@ -1,14 +1,14 @@
-import React from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import Colors from '@/constants/colors';
-import { Bell, X } from 'lucide-react-native';
-import TransitStepIndicator from './TransitStepIndicator';
-import { LiveArrival } from './LiveArrivalsCard';
+import React from 'react'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
+import Colors from '@/constants/colors'
+import { Bell, X } from 'lucide-react-native'
+import TransitStepIndicator from './TransitStepIndicator'
+import { LiveArrival } from './LiveArrivalsCard'
 
 type ArrivalAlertProps = {
-  arrival: LiveArrival;
-  onDismiss: () => void;
-};
+  arrival: LiveArrival
+  onDismiss: () => void
+}
 
 const ArrivalAlert: React.FC<ArrivalAlertProps> = ({ arrival, onDismiss }) => {
   return (
@@ -37,7 +37,9 @@ const ArrivalAlert: React.FC<ArrivalAlertProps> = ({ arrival, onDismiss }) => {
             </Text>
           </View>
 
-          {arrival.platform && <Text style={styles.platformText}>Platform {arrival.platform}</Text>}
+          {arrival.platform && (
+            <Text style={styles.platformText}>Platform {arrival.platform}</Text>
+          )}
         </View>
 
         <Pressable style={styles.dismissButton} onPress={onDismiss}>
@@ -45,8 +47,8 @@ const ArrivalAlert: React.FC<ArrivalAlertProps> = ({ arrival, onDismiss }) => {
         </Pressable>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -92,6 +94,6 @@ const styles = StyleSheet.create({
   dismissButton: {
     padding: 4,
   },
-});
+})
 
-export default ArrivalAlert;
+export default ArrivalAlert

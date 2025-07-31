@@ -1,4 +1,4 @@
-import { RegionConfig } from '@/types/region';
+import { RegionConfig } from '@/types/region'
 
 export const washingtonConfig: RegionConfig = {
   id: 'dc',
@@ -66,4 +66,4 @@ export const washingtonConfig: RegionConfig = {
   ],
   transitApiEndpoint: 'https://api.wmata.com/',
   mapStyle: 'standard',
-};
+}

@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Pressable, Modal } from 'react-native';
-import Colors from '@/constants/colors';
-import { useRegionStore } from '@/stores/regionStore';
-import RegionSelector from './RegionSelector';
-import { Globe, X } from 'lucide-react-native';
+import React, { useState } from 'react'
+import { StyleSheet, Text, View, Pressable, Modal } from 'react-native'
+import Colors from '@/constants/colors'
+import { useRegionStore } from '@/stores/regionStore'
+import RegionSelector from './RegionSelector'
+import { Globe, X } from 'lucide-react-native'
 
 const RegionSwitcher: React.FC = () => {
-  const [showModal, setShowModal] = useState(false);
-  const { currentRegion, availableRegions, userPreferences, setRegion } = useRegionStore();
+  const [showModal, setShowModal] = useState(false)
+  const { currentRegion, availableRegions, userPreferences, setRegion } =
+    useRegionStore()
 
   const handleRegionSelect = (regionId: string) => {
-    setRegion(regionId);
-    setShowModal(false);
-  };
+    setRegion(regionId)
+    setShowModal(false)
+  }
 
   return (
     <>
@@ -21,11 +22,18 @@ const RegionSwitcher: React.FC = () => {
         <Text style={styles.triggerText}>{currentRegion.name}</Text>
       </Pressable>
 
-      <Modal visible={showModal} animationType="slide" presentationStyle="pageSheet">
+      <Modal
+        visible={showModal}
+        animationType="slide"
+        presentationStyle="pageSheet"
+      >
         <View style={styles.modalContainer}>
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>Switch Region</Text>
-            <Pressable style={styles.closeButton} onPress={() => setShowModal(false)}>
+            <Pressable
+              style={styles.closeButton}
+              onPress={() => setShowModal(false)}
+            >
               <X size={24} color={Colors.text} />
             </Pressable>
           </View>
@@ -38,8 +46,8 @@ const RegionSwitcher: React.FC = () => {
         </View>
       </Modal>
     </>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   trigger: {
@@ -76,6 +84,6 @@ const styles = StyleSheet.create({
   closeButton: {
     padding: 4,
   },
-});
+})
 
-export default RegionSwitcher;
+export default RegionSwitcher

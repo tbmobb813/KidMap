@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import Colors from '@/constants/colors';
-import useLocation from '@/hooks/useLocation';
-import KidMap from '@/components/KidMap';
-import { MapPin, Navigation } from 'lucide-react-native';
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
+import Colors from '@/constants/colors'
+import useLocation from '@/hooks/useLocation'
+import KidMap from '@/components/KidMap'
+import { MapPin, Navigation } from 'lucide-react-native'
 
 export default function MapScreen() {
-  const { location, loading } = useLocation();
-  const [selectedPlace, setSelectedPlace] = useState<any>(null);
+  const { location, loading } = useLocation()
+  const [selectedPlace, setSelectedPlace] = useState<any>(null)
 
   const handlePlaceSelect = (place: any) => {
-    setSelectedPlace(place);
-  };
+    setSelectedPlace(place)
+  }
 
   const handleGetDirections = () => {
     if (location && selectedPlace) {
       // This would trigger navigation in a real app
-      console.log('Getting directions from', location, 'to', selectedPlace);
+      console.log('Getting directions from', location, 'to', selectedPlace)
     }
-  };
+  }
 
   if (loading) {
     return (
@@ -27,7 +27,7 @@ export default function MapScreen() {
           <Text style={styles.loadingText}>Loading map...</Text>
         </View>
       </View>
-    );
+    )
   }
 
   if (!location) {
@@ -41,7 +41,7 @@ export default function MapScreen() {
           </Text>
         </View>
       </View>
-    );
+    )
   }
 
   return (
@@ -50,7 +50,10 @@ export default function MapScreen() {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Map</Text>
         {selectedPlace && (
-          <Pressable style={styles.directionsButton} onPress={handleGetDirections}>
+          <Pressable
+            style={styles.directionsButton}
+            onPress={handleGetDirections}
+          >
             <Navigation size={20} color="#FFFFFF" />
             <Text style={styles.directionsText}>Directions</Text>
           </Pressable>
@@ -68,7 +71,7 @@ export default function MapScreen() {
             setSelectedPlace({
               name: 'Selected Location',
               address: `${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}`,
-            });
+            })
           }}
           showUserLocation={true}
         />
@@ -82,7 +85,7 @@ export default function MapScreen() {
         </View>
       )}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -167,4 +170,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.textLight,
   },
-});
+})

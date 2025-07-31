@@ -11,13 +11,13 @@ export type CategoryIcon =
   | 'food-icecream'
   | 'friend'
   | 'family'
-  | 'custom';
+  | 'custom'
 
 export interface Category {
-  id: string;
-  name: string;
-  icon: CategoryIcon;
-  createdBy: 'parent' | 'child';
-  approved?: boolean; // for parent approval
-  createdAt: number;
+  id: string
+  name: string
+  icon: CategoryIcon
+  createdBy: 'parent' | 'child'
+  approved?: boolean // for parent approval
+  createdAt: number
 }

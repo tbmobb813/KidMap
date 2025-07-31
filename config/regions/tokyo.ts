@@ -1,4 +1,4 @@
-import { RegionConfig } from '@/types/region';
+import { RegionConfig } from '@/types/region'
 
 export const tokyoConfig: RegionConfig = {
   id: 'tokyo',
@@ -78,4 +78,4 @@ export const tokyoConfig: RegionConfig = {
   ],
   transitApiEndpoint: 'https://api.tokyometro.jp/',
   mapStyle: 'standard',
-};
+}

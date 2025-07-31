@@ -1,14 +1,14 @@
-import React from 'react';
-import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
-import Colors from '@/constants/colors';
-import { RegionConfig } from '@/types/region';
-import { MapPin, Check } from 'lucide-react-native';
+import React from 'react'
+import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native'
+import Colors from '@/constants/colors'
+import { RegionConfig } from '@/types/region'
+import { MapPin, Check } from 'lucide-react-native'
 
 type RegionSelectorProps = {
-  regions: RegionConfig[];
-  selectedRegion: string;
-  onSelectRegion: (regionId: string) => void;
-};
+  regions: RegionConfig[]
+  selectedRegion: string
+  onSelectRegion: (regionId: string) => void
+}
 
 const RegionSelector: React.FC<RegionSelectorProps> = ({
   regions,
@@ -17,7 +17,10 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({
 }) => {
   const renderRegion = ({ item }: { item: RegionConfig }) => (
     <Pressable
-      style={[styles.regionItem, selectedRegion === item.id && styles.selectedRegion]}
+      style={[
+        styles.regionItem,
+        selectedRegion === item.id && styles.selectedRegion,
+      ]}
       onPress={() => onSelectRegion(item.id)}
     >
       <View style={styles.regionInfo}>
@@ -32,7 +35,7 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({
       </View>
       {selectedRegion === item.id && <Check size={24} color={Colors.success} />}
     </Pressable>
-  );
+  )
 
   return (
     <View style={styles.container}>
@@ -48,8 +51,8 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({
         contentContainerStyle={styles.regionsList}
       />
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -112,6 +115,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.textLight,
   },
-});
+})
 
-export default RegionSelector;
+export default RegionSelector

@@ -1,18 +1,26 @@
-import { isMockLocation, getDeviceInfo } from '@/utils/deviceValidation';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Pressable, Alert, Platform, BackHandler } from 'react-native';
-import Colors from '@/constants/colors';
-import { Camera, MapPin } from 'lucide-react-native';
-import * as ImagePicker from 'expo-image-picker';
-import { useNavigationStore } from '@/stores/navigationStore';
-import useLocation from '@/hooks/useLocation';
+import { isMockLocation, getDeviceInfo } from '@/utils/deviceValidation'
+import React, { useState } from 'react'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  Alert,
+  Platform,
+  BackHandler,
+} from 'react-native'
+import Colors from '@/constants/colors'
+import { Camera, MapPin } from 'lucide-react-native'
+import * as ImagePicker from 'expo-image-picker'
+import { useNavigationStore } from '@/stores/navigationStore'
+import useLocation from '@/hooks/useLocation'
 
 type PhotoCheckInButtonProps = {
-  placeName: string;
-  placeId: string;
-  placeLat: number;
-  placeLng: number;
-};
+  placeName: string
+  placeId: string
+  placeLat: number
+  placeLng: number
+}
 
 const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({
   placeName,
@@ -20,22 +28,27 @@ const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({
   placeLat,
   placeLng,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { addPhotoCheckIn } = useNavigationStore();
-  const { latitude, longitude, error: locationError } = useLocation();
+  const [isLoading, setIsLoading] = useState(false)
+  const { addPhotoCheckIn } = useNavigationStore()
+  const { latitude, longitude, error: locationError } = useLocation()
 
   // Haversine formula for distance in meters
-  function getDistanceFromLatLonInMeters(lat1: number, lon1: number, lat2: number, lon2: number) {
-    const R = 6371e3; // meters
-    const φ1 = (lat1 * Math.PI) / 180;
-    const φ2 = (lat2 * Math.PI) / 180;
-    const Δφ = ((lat2 - lat1) * Math.PI) / 180;
-    const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+  function getDistanceFromLatLonInMeters(
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number,
+  ) {
+    const R = 6371e3 // meters
+    const φ1 = (lat1 * Math.PI) / 180
+    const φ2 = (lat2 * Math.PI) / 180
+    const Δφ = ((lat2 - lat1) * Math.PI) / 180
+    const Δλ = ((lon2 - lon1) * Math.PI) / 180
     const a =
       Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
+      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2)
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+    return R * c
   }
 
   const handlePhotoCheckIn = async () => {
@@ -44,37 +57,45 @@ const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({
       Alert.alert(
         'Location Spoofing Detected',
         'Mock location detected. Please disable mock location apps to check in.',
-      );
-      return;
+      )
+      return
     }
     // Require location
     if (locationError) {
       Alert.alert(
         'Location Error',
         'Could not get your location. Please enable location services and try again.',
-      );
-      return;
+      )
+      return
     }
 
     // Use real place coordinates from props
-    const distance = getDistanceFromLatLonInMeters(latitude, longitude, placeLat, placeLng);
-    const allowedRadius = 100; // meters
+    const distance = getDistanceFromLatLonInMeters(
+      latitude,
+      longitude,
+      placeLat,
+      placeLng,
+    )
+    const allowedRadius = 100 // meters
     if (distance > allowedRadius) {
       Alert.alert(
         'Too Far From Location',
         `You must be within ${allowedRadius} meters of the destination to check in. (Currently: ${Math.round(distance)}m)`,
-      );
-      return;
+      )
+      return
     }
 
     // Optionally: Add server-side validation here for extra anti-spoofing (future)
     // await validateCheckInOnServer({ latitude, longitude, deviceInfo: getDeviceInfo(), placeId });
 
     // Always capture device info for audit
-    const deviceInfo = getDeviceInfo();
+    const deviceInfo = getDeviceInfo()
 
     if (Platform.OS === 'web') {
-      Alert.alert('Photo Check-in', 'Camera not available on web. Check-in recorded!');
+      Alert.alert(
+        'Photo Check-in',
+        'Camera not available on web. Check-in recorded!',
+      )
       addPhotoCheckIn({
         placeId,
         placeName,
@@ -82,15 +103,15 @@ const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({
         timestamp: Date.now(),
         notes: 'Checked in successfully!',
         deviceInfo,
-      });
-      return;
+      })
+      return
     }
 
     try {
-      setIsLoading(true);
+      setIsLoading(true)
 
       // Android-specific permission handling
-      const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+      const permissionResult = await ImagePicker.requestCameraPermissionsAsync()
       if (!permissionResult.granted) {
         if (Platform.OS === 'android') {
           Alert.alert(
@@ -104,15 +125,18 @@ const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({
                   Alert.alert(
                     'Enable Camera',
                     'Go to Settings > Apps > KidMap > Permissions > Camera',
-                  );
+                  )
                 },
               },
             ],
-          );
+          )
         } else {
-          Alert.alert('Permission needed', 'Camera permission is required for photo check-ins');
+          Alert.alert(
+            'Permission needed',
+            'Camera permission is required for photo check-ins',
+          )
         }
-        return;
+        return
       }
 
       // Android-optimized camera options
@@ -130,9 +154,9 @@ const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({
               allowsEditing: true,
               aspect: [4, 3] as [number, number],
               quality: 0.7,
-            };
+            }
 
-      const result = await ImagePicker.launchCameraAsync(cameraOptions);
+      const result = await ImagePicker.launchCameraAsync(cameraOptions)
 
       if (!result.canceled && result.assets[0]) {
         addPhotoCheckIn({
@@ -142,17 +166,20 @@ const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({
           timestamp: Date.now(),
           notes: 'Safe arrival confirmed!',
           deviceInfo,
-        });
+        })
 
-        Alert.alert('Check-in Complete!', `You've safely arrived at ${placeName}!`);
+        Alert.alert(
+          'Check-in Complete!',
+          `You've safely arrived at ${placeName}!`,
+        )
       }
     } catch (error) {
-      console.log('Camera error:', error);
-      Alert.alert('Error', 'Could not take photo. Please try again.');
+      console.log('Camera error:', error)
+      Alert.alert('Error', 'Could not take photo. Please try again.')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <Pressable
@@ -162,19 +189,25 @@ const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({
       accessible={true}
       accessibilityRole="button"
       accessibilityLabel={
-        isLoading ? 'Taking photo for check-in at ' + placeName : 'Photo check-in at ' + placeName
+        isLoading
+          ? 'Taking photo for check-in at ' + placeName
+          : 'Photo check-in at ' + placeName
       }
       accessibilityHint={
-        isLoading ? 'Wait for the photo to be taken' : 'Take a photo to check in at ' + placeName
+        isLoading
+          ? 'Wait for the photo to be taken'
+          : 'Take a photo to check in at ' + placeName
       }
       accessibilityState={{ disabled: isLoading }}
     >
       <Camera size={20} color="#FFFFFF" />
-      <Text style={styles.text}>{isLoading ? 'Taking Photo...' : 'Photo Check-in'}</Text>
+      <Text style={styles.text}>
+        {isLoading ? 'Taking Photo...' : 'Photo Check-in'}
+      </Text>
       <MapPin size={16} color="#FFFFFF" style={styles.locationIcon} />
     </Pressable>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -203,6 +236,6 @@ const styles = StyleSheet.create({
   locationIcon: {
     marginLeft: 4,
   },
-});
+})
 
-export default PhotoCheckInButton;
+export default PhotoCheckInButton

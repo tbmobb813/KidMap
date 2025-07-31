@@ -1,40 +1,43 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { RegionConfig, UserRegionPreferences } from '@/types/region';
-import { newYorkConfig } from '@/config/regions/newYork';
-import { londonConfig } from '@/config/regions/london';
-import { tokyoConfig } from '@/config/regions/tokyo';
-import { chicagoConfig } from '@/config/regions/chicago';
-import { sanFranciscoConfig } from '@/config/regions/sanFrancisco';
-import { washingtonConfig } from '@/config/regions/washington';
-import { bostonConfig } from '@/config/regions/boston';
-import { losAngelesConfig } from '@/config/regions/losAngeles';
-import { seattleConfig } from '@/config/regions/seattle';
-import { philadelphiaConfig } from '@/config/regions/philadelphia';
-import { atlantaConfig } from '@/config/regions/atlanta';
-import { miamiConfig } from '@/config/regions/miami';
+import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { RegionConfig, UserRegionPreferences } from '@/types/region'
+import { newYorkConfig } from '@/config/regions/newYork'
+import { londonConfig } from '@/config/regions/london'
+import { tokyoConfig } from '@/config/regions/tokyo'
+import { chicagoConfig } from '@/config/regions/chicago'
+import { sanFranciscoConfig } from '@/config/regions/sanFrancisco'
+import { washingtonConfig } from '@/config/regions/washington'
+import { bostonConfig } from '@/config/regions/boston'
+import { losAngelesConfig } from '@/config/regions/losAngeles'
+import { seattleConfig } from '@/config/regions/seattle'
+import { philadelphiaConfig } from '@/config/regions/philadelphia'
+import { atlantaConfig } from '@/config/regions/atlanta'
+import { miamiConfig } from '@/config/regions/miami'
 
 type RegionState = {
-  availableRegions: RegionConfig[];
-  currentRegion: RegionConfig;
-  userPreferences: UserRegionPreferences;
-  isConfigured: boolean;
+  availableRegions: RegionConfig[]
+  currentRegion: RegionConfig
+  userPreferences: UserRegionPreferences
+  isConfigured: boolean
 
   // Actions
-  setRegion: (regionId: string) => void;
-  updatePreferences: (preferences: Partial<UserRegionPreferences>) => void;
-  completeOnboarding: () => void;
-  addCustomRegion: (region: RegionConfig) => void;
-  removeRegion: (regionId: string) => void;
-  updateRegionTransitData: (regionId: string, transitData: Partial<RegionConfig>) => void;
-  getCurrentTransitSystems: () => RegionConfig['transitSystems'];
-  getEmergencyNumber: () => string;
-  getSafetyTips: () => string[];
-  getFunFacts: () => string[];
-  getRegionsByCountry: (country: string) => RegionConfig[];
-  searchRegions: (query: string) => RegionConfig[];
-};
+  setRegion: (regionId: string) => void
+  updatePreferences: (preferences: Partial<UserRegionPreferences>) => void
+  completeOnboarding: () => void
+  addCustomRegion: (region: RegionConfig) => void
+  removeRegion: (regionId: string) => void
+  updateRegionTransitData: (
+    regionId: string,
+    transitData: Partial<RegionConfig>,
+  ) => void
+  getCurrentTransitSystems: () => RegionConfig['transitSystems']
+  getEmergencyNumber: () => string
+  getSafetyTips: () => string[]
+  getFunFacts: () => string[]
+  getRegionsByCountry: (country: string) => RegionConfig[]
+  searchRegions: (query: string) => RegionConfig[]
+}
 
 const defaultPreferences: UserRegionPreferences = {
   selectedRegion: 'nyc',
@@ -42,7 +45,7 @@ const defaultPreferences: UserRegionPreferences = {
   preferredUnits: 'imperial',
   accessibilityMode: false,
   parentalControls: true,
-};
+}
 
 export const useRegionStore = create<RegionState>()(
   persist(
@@ -67,7 +70,7 @@ export const useRegionStore = create<RegionState>()(
 
       setRegion: (regionId) =>
         set((state) => {
-          const region = state.availableRegions.find((r) => r.id === regionId);
+          const region = state.availableRegions.find((r) => r.id === regionId)
           if (region) {
             return {
               currentRegion: region,
@@ -75,9 +78,9 @@ export const useRegionStore = create<RegionState>()(
                 ...state.userPreferences,
                 selectedRegion: regionId,
               },
-            };
+            }
           }
-          return state;
+          return state
         }),
 
       updatePreferences: (preferences) =>
@@ -94,7 +97,9 @@ export const useRegionStore = create<RegionState>()(
 
       removeRegion: (regionId) =>
         set((state) => ({
-          availableRegions: state.availableRegions.filter((r) => r.id !== regionId),
+          availableRegions: state.availableRegions.filter(
+            (r) => r.id !== regionId,
+          ),
         })),
 
       updateRegionTransitData: (regionId, transitData) =>
@@ -109,33 +114,35 @@ export const useRegionStore = create<RegionState>()(
         })),
 
       getCurrentTransitSystems: () => {
-        return get().currentRegion.transitSystems;
+        return get().currentRegion.transitSystems
       },
 
       getEmergencyNumber: () => {
-        return get().currentRegion.emergencyNumber;
+        return get().currentRegion.emergencyNumber
       },
 
       getSafetyTips: () => {
-        return get().currentRegion.safetyTips;
+        return get().currentRegion.safetyTips
       },
 
       getFunFacts: () => {
-        return get().currentRegion.funFacts;
+        return get().currentRegion.funFacts
       },
 
       getRegionsByCountry: (country) => {
-        return get().availableRegions.filter((region) => region.country === country);
+        return get().availableRegions.filter(
+          (region) => region.country === country,
+        )
       },
 
       searchRegions: (query) => {
-        const regions = get().availableRegions;
-        const lowercaseQuery = query.toLowerCase();
+        const regions = get().availableRegions
+        const lowercaseQuery = query.toLowerCase()
         return regions.filter(
           (region) =>
             region.name.toLowerCase().includes(lowercaseQuery) ||
             region.country.toLowerCase().includes(lowercaseQuery),
-        );
+        )
       },
     }),
     {
@@ -143,4 +150,4 @@ export const useRegionStore = create<RegionState>()(
       storage: createJSONStorage(() => AsyncStorage),
     },
   ),
-);
+)

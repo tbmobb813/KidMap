@@ -1,4 +1,4 @@
-import { RegionConfig } from '@/types/region';
+import { RegionConfig } from '@/types/region'
 
 export const newYorkConfig: RegionConfig = {
   id: 'nyc',
@@ -74,19 +74,22 @@ export const newYorkConfig: RegionConfig = {
     {
       name: 'Central Park',
       category: 'park',
-      description: 'A large public park in Manhattan with playgrounds, lakes, and walking paths',
+      description:
+        'A large public park in Manhattan with playgrounds, lakes, and walking paths',
     },
     {
       name: 'Brooklyn Bridge',
       category: 'landmark',
-      description: 'Historic bridge connecting Manhattan and Brooklyn with great views',
+      description:
+        'Historic bridge connecting Manhattan and Brooklyn with great views',
     },
     {
       name: 'Times Square',
       category: 'landmark',
-      description: 'Busy commercial intersection known for its bright lights and theaters',
+      description:
+        'Busy commercial intersection known for its bright lights and theaters',
     },
   ],
   transitApiEndpoint: 'https://api.mta.info/',
   mapStyle: 'standard',
-};
+}

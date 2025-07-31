@@ -1,4 +1,4 @@
-import { Place } from '@/types/navigation';
+import { Place } from '@/types/navigation'
 
 export const favoriteLocations: Place[] = [
   {
@@ -45,7 +45,7 @@ export const favoriteLocations: Place[] = [
     },
     isFavorite: true,
   },
-];
+]
 
 export const recentSearches: Place[] = [
   {
@@ -68,4 +68,4 @@ export const recentSearches: Place[] = [
       longitude: -74.015,
     },
   },
-];
+]

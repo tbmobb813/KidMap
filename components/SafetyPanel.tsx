@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   StyleSheet,
   Text,
@@ -7,9 +7,9 @@ import {
   Alert,
   Linking,
   Platform,
-} from 'react-native';
-import { useRouter } from 'expo-router';
-import Colors from '@/constants/colors';
+} from 'react-native'
+import { useRouter } from 'expo-router'
+import Colors from '@/constants/colors'
 import {
   Shield,
   Phone,
@@ -18,26 +18,26 @@ import {
   AlertTriangle,
   Settings,
   ChevronRight,
-} from 'lucide-react-native';
-import { useGamificationStore } from '@/stores/gamificationStore';
-import { useSafeZoneStore } from '@/stores/safeZoneStore';
-import { useParentalControlStore } from '@/stores/parentalControlStore';
+} from 'lucide-react-native'
+import { useGamificationStore } from '@/stores/gamificationStore'
+import { useSafeZoneStore } from '@/stores/safeZoneStore'
+import { useParentalControlStore } from '@/stores/parentalControlStore'
 
 type SafetyPanelProps = {
   currentLocation?: {
-    latitude: number;
-    longitude: number;
-  };
-};
+    latitude: number
+    longitude: number
+  }
+}
 
 const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation }) => {
-  const router = useRouter();
-  const { safetyContacts } = useGamificationStore();
-  const { safeZones } = useSafeZoneStore();
-  const { childActivity } = useParentalControlStore();
-  const [isExpanded, setIsExpanded] = useState(false);
+  const router = useRouter()
+  const { safetyContacts } = useGamificationStore()
+  const { safeZones } = useSafeZoneStore()
+  const { childActivity } = useParentalControlStore()
+  const [isExpanded, setIsExpanded] = useState(false)
 
-  const safetyStatus = childActivity.isInSafeZone ? 'safe' : 'outside';
+  const safetyStatus = childActivity.isInSafeZone ? 'safe' : 'outside'
 
   const handleEmergencyCall = () => {
     Alert.alert('Emergency Call', 'Do you need to call for help?', [
@@ -46,25 +46,27 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation }) => {
       {
         text: 'Call Parent',
         onPress: () => {
-          const primaryContact = safetyContacts.find((c) => c.isPrimary);
+          const primaryContact = safetyContacts.find((c) => c.isPrimary)
           if (primaryContact) {
-            Linking.openURL(`tel:${primaryContact.phone}`);
+            Linking.openURL(`tel:${primaryContact.phone}`)
           }
         },
       },
-    ]);
-  };
+    ])
+  }
 
   const handleShareLocation = () => {
-    if (!currentLocation) return;
+    if (!currentLocation) return
 
-    const message = `I'm at: https://maps.google.com/?q=${currentLocation.latitude},${currentLocation.longitude}`;
-    const primaryContact = safetyContacts.find((c) => c.isPrimary);
+    const message = `I'm at: https://maps.google.com/?q=${currentLocation.latitude},${currentLocation.longitude}`
+    const primaryContact = safetyContacts.find((c) => c.isPrimary)
 
     if (primaryContact && Platform.OS !== 'web') {
-      Linking.openURL(`sms:${primaryContact.phone}&body=${encodeURIComponent(message)}`);
+      Linking.openURL(
+        `sms:${primaryContact.phone}&body=${encodeURIComponent(message)}`,
+      )
     }
-  };
+  }
 
   const handleSafeArrival = () => {
     Alert.alert('Safe Arrival', 'Let your family know you arrived safely?', [
@@ -72,18 +74,23 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation }) => {
       {
         text: 'Send message',
         onPress: () => {
-          const primaryContact = safetyContacts.find((c) => c.isPrimary);
+          const primaryContact = safetyContacts.find((c) => c.isPrimary)
           if (primaryContact && Platform.OS !== 'web') {
-            Linking.openURL(`sms:${primaryContact.phone}&body=I arrived safely! 😊`);
+            Linking.openURL(
+              `sms:${primaryContact.phone}&body=I arrived safely! 😊`,
+            )
           }
         },
       },
-    ]);
-  };
+    ])
+  }
 
   return (
     <View style={styles.container}>
-      <Pressable style={styles.header} onPress={() => setIsExpanded(!isExpanded)}>
+      <Pressable
+        style={styles.header}
+        onPress={() => setIsExpanded(!isExpanded)}
+      >
         <Shield size={20} color={Colors.primary} />
         <Text style={styles.title}>Safety Tools</Text>
         <Text style={styles.expandIcon}>{isExpanded ? '−' : '+'}</Text>
@@ -92,12 +99,18 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation }) => {
       {isExpanded && (
         <View style={styles.content}>
           <View style={styles.buttonRow}>
-            <Pressable style={styles.safetyButton} onPress={handleEmergencyCall}>
+            <Pressable
+              style={styles.safetyButton}
+              onPress={handleEmergencyCall}
+            >
               <Phone size={20} color="#FFFFFF" />
               <Text style={styles.buttonText}>Emergency</Text>
             </Pressable>
 
-            <Pressable style={styles.safetyButton} onPress={handleShareLocation}>
+            <Pressable
+              style={styles.safetyButton}
+              onPress={handleShareLocation}
+            >
               <MapPin size={20} color="#FFFFFF" />
               <Text style={styles.buttonText}>Share Location</Text>
             </Pressable>
@@ -126,8 +139,8 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation }) => {
         </View>
       )}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -204,6 +217,6 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     fontWeight: '500',
   },
-});
+})
 
-export default SafetyPanel;
+export default SafetyPanel

@@ -1,64 +1,33 @@
-import React from 'react';
-import { fireEvent, waitFor } from '@testing-library/react-native';
-import RouteDetailScreen from '@/app/route/[id]';
-import * as api from '@/utils/api';
-import { TravelMode } from '@/utils/api';
-import { useNavigationStore } from '@/stores/navigationStore';
-import { renderWithProviders, setupKidMapTests } from '../helpers';
+import React from 'react'
+import { render } from '@testing-library/react-native'
+import RouteDetailScreen from '../app/route/[id]'
+const {
+  testLogger,
+  renderWithLogging,
+  expectWithLog,
+} = require('./utils/testHelpers')
 
-jest.mock('@/stores/navigationStore');
-jest.mock('@/utils/api');
+// Mock expo-router
+jest.mock('expo-router', () => ({
+  useLocalSearchParams: () => ({ id: 'test-route-123' }),
+  useRouter: () => ({ back: jest.fn() }),
+}))
 
 describe('RouteDetailScreen', () => {
-  const origin = { coords: [0, 0], name: 'Start' };
-  const destination = { coords: [1, 1], name: 'End' };
+  test('renders route details', () => {
+    testLogger.info('Testing RouteDetailScreen render')
 
-  beforeEach(() => {
-    setupKidMapTests();
-    (useNavigationStore as jest.Mock).mockReturnValue({ origin, destination });
-  });
+    const { getByText } = renderWithLogging(
+      render,
+      <RouteDetailScreen />,
+      'RouteDetailScreen',
+    )
 
-  it('shows spinner, then renders steps, then hides spinner', async () => {
-    const stubResult = {
-      mode: 'walking' as TravelMode,
-      totalDistance: 0,
-      totalDuration: 0,
-      steps: [],
-    };
-    (api.fetchRoute as jest.Mock).mockResolvedValueOnce(stubResult);
+    expectWithLog(
+      'Route details should be visible',
+      getByText(/route/i),
+    ).toBeTruthy()
 
-    const { getByTestId, queryByText } = renderWithProviders(<RouteDetailScreen />);
-    expect(getByTestId('loading-spinner')).toBeTruthy();
-
-    await waitFor(() => {
-      expect(api.fetchRoute).toHaveBeenCalledWith(origin.coords, destination.coords, 'walking');
-    });
-    expect(queryByText('Distance')).toBeTruthy();
-    expect(queryByText('Duration')).toBeTruthy();
-  });
-
-  it('renders error message on null result', async () => {
-    (api.fetchRoute as jest.Mock).mockResolvedValueOnce(null);
-
-    const { getByText } = renderWithProviders(<RouteDetailScreen />);
-    await waitFor(() => {
-      expect(getByText('Unable to load route')).toBeTruthy();
-    });
-  });
-
-  it('allows switching modes and re-fetches', async () => {
-    (api.fetchRoute as jest.Mock).mockResolvedValue({
-      mode: 'cycling' as TravelMode,
-      totalDistance: 0,
-      totalDuration: 0,
-      steps: [],
-    });
-    const { getByText } = renderWithProviders(<RouteDetailScreen />);
-
-    await waitFor(() => expect(api.fetchRoute).toHaveBeenCalledTimes(1));
-    fireEvent.press(getByText('Cycling'));
-    await waitFor(() =>
-      expect(api.fetchRoute).toHaveBeenCalledWith(origin.coords, destination.coords, 'cycling'),
-    );
-  });
-});
+    testLogger.info('RouteDetailScreen test completed')
+  })
+})

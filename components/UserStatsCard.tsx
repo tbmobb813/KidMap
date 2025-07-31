@@ -1,21 +1,22 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Colors from '@/constants/colors';
-import { Trophy, MapPin, Zap, Target } from 'lucide-react-native';
-import { UserStats } from '@/types/gamification';
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import Colors from '@/constants/colors'
+import { Trophy, MapPin, Zap, Target } from 'lucide-react-native'
+import { UserStats } from '@/types/gamification'
 
 type UserStatsCardProps = {
-  stats: UserStats;
-};
+  stats: UserStats
+}
 
 const UserStatsCard: React.FC<UserStatsCardProps> = ({ stats }) => {
   const getProgressToNextLevel = () => {
-    const pointsForCurrentLevel = (stats.level - 1) * 200;
-    const pointsForNextLevel = stats.level * 200;
+    const pointsForCurrentLevel = (stats.level - 1) * 200
+    const pointsForNextLevel = stats.level * 200
     const progress =
-      (stats.totalPoints - pointsForCurrentLevel) / (pointsForNextLevel - pointsForCurrentLevel);
-    return Math.max(0, Math.min(1, progress));
-  };
+      (stats.totalPoints - pointsForCurrentLevel) /
+      (pointsForNextLevel - pointsForCurrentLevel)
+    return Math.max(0, Math.min(1, progress))
+  }
 
   return (
     <View style={styles.container}>
@@ -29,10 +30,16 @@ const UserStatsCard: React.FC<UserStatsCardProps> = ({ stats }) => {
 
       <View style={styles.progressContainer}>
         <View style={styles.progressBar}>
-          <View style={[styles.progressFill, { width: `${getProgressToNextLevel() * 100}%` }]} />
+          <View
+            style={[
+              styles.progressFill,
+              { width: `${getProgressToNextLevel() * 100}%` },
+            ]}
+          />
         </View>
         <Text style={styles.progressText}>
-          {Math.round(getProgressToNextLevel() * 100)}% to Level {stats.level + 1}
+          {Math.round(getProgressToNextLevel() * 100)}% to Level{' '}
+          {stats.level + 1}
         </Text>
       </View>
 
@@ -56,8 +63,8 @@ const UserStatsCard: React.FC<UserStatsCardProps> = ({ stats }) => {
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -130,6 +137,6 @@ const styles = StyleSheet.create({
     color: Colors.textLight,
     fontWeight: '500',
   },
-});
+})
 
-export default UserStatsCard;
+export default UserStatsCard

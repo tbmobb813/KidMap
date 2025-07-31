@@ -1,4 +1,4 @@
-import { Route, TransitStep } from '@/types/navigation';
+import { Route, TransitStep } from '@/types/navigation'
 
 export const sampleRoutes: Route[] = [
   {
@@ -69,7 +69,7 @@ export const sampleRoutes: Route[] = [
       },
     ],
   },
-];
+]
 
 export const subwayLines = [
   { id: 'a', name: 'A', color: '#0039A6' },
@@ -79,4 +79,4 @@ export const subwayLines = [
   { id: 'e', name: 'E', color: '#0039A6' },
   { id: 'f', name: 'F', color: '#FF6319' },
   { id: 'g', name: 'G', color: '#6CBE45' },
-];
+]

@@ -1,50 +1,52 @@
-import { create } from 'zustand';
-import { Place, Route, PhotoCheckIn } from '@/types/navigation';
-import { favoriteLocations } from '@/mocks/places';
-import { sampleRoutes } from '@/mocks/transit';
+import { create } from 'zustand'
+import { Place, Route, PhotoCheckIn } from '@/types/navigation'
+import { favoriteLocations } from '@/mocks/places'
+import { sampleRoutes } from '@/mocks/transit'
 
 type AccessibilitySettings = {
-  largeText: boolean;
-  highContrast: boolean;
-  voiceDescriptions: boolean;
-  simplifiedMode: boolean;
-};
+  largeText: boolean
+  highContrast: boolean
+  voiceDescriptions: boolean
+  simplifiedMode: boolean
+}
 
 type WeatherInfo = {
-  temperature: number;
-  condition: string;
-  humidity: number;
-};
+  temperature: number
+  condition: string
+  humidity: number
+}
 
 type NavigationState = {
-  favorites: Place[];
-  recentSearches: Place[];
-  origin: Place | null;
-  destination: Place | null;
-  availableRoutes: Route[];
-  selectedRoute: Route | null;
-  activeRoute: any | null;
-  searchQuery: string;
-  accessibilitySettings: AccessibilitySettings;
-  photoCheckIns: PhotoCheckIn[];
-  weatherInfo: WeatherInfo | null;
+  favorites: Place[]
+  recentSearches: Place[]
+  origin: Place | null
+  destination: Place | null
+  availableRoutes: Route[]
+  selectedRoute: Route | null
+  activeRoute: any | null
+  searchQuery: string
+  accessibilitySettings: AccessibilitySettings
+  photoCheckIns: PhotoCheckIn[]
+  weatherInfo: WeatherInfo | null
 
   // Actions
-  setOrigin: (place: Place | null) => void;
-  setDestination: (place: Place | null) => void;
-  addToFavorites: (place: Place) => void;
-  removeFromFavorites: (placeId: string) => void;
-  addToRecentSearches: (place: Place) => void;
-  clearRecentSearches: () => void;
-  setSearchQuery: (query: string) => void;
-  findRoutes: () => void;
-  selectRoute: (route: Route) => void;
-  clearRoute: () => void;
-  clearActiveRoute: () => void;
-  updateAccessibilitySettings: (settings: Partial<AccessibilitySettings>) => void;
-  addPhotoCheckIn: (checkIn: Omit<PhotoCheckIn, 'id'>) => void;
-  setWeatherInfo: (weather: WeatherInfo) => void;
-};
+  setOrigin: (place: Place | null) => void
+  setDestination: (place: Place | null) => void
+  addToFavorites: (place: Place) => void
+  removeFromFavorites: (placeId: string) => void
+  addToRecentSearches: (place: Place) => void
+  clearRecentSearches: () => void
+  setSearchQuery: (query: string) => void
+  findRoutes: () => void
+  selectRoute: (route: Route) => void
+  clearRoute: () => void
+  clearActiveRoute: () => void
+  updateAccessibilitySettings: (
+    settings: Partial<AccessibilitySettings>,
+  ) => void
+  addPhotoCheckIn: (checkIn: Omit<PhotoCheckIn, 'id'>) => void
+  setWeatherInfo: (weather: WeatherInfo) => void
+}
 
 export const useNavigationStore = create<NavigationState>((set, get) => ({
   favorites: favoriteLocations,
@@ -72,11 +74,11 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
     set((state) => {
       // Check if already in favorites
       if (state.favorites.some((fav) => fav.id === place.id)) {
-        return state;
+        return state
       }
 
-      const updatedPlace = { ...place, isFavorite: true };
-      return { favorites: [...state.favorites, updatedPlace] };
+      const updatedPlace = { ...place, isFavorite: true }
+      return { favorites: [...state.favorites, updatedPlace] }
     }),
 
   removeFromFavorites: (placeId) =>
@@ -87,12 +89,14 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
   addToRecentSearches: (place) =>
     set((state) => {
       // Remove if already exists to avoid duplicates
-      const filteredSearches = state.recentSearches.filter((p) => p.id !== place.id);
+      const filteredSearches = state.recentSearches.filter(
+        (p) => p.id !== place.id,
+      )
 
       // Add to beginning of array, limit to 5 recent searches
       return {
         recentSearches: [place, ...filteredSearches].slice(0, 5),
-      };
+      }
     }),
 
   clearRecentSearches: () => set({ recentSearches: [] }),
@@ -100,11 +104,11 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
   setSearchQuery: (query) => set({ searchQuery: query }),
 
   findRoutes: () => {
-    const { origin, destination } = get();
+    const { origin, destination } = get()
 
     if (!origin || !destination) {
-      set({ availableRoutes: [], selectedRoute: null });
-      return;
+      set({ availableRoutes: [], selectedRoute: null })
+      return
     }
 
     // In a real app, this would call an API to get routes
@@ -112,7 +116,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
     set({
       availableRoutes: sampleRoutes,
       selectedRoute: sampleRoutes[0],
-    });
+    })
   },
 
   selectRoute: (route) => set({ selectedRoute: route }),
@@ -133,10 +137,13 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
 
   addPhotoCheckIn: (checkIn) =>
     set((state) => ({
-      photoCheckIns: [...state.photoCheckIns, { ...checkIn, id: Date.now().toString() }],
+      photoCheckIns: [
+        ...state.photoCheckIns,
+        { ...checkIn, id: Date.now().toString() },
+      ],
     })),
 
   setWeatherInfo: (weather) => set({ weatherInfo: weather }),
 
   clearActiveRoute: () => set({ activeRoute: null }),
-}));
+}))

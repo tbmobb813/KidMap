@@ -1,24 +1,27 @@
-import { useMemo } from 'react';
-import { useRegionStore } from '@/stores/regionStore';
+import { useMemo } from 'react'
+import { useRegionStore } from '@/stores/regionStore'
 import {
   formatCurrency,
   formatDistance,
   formatTemperature,
   getLocalizedTime,
-} from '@/utils/regionUtils';
+} from '@/utils/regionUtils'
 
 export function useRegionalData() {
-  const { currentRegion, userPreferences } = useRegionStore();
+  const { currentRegion, userPreferences } = useRegionStore()
 
   const formatters = useMemo(
     () => ({
-      currency: (amount: number) => formatCurrency(amount, currentRegion.currency),
-      distance: (meters: number) => formatDistance(meters, userPreferences.preferredUnits),
-      temperature: (celsius: number) => formatTemperature(celsius, userPreferences.preferredUnits),
+      currency: (amount: number) =>
+        formatCurrency(amount, currentRegion.currency),
+      distance: (meters: number) =>
+        formatDistance(meters, userPreferences.preferredUnits),
+      temperature: (celsius: number) =>
+        formatTemperature(celsius, userPreferences.preferredUnits),
       time: (date: Date) => getLocalizedTime(date, currentRegion.timezone),
     }),
     [currentRegion, userPreferences],
-  );
+  )
 
   const regionalContent = useMemo(
     () => ({
@@ -31,12 +34,12 @@ export function useRegionalData() {
       timezone: currentRegion.timezone,
     }),
     [currentRegion],
-  );
+  )
 
   return {
     currentRegion,
     userPreferences,
     formatters,
     regionalContent,
-  };
+  }
 }

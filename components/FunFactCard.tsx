@@ -1,15 +1,19 @@
-import React from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import Colors from '@/constants/colors';
-import { Lightbulb, X } from 'lucide-react-native';
+import React from 'react'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
+import Colors from '@/constants/colors'
+import { Lightbulb, X } from 'lucide-react-native'
 
 type FunFactCardProps = {
-  fact: string;
-  location?: string;
-  onDismiss?: () => void;
-};
+  fact: string
+  location?: string
+  onDismiss?: () => void
+}
 
-const FunFactCard: React.FC<FunFactCardProps> = ({ fact, location, onDismiss }) => {
+const FunFactCard: React.FC<FunFactCardProps> = ({
+  fact,
+  location,
+  onDismiss,
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -28,8 +32,8 @@ const FunFactCard: React.FC<FunFactCardProps> = ({ fact, location, onDismiss }) 
 
       <Text style={styles.factText}>{fact}</Text>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -67,6 +71,6 @@ const styles = StyleSheet.create({
     color: Colors.text,
     lineHeight: 20,
   },
-});
+})
 
-export default FunFactCard;
+export default FunFactCard

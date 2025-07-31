@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, ActivityIndicator } from 'react-native';
-import { Image } from 'expo-image';
-import Colors from '@/constants/colors';
-import { ImageOff } from 'lucide-react-native';
+import React, { useState } from 'react'
+import { StyleSheet, View, ActivityIndicator } from 'react-native'
+import { Image } from 'expo-image'
+import Colors from '@/constants/colors'
+import { ImageOff } from 'lucide-react-native'
 
 type OptimizedImageProps = {
-  source: { uri: string } | number;
-  style?: any;
-  placeholder?: string;
-  contentFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
-  onLoad?: () => void;
-  onError?: () => void;
-};
+  source: { uri: string } | number
+  style?: any
+  placeholder?: string
+  contentFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down'
+  onLoad?: () => void
+  onError?: () => void
+}
 
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
   source,
@@ -21,26 +21,26 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   onLoad,
   onError,
 }) => {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
 
   const handleLoad = () => {
-    setLoading(false);
-    onLoad?.();
-  };
+    setLoading(false)
+    onLoad?.()
+  }
 
   const handleError = () => {
-    setLoading(false);
-    setError(true);
-    onError?.();
-  };
+    setLoading(false)
+    setError(true)
+    onError?.()
+  }
 
   if (error) {
     return (
       <View style={[styles.errorContainer, style]}>
         <ImageOff size={24} color={Colors.textLight} />
       </View>
-    );
+    )
   }
 
   return (
@@ -60,8 +60,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         </View>
       )}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   errorContainer: {
@@ -75,6 +75,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.card,
   },
-});
+})
 
-export default OptimizedImage;
+export default OptimizedImage

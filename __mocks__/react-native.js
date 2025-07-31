@@ -1,13 +1,13 @@
-const React = require('react');
+const React = require('react')
 // Use real React Native module as basis
-const RN = jest.requireActual('react-native');
+const RN = jest.requireActual('react-native')
 
 // Override Appearance to avoid native Appearance API in tests
 RN.Appearance = {
   getColorScheme: () => 'light',
   addChangeListener: jest.fn(),
   removeChangeListener: jest.fn(),
-};
+}
 
 // Override Button globally: renders as TouchableOpacity wrapping Text
 RN.Button = ({ title, onPress, ...props }) =>
@@ -15,6 +15,6 @@ RN.Button = ({ title, onPress, ...props }) =>
     RN.TouchableOpacity,
     { onPress, accessibilityRole: 'button', ...props },
     React.createElement(RN.Text, null, title),
-  );
+  )
 
-module.exports = RN;
+module.exports = RN

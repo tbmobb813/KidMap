@@ -1,15 +1,15 @@
-import React from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import Colors from '@/constants/colors';
-import { LucideIcon } from 'lucide-react-native';
+import React from 'react'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
+import Colors from '@/constants/colors'
+import { LucideIcon } from 'lucide-react-native'
 
 type EmptyStateProps = {
-  icon: LucideIcon;
-  title: string;
-  description: string;
-  actionText?: string;
-  onAction?: () => void;
-};
+  icon: LucideIcon
+  title: string
+  description: string
+  actionText?: string
+  onAction?: () => void
+}
 
 const EmptyState: React.FC<EmptyStateProps> = ({
   icon: Icon,
@@ -31,8 +31,8 @@ const EmptyState: React.FC<EmptyStateProps> = ({
         </Pressable>
       )}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -75,6 +75,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-});
+})
 
-export default EmptyState;
+export default EmptyState

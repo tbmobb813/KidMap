@@ -1,59 +1,68 @@
 // components/SafetyErrorBoundary.tsx - Specialized error boundary for safety-critical components
-import React from 'react';
-import { StyleSheet, Text, View, Pressable, Alert } from 'react-native';
-import Colors from '@/constants/colors';
-import { Shield, AlertTriangle, RefreshCw, Phone } from 'lucide-react-native';
+import React from 'react'
+import { StyleSheet, Text, View, Pressable, Alert } from 'react-native'
+import Colors from '@/constants/colors'
+import { Shield, AlertTriangle, RefreshCw, Phone } from 'lucide-react-native'
 
 type SafetyErrorBoundaryState = {
-  hasError: boolean;
-  error: Error | null;
-  errorInfo: React.ErrorInfo | null;
-};
+  hasError: boolean
+  error: Error | null
+  errorInfo: React.ErrorInfo | null
+}
 
 type SafetyErrorBoundaryProps = {
-  children: React.ReactNode;
-  componentName: string;
-  fallbackMessage?: string;
-  onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
-};
+  children: React.ReactNode
+  componentName: string
+  fallbackMessage?: string
+  onError?: (error: Error, errorInfo: React.ErrorInfo) => void
+}
 
-class SafetyErrorBoundary extends React.Component<SafetyErrorBoundaryProps, SafetyErrorBoundaryState> {
+class SafetyErrorBoundary extends React.Component<
+  SafetyErrorBoundaryProps,
+  SafetyErrorBoundaryState
+> {
   constructor(props: SafetyErrorBoundaryProps) {
-    super(props);
-    this.state = { hasError: false, error: null, errorInfo: null };
+    super(props)
+    this.state = { hasError: false, error: null, errorInfo: null }
   }
 
-  static getDerivedStateFromError(error: Error): Partial<SafetyErrorBoundaryState> {
-    return { hasError: true, error };
+  static getDerivedStateFromError(
+    error: Error,
+  ): Partial<SafetyErrorBoundaryState> {
+    return { hasError: true, error }
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     // Log error details for safety-critical components
-    console.error(`Safety component error in ${this.props.componentName}:`, error, errorInfo);
-    
+    console.error(
+      `Safety component error in ${this.props.componentName}:`,
+      error,
+      errorInfo,
+    )
+
     // Store error info for debugging
-    this.setState({ errorInfo });
-    
+    this.setState({ errorInfo })
+
     // Call custom error handler if provided
     if (this.props.onError) {
-      this.props.onError(error, errorInfo);
+      this.props.onError(error, errorInfo)
     }
 
     // For safety-critical errors, consider notifying parents/guardians
-    this.handleSafetyCriticalError(error);
+    this.handleSafetyCriticalError(error)
   }
 
   handleSafetyCriticalError = (error: Error) => {
     // In a real implementation, this could send alerts to parents
-    console.warn('Safety-critical component failure:', error.message);
-    
+    console.warn('Safety-critical component failure:', error.message)
+
     // Could integrate with notification system
     // sendEmergencyNotification('Safety system error detected');
-  };
+  }
 
   retry = () => {
-    this.setState({ hasError: false, error: null, errorInfo: null });
-  };
+    this.setState({ hasError: false, error: null, errorInfo: null })
+  }
 
   handleEmergencyContact = () => {
     Alert.alert(
@@ -61,13 +70,16 @@ class SafetyErrorBoundary extends React.Component<SafetyErrorBoundaryProps, Safe
       'Would you like to contact your emergency contact?',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Call', onPress: () => {
-          // In a real app, this would call the emergency contact
-          console.log('Emergency contact called');
-        }}
-      ]
-    );
-  };
+        {
+          text: 'Call',
+          onPress: () => {
+            // In a real app, this would call the emergency contact
+            console.log('Emergency contact called')
+          },
+        },
+      ],
+    )
+  }
 
   render() {
     if (this.state.hasError) {
@@ -76,10 +88,10 @@ class SafetyErrorBoundary extends React.Component<SafetyErrorBoundaryProps, Safe
           <Shield size={48} color={Colors.error} />
           <Text style={styles.title}>Safety Feature Unavailable</Text>
           <Text style={styles.message}>
-            {this.props.fallbackMessage || 
-             `The ${this.props.componentName} safety feature encountered an error and needs to restart.`}
+            {this.props.fallbackMessage ||
+              `The ${this.props.componentName} safety feature encountered an error and needs to restart.`}
           </Text>
-          
+
           {/* Error details for debugging */}
           {__DEV__ && this.state.error && (
             <View style={styles.debugInfo}>
@@ -93,8 +105,11 @@ class SafetyErrorBoundary extends React.Component<SafetyErrorBoundaryProps, Safe
               <RefreshCw size={20} color="#FFFFFF" />
               <Text style={styles.buttonText}>Restart Safety Feature</Text>
             </Pressable>
-            
-            <Pressable style={styles.emergencyButton} onPress={this.handleEmergencyContact}>
+
+            <Pressable
+              style={styles.emergencyButton}
+              onPress={this.handleEmergencyContact}
+            >
               <Phone size={20} color="#FFFFFF" />
               <Text style={styles.buttonText}>Emergency Contact</Text>
             </Pressable>
@@ -104,10 +119,10 @@ class SafetyErrorBoundary extends React.Component<SafetyErrorBoundaryProps, Safe
             If this problem continues, please contact your parent or guardian.
           </Text>
         </View>
-      );
+      )
     }
 
-    return this.props.children;
+    return this.props.children
   }
 }
 
@@ -189,6 +204,6 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
     fontFamily: 'monospace',
   },
-});
+})
 
-export default SafetyErrorBoundary;
+export default SafetyErrorBoundary

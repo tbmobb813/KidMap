@@ -1,89 +1,59 @@
 // jest.setup.js
 
-// Basic testing library setup
-// Note: @testing-library/jest-native extensions will be loaded if package is available
+// Import the testing library
+import '@testing-library/jest-native/extend-expect'
 
 // Define global variables
-global.__DEV__ = true;
+global.__DEV__ = true
 
-// Basic React mocks
-jest.mock('react-native', () => ({
-  Text: 'Text',
-  View: 'View',
-  ScrollView: 'ScrollView',
-  TouchableOpacity: 'TouchableOpacity',
-  Pressable: 'Pressable',
-  Button: 'Button',
-  TextInput: 'TextInput',
-  FlatList: 'FlatList',
-  Dimensions: {
-    get: jest.fn(() => ({ width: 375, height: 667 })),
-  },
-  StyleSheet: {
-    create: jest.fn((styles) => styles),
-    flatten: jest.fn((style) => style),
-  },
-  Platform: {
-    OS: 'ios',
-    select: jest.fn((obj) => obj.ios || obj.default),
-  },
-  Alert: {
-    alert: jest.fn(),
-  },
-  Appearance: {
-    getColorScheme: () => 'light',
-    addChangeListener: jest.fn(),
-    removeChangeListener: jest.fn(),
-  },
-  RefreshControl: 'RefreshControl',
-}));
-jest.mock('react-native/Libraries/Components/Touchable/TouchableOpacity', () => {
-  const { View } = jest.requireActual('react-native');
-  return View;
-});
+// Basic React Native platform mocks
+jest.mock('react-native/Libraries/Utilities/Platform', () => ({
+  OS: 'ios',
+  select: jest.fn((obj) => obj.ios || obj.default),
+}))
 
 // Stub CSS-Interop to prevent runtime errors
-jest.mock('react-native-css-interop', () => ({}));
+jest.mock('react-native-css-interop', () => ({}))
 // Stub NativeWind and React JSX runtimes to support JSX transform
 jest.mock('nativewind/jsx-runtime', () => {
-  const React = require('react');
+  const React = require('react')
   return {
     jsx: (type, props, key) => React.createElement(type, props),
     jsxs: (type, props, key) => React.createElement(type, props),
     Fragment: React.Fragment,
-  };
-});
+  }
+})
 jest.mock('react/jsx-runtime', () => {
-  const React = require('react');
+  const React = require('react')
   return {
     jsx: (type, props, key) => React.createElement(type, props),
     jsxs: (type, props, key) => React.createElement(type, props),
     Fragment: React.Fragment,
-  };
-});
+  }
+})
 // Stub dev runtime for React JSX
 jest.mock('react/jsx-dev-runtime', () => {
-  const React = require('react');
+  const React = require('react')
   return {
     jsxDEV: (type, props, key) => React.createElement(type, props),
     Fragment: React.Fragment,
-  };
-});
+  }
+})
 // Stub dev runtime for NativeWind JSX
 jest.mock('nativewind/jsx-dev-runtime', () => {
-  const React = require('react');
+  const React = require('react')
   return {
     jsxDEV: (type, props, key) => React.createElement(type, props),
     Fragment: React.Fragment,
-  };
-});
+  }
+})
 
 // --- Mock React Native Reanimated ---
 jest.mock('react-native-reanimated', () => {
-  const Reanimated = require('react-native-reanimated/mock');
-  Reanimated.default.call = () => { };
-  return Reanimated;
-});
+  const Reanimated = require('react-native-reanimated/mock')
+  Reanimated.default.call = () => {}
+  return Reanimated
+})
 
 // --- Fix Animated Issues ---
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper', () => ({
@@ -92,14 +62,14 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper', () => ({
   finishOperationBatch: jest.fn(),
   flushQueue: jest.fn(),
   API: {},
-}));
+}))
 
 jest.mock('react-native/Libraries/Animated/AnimatedImplementation', () => ({
   View: require('react-native').View,
   Text: require('react-native').Text,
   ScrollView: require('react-native').ScrollView,
   createAnimatedComponent: jest.fn((component) => component),
-}));
+}))
 
 // ----- Mock expo-notifications -----
 jest.mock('expo-notifications', () => ({
@@ -110,21 +80,21 @@ jest.mock('expo-notifications', () => ({
       body: 'Your device is being pinged!',
     }),
   ),
-}));
+}))
 
 // ----- Polyfill fetch for Node environment -----
 if (!global.fetch) {
-  global.fetch = require('node-fetch');
+  global.fetch = require('node-fetch')
 }
 
 // ----- Setup React Native Gesture Handler -----
-import 'react-native-gesture-handler/jestSetup';
+import 'react-native-gesture-handler/jestSetup'
 
 // ----- Mock @expo/vector-icons -----
-jest.mock('@expo/vector-icons', () => new Proxy({}, { get: (_, key) => key }));
+jest.mock('@expo/vector-icons', () => new Proxy({}, { get: (_, key) => key }))
 
 // ----- Mock lucide-react-native -----
-jest.mock('lucide-react-native', () => new Proxy({}, { get: (_, key) => key }));
+jest.mock('lucide-react-native', () => new Proxy({}, { get: (_, key) => key }))
 
 // ----- Mock Expo Modules -----
 jest.mock('expo-constants', () => ({
@@ -134,10 +104,12 @@ jest.mock('expo-constants', () => ({
       slug: 'kidmap',
     },
   },
-}));
+}))
 
 jest.mock('expo-location', () => ({
-  requestForegroundPermissionsAsync: jest.fn(() => Promise.resolve({ status: 'granted' })),
+  requestForegroundPermissionsAsync: jest.fn(() =>
+    Promise.resolve({ status: 'granted' }),
+  ),
   getCurrentPositionAsync: jest.fn(() =>
     Promise.resolve({
       coords: {
@@ -152,13 +124,13 @@ jest.mock('expo-location', () => ({
     }),
   ),
   watchPositionAsync: jest.fn(() => Promise.resolve({ remove: jest.fn() })),
-}));
+}))
 
 jest.mock('expo-haptics', () => ({
   impactAsync: jest.fn(),
   notificationAsync: jest.fn(),
   selectionAsync: jest.fn(),
-}));
+}))
 
 jest.mock('expo-router', () => ({
   useRouter: () => ({
@@ -169,7 +141,7 @@ jest.mock('expo-router', () => ({
   }),
   useLocalSearchParams: () => ({}),
   Link: ({ children }) => children,
-}));
+}))
 
 // ----- Mock Async Storage -----
 jest.mock('@react-native-async-storage/async-storage', () => ({
@@ -181,7 +153,7 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   multiGet: jest.fn(() => Promise.resolve([])),
   multiSet: jest.fn(() => Promise.resolve()),
   multiRemove: jest.fn(() => Promise.resolve()),
-}));
+}))
 
 // ----- Silence console warnings & errors -----
 // Silence console warnings & errors
@@ -189,7 +161,7 @@ global.console = {
   ...console,
   warn: jest.fn(),
   error: jest.fn(),
-};
+}
 global.navigator = {
   geolocation: {
     getCurrentPosition: jest.fn((success) =>
@@ -200,22 +172,22 @@ global.navigator = {
     watchPosition: jest.fn(),
     clearWatch: jest.fn(),
   },
-};
+}
 
 jest.mock('react-native/Libraries/Animated/nodes/AnimatedNode', () => ({
   API: {},
-}));
+}))
 
 jest.mock('react-native/Libraries/Components/ScrollView/ScrollView', () => {
-  const React = require('react');
+  const React = require('react')
   return React.forwardRef((props, ref) => {
-    const { children, ...otherProps } = props;
-    return React.createElement('ScrollView', { ...otherProps, ref }, children);
-  });
-});
+    const { children, ...otherProps } = props
+    return React.createElement('ScrollView', { ...otherProps, ref }, children)
+  })
+})
 
 if (typeof navigator === 'undefined') {
-  global.navigator = {};
+  global.navigator = {}
 }
 
 // Mock API functions for testing
@@ -228,7 +200,7 @@ jest.mock('@/utils/api', () => ({
       distance: 100,
       duration: 120,
       instruction: 'Walk to destination',
-    };
+    }
 
     const steps = [
       baseStep,
@@ -237,7 +209,7 @@ jest.mock('@/utils/api', () => ({
         line: mode === 'transit' ? 'Bus 42' : undefined,
       },
       baseStep,
-    ];
+    ]
 
     return {
       steps,
@@ -249,63 +221,65 @@ jest.mock('@/utils/api', () => ({
         northeast: { lat: 1.001, lng: 1.001 },
         southwest: { lat: 0, lng: 0 },
       },
-    };
+    }
   }),
   searchPlaces: jest.fn(async () => []),
-}));
+}))
 
-const fs = require('fs');
-const path = require('path');
+// Import testLogger from testHelpers
+const { testLogger } = require('./__tests__/utils/testHelpers')
 
-// Create a custom logger for tests
-const testLogger = {
-  log: (message, level = 'INFO') => {
-    const timestamp = new Date().toISOString();
-    const logEntry = `[${timestamp}] [${level}] ${message}\n`;
+// Make testLogger available globally
+global.testLogger = testLogger
 
-    const logFile = path.join(__dirname, 'logs', 'debug', `test-debug-${new Date().toISOString().slice(0, 10)}.log`);
+// Enhanced test lifecycle logging with data focus
+let testStartTime
 
-    // Ensure debug directory exists
-    const debugDir = path.dirname(logFile);
-    if (!fs.existsSync(debugDir)) {
-      fs.mkdirSync(debugDir, { recursive: true });
-    }
-
-    fs.appendFileSync(logFile, logEntry);
-    console.log(`🔍 ${logEntry.trim()}`);
-  },
-
-  error: (message) => testLogger.log(message, 'ERROR'),
-  warn: (message) => testLogger.log(message, 'WARN'),
-  info: (message) => testLogger.log(message, 'INFO'),
-  debug: (message) => testLogger.log(message, 'DEBUG')
-};
-
-// Make logger available globally in tests
-global.testLogger = testLogger;
-
-// Log test start/end
 beforeEach(() => {
-  const testName = expect.getState().currentTestName || 'Unknown test';
-  testLogger.info(`Starting test: ${testName}`);
-});
+  testStartTime = Date.now()
+  const testName = expect.getState().currentTestName || 'Unknown test'
+  // Log test start with context
+  testLogger.info(`� TEST_START: "${testName}"`)
+})
 
 afterEach(() => {
-  const testName = expect.getState().currentTestName || 'Unknown test';
-  const testResult = expect.getState().isExpectingAssertions ? 'PASSED' : 'Status unknown';
-  testLogger.info(`Finished test: ${testName} - ${testResult}`);
-});
+  const testName = expect.getState().currentTestName || 'Unknown test'
+  const duration = Date.now() - testStartTime
 
-// Log test failures
-const originalIt = global.it;
+  // Check if test passed or failed based on Jest state
+  const testState = expect.getState()
+  const passed =
+    !testState.currentTestName ||
+    testState.assertionCalls === testState.expectedAssertionsNumber
+
+  testLogger.logTestResult(testName, passed ? 'PASS' : 'FAIL', duration)
+})
+
+// Enhanced error logging for failed tests with detailed context
+const originalIt = global.it
 global.it = (name, fn, timeout) => {
-  return originalIt(name, async (...args) => {
-    try {
-      await fn(...args);
-      testLogger.info(`✅ Test passed: ${name}`);
-    } catch (error) {
-      testLogger.error(`❌ Test failed: ${name} - Error: ${error.message}`);
-      throw error;
-    }
-  }, timeout);
-};
+  return originalIt(
+    name,
+    async (...args) => {
+      const startTime = Date.now()
+      try {
+        const result = await fn(...args)
+        const duration = Date.now() - startTime
+        testLogger.logTestResult(name, 'PASS', duration, {
+          type: 'individual_test',
+          args: args.length,
+        })
+        return result
+      } catch (error) {
+        const duration = Date.now() - startTime
+        testLogger.logTestFailure(name, error, {
+          type: 'individual_test',
+          duration,
+          args,
+        })
+        throw error
+      }
+    },
+    timeout,
+  )
+}

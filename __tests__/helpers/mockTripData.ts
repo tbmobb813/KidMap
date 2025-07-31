@@ -1,7 +1,7 @@
 // __tests__/helpers/mockTripData.ts - Mock trip data and related helpers for KidMap testing
-import { TripData } from '@/utils/achievementEngine';
-import { TripJournal, Achievement, UserStats } from '@/types/gamification';
-import { Route, Place, TransitStep, PhotoCheckIn } from '@/types/navigation';
+import { TripData } from '@/utils/achievementEngine'
+import { TripJournal, Achievement, UserStats } from '@/types/gamification'
+import { Route, Place, TransitStep, PhotoCheckIn } from '@/types/navigation'
 
 // Mock TripData for different scenarios
 export const mockTripData: Record<string, TripData> = {
@@ -70,7 +70,7 @@ export const mockTripData: Record<string, TripData> = {
     weatherCondition: 'sunny',
     timeOfDay: 'morning',
   },
-};
+}
 
 // Mock TripJournal entries
 export const mockTripJournal: TripJournal[] = [
@@ -112,7 +112,7 @@ export const mockTripJournal: TripJournal[] = [
       'Americans consume about 20 quarts of ice cream per person each year!',
     ],
   },
-];
+]
 
 // Mock Places for trip planning
 export const mockPlaces: Place[] = [
@@ -121,7 +121,7 @@ export const mockPlaces: Place[] = [
     name: 'Home',
     address: '123 Main St, New York, NY',
     category: 'home',
-    coordinates: { latitude: 40.7128, longitude: -74.0060 },
+    coordinates: { latitude: 40.7128, longitude: -74.006 },
     isFavorite: true,
   },
   {
@@ -129,7 +129,7 @@ export const mockPlaces: Place[] = [
     name: 'Lincoln Elementary School',
     address: '456 School Ave, New York, NY',
     category: 'school',
-    coordinates: { latitude: 40.7580, longitude: -73.9855 },
+    coordinates: { latitude: 40.758, longitude: -73.9855 },
     isFavorite: true,
   },
   {
@@ -153,7 +153,7 @@ export const mockPlaces: Place[] = [
     name: 'Museum of Natural History',
     address: 'Central Park West, New York, NY',
     category: 'other',
-    coordinates: { latitude: 40.7813, longitude: -73.9740 },
+    coordinates: { latitude: 40.7813, longitude: -73.974 },
     isFavorite: false,
   },
   {
@@ -164,7 +164,7 @@ export const mockPlaces: Place[] = [
     coordinates: { latitude: 40.7505, longitude: -73.9934 },
     isFavorite: true,
   },
-];
+]
 
 // Mock Routes with different transport modes
 export const mockRoutes: Route[] = [
@@ -218,7 +218,7 @@ export const mockRoutes: Route[] = [
     departureTime: '10:00',
     arrivalTime: '10:20',
   },
-];
+]
 
 // Mock PhotoCheckIn data
 export const mockPhotoCheckIns: PhotoCheckIn[] = [
@@ -248,7 +248,7 @@ export const mockPhotoCheckIns: PhotoCheckIn[] = [
       verified: true,
     },
   },
-];
+]
 
 // Mock UserStats for different progression levels
 export const mockUserStatsProgression: Record<string, UserStats> = {
@@ -270,7 +270,7 @@ export const mockUserStatsProgression: Record<string, UserStats> = {
     weatherConditions: ['sunny'],
     consecutiveDays: 1,
   },
-  
+
   intermediate: {
     totalTrips: 15,
     totalPoints: 320,
@@ -289,7 +289,7 @@ export const mockUserStatsProgression: Record<string, UserStats> = {
     weatherConditions: ['sunny', 'cloudy', 'rainy'],
     consecutiveDays: 5,
   },
-  
+
   advanced: {
     totalTrips: 50,
     totalPoints: 1250,
@@ -308,11 +308,13 @@ export const mockUserStatsProgression: Record<string, UserStats> = {
     weatherConditions: ['sunny', 'cloudy', 'rainy', 'snow'],
     consecutiveDays: 14,
   },
-};
+}
 
 // Helper functions for creating mock data
 
-export const createMockTripData = (overrides: Partial<TripData> = {}): TripData => ({
+export const createMockTripData = (
+  overrides: Partial<TripData> = {},
+): TripData => ({
   destination: 'Test Destination',
   duration: 15,
   mode: 'walking',
@@ -321,9 +323,11 @@ export const createMockTripData = (overrides: Partial<TripData> = {}): TripData 
   weatherCondition: 'sunny',
   timeOfDay: 'morning',
   ...overrides,
-});
+})
 
-export const createMockTripJournal = (overrides: Partial<TripJournal> = {}): TripJournal => ({
+export const createMockTripJournal = (
+  overrides: Partial<TripJournal> = {},
+): TripJournal => ({
   id: `journal-${Date.now()}`,
   date: new Date().toISOString().split('T')[0],
   from: 'Test Origin',
@@ -333,17 +337,17 @@ export const createMockTripJournal = (overrides: Partial<TripJournal> = {}): Tri
   rating: 4,
   funFacts: ['This is a test fun fact!'],
   ...overrides,
-});
+})
 
 export const createMockPlace = (overrides: Partial<Place> = {}): Place => ({
   id: `place-${Date.now()}`,
   name: 'Test Place',
   address: '123 Test St, Test City',
   category: 'other',
-  coordinates: { latitude: 40.7128, longitude: -74.0060 },
+  coordinates: { latitude: 40.7128, longitude: -74.006 },
   isFavorite: false,
   ...overrides,
-});
+})
 
 export const createMockRoute = (overrides: Partial<Route> = {}): Route => ({
   id: `route-${Date.now()}`,
@@ -360,9 +364,11 @@ export const createMockRoute = (overrides: Partial<Route> = {}): Route => ({
   departureTime: '09:00',
   arrivalTime: '09:15',
   ...overrides,
-});
+})
 
-export const createMockPhotoCheckIn = (overrides: Partial<PhotoCheckIn> = {}): PhotoCheckIn => ({
+export const createMockPhotoCheckIn = (
+  overrides: Partial<PhotoCheckIn> = {},
+): PhotoCheckIn => ({
   id: `checkin-${Date.now()}`,
   placeId: 'test-place',
   placeName: 'Test Place',
@@ -371,18 +377,22 @@ export const createMockPhotoCheckIn = (overrides: Partial<PhotoCheckIn> = {}): P
   notes: 'Test check-in',
   deviceInfo: {
     timestamp: Date.now(),
-    location: { latitude: 40.7128, longitude: -74.0060 },
+    location: { latitude: 40.7128, longitude: -74.006 },
     verified: true,
   },
   ...overrides,
-});
+})
 
 // Mock data generators for bulk testing
 export const generateMockTrips = (count: number): TripData[] => {
-  const destinations = ['Park', 'Library', 'School', 'Store', 'Friend\'s House'];
-  const modes: TripData['mode'][] = ['walking', 'transit', 'combined'];
-  const weather = ['sunny', 'cloudy', 'rainy'];
-  const timesOfDay: TripData['timeOfDay'][] = ['morning', 'afternoon', 'evening'];
+  const destinations = ['Park', 'Library', 'School', 'Store', "Friend's House"]
+  const modes: TripData['mode'][] = ['walking', 'transit', 'combined']
+  const weather = ['sunny', 'cloudy', 'rainy']
+  const timesOfDay: TripData['timeOfDay'][] = [
+    'morning',
+    'afternoon',
+    'evening',
+  ]
 
   return Array.from({ length: count }, (_, i) => ({
     destination: destinations[i % destinations.length],
@@ -392,8 +402,8 @@ export const generateMockTrips = (count: number): TripData[] => {
     distance: Math.floor(Math.random() * 5000) + 200, // 200-5200 meters
     weatherCondition: weather[Math.floor(Math.random() * weather.length)],
     timeOfDay: timesOfDay[Math.floor(Math.random() * timesOfDay.length)],
-  }));
-};
+  }))
+}
 
 export const generateMockJournalEntries = (count: number): TripJournal[] => {
   const funFactPool = [
@@ -402,12 +412,12 @@ export const generateMockJournalEntries = (count: number): TripJournal[] => {
     'The Statue of Liberty was a gift from France!',
     'Brooklyn Bridge was completed in 1883!',
     'Times Square is visited by 50 million people annually!',
-  ];
+  ]
 
   return Array.from({ length: count }, (_, i) => {
-    const date = new Date();
-    date.setDate(date.getDate() - i);
-    
+    const date = new Date()
+    date.setDate(date.getDate() - i)
+
     return {
       id: `journal-${i + 1}`,
       date: date.toISOString().split('T')[0],
@@ -417,9 +427,9 @@ export const generateMockJournalEntries = (count: number): TripJournal[] => {
       notes: `Trip ${i + 1} notes - had a great time!`,
       rating: Math.floor(Math.random() * 5) + 1,
       funFacts: [funFactPool[Math.floor(Math.random() * funFactPool.length)]],
-    };
-  });
-};
+    }
+  })
+}
 
 // Export commonly used mock combinations
 export const mockDataSets = {
@@ -443,4 +453,4 @@ export const mockDataSets = {
     journal: generateMockJournalEntries(30),
     stats: mockUserStatsProgression.advanced,
   },
-};
+}

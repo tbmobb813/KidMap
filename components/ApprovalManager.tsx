@@ -1,5 +1,5 @@
 // components/ApprovalManager.tsx - Comprehensive approval management system
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react'
 import {
   View,
   Text,
@@ -10,8 +10,8 @@ import {
   Modal,
   TextInput,
   Animated,
-} from 'react-native';
-import { PendingApproval } from '@/types';
+} from 'react-native'
+import { PendingApproval } from '@/types'
 import {
   Clock,
   CheckCircle,
@@ -29,68 +29,80 @@ import {
   Search,
   ChevronDown,
   ChevronUp,
-} from 'lucide-react-native';
-import Colors from '../constants/colors';
-import AccessibleButton from './AccessibleButton';
-import { useParentalControlStoreWithHelpers } from '@/stores/parentalControlStore';
+} from 'lucide-react-native'
+import Colors from '../constants/colors'
+import AccessibleButton from './AccessibleButton'
+import { useParentalControlStoreWithHelpers } from '@/stores/parentalControlStore'
 
 interface ApprovalManagerProps {
-  visible: boolean;
-  onClose: () => void;
+  visible: boolean
+  onClose: () => void
 }
 
 interface FilterState {
-  type: string;
-  status: string;
-  priority: string;
-  dateRange: string;
+  type: string
+  status: string
+  priority: string
+  dateRange: string
 }
 
-export default function ApprovalManager({ visible, onClose }: ApprovalManagerProps) {
-  const { 
-    pendingApprovals, 
-    approvalHistory, 
-    approveRequest, 
+export default function ApprovalManager({
+  visible,
+  onClose,
+}: ApprovalManagerProps) {
+  const {
+    pendingApprovals,
+    approvalHistory,
+    approveRequest,
     rejectRequest,
-    getPendingApprovalsCount 
-  } = useParentalControlStoreWithHelpers();
-  
-  const [selectedTab, setSelectedTab] = useState<'pending' | 'history'>('pending');
-  const [selectedApproval, setSelectedApproval] = useState<PendingApproval | null>(null);
-  const [showDetailModal, setShowDetailModal] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
+    getPendingApprovalsCount,
+  } = useParentalControlStoreWithHelpers()
+
+  const [selectedTab, setSelectedTab] = useState<'pending' | 'history'>(
+    'pending',
+  )
+  const [selectedApproval, setSelectedApproval] =
+    useState<PendingApproval | null>(null)
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [showFilters, setShowFilters] = useState(false)
   const [filters, setFilters] = useState<FilterState>({
     type: 'all',
     status: 'all',
     priority: 'all',
     dateRange: 'all',
-  });
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  })
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
 
-  const handleApprove = useCallback(async (approvalId: string, comments?: string) => {
-    try {
-      await approveRequest(approvalId, comments);
-      Alert.alert('Approved', 'The request has been approved successfully.');
-      setShowDetailModal(false);
-    } catch (error) {
-      Alert.alert('Error', 'Failed to approve the request. Please try again.');
-    }
-  }, [approveRequest]);
+  const handleApprove = useCallback(
+    async (approvalId: string, comments?: string) => {
+      try {
+        await approveRequest(approvalId, comments)
+        Alert.alert('Approved', 'The request has been approved successfully.')
+        setShowDetailModal(false)
+      } catch (error) {
+        Alert.alert('Error', 'Failed to approve the request. Please try again.')
+      }
+    },
+    [approveRequest],
+  )
 
-  const handleReject = useCallback(async (approvalId: string, reason?: string) => {
-    try {
-      await rejectRequest(approvalId, reason);
-      Alert.alert('Rejected', 'The request has been rejected.');
-      setShowDetailModal(false);
-    } catch (error) {
-      Alert.alert('Error', 'Failed to reject the request. Please try again.');
-    }
-  }, [rejectRequest]);
+  const handleReject = useCallback(
+    async (approvalId: string, reason?: string) => {
+      try {
+        await rejectRequest(approvalId, reason)
+        Alert.alert('Rejected', 'The request has been rejected.')
+        setShowDetailModal(false)
+      } catch (error) {
+        Alert.alert('Error', 'Failed to reject the request. Please try again.')
+      }
+    },
+    [rejectRequest],
+  )
 
   const handleBulkApprove = () => {
-    const pendingIds = pendingApprovals.map(approval => approval.id);
-    if (pendingIds.length === 0) return;
+    const pendingIds = pendingApprovals.map((approval) => approval.id)
+    if (pendingIds.length === 0) return
 
     Alert.alert(
       'Approve All Requests',
@@ -101,97 +113,111 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
           text: 'Approve All',
           onPress: async () => {
             for (const id of pendingIds) {
-              await approveRequest(id, 'Bulk approval');
+              await approveRequest(id, 'Bulk approval')
             }
-            Alert.alert('Success', `${pendingIds.length} requests have been approved.`);
-          }
-        }
-      ]
-    );
-  };
+            Alert.alert(
+              'Success',
+              `${pendingIds.length} requests have been approved.`,
+            )
+          },
+        },
+      ],
+    )
+  }
 
   const toggleItemExpansion = (id: string) => {
-    setExpandedItems(prev => {
-      const newSet = new Set(prev);
+    setExpandedItems((prev) => {
+      const newSet = new Set(prev)
       if (newSet.has(id)) {
-        newSet.delete(id);
+        newSet.delete(id)
       } else {
-        newSet.add(id);
+        newSet.add(id)
       }
-      return newSet;
-    });
-  };
+      return newSet
+    })
+  }
 
   const getApprovalIcon = (type: PendingApproval['type']) => {
     switch (type) {
       case 'category':
-        return <Tag size={20} color={Colors.primary} />;
+        return <Tag size={20} color={Colors.primary} />
       case 'safe-zone':
-        return <MapPin size={20} color={Colors.primary} />;
+        return <MapPin size={20} color={Colors.primary} />
       case 'contact':
-        return <Users size={20} color={Colors.primary} />;
+        return <Users size={20} color={Colors.primary} />
       case 'route':
-        return <Route size={20} color={Colors.primary} />;
+        return <Route size={20} color={Colors.primary} />
       default:
-        return <AlertCircle size={20} color={Colors.primary} />;
+        return <AlertCircle size={20} color={Colors.primary} />
     }
-  };
+  }
 
   const getPriorityColor = (priority: PendingApproval['priority']) => {
     switch (priority) {
       case 'high':
-        return Colors.error;
+        return Colors.error
       case 'medium':
-        return Colors.warning;
+        return Colors.warning
       case 'low':
-        return Colors.success;
+        return Colors.success
       default:
-        return Colors.text.primaryLight;
+        return Colors.text.primaryLight
     }
-  };
+  }
 
   const formatTimeAgo = (timestamp: number) => {
-    const now = Date.now();
-    const diff = now - timestamp;
-    const minutes = Math.floor(diff / (1000 * 60));
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const now = Date.now()
+    const diff = now - timestamp
+    const minutes = Math.floor(diff / (1000 * 60))
+    const hours = Math.floor(diff / (1000 * 60 * 60))
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
 
-    if (minutes < 1) return 'Just now';
-    if (minutes < 60) return `${minutes}m ago`;
-    if (hours < 24) return `${hours}h ago`;
-    return `${days}d ago`;
-  };
+    if (minutes < 1) return 'Just now'
+    if (minutes < 60) return `${minutes}m ago`
+    if (hours < 24) return `${hours}h ago`
+    return `${days}d ago`
+  }
 
-  const filteredApprovals = (selectedTab === 'pending' ? pendingApprovals : approvalHistory)
-    .filter(approval => {
-      if (searchQuery && !approval.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-          !approval.description.toLowerCase().includes(searchQuery.toLowerCase())) {
-        return false;
+  const filteredApprovals = (
+    selectedTab === 'pending' ? pendingApprovals : approvalHistory
+  )
+    .filter((approval) => {
+      if (
+        searchQuery &&
+        !approval.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        !approval.description.toLowerCase().includes(searchQuery.toLowerCase())
+      ) {
+        return false
       }
-      
-      if (filters.type !== 'all' && approval.type !== filters.type) return false;
-      if (selectedTab === 'history' && filters.status !== 'all' && approval.status !== filters.status) return false;
-      if (filters.priority !== 'all' && approval.priority !== filters.priority) return false;
-      
-      return true;
+
+      if (filters.type !== 'all' && approval.type !== filters.type) return false
+      if (
+        selectedTab === 'history' &&
+        filters.status !== 'all' &&
+        approval.status !== filters.status
+      )
+        return false
+      if (filters.priority !== 'all' && approval.priority !== filters.priority)
+        return false
+
+      return true
     })
     .sort((a, b) => {
       // Sort by priority first, then by timestamp
-      const priorityOrder = { high: 3, medium: 2, low: 1 };
-      const aPriority = priorityOrder[a.priority] || 0;
-      const bPriority = priorityOrder[b.priority] || 0;
-      
+      const priorityOrder = { high: 3, medium: 2, low: 1 }
+      const aPriority = priorityOrder[a.priority] || 0
+      const bPriority = priorityOrder[b.priority] || 0
+
       if (aPriority !== bPriority) {
-        return bPriority - aPriority;
+        return bPriority - aPriority
       }
-      
-      return b.timestamp - a.timestamp;
-    });
+
+      return b.timestamp - a.timestamp
+    })
 
   const renderApprovalItem = (approval: PendingApproval) => {
-    const isExpanded = expandedItems.has(approval.id);
-    
+    const isExpanded = expandedItems.has(approval.id)
+
     return (
       <View key={approval.id} style={styles.approvalItem}>
         <TouchableOpacity
@@ -206,26 +232,58 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
             <View style={styles.approvalContent}>
               <View style={styles.approvalTitleRow}>
                 <Text style={styles.approvalTitle}>{approval.title}</Text>
-                <View style={[styles.priorityBadge, { backgroundColor: getPriorityColor(approval.priority) + '20' }]}>
-                  <Text style={[styles.priorityText, { color: getPriorityColor(approval.priority) }]}>
+                <View
+                  style={[
+                    styles.priorityBadge,
+                    {
+                      backgroundColor:
+                        getPriorityColor(approval.priority) + '20',
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.priorityText,
+                      { color: getPriorityColor(approval.priority) },
+                    ]}
+                  >
                     {approval.priority.toUpperCase()}
                   </Text>
                 </View>
               </View>
-              <Text style={styles.approvalDescription} numberOfLines={isExpanded ? undefined : 2}>
+              <Text
+                style={styles.approvalDescription}
+                numberOfLines={isExpanded ? undefined : 2}
+              >
                 {approval.description}
               </Text>
               <View style={styles.approvalMeta}>
-                <Text style={styles.approvalTime}>{formatTimeAgo(approval.timestamp)}</Text>
+                <Text style={styles.approvalTime}>
+                  {formatTimeAgo(approval.timestamp)}
+                </Text>
                 {approval.status && (
-                  <View style={[
-                    styles.statusBadge,
-                    { backgroundColor: approval.status === 'approved' ? Colors.success + '20' : Colors.error + '20' }
-                  ]}>
-                    <Text style={[
-                      styles.statusText,
-                      { color: approval.status === 'approved' ? Colors.success : Colors.error }
-                    ]}>
+                  <View
+                    style={[
+                      styles.statusBadge,
+                      {
+                        backgroundColor:
+                          approval.status === 'approved'
+                            ? Colors.success + '20'
+                            : Colors.error + '20',
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.statusText,
+                        {
+                          color:
+                            approval.status === 'approved'
+                              ? Colors.success
+                              : Colors.error,
+                        },
+                      ]}
+                    >
                       {approval.status.toUpperCase()}
                     </Text>
                   </View>
@@ -261,8 +319,8 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
                 <AccessibleButton
                   title="View Details"
                   onPress={() => {
-                    setSelectedApproval(approval);
-                    setShowDetailModal(true);
+                    setSelectedApproval(approval)
+                    setShowDetailModal(true)
                   }}
                   style={styles.detailButton}
                   textStyle={styles.detailButtonText}
@@ -293,11 +351,11 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
           </View>
         )}
       </View>
-    );
-  };
+    )
+  }
 
   const renderDetailModal = () => {
-    if (!selectedApproval) return null;
+    if (!selectedApproval) return null
 
     return (
       <Modal
@@ -323,18 +381,22 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
                 {getApprovalIcon(selectedApproval.type)}
                 <Text style={styles.detailTitle}>{selectedApproval.title}</Text>
               </View>
-              <Text style={styles.detailDescription}>{selectedApproval.description}</Text>
+              <Text style={styles.detailDescription}>
+                {selectedApproval.description}
+              </Text>
             </View>
 
             {selectedApproval.metadata && (
               <View style={styles.detailSection}>
                 <Text style={styles.sectionTitle}>Request Details</Text>
-                {Object.entries(selectedApproval.metadata).map(([key, value]) => (
-                  <View key={key} style={styles.detailRow}>
-                    <Text style={styles.detailLabel}>{key}:</Text>
-                    <Text style={styles.detailValue}>{String(value)}</Text>
-                  </View>
-                ))}
+                {Object.entries(selectedApproval.metadata).map(
+                  ([key, value]) => (
+                    <View key={key} style={styles.detailRow}>
+                      <Text style={styles.detailLabel}>{key}:</Text>
+                      <Text style={styles.detailValue}>{String(value)}</Text>
+                    </View>
+                  ),
+                )}
               </View>
             )}
 
@@ -346,7 +408,12 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
               </View>
               <View style={styles.detailRow}>
                 <Text style={styles.detailLabel}>Priority:</Text>
-                <Text style={[styles.detailValue, { color: getPriorityColor(selectedApproval.priority) }]}>
+                <Text
+                  style={[
+                    styles.detailValue,
+                    { color: getPriorityColor(selectedApproval.priority) },
+                  ]}
+                >
                   {selectedApproval.priority.toUpperCase()}
                 </Text>
               </View>
@@ -371,10 +438,14 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
                     {
                       text: 'Reject',
                       style: 'destructive',
-                      onPress: () => handleReject(selectedApproval.id, 'Rejected from detail view')
-                    }
-                  ]
-                );
+                      onPress: () =>
+                        handleReject(
+                          selectedApproval.id,
+                          'Rejected from detail view',
+                        ),
+                    },
+                  ],
+                )
               }}
               style={styles.modalRejectButton}
               textStyle={styles.modalRejectText}
@@ -389,10 +460,14 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
                     { text: 'Cancel', style: 'cancel' },
                     {
                       text: 'Approve',
-                      onPress: () => handleApprove(selectedApproval.id, 'Approved from detail view')
-                    }
-                  ]
-                );
+                      onPress: () =>
+                        handleApprove(
+                          selectedApproval.id,
+                          'Approved from detail view',
+                        ),
+                    },
+                  ],
+                )
               }}
               style={styles.modalApproveButton}
               textStyle={styles.modalApproveText}
@@ -400,13 +475,17 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
           </View>
         </View>
       </Modal>
-    );
-  };
+    )
+  }
 
-  if (!visible) return null;
+  if (!visible) return null
 
   return (
-    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
+    <Modal
+      visible={visible}
+      animationType="slide"
+      presentationStyle="pageSheet"
+    >
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -428,8 +507,20 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
             style={[styles.tab, selectedTab === 'pending' && styles.activeTab]}
             onPress={() => setSelectedTab('pending')}
           >
-            <Clock size={16} color={selectedTab === 'pending' ? Colors.primary : Colors.text.primaryLight} />
-            <Text style={[styles.tabText, selectedTab === 'pending' && styles.activeTabText]}>
+            <Clock
+              size={16}
+              color={
+                selectedTab === 'pending'
+                  ? Colors.primary
+                  : Colors.text.primaryLight
+              }
+            />
+            <Text
+              style={[
+                styles.tabText,
+                selectedTab === 'pending' && styles.activeTabText,
+              ]}
+            >
               Pending ({getPendingApprovalsCount()})
             </Text>
           </TouchableOpacity>
@@ -437,8 +528,20 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
             style={[styles.tab, selectedTab === 'history' && styles.activeTab]}
             onPress={() => setSelectedTab('history')}
           >
-            <CheckCircle size={16} color={selectedTab === 'history' ? Colors.primary : Colors.text.primaryLight} />
-            <Text style={[styles.tabText, selectedTab === 'history' && styles.activeTabText]}>
+            <CheckCircle
+              size={16}
+              color={
+                selectedTab === 'history'
+                  ? Colors.primary
+                  : Colors.text.primaryLight
+              }
+            />
+            <Text
+              style={[
+                styles.tabText,
+                selectedTab === 'history' && styles.activeTabText,
+              ]}
+            >
               History ({approvalHistory.length})
             </Text>
           </TouchableOpacity>
@@ -478,7 +581,8 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
                   <Clock size={48} color={Colors.text.primaryLight} />
                   <Text style={styles.emptyTitle}>No Pending Approvals</Text>
                   <Text style={styles.emptySubtitle}>
-                    All requests have been reviewed. New requests will appear here.
+                    All requests have been reviewed. New requests will appear
+                    here.
                   </Text>
                 </>
               ) : (
@@ -499,7 +603,7 @@ export default function ApprovalManager({ visible, onClose }: ApprovalManagerPro
         {renderDetailModal()}
       </View>
     </Modal>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -862,4 +966,4 @@ const styles = StyleSheet.create({
     color: Colors.background,
     fontWeight: '600',
   },
-});
+})

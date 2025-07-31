@@ -1,31 +1,35 @@
-import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import Colors from '@/constants/colors';
-import { useRegionStore } from '@/stores/regionStore';
-import TransitStepIndicator from './TransitStepIndicator';
-import { Train, Bus, Navigation, Ship } from 'lucide-react-native';
+import React from 'react'
+import { StyleSheet, Text, View, FlatList } from 'react-native'
+import Colors from '@/constants/colors'
+import { useRegionStore } from '@/stores/regionStore'
+import TransitStepIndicator from './TransitStepIndicator'
+import { Train, Bus, Navigation, Ship } from 'lucide-react-native'
 
 const RegionalTransitCard: React.FC = () => {
-  const { currentRegion, getCurrentTransitSystems } = useRegionStore();
-  const transitSystems = getCurrentTransitSystems();
+  const { currentRegion, getCurrentTransitSystems } = useRegionStore()
+  const transitSystems = getCurrentTransitSystems()
 
   const getTransitIcon = (type: string) => {
     switch (type) {
       case 'subway':
       case 'train':
-        return <Train size={20} color="#FFFFFF" />;
+        return <Train size={20} color="#FFFFFF" />
       case 'bus':
-        return <Bus size={20} color="#FFFFFF" />;
+        return <Bus size={20} color="#FFFFFF" />
       case 'tram':
-        return <Navigation size={20} color="#FFFFFF" />;
+        return <Navigation size={20} color="#FFFFFF" />
       case 'ferry':
-        return <Ship size={20} color="#FFFFFF" />;
+        return <Ship size={20} color="#FFFFFF" />
       default:
-        return <Train size={20} color="#FFFFFF" />;
+        return <Train size={20} color="#FFFFFF" />
     }
-  };
+  }
 
-  const renderTransitSystem = ({ item }: { item: (typeof transitSystems)[0] }) => (
+  const renderTransitSystem = ({
+    item,
+  }: {
+    item: (typeof transitSystems)[0]
+  }) => (
     <View style={styles.transitItem}>
       <View style={[styles.transitIcon, { backgroundColor: item.color }]}>
         {getTransitIcon(item.type)}
@@ -38,12 +42,14 @@ const RegionalTransitCard: React.FC = () => {
         </Text>
       </View>
     </View>
-  );
+  )
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Transit Systems in {currentRegion.name}</Text>
+        <Text style={styles.title}>
+          Transit Systems in {currentRegion.name}
+        </Text>
         <Text style={styles.subtitle}>{currentRegion.country}</Text>
       </View>
 
@@ -56,11 +62,13 @@ const RegionalTransitCard: React.FC = () => {
       />
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>Emergency: {currentRegion.emergencyNumber}</Text>
+        <Text style={styles.footerText}>
+          Emergency: {currentRegion.emergencyNumber}
+        </Text>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -125,6 +133,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
   },
-});
+})
 
-export default RegionalTransitCard;
+export default RegionalTransitCard

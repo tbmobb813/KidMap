@@ -1,19 +1,35 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, Pressable, Alert, Vibration, Platform } from 'react-native';
-import Colors from '@/constants/colors';
-import { Mic, MicOff, Volume2, VolumeX, Play, Pause, HelpCircle } from 'lucide-react-native';
-import { speechEngine, VoiceCommand } from '@/utils/speechEngine';
+import React, { useState, useEffect, useRef } from 'react'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  Alert,
+  Vibration,
+  Platform,
+} from 'react-native'
+import Colors from '@/constants/colors'
+import {
+  Mic,
+  MicOff,
+  Volume2,
+  VolumeX,
+  Play,
+  Pause,
+  HelpCircle,
+} from 'lucide-react-native'
+import { speechEngine, VoiceCommand } from '@/utils/speechEngine'
 
 type VoiceNavigationProps = {
-  currentStep?: string;
-  currentLocation?: string;
-  timeRemaining?: number;
-  isNavigationPaused?: boolean;
-  onVoiceCommand?: (action: string, context?: any) => void;
-  onEmergencyCall?: () => void;
-  onPauseNavigation?: () => void;
-  onResumeNavigation?: () => void;
-};
+  currentStep?: string
+  currentLocation?: string
+  timeRemaining?: number
+  isNavigationPaused?: boolean
+  onVoiceCommand?: (action: string, context?: any) => void
+  onEmergencyCall?: () => void
+  onPauseNavigation?: () => void
+  onResumeNavigation?: () => void
+}
 
 const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
   currentStep = 'Walk to Main Street Station',
@@ -25,208 +41,220 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
   onPauseNavigation,
   onResumeNavigation,
 }) => {
-  const [isListening, setIsListening] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [isVoiceEnabled, setIsVoiceEnabled] = useState(true);
-  const [recognizedText, setRecognizedText] = useState('');
-  const [showCommands, setShowCommands] = useState(false);
+  const [isListening, setIsListening] = useState(false)
+  const [isSpeaking, setIsSpeaking] = useState(false)
+  const [isVoiceEnabled, setIsVoiceEnabled] = useState(true)
+  const [recognizedText, setRecognizedText] = useState('')
+  const [showCommands, setShowCommands] = useState(false)
 
   // refs to clear timers on unmount
-  const listeningTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const speakingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const listeningTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const speakingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // available voice commands from speech engine
-  const voiceCommands = speechEngine.getAvailableCommands();
+  const voiceCommands = speechEngine.getAvailableCommands()
 
   useEffect(() => {
     // Initialize speech engine
-    speechEngine.initialize();
-    
+    speechEngine.initialize()
+
     return () => {
       // cleanup timers
       if (listeningTimeout.current) {
-        clearTimeout(listeningTimeout.current);
+        clearTimeout(listeningTimeout.current)
       }
       if (speakingTimeout.current) {
-        clearTimeout(speakingTimeout.current);
+        clearTimeout(speakingTimeout.current)
       }
-      
+
       // Stop any ongoing speech
-      speechEngine.stopSpeaking();
-    };
-  }, []);
+      speechEngine.stopSpeaking()
+    }
+  }, [])
 
   // Auto-announce navigation steps when they change
   useEffect(() => {
     if (isVoiceEnabled && currentStep && !isNavigationPaused) {
-      handleAutoSpeak();
+      handleAutoSpeak()
     }
-  }, [currentStep, isVoiceEnabled, isNavigationPaused]);
+  }, [currentStep, isVoiceEnabled, isNavigationPaused])
 
   const handleAutoSpeak = async () => {
     if (await speechEngine.isSpeaking()) {
-      return; // Don't interrupt current speech
+      return // Don't interrupt current speech
     }
-    
+
     await speechEngine.speakInstruction(currentStep, {
       location: currentLocation,
       distance: Math.floor(Math.random() * 100) + 50, // Would come from actual route data
       safety: true,
-    });
-  };
+    })
+  }
 
   const handleVoiceToggle = () => {
     if (isListening) {
-      stopListening();
+      stopListening()
     } else {
-      startListening();
+      startListening()
     }
-  };
+  }
 
   const startListening = async () => {
-    setIsListening(true);
-    setRecognizedText('Listening...');
-    Vibration.vibrate(100); // Haptic feedback
-    
+    setIsListening(true)
+    setRecognizedText('Listening...')
+    Vibration.vibrate(100) // Haptic feedback
+
     // Simulate voice recognition (in real app, would use expo-speech-recognition or similar)
     // For demo purposes, we'll simulate recognition with a timeout
     listeningTimeout.current = setTimeout(() => {
-      simulateVoiceRecognition();
-    }, 3000);
-  };
+      simulateVoiceRecognition()
+    }, 3000)
+  }
 
   const stopListening = () => {
-    setIsListening(false);
-    setRecognizedText('');
-    
+    setIsListening(false)
+    setRecognizedText('')
+
     if (listeningTimeout.current) {
-      clearTimeout(listeningTimeout.current);
-      listeningTimeout.current = null;
+      clearTimeout(listeningTimeout.current)
+      listeningTimeout.current = null
     }
-  };
+  }
 
   // Simulate voice recognition for demo (replace with actual implementation)
   const simulateVoiceRecognition = () => {
     const mockInputs = [
       'where am i',
-      'repeat directions', 
+      'repeat directions',
       'how much time left',
       'help me',
-      'pause navigation'
-    ];
-    
-    const randomInput = mockInputs[Math.floor(Math.random() * mockInputs.length)];
-    setRecognizedText(`Heard: "${randomInput}"`);
-    processVoiceInput(randomInput);
-    
+      'pause navigation',
+    ]
+
+    const randomInput =
+      mockInputs[Math.floor(Math.random() * mockInputs.length)]
+    setRecognizedText(`Heard: "${randomInput}"`)
+    processVoiceInput(randomInput)
+
     setTimeout(() => {
-      setIsListening(false);
-      setRecognizedText('');
-    }, 2000);
-  };
+      setIsListening(false)
+      setRecognizedText('')
+    }, 2000)
+  }
 
   const processVoiceInput = async (input: string) => {
-    const command = speechEngine.processVoiceInput(input);
-    
+    const command = speechEngine.processVoiceInput(input)
+
     if (!command) {
-      await speechEngine.speak("I didn't understand that. Try saying 'help' to hear available commands.");
-      return;
+      await speechEngine.speak(
+        "I didn't understand that. Try saying 'help' to hear available commands.",
+      )
+      return
     }
 
     // Handle the command based on its action
     switch (command.action) {
       case 'location_status':
-        const locationResponse = speechEngine.generateResponse('location_status', {
-          location: currentLocation
-        });
-        await speechEngine.speak(locationResponse);
-        break;
-        
+        const locationResponse = speechEngine.generateResponse(
+          'location_status',
+          {
+            location: currentLocation,
+          },
+        )
+        await speechEngine.speak(locationResponse)
+        break
+
       case 'repeat_instruction':
-        const instructionResponse = speechEngine.generateResponse('repeat_instruction', {
-          instruction: currentStep
-        });
-        await speechEngine.speak(instructionResponse);
-        break;
-        
+        const instructionResponse = speechEngine.generateResponse(
+          'repeat_instruction',
+          {
+            instruction: currentStep,
+          },
+        )
+        await speechEngine.speak(instructionResponse)
+        break
+
       case 'time_estimate':
         const timeResponse = speechEngine.generateResponse('time_estimate', {
-          time: timeRemaining
-        });
-        await speechEngine.speak(timeResponse);
-        break;
-        
+          time: timeRemaining,
+        })
+        await speechEngine.speak(timeResponse)
+        break
+
       case 'emergency_contact':
-        await speechEngine.speak("I'll help you call for help right now!");
-        onEmergencyCall?.();
-        break;
-        
+        await speechEngine.speak("I'll help you call for help right now!")
+        onEmergencyCall?.()
+        break
+
       case 'pause_navigation':
         if (!isNavigationPaused) {
-          await speechEngine.speak("Navigation paused. Take your time!");
-          onPauseNavigation?.();
+          await speechEngine.speak('Navigation paused. Take your time!')
+          onPauseNavigation?.()
         }
-        break;
-        
+        break
+
       case 'resume_navigation':
         if (isNavigationPaused) {
-          await speechEngine.speak("Let's continue! You're doing great!");
-          onResumeNavigation?.();
+          await speechEngine.speak("Let's continue! You're doing great!")
+          onResumeNavigation?.()
         }
-        break;
-        
+        break
+
       case 'adjust_speed':
-        speechEngine.adjustSpeechSettings({ rate: 0.6 });
-        await speechEngine.speak("I'll speak more slowly now.");
-        break;
-        
+        speechEngine.adjustSpeechSettings({ rate: 0.6 })
+        await speechEngine.speak("I'll speak more slowly now.")
+        break
+
       default:
-        await speechEngine.speak("I understand! Let me help you with that.");
-        break;
+        await speechEngine.speak('I understand! Let me help you with that.')
+        break
     }
-    
+
     // Notify parent component
-    onVoiceCommand?.(command.action, { input, command });
-  };
+    onVoiceCommand?.(command.action, { input, command })
+  }
 
   const handleSpeak = async () => {
     if (isSpeaking) {
-      await speechEngine.stopSpeaking();
-      setIsSpeaking(false);
-      return;
+      await speechEngine.stopSpeaking()
+      setIsSpeaking(false)
+      return
     }
-    
-    setIsSpeaking(true);
-    
+
+    setIsSpeaking(true)
+
     try {
       await speechEngine.speakInstruction(currentStep, {
         location: currentLocation,
         distance: Math.floor(Math.random() * 100) + 50,
         safety: true,
-      });
+      })
     } catch (error) {
-      console.error('Speech failed:', error);
+      console.error('Speech failed:', error)
     } finally {
-      setIsSpeaking(false);
+      setIsSpeaking(false)
     }
-  };
+  }
 
   const toggleVoiceEnabled = () => {
-    setIsVoiceEnabled(!isVoiceEnabled);
-    
+    setIsVoiceEnabled(!isVoiceEnabled)
+
     if (!isVoiceEnabled) {
-      speechEngine.speak("Voice navigation is now on!");
+      speechEngine.speak('Voice navigation is now on!')
     } else {
-      speechEngine.speak("Voice navigation is now off.");
+      speechEngine.speak('Voice navigation is now off.')
     }
-  };
+  }
 
   const showHelp = () => {
-    setShowCommands(!showCommands);
+    setShowCommands(!showCommands)
     if (!showCommands) {
-      speechEngine.speak("Here are the commands you can say: " + voiceCommands.slice(0, 5).join(', '));
+      speechEngine.speak(
+        'Here are the commands you can say: ' +
+          voiceCommands.slice(0, 5).join(', '),
+      )
     }
-  };
+  }
 
   return (
     <View style={styles.container}>
@@ -234,8 +262,15 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
       <View style={styles.controlsContainer}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={isVoiceEnabled ? 'Disable voice navigation' : 'Enable voice navigation'}
-          style={[styles.toggleButton, !isVoiceEnabled && styles.disabledButton]}
+          accessibilityLabel={
+            isVoiceEnabled
+              ? 'Disable voice navigation'
+              : 'Enable voice navigation'
+          }
+          style={[
+            styles.toggleButton,
+            !isVoiceEnabled && styles.disabledButton,
+          ]}
           onPress={toggleVoiceEnabled}
         >
           {isVoiceEnabled ? (
@@ -250,11 +285,13 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
 
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={isListening ? 'Stop listening' : 'Start voice input'}
+          accessibilityLabel={
+            isListening ? 'Stop listening' : 'Start voice input'
+          }
           style={[
-            styles.voiceButton, 
+            styles.voiceButton,
             isListening && styles.listeningButton,
-            !isVoiceEnabled && styles.disabledButton
+            !isVoiceEnabled && styles.disabledButton,
           ]}
           onPress={handleVoiceToggle}
           disabled={!isVoiceEnabled}
@@ -264,18 +301,18 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
           ) : (
             <Mic size={24} color="#FFFFFF" />
           )}
-          <Text style={styles.buttonText}>
-            {isListening ? 'Stop' : 'Talk'}
-          </Text>
+          <Text style={styles.buttonText}>{isListening ? 'Stop' : 'Talk'}</Text>
         </Pressable>
 
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={isSpeaking ? 'Stop speaking' : 'Repeat current instruction'}
+          accessibilityLabel={
+            isSpeaking ? 'Stop speaking' : 'Repeat current instruction'
+          }
           style={[
-            styles.speakButton, 
+            styles.speakButton,
             isSpeaking && styles.speakingButton,
-            !isVoiceEnabled && styles.disabledButton
+            !isVoiceEnabled && styles.disabledButton,
           ]}
           onPress={handleSpeak}
           disabled={!isVoiceEnabled}
@@ -312,7 +349,9 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
       {isNavigationPaused && (
         <View style={styles.statusContainer}>
           <Text style={styles.statusText}>🔸 Navigation Paused</Text>
-          <Text style={styles.statusSubtext}>Say "continue" or "resume" to keep going</Text>
+          <Text style={styles.statusSubtext}>
+            Say "continue" or "resume" to keep going
+          </Text>
         </View>
       )}
 
@@ -333,8 +372,8 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
         </View>
       )}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -472,6 +511,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontStyle: 'italic',
   },
-});
+})
 
-export default VoiceNavigation;
+export default VoiceNavigation

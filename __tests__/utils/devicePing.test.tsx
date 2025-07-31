@@ -1,10 +1,12 @@
 // __tests__/devicePing.test.tsx - Device ping system tests
-import React from 'react';
-import { fireEvent, waitFor } from '@testing-library/react-native';
-import { Alert } from 'react-native';
-import DevicePingControl from '../../components/DevicePingControl';
-import { devicePingManager } from '../../utils/devicePing';
-import { renderWithProviders, setupKidMapTests } from '../helpers';
+import React from 'react'
+import { fireEvent, waitFor } from '@testing-library/react-native'
+import { Alert } from 'react-native'
+import DevicePingControl from '../../components/DevicePingControl'
+import { devicePingManager } from '../../utils/devicePing'
+import { renderWithProviders, setupKidMapTests } from '../helpers'
+import { pingDevice, sendLocationUpdate } from '../utils/pingDevice'
+const { testLogger, expectWithLog } = require('./utils/testHelpers')
 
 // Mock dependencies
 jest.mock('expo-notifications', () => ({
@@ -17,31 +19,37 @@ jest.mock('expo-notifications', () => ({
     MAX: 'max',
     HIGH: 'high',
   },
-}));
+}))
 
 jest.mock('expo-location', () => ({
-  requestForegroundPermissionsAsync: jest.fn().mockResolvedValue({ status: 'granted' }),
-  requestBackgroundPermissionsAsync: jest.fn().mockResolvedValue({ status: 'granted' }),
+  requestForegroundPermissionsAsync: jest
+    .fn()
+    .mockResolvedValue({ status: 'granted' }),
+  requestBackgroundPermissionsAsync: jest
+    .fn()
+    .mockResolvedValue({ status: 'granted' }),
   getCurrentPositionAsync: jest.fn().mockResolvedValue({
     coords: {
       latitude: 40.7128,
-      longitude: -74.0060,
+      longitude: -74.006,
       accuracy: 10,
     },
     timestamp: Date.now(),
   }),
-  reverseGeocodeAsync: jest.fn().mockResolvedValue([{
-    streetNumber: '123',
-    street: 'Main St',
-    city: 'New York',
-    region: 'NY',
-  }]),
+  reverseGeocodeAsync: jest.fn().mockResolvedValue([
+    {
+      streetNumber: '123',
+      street: 'Main St',
+      city: 'New York',
+      region: 'NY',
+    },
+  ]),
   Accuracy: {
     BestForNavigation: 'bestForNavigation',
     Balanced: 'balanced',
     High: 'high',
   },
-}));
+}))
 
 jest.mock('expo-av', () => ({
   Audio: {
@@ -57,129 +65,172 @@ jest.mock('expo-av', () => ({
       }),
     },
   },
-}));
+}))
 
 jest.mock('@/stores/parentalControlStore', () => ({
   useParentalControlStore: () => ({
     isAuthenticated: true,
   }),
-}));
+}))
 
 jest.mock('@/utils/speechEngine', () => ({
   speechEngine: {
     speak: jest.fn(),
   },
-}));
+}))
 
 // Mock Alert
-jest.spyOn(Alert, 'alert');
+jest.spyOn(Alert, 'alert')
 
 describe('Device Ping System', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-  });
+    jest.clearAllMocks()
+  })
 
   describe('DevicePingManager', () => {
     it('should initialize properly', async () => {
-      await devicePingManager.initialize();
+      await devicePingManager.initialize()
       // Test passes if no errors are thrown
-      expect(true).toBe(true);
-    });
+      expect(true).toBe(true)
+    })
 
     it('should send a ring ping', async () => {
-      const pingId = await devicePingManager.ringChild('Test ring message');
-      expect(pingId).toBeDefined();
-      expect(typeof pingId).toBe('string');
-    });
+      const pingId = await devicePingManager.ringChild('Test ring message')
+      expect(pingId).toBeDefined()
+      expect(typeof pingId).toBe('string')
+    })
 
     it('should send a location request', async () => {
-      const pingId = await devicePingManager.requestLocation('Where are you?');
-      expect(pingId).toBeDefined();
-      expect(typeof pingId).toBe('string');
-    });
+      const pingId = await devicePingManager.requestLocation('Where are you?')
+      expect(pingId).toBeDefined()
+      expect(typeof pingId).toBe('string')
+    })
 
     it('should send a check-in request', async () => {
-      const pingId = await devicePingManager.requestCheckIn('How are you doing?');
-      expect(pingId).toBeDefined();
-      expect(typeof pingId).toBe('string');
-    });
+      const pingId =
+        await devicePingManager.requestCheckIn('How are you doing?')
+      expect(pingId).toBeDefined()
+      expect(typeof pingId).toBe('string')
+    })
 
     it('should send an emergency ping', async () => {
-      const pingId = await devicePingManager.sendEmergencyPing('Emergency! Respond now!');
-      expect(pingId).toBeDefined();
-      expect(typeof pingId).toBe('string');
-    });
+      const pingId = await devicePingManager.sendEmergencyPing(
+        'Emergency! Respond now!',
+      )
+      expect(pingId).toBeDefined()
+      expect(typeof pingId).toBe('string')
+    })
 
     it('should track pending requests', async () => {
-      await devicePingManager.ringChild('Test ping');
-      const pendingRequests = devicePingManager.getPendingRequests();
-      expect(pendingRequests.length).toBeGreaterThan(0);
-      expect(pendingRequests[0].type).toBe('ring');
-    });
+      await devicePingManager.ringChild('Test ping')
+      const pendingRequests = devicePingManager.getPendingRequests()
+      expect(pendingRequests.length).toBeGreaterThan(0)
+      expect(pendingRequests[0].type).toBe('ring')
+    })
 
     it('should maintain ping history', async () => {
-      await devicePingManager.requestCheckIn('Test check-in');
-      const history = devicePingManager.getPingHistory();
-      expect(history.length).toBeGreaterThan(0);
-    });
-  });
+      await devicePingManager.requestCheckIn('Test check-in')
+      const history = devicePingManager.getPingHistory()
+      expect(history.length).toBeGreaterThan(0)
+    })
+  })
 
   describe('DevicePingControl Component', () => {
     const defaultProps = {
       visible: true,
       onClose: jest.fn(),
-    };
+    }
 
     beforeEach(() => {
-      setupKidMapTests();
-    });
+      setupKidMapTests()
+    })
 
     it('renders correctly when visible', () => {
-      const { getByText } = renderWithProviders(<DevicePingControl {...defaultProps} />);
-      expect(getByText('Device Control')).toBeTruthy();
-      expect(getByText('Quick Actions')).toBeTruthy();
-    });
+      const { getByText } = renderWithProviders(
+        <DevicePingControl {...defaultProps} />,
+      )
+      expect(getByText('Device Control')).toBeTruthy()
+      expect(getByText('Quick Actions')).toBeTruthy()
+    })
 
     it('renders all quick action buttons', () => {
-      const { getByText } = renderWithProviders(<DevicePingControl {...defaultProps} />);
-      expect(getByText('Ring Device')).toBeTruthy();
-      expect(getByText('Get Location')).toBeTruthy();
-      expect(getByText('Check-in')).toBeTruthy();
-      expect(getByText('Emergency')).toBeTruthy();
-    });
+      const { getByText } = renderWithProviders(
+        <DevicePingControl {...defaultProps} />,
+      )
+      expect(getByText('Ring Device')).toBeTruthy()
+      expect(getByText('Get Location')).toBeTruthy()
+      expect(getByText('Check-in')).toBeTruthy()
+      expect(getByText('Emergency')).toBeTruthy()
+    })
 
     it('handles ring device button press', async () => {
-      const { getByText } = renderWithProviders(<DevicePingControl {...defaultProps} />);
-      const ringButton = getByText('Ring Device');
-      
-      fireEvent.press(ringButton);
-      
+      const { getByText } = renderWithProviders(
+        <DevicePingControl {...defaultProps} />,
+      )
+      const ringButton = getByText('Ring Device')
+
+      fireEvent.press(ringButton)
+
       await waitFor(() => {
         expect(Alert.alert).toHaveBeenCalledWith(
           'Ping Sent',
-          'Your ring request has been sent to your child\'s device.',
-          expect.any(Array)
-        );
-      });
-    });
+          "Your ring request has been sent to your child's device.",
+          expect.any(Array),
+        )
+      })
+    })
 
     it('displays empty state when no pending requests', () => {
-      const { getByText } = renderWithProviders(<DevicePingControl {...defaultProps} />);
-      expect(getByText('No pending requests')).toBeTruthy();
-      expect(getByText('Your child has responded to all pings')).toBeTruthy();
-    });
-  });
+      const { getByText } = renderWithProviders(
+        <DevicePingControl {...defaultProps} />,
+      )
+      expect(getByText('No pending requests')).toBeTruthy()
+      expect(getByText('Your child has responded to all pings')).toBeTruthy()
+    })
+  })
 
   describe('Error Handling', () => {
     it('should handle location permission denied gracefully', async () => {
       // Mock permission denied
-      const mockLocation = require('expo-location');
-      mockLocation.requestForegroundPermissionsAsync.mockResolvedValueOnce({ status: 'denied' });
-      
-      await devicePingManager.initialize();
-      
+      const mockLocation = require('expo-location')
+      mockLocation.requestForegroundPermissionsAsync.mockResolvedValueOnce({
+        status: 'denied',
+      })
+
+      await devicePingManager.initialize()
+
       // Should not throw error, but log warning
-      expect(true).toBe(true);
-    });
-  });
-});
+      expect(true).toBe(true)
+    })
+  })
+})
+
+describe('Device Ping Functions', () => {
+  beforeEach(() => {
+    testLogger.info('Setting up device ping test')
+    jest.clearAllMocks()
+  })
+
+  test('pingDevice sends notification', async () => {
+    testLogger.info('Testing device ping functionality')
+
+    const result = await pingDevice('test-device-id')
+
+    testLogger.debug(`Ping result: ${JSON.stringify(result)}`)
+    expectWithLog('Ping should return success', result.success).toBe(true)
+
+    testLogger.info('Device ping test completed')
+  })
+
+  test('sendLocationUpdate transmits location', async () => {
+    testLogger.info('Testing location update transmission')
+
+    const location = { lat: 37.7749, lng: -122.4194 }
+    const result = await sendLocationUpdate(location)
+
+    testLogger.debug(`Location update result: ${JSON.stringify(result)}`)
+    expectWithLog('Location update should succeed', result.sent).toBe(true)
+
+    testLogger.info('Location update test completed')
+  })
+})

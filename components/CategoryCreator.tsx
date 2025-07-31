@@ -1,5 +1,5 @@
 // components/CategoryCreator.tsx - Kid-friendly category creation
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -9,53 +9,97 @@ import {
   ScrollView,
   Alert,
   Modal,
-} from 'react-native';
-import {
-  Plus,
-  X,
-  Save,
-  Star,
-} from 'lucide-react-native';
-import Colors from '../constants/colors';
-import AccessibleButton from './AccessibleButton';
-import { useCategoryStore, Category } from '../stores/categoryStore';
-import { useParentalControlStore } from '../stores/parentalControlStore';
+} from 'react-native'
+import { Plus, X, Save, Star } from 'lucide-react-native'
+import Colors from '../constants/colors'
+import AccessibleButton from './AccessibleButton'
+import { useCategoryStore, Category } from '../stores/categoryStore'
+import { useParentalControlStore } from '../stores/parentalControlStore'
 
 interface CategoryCreatorProps {
-  visible: boolean;
-  onClose: () => void;
+  visible: boolean
+  onClose: () => void
 }
 
 const ICON_OPTIONS = [
-  '🏫', '🏠', '🍕', '🎮', '🛍️', '🏥', '🚌', '👥',
-  '⚽', '🎭', '📚', '🎵', '🎨', '🏊', '🚴', '🎯',
-  '🌮', '🍔', '🍦', '☕', '🥨', '🎂', '🍪', '🧁',
-  '🏀', '⚾', '🎾', '🏐', '🏓', '🎱', '🎳', '🏸',
-  '🎪', '🎢', '🎡', '🎠', '🏰', '🗿', '🌋', '🏖️',
-];
+  '🏫',
+  '🏠',
+  '🍕',
+  '🎮',
+  '🛍️',
+  '🏥',
+  '🚌',
+  '👥',
+  '⚽',
+  '🎭',
+  '📚',
+  '🎵',
+  '🎨',
+  '🏊',
+  '🚴',
+  '🎯',
+  '🌮',
+  '🍔',
+  '🍦',
+  '☕',
+  '🥨',
+  '🎂',
+  '🍪',
+  '🧁',
+  '🏀',
+  '⚾',
+  '🎾',
+  '🏐',
+  '🏓',
+  '🎱',
+  '🎳',
+  '🏸',
+  '🎪',
+  '🎢',
+  '🎡',
+  '🎠',
+  '🏰',
+  '🗿',
+  '🌋',
+  '🏖️',
+]
 
 const COLOR_OPTIONS = [
-  '#dc2626', '#ea580c', '#ca8a04', '#65a30d',
-  '#059669', '#0891b2', '#2563eb', '#7c3aed',
-  '#c2410c', '#be123c', '#a21caf', '#7e22ce',
-];
+  '#dc2626',
+  '#ea580c',
+  '#ca8a04',
+  '#65a30d',
+  '#059669',
+  '#0891b2',
+  '#2563eb',
+  '#7c3aed',
+  '#c2410c',
+  '#be123c',
+  '#a21caf',
+  '#7e22ce',
+]
 
-export default function CategoryCreator({ visible, onClose }: CategoryCreatorProps) {
-  const { addCategory } = useCategoryStore();
-  const { settings } = useParentalControlStore();
-  
-  const [categoryName, setCategoryName] = useState('');
-  const [selectedIcon, setSelectedIcon] = useState('🏷️');
-  const [selectedColor, setSelectedColor] = useState(COLOR_OPTIONS[0]);
-  const [description, setDescription] = useState('');
+export default function CategoryCreator({
+  visible,
+  onClose,
+}: CategoryCreatorProps) {
+  const { addCategory } = useCategoryStore()
+  const { settings } = useParentalControlStore()
+
+  const [categoryName, setCategoryName] = useState('')
+  const [selectedIcon, setSelectedIcon] = useState('🏷️')
+  const [selectedColor, setSelectedColor] = useState(COLOR_OPTIONS[0])
+  const [description, setDescription] = useState('')
 
   const handleSave = () => {
     if (!categoryName.trim()) {
-      Alert.alert('Oops!', 'Please give your category a name! 😊');
-      return;
+      Alert.alert('Oops!', 'Please give your category a name! 😊')
+      return
     }
 
-    const needsApproval = settings.requireApprovalForNewCategories && settings.allowChildCategoryCreation;
+    const needsApproval =
+      settings.requireApprovalForNewCategories &&
+      settings.allowChildCategoryCreation
 
     const newCategory: Omit<Category, 'id' | 'createdAt'> = {
       name: categoryName.trim(),
@@ -67,44 +111,46 @@ export default function CategoryCreator({ visible, onClose }: CategoryCreatorPro
       isApproved: !needsApproval,
       createdBy: 'child',
       description: description.trim() || undefined,
-    };
+    }
 
-    addCategory(newCategory);
+    addCategory(newCategory)
 
     if (needsApproval) {
       Alert.alert(
         'Category Created! 🎉',
-        'Your new category has been sent to your parent for approval. You\'ll get it soon!',
-        [{ text: 'OK', onPress: onClose }]
-      );
+        "Your new category has been sent to your parent for approval. You'll get it soon!",
+        [{ text: 'OK', onPress: onClose }],
+      )
     } else {
-      Alert.alert(
-        'Category Added! 🎉',
-        'Your new category is ready to use!',
-        [{ text: 'Awesome!', onPress: onClose }]
-      );
+      Alert.alert('Category Added! 🎉', 'Your new category is ready to use!', [
+        { text: 'Awesome!', onPress: onClose },
+      ])
     }
 
     // Reset form
-    setCategoryName('');
-    setSelectedIcon('🏷️');
-    setSelectedColor(COLOR_OPTIONS[0]);
-    setDescription('');
-  };
+    setCategoryName('')
+    setSelectedIcon('🏷️')
+    setSelectedColor(COLOR_OPTIONS[0])
+    setDescription('')
+  }
 
   const handleClose = () => {
-    setCategoryName('');
-    setSelectedIcon('🏷️');
-    setSelectedColor(COLOR_OPTIONS[0]);
-    setDescription('');
-    onClose();
-  };
+    setCategoryName('')
+    setSelectedIcon('🏷️')
+    setSelectedColor(COLOR_OPTIONS[0])
+    setDescription('')
+    onClose()
+  }
 
-  if (!visible) return null;
-  if (!settings.allowChildCategoryCreation) return null;
+  if (!visible) return null
+  if (!settings.allowChildCategoryCreation) return null
 
   return (
-    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
+    <Modal
+      visible={visible}
+      animationType="slide"
+      presentationStyle="pageSheet"
+    >
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={handleClose} style={styles.headerButton}>
@@ -120,7 +166,12 @@ export default function CategoryCreator({ visible, onClose }: CategoryCreatorPro
           {/* Preview */}
           <View style={styles.previewSection}>
             <Text style={styles.sectionTitle}>Preview</Text>
-            <View style={[styles.previewCard, { backgroundColor: selectedColor + '20' }]}>
+            <View
+              style={[
+                styles.previewCard,
+                { backgroundColor: selectedColor + '20' },
+              ]}
+            >
               <Text style={styles.previewIcon}>{selectedIcon}</Text>
               <Text style={[styles.previewName, { color: selectedColor }]}>
                 {categoryName || 'My Category'}
@@ -151,7 +202,7 @@ export default function CategoryCreator({ visible, onClose }: CategoryCreatorPro
                   key={icon}
                   style={[
                     styles.iconOption,
-                    selectedIcon === icon && styles.iconOptionSelected
+                    selectedIcon === icon && styles.iconOptionSelected,
                   ]}
                   onPress={() => setSelectedIcon(icon)}
                 >
@@ -171,12 +222,16 @@ export default function CategoryCreator({ visible, onClose }: CategoryCreatorPro
                   style={[
                     styles.colorOption,
                     { backgroundColor: color },
-                    selectedColor === color && styles.colorOptionSelected
+                    selectedColor === color && styles.colorOptionSelected,
                   ]}
                   onPress={() => setSelectedColor(color)}
                 >
                   {selectedColor === color && (
-                    <Star size={16} color={Colors.background} fill={Colors.background} />
+                    <Star
+                      size={16}
+                      color={Colors.background}
+                      fill={Colors.background}
+                    />
                   )}
                 </TouchableOpacity>
               ))}
@@ -213,16 +268,23 @@ export default function CategoryCreator({ visible, onClose }: CategoryCreatorPro
 
         <View style={styles.actions}>
           <AccessibleButton
-            title={settings.requireApprovalForNewCategories ? "Send for Approval" : "Create Category"}
+            title={
+              settings.requireApprovalForNewCategories
+                ? 'Send for Approval'
+                : 'Create Category'
+            }
             onPress={handleSave}
-            style={[styles.createButton, !categoryName.trim() && styles.createButtonDisabled]}
+            style={[
+              styles.createButton,
+              !categoryName.trim() && styles.createButtonDisabled,
+            ]}
             textStyle={styles.createButtonText}
             disabled={!categoryName.trim()}
           />
         </View>
       </View>
     </Modal>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -388,4 +450,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-});
+})

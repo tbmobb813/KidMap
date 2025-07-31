@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import Colors from '@/constants/colors';
-import { Clock, X, MapPin } from 'lucide-react-native';
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
+import Colors from '@/constants/colors'
+import { Clock, X, MapPin } from 'lucide-react-native'
 
 type SmartNotificationProps = {
-  title: string;
-  message: string;
-  type: 'reminder' | 'weather' | 'safety' | 'achievement';
-  onDismiss: () => void;
-  actionText?: string;
-  onAction?: () => void;
-};
+  title: string
+  message: string
+  type: 'reminder' | 'weather' | 'safety' | 'achievement'
+  onDismiss: () => void
+  actionText?: string
+  onAction?: () => void
+}
 
 const SmartNotification: React.FC<SmartNotificationProps> = ({
   title,
@@ -23,41 +23,41 @@ const SmartNotification: React.FC<SmartNotificationProps> = ({
   const getIcon = () => {
     switch (type) {
       case 'reminder':
-        return <Clock size={20} color={Colors.primary} />;
+        return <Clock size={20} color={Colors.primary} />
       case 'weather':
-        return <MapPin size={20} color={Colors.warning} />;
+        return <MapPin size={20} color={Colors.warning} />
       case 'safety':
-        return <MapPin size={20} color={Colors.error} />;
+        return <MapPin size={20} color={Colors.error} />
       case 'achievement':
-        return <MapPin size={20} color={Colors.secondary} />;
+        return <MapPin size={20} color={Colors.secondary} />
     }
-  };
+  }
 
   const getBackgroundColor = () => {
     switch (type) {
       case 'reminder':
-        return '#F0F4FF';
+        return '#F0F4FF'
       case 'weather':
-        return '#FFF9E6';
+        return '#FFF9E6'
       case 'safety':
-        return '#FFE6E6';
+        return '#FFE6E6'
       case 'achievement':
-        return '#F0FFF4';
+        return '#F0FFF4'
     }
-  };
+  }
 
   const getBorderColor = () => {
     switch (type) {
       case 'reminder':
-        return Colors.primary;
+        return Colors.primary
       case 'weather':
-        return Colors.warning;
+        return Colors.warning
       case 'safety':
-        return Colors.error;
+        return Colors.error
       case 'achievement':
-        return Colors.secondary;
+        return Colors.secondary
     }
-  };
+  }
 
   return (
     <View
@@ -87,8 +87,8 @@ const SmartNotification: React.FC<SmartNotificationProps> = ({
         )}
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -137,6 +137,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-});
+})
 
-export default SmartNotification;
+export default SmartNotification

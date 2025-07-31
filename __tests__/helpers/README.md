@@ -26,29 +26,30 @@ describe('My Component Tests', () => {
 Comprehensive AsyncStorage mock with realistic data and failure simulation.
 
 ```typescript
-import { 
-  setupMockAsyncStorage, 
-  mockAsyncStorageInstance, 
+import {
+  setupMockAsyncStorage,
+  mockAsyncStorageInstance,
   STORAGE_KEYS,
-  getMockUserStats 
-} from '../helpers/mockAsyncStorage';
+  getMockUserStats,
+} from '../helpers/mockAsyncStorage'
 
 // Basic setup
-setupMockAsyncStorage();
+setupMockAsyncStorage()
 
 // Access mock data
-const userStats = getMockUserStats();
+const userStats = getMockUserStats()
 
 // Set custom data
 mockAsyncStorageInstance.setStorageData({
-  [STORAGE_KEYS.USER_STATS]: JSON.stringify(customStats)
-});
+  [STORAGE_KEYS.USER_STATS]: JSON.stringify(customStats),
+})
 
 // Simulate failures
-mockAsyncStorageInstance.setFailureMode(true, new Error('Storage error'));
+mockAsyncStorageInstance.setFailureMode(true, new Error('Storage error'))
 ```
 
 **Features:**
+
 - Pre-populated with realistic KidMap data
 - Storage keys constants for consistency
 - Failure simulation for error testing
@@ -60,28 +61,29 @@ mockAsyncStorageInstance.setFailureMode(true, new Error('Storage error'));
 Mock trip data, routes, places, and user progression for testing.
 
 ```typescript
-import { 
-  mockTripData, 
-  createMockTripData, 
-  mockUserStatsProgression 
-} from '../helpers/mockTripData';
+import {
+  mockTripData,
+  createMockTripData,
+  mockUserStatsProgression,
+} from '../helpers/mockTripData'
 
 // Use predefined trips
-const walkingTrip = mockTripData.walkingTrip;
+const walkingTrip = mockTripData.walkingTrip
 
 // Create custom trip
 const customTrip = createMockTripData({
   destination: 'Custom Place',
   mode: 'transit',
-  safety: 4
-});
+  safety: 4,
+})
 
 // Different user levels
-const beginnerStats = mockUserStatsProgression.beginner;
-const expertStats = mockUserStatsProgression.advanced;
+const beginnerStats = mockUserStatsProgression.beginner
+const expertStats = mockUserStatsProgression.advanced
 ```
 
 **Available Mock Data:**
+
 - `mockTripData` - Various trip scenarios
 - `mockTripJournal` - Trip journal entries
 - `mockPlaces` - Common places
@@ -93,10 +95,10 @@ const expertStats = mockUserStatsProgression.advanced;
 Enhanced render functions with proper provider setup.
 
 ```typescript
-import { 
+import {
   renderWithProviders,
   renderWithNavigation,
-  renderWithAllProviders 
+  renderWithAllProviders
 } from '../helpers/renderWithProviders';
 
 // Basic render with SafeAreaProvider
@@ -110,6 +112,7 @@ const result = renderWithAllProviders(<FullAppComponent />);
 ```
 
 **Available Renders:**
+
 - `renderWithProviders` - Basic providers (SafeArea, Stores)
 - `renderWithNavigation` - Adds NavigationContainer
 - `renderWithQuery` - Adds React Query
@@ -120,25 +123,25 @@ const result = renderWithAllProviders(<FullAppComponent />);
 Utilities for testing safe zone functionality.
 
 ```typescript
-import { 
+import {
   fillSafeZoneForm,
   createMockZone,
-  mockSuccessfulSafeZoneAPI 
-} from '../helpers/safeZoneTestHelpers';
+  mockSuccessfulSafeZoneAPI,
+} from '../helpers/safeZoneTestHelpers'
 
 // Fill safe zone form
 fillSafeZoneForm(renderResult, {
   name: 'School',
   latitude: '40.7128',
   longitude: '-74.0060',
-  radius: '150'
-});
+  radius: '150',
+})
 
 // Create mock zone
-const zone = createMockZone({ name: 'Home', radius: 100 });
+const zone = createMockZone({ name: 'Home', radius: 100 })
 
 // Mock API responses
-const mockAPI = mockSuccessfulSafeZoneAPI();
+const mockAPI = mockSuccessfulSafeZoneAPI()
 ```
 
 ### 5. General Test Utilities (`testUtils.tsx`)
@@ -146,17 +149,17 @@ const mockAPI = mockSuccessfulSafeZoneAPI();
 Common mocks and utilities used across tests.
 
 ```typescript
-import { 
+import {
   mockSpeechEngine,
   mockGamificationStore,
-  setupMocks 
-} from '../helpers/testUtils';
+  setupMocks,
+} from '../helpers/testUtils'
 
 // Setup all common mocks
-setupMocks();
+setupMocks()
 
 // Access individual mocks
-expect(mockSpeechEngine.speak).toHaveBeenCalled();
+expect(mockSpeechEngine.speak).toHaveBeenCalled()
 ```
 
 ## Testing Patterns
@@ -173,9 +176,9 @@ describe('MyComponent', () => {
 
   it('should handle user interaction', async () => {
     const { getByText } = renderWithProviders(<MyComponent />);
-    
+
     fireEvent.press(getByText('Button'));
-    
+
     await waitFor(() => {
       expect(getByText('Expected Result')).toBeTruthy();
     });
@@ -186,33 +189,33 @@ describe('MyComponent', () => {
 ### Store Testing
 
 ```typescript
-import { mockTripData, setupMockAsyncStorage } from '../helpers';
+import { mockTripData, setupMockAsyncStorage } from '../helpers'
 
 describe('MyStore', () => {
   beforeEach(() => {
-    setupMockAsyncStorage();
-  });
+    setupMockAsyncStorage()
+  })
 
   it('should handle trip completion', () => {
-    const { completeTrip } = useMyStore.getState();
-    
+    const { completeTrip } = useMyStore.getState()
+
     act(() => {
-      completeTrip(mockTripData.walkingTrip);
-    });
-    
+      completeTrip(mockTripData.walkingTrip)
+    })
+
     // Assert state changes
-  });
-});
+  })
+})
 ```
 
 ### Integration Testing
 
 ```typescript
-import { 
-  renderWithAllProviders, 
+import {
+  renderWithAllProviders,
   mockAsyncStorageInstance,
   STORAGE_KEYS,
-  mockUserStatsProgression 
+  mockUserStatsProgression
 } from '../helpers';
 
 describe('App Integration', () => {
@@ -224,10 +227,10 @@ describe('App Integration', () => {
 
     // Render full app
     const { getByText } = renderWithAllProviders(<App />);
-    
+
     // Test user flow
     fireEvent.press(getByText('Start Trip'));
-    
+
     await waitFor(() => {
       expect(getByText('Trip Started')).toBeTruthy();
     });
@@ -244,9 +247,9 @@ describe('Error Handling', () => {
   it('should handle storage failures', async () => {
     // Simulate storage failure
     mockAsyncStorageInstance.setFailureMode(true, new Error('Storage full'));
-    
+
     const { getByText } = renderWithProviders(<MyComponent />);
-    
+
     await waitFor(() => {
       expect(getByText('Error: Storage unavailable')).toBeTruthy();
     });
@@ -290,6 +293,7 @@ When adding new helpers:
 If you have existing tests with inline mocks:
 
 ### Before
+
 ```typescript
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(() => Promise.resolve(null)),
@@ -300,6 +304,7 @@ const { getByText } = render(<Component />);
 ```
 
 ### After
+
 ```typescript
 import { setupKidMapTests, renderWithProviders } from '../helpers';
 
@@ -311,6 +316,7 @@ const { getByText } = renderWithProviders(<Component />);
 ```
 
 This migration provides:
+
 - ✅ More realistic mock data
 - ✅ Better error simulation
 - ✅ Consistent test setup

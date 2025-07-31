@@ -1,4 +1,4 @@
-import { RegionConfig } from '@/types/region';
+import { RegionConfig } from '@/types/region'
 
 export const philadelphiaConfig: RegionConfig = {
   id: 'philadelphia',
@@ -58,7 +58,8 @@ export const philadelphiaConfig: RegionConfig = {
     {
       name: 'Independence Hall',
       category: 'landmark',
-      description: 'Historic building where the Declaration of Independence was signed',
+      description:
+        'Historic building where the Declaration of Independence was signed',
     },
     {
       name: 'Philadelphia Zoo',
@@ -73,4 +74,4 @@ export const philadelphiaConfig: RegionConfig = {
   ],
   transitApiEndpoint: 'https://api.septa.org/',
   mapStyle: 'standard',
-};
+}

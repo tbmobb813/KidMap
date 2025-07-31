@@ -1,5 +1,5 @@
-import { Platform } from 'react-native';
-import Constants from 'expo-constants';
+import { Platform } from 'react-native'
+import Constants from 'expo-constants'
 
 export const Config = {
   // Environment
@@ -7,7 +7,9 @@ export const Config = {
   isProduction: !__DEV__,
 
   // API Configuration
-  API_BASE_URL: __DEV__ ? 'http://localhost:3000/api' : 'https://your-production-api.com/api',
+  API_BASE_URL: __DEV__
+    ? 'http://localhost:3000/api'
+    : 'https://your-production-api.com/api',
 
   API_TIMEOUT: 10000,
 
@@ -91,13 +93,13 @@ export const Config = {
     SESSION_TIMEOUT: 30 * 60 * 1000, // 30 minutes
     MAX_LOGIN_ATTEMPTS: 5,
   },
-};
+}
 
 // Environment-specific overrides
 if (Config.isProduction) {
   // Production-only configurations
-  Config.CACHE.DEFAULT_TTL = 10 * 60 * 1000; // Longer cache in production
-  Config.LOCATION.TIMEOUT = 10000; // Shorter timeout in production
+  Config.CACHE.DEFAULT_TTL = 10 * 60 * 1000 // Longer cache in production
+  Config.LOCATION.TIMEOUT = 10000 // Shorter timeout in production
 }
 
-export default Config;
+export default Config

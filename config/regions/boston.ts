@@ -1,4 +1,4 @@
-import { RegionConfig } from '@/types/region';
+import { RegionConfig } from '@/types/region'
 
 export const bostonConfig: RegionConfig = {
   id: 'boston',
@@ -51,7 +51,8 @@ export const bostonConfig: RegionConfig = {
     {
       name: 'Boston Common',
       category: 'park',
-      description: "America's oldest public park with swan boats and playgrounds",
+      description:
+        "America's oldest public park with swan boats and playgrounds",
     },
     {
       name: 'Fenway Park',
@@ -66,4 +67,4 @@ export const bostonConfig: RegionConfig = {
   ],
   transitApiEndpoint: 'https://api-v3.mbta.com/',
   mapStyle: 'standard',
-};
+}

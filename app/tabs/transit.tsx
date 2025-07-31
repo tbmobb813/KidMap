@@ -1,145 +1,151 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable, RefreshControl } from 'react-native';
-import Colors from '@/constants/colors';
-import SearchBar from '@/components/SearchBar';
-import { Clock, RefreshCw } from 'lucide-react-native';
-import LiveArrivalsCard from '@/components/LiveArrivalsCard';
-import useLocation from '@/hooks/useLocation';
-import { 
-  getNearbyTransitStations, 
-  getTransitLineStatus, 
-  TransitStation, 
-  TransitLine 
-} from '@/utils/transitApi';
+import React, { useState, useEffect } from 'react'
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Pressable,
+  RefreshControl,
+} from 'react-native'
+import Colors from '@/constants/colors'
+import SearchBar from '@/components/SearchBar'
+import { Clock, RefreshCw } from 'lucide-react-native'
+import LiveArrivalsCard from '@/components/LiveArrivalsCard'
+import useLocation from '@/hooks/useLocation'
+import {
+  getNearbyTransitStations,
+  getTransitLineStatus,
+  TransitStation,
+  TransitLine,
+} from '@/utils/transitApi'
 
 export default function TransitScreen() {
-  const { location } = useLocation();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedLine, setSelectedLine] = useState<string | null>(null);
-  const [selectedStation, setSelectedStation] = useState<string | null>(null);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [lastRefresh, setLastRefresh] = useState(new Date());
-  
+  const { location } = useLocation()
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedLine, setSelectedLine] = useState<string | null>(null)
+  const [selectedStation, setSelectedStation] = useState<string | null>(null)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [lastRefresh, setLastRefresh] = useState(new Date())
+
   // Real transit data states
-  const [transitLines, setTransitLines] = useState<TransitLine[]>([]);
-  const [nearbyStations, setNearbyStations] = useState<TransitStation[]>([]);
-  const [loadingLines, setLoadingLines] = useState(true);
-  const [loadingStations, setLoadingStations] = useState(true);
+  const [transitLines, setTransitLines] = useState<TransitLine[]>([])
+  const [nearbyStations, setNearbyStations] = useState<TransitStation[]>([])
+  const [loadingLines, setLoadingLines] = useState(true)
+  const [loadingStations, setLoadingStations] = useState(true)
 
   // Load transit data on component mount and location change
   useEffect(() => {
-    loadTransitData();
-  }, []);
+    loadTransitData()
+  }, [])
 
   useEffect(() => {
     if (location) {
-      loadNearbyStations();
+      loadNearbyStations()
     }
-  }, [location]);
+  }, [location])
 
   // Auto-refresh arrivals every 30 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      handleRefreshArrivals();
-    }, 30000);
+      handleRefreshArrivals()
+    }, 30000)
 
-    return () => clearInterval(interval);
-  }, []);
+    return () => clearInterval(interval)
+  }, [])
 
   const loadTransitData = async () => {
-    setLoadingLines(true);
+    setLoadingLines(true)
     try {
-      const lines = await getTransitLineStatus();
-      setTransitLines(lines);
+      const lines = await getTransitLineStatus()
+      setTransitLines(lines)
     } catch (error) {
-      console.error('Error loading transit lines:', error);
+      console.error('Error loading transit lines:', error)
     } finally {
-      setLoadingLines(false);
+      setLoadingLines(false)
     }
-  };
+  }
 
   const loadNearbyStations = async () => {
-    if (!location) return;
-    
-    setLoadingStations(true);
+    if (!location) return
+
+    setLoadingStations(true)
     try {
       const stations = await getNearbyTransitStations(
         { lat: location.latitude, lng: location.longitude },
-        1000 // 1km radius
-      );
-      setNearbyStations(stations);
-      
+        1000, // 1km radius
+      )
+      setNearbyStations(stations)
+
       // Auto-select first station if none selected
       if (stations.length > 0 && !selectedStation) {
-        setSelectedStation(stations[0].id);
+        setSelectedStation(stations[0].id)
       }
     } catch (error) {
-      console.error('Error loading nearby stations:', error);
+      console.error('Error loading nearby stations:', error)
     } finally {
-      setLoadingStations(false);
+      setLoadingStations(false)
     }
-  };
+  }
 
   const handleRefreshArrivals = async () => {
-    setIsRefreshing(true);
-    setLastRefresh(new Date());
+    setIsRefreshing(true)
+    setLastRefresh(new Date())
 
     try {
       // Reload both transit lines and nearby stations
-      await Promise.all([
-        loadTransitData(),
-        loadNearbyStations(),
-      ]);
+      await Promise.all([loadTransitData(), loadNearbyStations()])
     } catch (error) {
-      console.error('Error refreshing transit data:', error);
+      console.error('Error refreshing transit data:', error)
     } finally {
       // Add a small delay to show the refresh animation
       setTimeout(() => {
-        setIsRefreshing(false);
-      }, 1000);
+        setIsRefreshing(false)
+      }, 1000)
     }
-  };
+  }
 
   const getTimeAgo = (date: Date) => {
-    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
-    if (seconds < 60) return `${seconds} sec ago`;
-    const minutes = Math.floor(seconds / 60);
-    return `${minutes} min ago`;
-  };
+    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000)
+    if (seconds < 60) return `${seconds} sec ago`
+    const minutes = Math.floor(seconds / 60)
+    return `${minutes} min ago`
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'normal':
-        return Colors.success;
+        return Colors.success
       case 'delayed':
-        return Colors.warning;
+        return Colors.warning
       case 'alert':
       case 'suspended':
-        return Colors.error;
+        return Colors.error
       default:
-        return Colors.textLight;
+        return Colors.textLight
     }
-  };
+  }
 
-  const filteredLines = transitLines.filter(line =>
-    line.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredLines = transitLines.filter((line) =>
+    line.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
 
-  const selectedStationData = nearbyStations.find(station => station.id === selectedStation);
+  const selectedStationData = nearbyStations.find(
+    (station) => station.id === selectedStation,
+  )
 
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Transit</Text>
-        <Pressable 
+        <Pressable
           style={styles.refreshButton}
           onPress={handleRefreshArrivals}
           disabled={isRefreshing}
         >
-          <RefreshCw 
-            size={20} 
-            color={Colors.primary} 
+          <RefreshCw
+            size={20}
+            color={Colors.primary}
             style={{ opacity: isRefreshing ? 0.5 : 1 }}
           />
         </Pressable>
@@ -185,18 +191,24 @@ export default function TransitScreen() {
           {nearbyStations.map((station) => (
             <Pressable
               key={station.id}
-              style={[styles.stationButton, selectedStation === station.id && styles.selectedStationButton]}
+              style={[
+                styles.stationButton,
+                selectedStation === station.id && styles.selectedStationButton,
+              ]}
               onPress={() => setSelectedStation(station.id)}
             >
               <Text
                 style={[
                   styles.stationButtonText,
-                  selectedStation === station.id && styles.selectedStationButtonText,
+                  selectedStation === station.id &&
+                    styles.selectedStationButtonText,
                 ]}
               >
                 {station.name}
               </Text>
-              <Text style={styles.stationDistance}>{(station.distance * 1000).toFixed(0)}m</Text>
+              <Text style={styles.stationDistance}>
+                {(station.distance * 1000).toFixed(0)}m
+              </Text>
             </Pressable>
           ))}
         </ScrollView>
@@ -205,13 +217,14 @@ export default function TransitScreen() {
         {selectedStationData && (
           <LiveArrivalsCard
             stationName={selectedStationData.name}
-            arrivals={(selectedStationData.arrivals || []).map(arrival => ({
+            arrivals={(selectedStationData.arrivals || []).map((arrival) => ({
               id: arrival.route,
               line: arrival.route,
               color: '#4A80F0',
               destination: arrival.destination,
-              arrivalTime: arrival.arrivalTime.includes('min') ? 
-                parseInt(arrival.arrivalTime) || 0 : 0,
+              arrivalTime: arrival.arrivalTime.includes('min')
+                ? parseInt(arrival.arrivalTime) || 0
+                : 0,
               type: 'subway' as const,
             }))}
             lastUpdated={getTimeAgo(lastRefresh)}
@@ -225,7 +238,10 @@ export default function TransitScreen() {
         {filteredLines.map((line) => (
           <Pressable
             key={line.id}
-            style={[styles.lineItem, selectedLine === line.id && styles.selectedLine]}
+            style={[
+              styles.lineItem,
+              selectedLine === line.id && styles.selectedLine,
+            ]}
             onPress={() => setSelectedLine(line.id)}
           >
             <View style={[styles.lineCircle, { backgroundColor: line.color }]}>
@@ -238,13 +254,15 @@ export default function TransitScreen() {
                   { backgroundColor: getStatusColor(line.status) },
                 ]}
               />
-              <Text style={styles.statusText}>{line.message || 'No status information'}</Text>
+              <Text style={styles.statusText}>
+                {line.message || 'No status information'}
+              </Text>
             </View>
           </Pressable>
         ))}
       </ScrollView>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -369,4 +387,4 @@ const styles = StyleSheet.create({
     color: Colors.text,
     flex: 1,
   },
-});
+})

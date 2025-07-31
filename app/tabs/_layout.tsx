@@ -1,8 +1,8 @@
-import React from 'react';
-import { Tabs } from 'expo-router';
-import Colors from '@/constants/colors';
-import { Home, Map, Train, Settings, Trophy, Shield } from 'lucide-react-native';
-import { Platform } from 'react-native';
+import React from 'react'
+import { Tabs } from 'expo-router'
+import Colors from '@/constants/colors'
+import { Home, Map, Train, Settings, Trophy, Shield } from 'lucide-react-native'
+import { Platform } from 'react-native'
 
 export default function TabLayout() {
   return (
@@ -76,5 +76,5 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
-  );
+  )
 }

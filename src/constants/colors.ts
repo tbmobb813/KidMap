@@ -33,4 +33,4 @@ export default {
   // Android-specific colors
   androidRipple: '#E3F2FD',
   androidElevation: '#000000',
-};
+}

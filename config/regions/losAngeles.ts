@@ -1,4 +1,4 @@
-import { RegionConfig } from '@/types/region';
+import { RegionConfig } from '@/types/region'
 
 export const losAngelesConfig: RegionConfig = {
   id: 'la',
@@ -66,4 +66,4 @@ export const losAngelesConfig: RegionConfig = {
   ],
   transitApiEndpoint: 'https://api.metro.net/',
   mapStyle: 'standard',
-};
+}

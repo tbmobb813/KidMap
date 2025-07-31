@@ -1,5 +1,5 @@
 // components/DevicePingControl.tsx - Parent interface for device ping functionality
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react'
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
   Modal,
   TextInput,
   RefreshControl,
-} from 'react-native';
+} from 'react-native'
 import {
   Phone,
   MapPin,
@@ -25,151 +25,165 @@ import {
   Battery,
   Wifi,
   MapPinIcon,
-} from 'lucide-react-native';
-import Colors from '../constants/colors';
-import AccessibleButton from './AccessibleButton';
-import { devicePingManager, PingRequest, LocationUpdate } from '../utils/devicePing';
-import { useParentalControlStore } from '../stores/parentalControlStore';
+} from 'lucide-react-native'
+import Colors from '../constants/colors'
+import AccessibleButton from './AccessibleButton'
+import {
+  devicePingManager,
+  PingRequest,
+  LocationUpdate,
+} from '../utils/devicePing'
+import { useParentalControlStore } from '../stores/parentalControlStore'
 
 interface DevicePingControlProps {
-  visible: boolean;
-  onClose: () => void;
+  visible: boolean
+  onClose: () => void
 }
 
-export default function DevicePingControl({ visible, onClose }: DevicePingControlProps) {
-  const { session } = useParentalControlStore();
-  const isAuthenticated = session?.isAuthenticated || false;
-  
-  const [pendingPings, setPendingPings] = useState<PingRequest[]>([]);
-  const [pingHistory, setPingHistory] = useState<PingRequest[]>([]);
-  const [showCustomMessage, setShowCustomMessage] = useState(false);
-  const [customMessage, setCustomMessage] = useState('');
-  const [selectedPingType, setSelectedPingType] = useState<PingRequest['type']>('ring');
-  const [isLoading, setIsLoading] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-  const [lastLocationUpdate, setLastLocationUpdate] = useState<LocationUpdate | null>(null);
+export default function DevicePingControl({
+  visible,
+  onClose,
+}: DevicePingControlProps) {
+  const { session } = useParentalControlStore()
+  const isAuthenticated = session?.isAuthenticated || false
+
+  const [pendingPings, setPendingPings] = useState<PingRequest[]>([])
+  const [pingHistory, setPingHistory] = useState<PingRequest[]>([])
+  const [showCustomMessage, setShowCustomMessage] = useState(false)
+  const [customMessage, setCustomMessage] = useState('')
+  const [selectedPingType, setSelectedPingType] =
+    useState<PingRequest['type']>('ring')
+  const [isLoading, setIsLoading] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
+  const [lastLocationUpdate, setLastLocationUpdate] =
+    useState<LocationUpdate | null>(null)
 
   useEffect(() => {
     if (visible && isAuthenticated) {
-      refreshPingData();
+      refreshPingData()
       // Set up periodic refresh
-      const interval = setInterval(refreshPingData, 5000);
-      return () => clearInterval(interval);
+      const interval = setInterval(refreshPingData, 5000)
+      return () => clearInterval(interval)
     }
-  }, [visible, isAuthenticated]);
+  }, [visible, isAuthenticated])
 
   const refreshPingData = useCallback(async () => {
     try {
-      setPendingPings(devicePingManager.getPendingRequests());
-      setPingHistory(devicePingManager.getPingHistory());
+      setPendingPings(devicePingManager.getPendingRequests())
+      setPingHistory(devicePingManager.getPingHistory())
     } catch (error) {
-      console.error('Error refreshing ping data:', error);
+      console.error('Error refreshing ping data:', error)
     }
-  }, []);
+  }, [])
 
   const handleRefresh = useCallback(async () => {
-    setRefreshing(true);
-    await refreshPingData();
-    setRefreshing(false);
-  }, [refreshPingData]);
+    setRefreshing(true)
+    await refreshPingData()
+    setRefreshing(false)
+  }, [refreshPingData])
 
-  const sendPing = useCallback(async (type: PingRequest['type'], message?: string) => {
-    if (!isAuthenticated) {
-      Alert.alert('Authentication Required', 'Please authenticate to send pings to your child.');
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      let pingId: string;
-      
-      switch (type) {
-        case 'ring':
-          pingId = await devicePingManager.ringChild(message);
-          break;
-        case 'locate':
-          pingId = await devicePingManager.requestLocation(message);
-          break;
-        case 'check-in':
-          pingId = await devicePingManager.requestCheckIn(message);
-          break;
-        case 'emergency':
-          pingId = await devicePingManager.sendEmergencyPing(message);
-          break;
-        default:
-          throw new Error('Invalid ping type');
+  const sendPing = useCallback(
+    async (type: PingRequest['type'], message?: string) => {
+      if (!isAuthenticated) {
+        Alert.alert(
+          'Authentication Required',
+          'Please authenticate to send pings to your child.',
+        )
+        return
       }
 
-      Alert.alert(
-        'Ping Sent',
-        `Your ${type} request has been sent to your child's device.`,
-        [{ text: 'OK', onPress: refreshPingData }]
-      );
+      setIsLoading(true)
+      try {
+        let pingId: string
 
-      setShowCustomMessage(false);
-      setCustomMessage('');
-      
-    } catch (error) {
-      console.error('Error sending ping:', error);
-      Alert.alert('Error', 'Failed to send ping. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [isAuthenticated, refreshPingData]);
+        switch (type) {
+          case 'ring':
+            pingId = await devicePingManager.ringChild(message)
+            break
+          case 'locate':
+            pingId = await devicePingManager.requestLocation(message)
+            break
+          case 'check-in':
+            pingId = await devicePingManager.requestCheckIn(message)
+            break
+          case 'emergency':
+            pingId = await devicePingManager.sendEmergencyPing(message)
+            break
+          default:
+            throw new Error('Invalid ping type')
+        }
+
+        Alert.alert(
+          'Ping Sent',
+          `Your ${type} request has been sent to your child's device.`,
+          [{ text: 'OK', onPress: refreshPingData }],
+        )
+
+        setShowCustomMessage(false)
+        setCustomMessage('')
+      } catch (error) {
+        console.error('Error sending ping:', error)
+        Alert.alert('Error', 'Failed to send ping. Please try again.')
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [isAuthenticated, refreshPingData],
+  )
 
   const showCustomMessageModal = useCallback((type: PingRequest['type']) => {
-    setSelectedPingType(type);
-    setCustomMessage('');
-    setShowCustomMessage(true);
-  }, []);
+    setSelectedPingType(type)
+    setCustomMessage('')
+    setShowCustomMessage(true)
+  }, [])
 
   const sendCustomPing = useCallback(async () => {
     if (!customMessage.trim()) {
-      Alert.alert('Message Required', 'Please enter a message for your child.');
-      return;
+      Alert.alert('Message Required', 'Please enter a message for your child.')
+      return
     }
-    await sendPing(selectedPingType, customMessage.trim());
-  }, [customMessage, selectedPingType, sendPing]);
+    await sendPing(selectedPingType, customMessage.trim())
+  }, [customMessage, selectedPingType, sendPing])
 
   const formatTimeAgo = useCallback((timestamp: number) => {
-    const now = Date.now();
-    const diff = now - timestamp;
-    const minutes = Math.floor(diff / (1000 * 60));
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const now = Date.now()
+    const diff = now - timestamp
+    const minutes = Math.floor(diff / (1000 * 60))
+    const hours = Math.floor(diff / (1000 * 60 * 60))
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
 
-    if (minutes < 1) return 'Just now';
-    if (minutes < 60) return `${minutes}m ago`;
-    if (hours < 24) return `${hours}h ago`;
-    return `${days}d ago`;
-  }, []);
+    if (minutes < 1) return 'Just now'
+    if (minutes < 60) return `${minutes}m ago`
+    if (hours < 24) return `${hours}h ago`
+    return `${days}d ago`
+  }, [])
 
   const getPingIcon = useCallback((type: PingRequest['type'], size = 20) => {
     switch (type) {
       case 'ring':
-        return <Phone size={size} color={Colors.primary} />;
+        return <Phone size={size} color={Colors.primary} />
       case 'locate':
-        return <MapPin size={size} color={Colors.primary} />;
+        return <MapPin size={size} color={Colors.primary} />
       case 'check-in':
-        return <MessageCircle size={size} color={Colors.primary} />;
+        return <MessageCircle size={size} color={Colors.primary} />
       case 'emergency':
-        return <AlertTriangle size={size} color={Colors.error} />;
+        return <AlertTriangle size={size} color={Colors.error} />
       default:
-        return <Smartphone size={size} color={Colors.primary} />;
+        return <Smartphone size={size} color={Colors.primary} />
     }
-  }, []);
+  }, [])
 
   const getPingStatusColor = useCallback((ping: PingRequest) => {
-    if (ping.acknowledged) return Colors.success;
-    if (Date.now() > ping.expiresAt) return Colors.textLight;
-    if (ping.urgency === 'emergency') return Colors.error;
-    return Colors.warning;
-  }, []);
+    if (ping.acknowledged) return Colors.success
+    if (Date.now() > ping.expiresAt) return Colors.textLight
+    if (ping.urgency === 'emergency') return Colors.error
+    return Colors.warning
+  }, [])
 
   const renderQuickActions = () => (
     <View style={styles.quickActions}>
       <Text style={styles.sectionTitle}>Quick Actions</Text>
-      
+
       <View style={styles.actionGrid}>
         <TouchableOpacity
           style={[styles.actionButton, styles.ringButton]}
@@ -188,7 +202,9 @@ export default function DevicePingControl({ visible, onClose }: DevicePingContro
         >
           <MapPin size={24} color={Colors.background} />
           <Text style={styles.actionButtonText}>Get Location</Text>
-          <Text style={styles.actionButtonSubtext}>Request current location</Text>
+          <Text style={styles.actionButtonSubtext}>
+            Request current location
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -209,9 +225,13 @@ export default function DevicePingControl({ visible, onClose }: DevicePingContro
               'This will send an urgent notification to your child. Use only for emergencies.',
               [
                 { text: 'Cancel', style: 'cancel' },
-                { text: 'Send Emergency', style: 'destructive', onPress: () => sendPing('emergency') }
-              ]
-            );
+                {
+                  text: 'Send Emergency',
+                  style: 'destructive',
+                  onPress: () => sendPing('emergency'),
+                },
+              ],
+            )
           }}
           disabled={isLoading}
         >
@@ -231,45 +251,60 @@ export default function DevicePingControl({ visible, onClose }: DevicePingContro
         />
       </View>
     </View>
-  );
+  )
 
   const renderPendingPings = () => (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>
         Pending Requests ({pendingPings.length})
       </Text>
-      
+
       {pendingPings.length === 0 ? (
         <View style={styles.emptyState}>
           <CheckCircle size={48} color={Colors.success} />
           <Text style={styles.emptyStateText}>No pending requests</Text>
-          <Text style={styles.emptyStateSubtext}>Your child has responded to all pings</Text>
+          <Text style={styles.emptyStateSubtext}>
+            Your child has responded to all pings
+          </Text>
         </View>
       ) : (
-        pendingPings.map(ping => (
+        pendingPings.map((ping) => (
           <View key={ping.id} style={styles.pingItem}>
             <View style={styles.pingHeader}>
               <View style={styles.pingInfo}>
                 {getPingIcon(ping.type)}
                 <View style={styles.pingDetails}>
                   <Text style={styles.pingType}>
-                    {ping.type.charAt(0).toUpperCase() + ping.type.slice(1)} Request
+                    {ping.type.charAt(0).toUpperCase() + ping.type.slice(1)}{' '}
+                    Request
                   </Text>
-                  <Text style={styles.pingTime}>{formatTimeAgo(ping.timestamp)}</Text>
+                  <Text style={styles.pingTime}>
+                    {formatTimeAgo(ping.timestamp)}
+                  </Text>
                 </View>
               </View>
-              <View style={[styles.pingStatus, { backgroundColor: getPingStatusColor(ping) + '20' }]}>
+              <View
+                style={[
+                  styles.pingStatus,
+                  { backgroundColor: getPingStatusColor(ping) + '20' },
+                ]}
+              >
                 <Clock size={12} color={getPingStatusColor(ping)} />
-                <Text style={[styles.pingStatusText, { color: getPingStatusColor(ping) }]}>
+                <Text
+                  style={[
+                    styles.pingStatusText,
+                    { color: getPingStatusColor(ping) },
+                  ]}
+                >
                   Pending
                 </Text>
               </View>
             </View>
-            
+
             {ping.message && (
               <Text style={styles.pingMessage}>{ping.message}</Text>
             )}
-            
+
             <View style={styles.pingFooter}>
               <Text style={styles.urgencyText}>
                 Priority: {ping.urgency.toUpperCase()}
@@ -282,27 +317,31 @@ export default function DevicePingControl({ visible, onClose }: DevicePingContro
         ))
       )}
     </View>
-  );
+  )
 
   const renderPingHistory = () => (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Recent Activity</Text>
-      
+
       {pingHistory.length === 0 ? (
         <View style={styles.emptyState}>
           <MessageCircle size={48} color={Colors.textLight} />
           <Text style={styles.emptyStateText}>No recent activity</Text>
-          <Text style={styles.emptyStateSubtext}>Device pings will appear here</Text>
+          <Text style={styles.emptyStateSubtext}>
+            Device pings will appear here
+          </Text>
         </View>
       ) : (
-        pingHistory.slice(0, 10).map(ping => (
+        pingHistory.slice(0, 10).map((ping) => (
           <View key={ping.id} style={styles.historyItem}>
             <View style={styles.historyHeader}>
               {getPingIcon(ping.type, 16)}
               <Text style={styles.historyType}>
                 {ping.type.charAt(0).toUpperCase() + ping.type.slice(1)}
               </Text>
-              <Text style={styles.historyTime}>{formatTimeAgo(ping.timestamp)}</Text>
+              <Text style={styles.historyTime}>
+                {formatTimeAgo(ping.timestamp)}
+              </Text>
               <View style={styles.historyStatus}>
                 {ping.acknowledged ? (
                   <CheckCircle size={16} color={Colors.success} />
@@ -311,7 +350,7 @@ export default function DevicePingControl({ visible, onClose }: DevicePingContro
                 )}
               </View>
             </View>
-            
+
             {ping.message && (
               <Text style={styles.historyMessage}>{ping.message}</Text>
             )}
@@ -319,10 +358,10 @@ export default function DevicePingControl({ visible, onClose }: DevicePingContro
         ))
       )}
     </View>
-  );
+  )
 
   const renderLastLocation = () => {
-    if (!lastLocationUpdate) return null;
+    if (!lastLocationUpdate) return null
 
     return (
       <View style={styles.section}>
@@ -334,37 +373,46 @@ export default function DevicePingControl({ visible, onClose }: DevicePingContro
               Updated {formatTimeAgo(lastLocationUpdate.timestamp)}
             </Text>
           </View>
-          
+
           {lastLocationUpdate.address && (
-            <Text style={styles.locationAddress}>{lastLocationUpdate.address}</Text>
+            <Text style={styles.locationAddress}>
+              {lastLocationUpdate.address}
+            </Text>
           )}
-          
+
           <Text style={styles.locationCoords}>
-            {lastLocationUpdate.latitude.toFixed(6)}, {lastLocationUpdate.longitude.toFixed(6)}
+            {lastLocationUpdate.latitude.toFixed(6)},{' '}
+            {lastLocationUpdate.longitude.toFixed(6)}
           </Text>
-          
+
           <View style={styles.locationDetails}>
             <View style={styles.locationDetail}>
               <Text style={styles.locationDetailLabel}>Accuracy:</Text>
-              <Text style={styles.locationDetailValue}>{Math.round(lastLocationUpdate.accuracy)}m</Text>
+              <Text style={styles.locationDetailValue}>
+                {Math.round(lastLocationUpdate.accuracy)}m
+              </Text>
             </View>
-            
+
             {lastLocationUpdate.batteryLevel && (
               <View style={styles.locationDetail}>
                 <Battery size={14} color={Colors.textLight} />
-                <Text style={styles.locationDetailValue}>{Math.round(lastLocationUpdate.batteryLevel)}%</Text>
+                <Text style={styles.locationDetailValue}>
+                  {Math.round(lastLocationUpdate.batteryLevel)}%
+                </Text>
               </View>
             )}
-            
+
             <View style={styles.locationDetail}>
               <Wifi size={14} color={Colors.textLight} />
-              <Text style={styles.locationDetailValue}>{lastLocationUpdate.networkStatus}</Text>
+              <Text style={styles.locationDetailValue}>
+                {lastLocationUpdate.networkStatus}
+              </Text>
             </View>
           </View>
         </View>
       </View>
-    );
-  };
+    )
+  }
 
   const renderCustomMessageModal = () => (
     <Modal
@@ -387,7 +435,10 @@ export default function DevicePingControl({ visible, onClose }: DevicePingContro
             style={styles.modalSendButton}
             disabled={isLoading || !customMessage.trim()}
           >
-            <Send size={24} color={customMessage.trim() ? Colors.primary : Colors.textLight} />
+            <Send
+              size={24}
+              color={customMessage.trim() ? Colors.primary : Colors.textLight}
+            />
           </TouchableOpacity>
         </View>
 
@@ -395,20 +446,22 @@ export default function DevicePingControl({ visible, onClose }: DevicePingContro
           <View style={styles.messageTypeSelector}>
             <Text style={styles.inputLabel}>Message Type:</Text>
             <View style={styles.typeButtons}>
-              {(['ring', 'locate', 'check-in'] as const).map(type => (
+              {(['ring', 'locate', 'check-in'] as const).map((type) => (
                 <TouchableOpacity
                   key={type}
                   style={[
                     styles.typeButton,
-                    selectedPingType === type && styles.typeButtonActive
+                    selectedPingType === type && styles.typeButtonActive,
                   ]}
                   onPress={() => setSelectedPingType(type)}
                 >
                   {getPingIcon(type, 16)}
-                  <Text style={[
-                    styles.typeButtonText,
-                    selectedPingType === type && styles.typeButtonTextActive
-                  ]}>
+                  <Text
+                    style={[
+                      styles.typeButtonText,
+                      selectedPingType === type && styles.typeButtonTextActive,
+                    ]}
+                  >
                     {type.charAt(0).toUpperCase() + type.slice(1)}
                   </Text>
                 </TouchableOpacity>
@@ -437,12 +490,12 @@ export default function DevicePingControl({ visible, onClose }: DevicePingContro
           <View style={styles.presetMessages}>
             <Text style={styles.inputLabel}>Quick Messages:</Text>
             {[
-              "Where are you right now?",
-              "Please call me when you get this",
-              "Time to come home",
-              "Are you safe?",
-              "Check in with me please"
-            ].map(preset => (
+              'Where are you right now?',
+              'Please call me when you get this',
+              'Time to come home',
+              'Are you safe?',
+              'Check in with me please',
+            ].map((preset) => (
               <TouchableOpacity
                 key={preset}
                 style={styles.presetButton}
@@ -455,20 +508,31 @@ export default function DevicePingControl({ visible, onClose }: DevicePingContro
         </View>
       </View>
     </Modal>
-  );
+  )
 
-  if (!visible) return null;
+  if (!visible) return null
 
   return (
-    <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
+    <Modal
+      visible={visible}
+      animationType="slide"
+      presentationStyle="pageSheet"
+    >
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
             <XCircle size={24} color={Colors.textLight} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Device Control</Text>
-          <TouchableOpacity onPress={handleRefresh} style={styles.refreshButton} disabled={refreshing}>
-            <Volume2 size={24} color={refreshing ? Colors.textLight : Colors.primary} />
+          <TouchableOpacity
+            onPress={handleRefresh}
+            style={styles.refreshButton}
+            disabled={refreshing}
+          >
+            <Volume2
+              size={24}
+              color={refreshing ? Colors.textLight : Colors.primary}
+            />
           </TouchableOpacity>
         </View>
 
@@ -488,7 +552,7 @@ export default function DevicePingControl({ visible, onClose }: DevicePingContro
         {renderCustomMessageModal()}
       </View>
     </Modal>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -839,4 +903,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.text,
   },
-});
+})

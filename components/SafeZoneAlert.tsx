@@ -1,5 +1,5 @@
 // components/SafeZoneAlert.tsx - Real-time safe zone notifications
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
@@ -8,22 +8,32 @@ import {
   TouchableOpacity,
   Dimensions,
   Platform,
-} from 'react-native';
-import { Shield, ShieldCheck, ShieldAlert, X, MapPin } from 'lucide-react-native';
-import Colors from '@/constants/colors';
-import { SafeZoneEvent } from '@/utils/safeZoneAlerts';
+} from 'react-native'
+import {
+  Shield,
+  ShieldCheck,
+  ShieldAlert,
+  X,
+  MapPin,
+} from 'lucide-react-native'
+import Colors from '@/constants/colors'
+import { SafeZoneEvent } from '@/utils/safeZoneAlerts'
 
 interface SafeZoneAlertProps {
-  event: SafeZoneEvent | null;
-  onDismiss: () => void;
-  style?: any;
+  event: SafeZoneEvent | null
+  onDismiss: () => void
+  style?: any
 }
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window')
 
-export default function SafeZoneAlert({ event, onDismiss, style }: SafeZoneAlertProps) {
-  const [slideAnim] = useState(new Animated.Value(-100));
-  const [opacityAnim] = useState(new Animated.Value(0));
+export default function SafeZoneAlert({
+  event,
+  onDismiss,
+  style,
+}: SafeZoneAlertProps) {
+  const [slideAnim] = useState(new Animated.Value(-100))
+  const [opacityAnim] = useState(new Animated.Value(0))
 
   useEffect(() => {
     if (event) {
@@ -39,20 +49,20 @@ export default function SafeZoneAlert({ event, onDismiss, style }: SafeZoneAlert
           duration: 300,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]).start()
 
       // Auto-dismiss after 5 seconds
       const timer = setTimeout(() => {
-        handleDismiss();
-      }, 5000);
+        handleDismiss()
+      }, 5000)
 
-      return () => clearTimeout(timer);
+      return () => clearTimeout(timer)
     } else {
       // Reset animations when no event
-      slideAnim.setValue(-100);
-      opacityAnim.setValue(0);
+      slideAnim.setValue(-100)
+      opacityAnim.setValue(0)
     }
-  }, [event]);
+  }, [event])
 
   const handleDismiss = () => {
     Animated.parallel([
@@ -67,15 +77,15 @@ export default function SafeZoneAlert({ event, onDismiss, style }: SafeZoneAlert
         useNativeDriver: true,
       }),
     ]).start(() => {
-      onDismiss();
-    });
-  };
+      onDismiss()
+    })
+  }
 
-  if (!event) return null;
+  if (!event) return null
 
-  const isEntering = event.eventType === 'enter';
-  const alertColor = isEntering ? Colors.success : Colors.warning;
-  const IconComponent = isEntering ? ShieldCheck : ShieldAlert;
+  const isEntering = event.eventType === 'enter'
+  const alertColor = isEntering ? Colors.success : Colors.warning
+  const IconComponent = isEntering ? ShieldCheck : ShieldAlert
 
   return (
     <Animated.View
@@ -93,18 +103,19 @@ export default function SafeZoneAlert({ event, onDismiss, style }: SafeZoneAlert
         <View style={styles.iconContainer}>
           <IconComponent size={24} color="#FFFFFF" />
         </View>
-        
+
         <View style={styles.textContainer}>
           <Text style={styles.title}>
             {isEntering ? 'Entered Safe Zone' : 'Left Safe Zone'}
           </Text>
-          <Text style={styles.zoneName}>
-            {event.zoneName}
-          </Text>
+          <Text style={styles.zoneName}>{event.zoneName}</Text>
           <View style={styles.detailsRow}>
             <MapPin size={12} color="#FFFFFF" style={styles.locationIcon} />
             <Text style={styles.timestamp}>
-              {event.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              {event.timestamp.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
             </Text>
           </View>
         </View>
@@ -134,7 +145,7 @@ export default function SafeZoneAlert({ event, onDismiss, style }: SafeZoneAlert
         />
       </View>
     </Animated.View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -214,24 +225,29 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
   },
-});
+})
 
 // SafeZoneAlert History Component for parent dashboard
 interface SafeZoneAlertHistoryProps {
-  events: SafeZoneEvent[];
-  maxEvents?: number;
+  events: SafeZoneEvent[]
+  maxEvents?: number
 }
 
-export function SafeZoneAlertHistory({ events, maxEvents = 10 }: SafeZoneAlertHistoryProps) {
-  const recentEvents = events.slice(0, maxEvents);
+export function SafeZoneAlertHistory({
+  events,
+  maxEvents = 10,
+}: SafeZoneAlertHistoryProps) {
+  const recentEvents = events.slice(0, maxEvents)
 
   if (recentEvents.length === 0) {
     return (
       <View style={historyStyles.emptyContainer}>
         <Shield size={32} color={Colors.textLight} />
-        <Text style={historyStyles.emptyText}>No recent safe zone activity</Text>
+        <Text style={historyStyles.emptyText}>
+          No recent safe zone activity
+        </Text>
       </View>
-    );
+    )
   }
 
   return (
@@ -248,7 +264,8 @@ export function SafeZoneAlertHistory({ events, maxEvents = 10 }: SafeZoneAlertHi
           </View>
           <View style={historyStyles.eventContent}>
             <Text style={historyStyles.eventTitle}>
-              {event.eventType === 'enter' ? 'Entered' : 'Left'} {event.zoneName}
+              {event.eventType === 'enter' ? 'Entered' : 'Left'}{' '}
+              {event.zoneName}
             </Text>
             <Text style={historyStyles.eventTime}>
               {event.timestamp.toLocaleString()}
@@ -257,7 +274,7 @@ export function SafeZoneAlertHistory({ events, maxEvents = 10 }: SafeZoneAlertHi
         </View>
       ))}
     </View>
-  );
+  )
 }
 
 const historyStyles = StyleSheet.create({
@@ -315,4 +332,4 @@ const historyStyles = StyleSheet.create({
     fontSize: 12,
     color: Colors.textLight,
   },
-});
+})

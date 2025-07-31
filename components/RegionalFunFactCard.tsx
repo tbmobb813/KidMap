@@ -1,19 +1,23 @@
-import React from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import Colors from '@/constants/colors';
-import { Lightbulb, X } from 'lucide-react-native';
-import { useRegionalData } from '@/hooks/useRegionalData';
+import React from 'react'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
+import Colors from '@/constants/colors'
+import { Lightbulb, X } from 'lucide-react-native'
+import { useRegionalData } from '@/hooks/useRegionalData'
 
 type RegionalFunFactCardProps = {
-  onDismiss?: () => void;
-};
+  onDismiss?: () => void
+}
 
-const RegionalFunFactCard: React.FC<RegionalFunFactCardProps> = ({ onDismiss }) => {
-  const { regionalContent, currentRegion } = useRegionalData();
+const RegionalFunFactCard: React.FC<RegionalFunFactCardProps> = ({
+  onDismiss,
+}) => {
+  const { regionalContent, currentRegion } = useRegionalData()
 
   // Get a random fun fact from the current region
   const randomFact =
-    regionalContent.funFacts[Math.floor(Math.random() * regionalContent.funFacts.length)];
+    regionalContent.funFacts[
+      Math.floor(Math.random() * regionalContent.funFacts.length)
+    ]
 
   return (
     <View style={styles.container}>
@@ -31,8 +35,8 @@ const RegionalFunFactCard: React.FC<RegionalFunFactCardProps> = ({ onDismiss }) 
 
       <Text style={styles.factText}>{randomFact}</Text>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -70,6 +74,6 @@ const styles = StyleSheet.create({
     color: Colors.text,
     lineHeight: 20,
   },
-});
+})
 
-export default RegionalFunFactCard;
+export default RegionalFunFactCard

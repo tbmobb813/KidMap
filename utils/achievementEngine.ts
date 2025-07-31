@@ -1,24 +1,24 @@
 // utils/achievementEngine.ts - Gamification and achievement system
-import { UserStats, Achievement } from '@/types';
+import { UserStats, Achievement } from '@/types'
 
 export interface TripData {
-  destination: string;
-  duration: number; // minutes
-  mode: 'walking' | 'transit' | 'combined';
-  safety: number; // 1-5 rating
-  distance?: number; // meters
-  weatherCondition?: string;
-  timeOfDay?: 'morning' | 'afternoon' | 'evening' | 'night';
+  destination: string
+  duration: number // minutes
+  mode: 'walking' | 'transit' | 'combined'
+  safety: number // 1-5 rating
+  distance?: number // meters
+  weatherCondition?: string
+  timeOfDay?: 'morning' | 'afternoon' | 'evening' | 'night'
 }
 
 export class AchievementEngine {
-  private static instance: AchievementEngine;
-  
+  private static instance: AchievementEngine
+
   static getInstance(): AchievementEngine {
     if (!AchievementEngine.instance) {
-      AchievementEngine.instance = new AchievementEngine();
+      AchievementEngine.instance = new AchievementEngine()
     }
-    return AchievementEngine.instance;
+    return AchievementEngine.instance
   }
 
   // Predefined achievements
@@ -172,141 +172,161 @@ export class AchievementEngine {
       category: 'consistency',
       requirement: 'Trip every day for 7 days',
     },
-  ];
+  ]
 
   // Check for newly unlocked achievements after a trip
   checkAchievements(userStats: UserStats, tripData: TripData): Achievement[] {
-    const newAchievements: Achievement[] = [];
+    const newAchievements: Achievement[] = []
 
-    this.achievements.forEach(achievement => {
-      if (!achievement.unlocked && this.meetsRequirement(achievement, userStats, tripData)) {
-        achievement.unlocked = true;
-        achievement.unlockedAt = new Date();
-        newAchievements.push(achievement);
+    this.achievements.forEach((achievement) => {
+      if (
+        !achievement.unlocked &&
+        this.meetsRequirement(achievement, userStats, tripData)
+      ) {
+        achievement.unlocked = true
+        achievement.unlockedAt = new Date()
+        newAchievements.push(achievement)
       }
-    });
+    })
 
-    return newAchievements;
+    return newAchievements
   }
 
-  private meetsRequirement(achievement: Achievement, stats: UserStats, trip: TripData): boolean {
+  private meetsRequirement(
+    achievement: Achievement,
+    stats: UserStats,
+    trip: TripData,
+  ): boolean {
     switch (achievement.id) {
       case 'first_step':
-        return stats.totalTrips >= 1;
-      
+        return stats.totalTrips >= 1
+
       case 'explorer':
-        return stats.totalTrips >= 10;
-      
+        return stats.totalTrips >= 10
+
       case 'navigator':
-        return stats.totalTrips >= 25;
-      
+        return stats.totalTrips >= 25
+
       case 'city_master':
-        return stats.totalTrips >= 50;
-      
+        return stats.totalTrips >= 50
+
       case 'safety_first':
-        return stats.safeTrips >= 5; // Assumes safeTrips tracks 5-star safety trips
-      
+        return stats.safeTrips >= 5 // Assumes safeTrips tracks 5-star safety trips
+
       case 'guardian_angel':
-        return stats.averageSafety >= 4.5; // 90% of 5 stars
-      
+        return stats.averageSafety >= 4.5 // 90% of 5 stars
+
       case 'walking_warrior':
-        return (stats.totalDistance || 0) >= 10000; // Assuming distance in meters
-      
+        return (stats.totalDistance || 0) >= 10000 // Assuming distance in meters
+
       case 'transit_pro':
-        return (stats.transitTrips || 0) >= 15;
-      
+        return (stats.transitTrips || 0) >= 15
+
       case 'multimodal_master':
-        return (stats.walkingTrips || 0) > 0 && 
-               (stats.transitTrips || 0) > 0 && 
-               (stats.combinedTrips || 0) > 0;
-      
+        return (
+          (stats.walkingTrips || 0) > 0 &&
+          (stats.transitTrips || 0) > 0 &&
+          (stats.combinedTrips || 0) > 0
+        )
+
       case 'speed_demon':
-        return trip.duration < 15;
-      
+        return trip.duration < 15
+
       case 'early_bird':
-        return (stats.morningTrips || 0) >= 5;
-      
+        return (stats.morningTrips || 0) >= 5
+
       case 'night_owl':
-        return (stats.eveningTrips || 0) >= 3;
-      
+        return (stats.eveningTrips || 0) >= 3
+
       case 'weather_warrior':
-        return (stats.weatherConditions || []).length >= 3;
-      
+        return (stats.weatherConditions || []).length >= 3
+
       case 'weekly_wanderer':
-        return this.checkWeeklyConsistency(stats);
-      
+        return this.checkWeeklyConsistency(stats)
+
       default:
-        return false;
+        return false
     }
   }
 
   private checkWeeklyConsistency(stats: UserStats): boolean {
     // Simplified check - in real app would check actual trip dates
-    return stats.totalTrips >= 7 && (stats.consecutiveDays || 0) >= 7;
+    return stats.totalTrips >= 7 && (stats.consecutiveDays || 0) >= 7
   }
 
   // Calculate points from achievements
   calculateTotalPoints(unlockedAchievements: Achievement[]): number {
-    return unlockedAchievements.reduce((total, achievement) => total + (achievement.points || 0), 0);
+    return unlockedAchievements.reduce(
+      (total, achievement) => total + (achievement.points || 0),
+      0,
+    )
   }
 
   // Get achievements by category
   getAchievementsByCategory(category: string): Achievement[] {
-    return this.achievements.filter(achievement => achievement.category === category);
+    return this.achievements.filter(
+      (achievement) => achievement.category === category,
+    )
   }
 
   // Get progress toward next achievement
-  getNextAchievements(userStats: UserStats): Array<{achievement: Achievement, progress: number}> {
-    const nextAchievements: Array<{achievement: Achievement, progress: number}> = [];
+  getNextAchievements(
+    userStats: UserStats,
+  ): Array<{ achievement: Achievement; progress: number }> {
+    const nextAchievements: Array<{
+      achievement: Achievement
+      progress: number
+    }> = []
 
     this.achievements
-      .filter(a => !a.unlocked)
-      .forEach(achievement => {
-        const progress = this.calculateProgress(achievement, userStats);
+      .filter((a) => !a.unlocked)
+      .forEach((achievement) => {
+        const progress = this.calculateProgress(achievement, userStats)
         if (progress > 0) {
-          nextAchievements.push({ achievement, progress });
+          nextAchievements.push({ achievement, progress })
         }
-      });
+      })
 
-    return nextAchievements
-      .sort((a, b) => b.progress - a.progress)
-      .slice(0, 3); // Top 3 closest achievements
+    return nextAchievements.sort((a, b) => b.progress - a.progress).slice(0, 3) // Top 3 closest achievements
   }
 
-  private calculateProgress(achievement: Achievement, stats: UserStats): number {
+  private calculateProgress(
+    achievement: Achievement,
+    stats: UserStats,
+  ): number {
     switch (achievement.id) {
       case 'first_step':
-        return Math.min(stats.totalTrips / 1, 1);
-      
+        return Math.min(stats.totalTrips / 1, 1)
+
       case 'explorer':
-        return Math.min(stats.totalTrips / 10, 1);
-      
+        return Math.min(stats.totalTrips / 10, 1)
+
       case 'navigator':
-        return Math.min(stats.totalTrips / 25, 1);
-      
+        return Math.min(stats.totalTrips / 25, 1)
+
       case 'city_master':
-        return Math.min(stats.totalTrips / 50, 1);
-      
+        return Math.min(stats.totalTrips / 50, 1)
+
       case 'safety_first':
-        return Math.min(stats.safeTrips / 5, 1);
-      
+        return Math.min(stats.safeTrips / 5, 1)
+
       case 'guardian_angel':
-        return Math.min(stats.averageSafety / 4.5, 1);
-      
+        return Math.min(stats.averageSafety / 4.5, 1)
+
       case 'walking_warrior':
-        return Math.min((stats.totalDistance || 0) / 10000, 1);
-      
+        return Math.min((stats.totalDistance || 0) / 10000, 1)
+
       case 'transit_pro':
-        return Math.min((stats.transitTrips || 0) / 15, 1);
-      
+        return Math.min((stats.transitTrips || 0) / 15, 1)
+
       case 'early_bird':
-        return Math.min((stats.morningTrips || 0) / 5, 1);
-      
+        return Math.min((stats.morningTrips || 0) / 5, 1)
+
       case 'night_owl':
-        return Math.min((stats.eveningTrips || 0) / 3, 1);
-      
+        return Math.min((stats.eveningTrips || 0) / 3, 1)
+
       default:
-        return 0;
+        return 0
     }
   }
 
@@ -318,22 +338,22 @@ export class AchievementEngine {
       `🎊 Congratulations! You achieved "${achievement.title}"!`,
       `⭐ Fantastic! You unlocked "${achievement.title}"!`,
       `🏆 Great work! You earned "${achievement.title}"!`,
-    ];
-    
-    return messages[Math.floor(Math.random() * messages.length)];
+    ]
+
+    return messages[Math.floor(Math.random() * messages.length)]
   }
 
   // Get all achievements for display
   getAllAchievements(): Achievement[] {
-    return [...this.achievements];
+    return [...this.achievements]
   }
 
   // Reset achievements (for testing or user reset)
   resetAchievements(): void {
-    this.achievements.forEach(achievement => {
-      achievement.unlocked = false;
-      delete achievement.unlockedAt;
-    });
+    this.achievements.forEach((achievement) => {
+      achievement.unlocked = false
+      delete achievement.unlockedAt
+    })
   }
 
   // Update user stats after trip completion
@@ -341,51 +361,56 @@ export class AchievementEngine {
     const updatedStats: UserStats = {
       ...currentStats,
       totalTrips: currentStats.totalTrips + 1,
-      totalDistance: (currentStats.totalDistance || 0) + (tripData.distance || 0),
-    };
+      totalDistance:
+        (currentStats.totalDistance || 0) + (tripData.distance || 0),
+    }
 
     // Update safety stats
-    const totalSafetyPoints = (currentStats.averageSafety * currentStats.totalTrips) + tripData.safety;
-    updatedStats.averageSafety = totalSafetyPoints / updatedStats.totalTrips;
-    
+    const totalSafetyPoints =
+      currentStats.averageSafety * currentStats.totalTrips + tripData.safety
+    updatedStats.averageSafety = totalSafetyPoints / updatedStats.totalTrips
+
     if (tripData.safety >= 5) {
-      updatedStats.safeTrips = (currentStats.safeTrips || 0) + 1;
+      updatedStats.safeTrips = (currentStats.safeTrips || 0) + 1
     }
 
     // Update mode-specific stats
     switch (tripData.mode) {
       case 'walking':
-        updatedStats.walkingTrips = (currentStats.walkingTrips || 0) + 1;
-        break;
+        updatedStats.walkingTrips = (currentStats.walkingTrips || 0) + 1
+        break
       case 'transit':
-        updatedStats.transitTrips = (currentStats.transitTrips || 0) + 1;
-        break;
+        updatedStats.transitTrips = (currentStats.transitTrips || 0) + 1
+        break
       case 'combined':
-        updatedStats.combinedTrips = (currentStats.combinedTrips || 0) + 1;
-        break;
+        updatedStats.combinedTrips = (currentStats.combinedTrips || 0) + 1
+        break
     }
 
     // Update time-based stats
     switch (tripData.timeOfDay) {
       case 'morning':
-        updatedStats.morningTrips = (currentStats.morningTrips || 0) + 1;
-        break;
+        updatedStats.morningTrips = (currentStats.morningTrips || 0) + 1
+        break
       case 'evening':
-        updatedStats.eveningTrips = (currentStats.eveningTrips || 0) + 1;
-        break;
+        updatedStats.eveningTrips = (currentStats.eveningTrips || 0) + 1
+        break
     }
 
     // Update weather conditions
     if (tripData.weatherCondition) {
-      const conditions = currentStats.weatherConditions || [];
+      const conditions = currentStats.weatherConditions || []
       if (!conditions.includes(tripData.weatherCondition)) {
-        updatedStats.weatherConditions = [...conditions, tripData.weatherCondition];
+        updatedStats.weatherConditions = [
+          ...conditions,
+          tripData.weatherCondition,
+        ]
       }
     }
 
-    return updatedStats;
+    return updatedStats
   }
 }
 
 // Export singleton instance
-export const achievementEngine = AchievementEngine.getInstance();
+export const achievementEngine = AchievementEngine.getInstance()
