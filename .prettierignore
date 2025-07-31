@@ -1,4 +1,4 @@
-node_modules/
-dist/
-build/
-.expo/
+node_modules
+build
+dist
+*.config.js

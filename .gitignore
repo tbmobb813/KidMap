@@ -35,3 +35,12 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 .vercel
+
+# Test logs (keep structure, ignore content)
+logs/test-runs/*
+logs/debug/*
+logs/coverage/*
+!logs/.gitkeep
+!logs/test-runs/.gitkeep
+!logs/debug/.gitkeep
+!logs/coverage/.gitkeep

@@ -47,26 +47,16 @@ export interface ParentSession {
   lastActivity: Date;
 }
 
-export interface SafeZone {
-  id: string;
-  name: string;
-  radius: number; // in meters
-  center: [number, number]; // [latitude, longitude]
-  color?: string; // for map display
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 interface ParentalControlState {
   // Authentication state
   session: ParentSession | null;
-
+  
   // Settings
   settings: ParentSettings;
-
+  
   // Pending approvals
   pendingApprovals: PendingApproval[];
-
+  
   // Child activity monitoring
   childActivity: {
     lastSeen: Date | null;
@@ -75,50 +65,25 @@ interface ParentalControlState {
     isInSafeZone: boolean;
     currentSafeZone: string | null;
   };
-
-  // Safe Zone Management
-  safeZones: SafeZone[];
-  setSafeZones: (zones: SafeZone[]) => void;
-  addSafeZone: (zone: SafeZone) => void;
-  removeSafeZone: (zoneId: string) => void;
-
-  // Emergency Contacts Management
-  emergencyContacts: EmergencyContact[];
-  setEmergencyContacts: (contacts: EmergencyContact[]) => void;
-  addEmergencyContact: (contact: EmergencyContact) => void;
-  removeEmergencyContact: (contactId: string) => void;
-
-  // Parental Lock
-  isLocked: boolean;
-  lockScreen: () => void;
-  unlockScreen: () => void;
-
-  // Location Sharing
-  isLocationSharingEnabled: boolean;
-  setLocationSharingEnabled: (enabled: boolean) => void;
-
-  // Parental Lock Settings
-  isParentalLockEnabled: boolean;
-  setParentalLockEnabled: (enabled: boolean) => void;
-
+  
   // Actions
   authenticateParent: (pin?: string, useBiometric?: boolean) => Promise<boolean>;
   logoutParent: () => void;
   updateSettings: (newSettings: Partial<ParentSettings>) => void;
-
+  
   // Approval management
   addPendingApproval: (approval: Omit<PendingApproval, 'id' | 'requestedAt' | 'status'>) => void;
   approveRequest: (id: string, notes?: string) => void;
   rejectRequest: (id: string, notes?: string) => void;
-
+  
   // Emergency functions
   triggerEmergencyAlert: () => Promise<void>;
   requestChildCheckIn: () => Promise<void>;
   locateChild: () => Promise<[number, number] | null>;
-
+  
   // Activity monitoring
   updateChildActivity: (activity: Partial<ParentalControlState['childActivity']>) => void;
-
+  
   // Utility functions
   isSessionValid: () => boolean;
   extendSession: () => void;
@@ -161,30 +126,10 @@ export const useParentalControlStore = create<ParentalControlState>()(
         isInSafeZone: false,
         currentSafeZone: null,
       },
-      // Safe Zone Management
-      safeZones: [],
-      setSafeZones: (zones: SafeZone[]) => set({ safeZones: zones }),
-      addSafeZone: (zone: SafeZone) => set(state => ({ safeZones: [...state.safeZones, zone] })),
-      removeSafeZone: (zoneId: string) => set(state => ({ safeZones: state.safeZones.filter(z => z.id !== zoneId) })),
-      // Parental Lock
-      isLocked: false,
-      lockScreen: () => set({ isLocked: true }),
-      unlockScreen: () => set({ isLocked: false }),
-      // Location Sharing
-      isLocationSharingEnabled: true,
-      setLocationSharingEnabled: (enabled: boolean) => set({ isLocationSharingEnabled: enabled }),
-      // Parental Lock Settings
-      isParentalLockEnabled: false,
-      setParentalLockEnabled: (enabled: boolean) => set({ isParentalLockEnabled: enabled }),
-      // Emergency Contacts Management
-      emergencyContacts: [],
-      setEmergencyContacts: (contacts: EmergencyContact[]) => set({ emergencyContacts: contacts }),
-      addEmergencyContact: (contact: EmergencyContact) => set(state => ({ emergencyContacts: [...state.emergencyContacts, contact] })),
-      removeEmergencyContact: (contactId: string) => set(state => ({ emergencyContacts: state.emergencyContacts.filter(c => c.id !== contactId) })),
 
       authenticateParent: async (pin?: string, useBiometric: boolean = true) => {
         const { settings } = get();
-
+        
         try {
           // Check if biometric authentication is requested and available
           if (useBiometric && settings.authenticationMethod !== 'pin') {
@@ -193,7 +138,7 @@ export const useParentalControlStore = create<ParentalControlState>()(
               fallbackLabel: 'Use PIN instead',
               disableDeviceFallback: false,
             });
-
+            
             if (biometricResult.success) {
               const session: ParentSession = {
                 isAuthenticated: true,
@@ -201,22 +146,22 @@ export const useParentalControlStore = create<ParentalControlState>()(
                 sessionTimeout: 30, // 30 minutes
                 lastActivity: new Date(),
               };
-
+              
               set({ session });
               return true;
             }
-
+            
             if (settings.authenticationMethod === 'biometric' && !biometricResult.success) {
               return false;
             }
           }
-
+          
           // PIN authentication
           if (settings.authenticationMethod !== 'biometric') {
             if (!pin || !settings.pin) {
               return false;
             }
-
+            
             if (pin === settings.pin) {
               const session: ParentSession = {
                 isAuthenticated: true,
@@ -224,12 +169,12 @@ export const useParentalControlStore = create<ParentalControlState>()(
                 sessionTimeout: 30,
                 lastActivity: new Date(),
               };
-
+              
               set({ session });
               return true;
             }
           }
-
+          
           return false;
         } catch (error) {
           console.error('Authentication error:', error);
@@ -254,7 +199,7 @@ export const useParentalControlStore = create<ParentalControlState>()(
           timestamp: Date.now(),
           status: 'pending',
         };
-
+        
         set((state) => ({
           pendingApprovals: [...state.pendingApprovals, newApproval]
         }));
@@ -282,14 +227,14 @@ export const useParentalControlStore = create<ParentalControlState>()(
 
       triggerEmergencyAlert: async () => {
         const { settings, childActivity } = get();
-
+        
         // Send emergency alerts to all emergency contacts
         for (const contact of settings.emergencyContacts) {
           if (contact.canReceiveAlerts) {
             try {
               // In a real implementation, this would send SMS/email
               console.log(`Emergency alert sent to ${contact.name}: ${contact.phone}`);
-
+              
               // Include child's location if available
               if (childActivity.currentLocation) {
                 console.log(`Child location: ${childActivity.currentLocation[0]}, ${childActivity.currentLocation[1]}`);
@@ -305,20 +250,20 @@ export const useParentalControlStore = create<ParentalControlState>()(
         try {
           // In a real implementation, this would send a push notification to the child's device
           console.log('Check-in request sent to child');
-
+          
           // Set a reminder to follow up if no response
           setTimeout(() => {
             const { childActivity } = get();
-            const timeSinceLastSeen = childActivity.lastSeen
+            const timeSinceLastSeen = childActivity.lastSeen 
               ? Date.now() - childActivity.lastSeen.getTime()
               : Infinity;
-
+              
             if (timeSinceLastSeen > 10 * 60 * 1000) { // 10 minutes
               console.log('Child has not responded to check-in request');
               // Could trigger additional alerts here
             }
           }, 10 * 60 * 1000);
-
+          
         } catch (error) {
           console.error('Failed to request child check-in:', error);
         }
@@ -328,14 +273,14 @@ export const useParentalControlStore = create<ParentalControlState>()(
         try {
           // In a real implementation, this would request the child's current location
           const { childActivity } = get();
-
+          
           if (childActivity.currentLocation) {
             return childActivity.currentLocation;
           }
-
+          
           // Trigger location request
           console.log('Location request sent to child device');
-
+          
           // Return null if location is not immediately available
           return null;
         } catch (error) {
@@ -350,63 +295,17 @@ export const useParentalControlStore = create<ParentalControlState>()(
         }));
       },
 
-      setSafeZones: (zones) => {
-        set({ safeZones: zones });
-      },
-
-      addSafeZone: (zone) => {
-        set((state) => ({
-          safeZones: [...state.safeZones, zone]
-        }));
-      },
-
-      removeSafeZone: (zoneId) => {
-        set((state) => ({
-          safeZones: state.safeZones.filter(zone => zone.id !== zoneId)
-        }));
-      },
-
-      setEmergencyContacts: (contacts) => {
-        set({ emergencyContacts: contacts });
-      },
-
-      addEmergencyContact: (contact) => {
-        set((state) => ({
-          emergencyContacts: [...state.emergencyContacts, contact]
-        }));
-      },
-
-      removeEmergencyContact: (contactId) => {
-        set((state) => ({
-          emergencyContacts: state.emergencyContacts.filter(contact => contact.id !== contactId)
-        }));
-      },
-
-      lockScreen: () => {
-        set({ isLocked: true });
-      },
-
-      unlockScreen: () => {
-        set({ isLocked: false });
-      },
-
-      setLocationSharingEnabled: (enabled) => {
-        set((state) => ({
-          settings: { ...state.settings, locationSharing: { ...state.settings.locationSharing, enabled } }
-        }));
-      },
-
       isSessionValid: () => {
         const { session } = get();
-
+        
         if (!session || !session.isAuthenticated) {
           return false;
         }
-
+        
         const now = new Date();
         const sessionAge = now.getTime() - session.lastActivity.getTime();
         const timeoutMs = session.sessionTimeout * 60 * 1000;
-
+        
         return sessionAge < timeoutMs;
       },
 
@@ -421,7 +320,7 @@ export const useParentalControlStore = create<ParentalControlState>()(
 
       canChildPerformAction: (action: string) => {
         const { settings } = get();
-
+        
         switch (action) {
           case 'createCategory':
             return settings.allowChildCategoryCreation;

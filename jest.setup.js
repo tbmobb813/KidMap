@@ -81,7 +81,7 @@ jest.mock('nativewind/jsx-dev-runtime', () => {
 // --- Mock React Native Reanimated ---
 jest.mock('react-native-reanimated', () => {
   const Reanimated = require('react-native-reanimated/mock');
-  Reanimated.default.call = () => {};
+  Reanimated.default.call = () => { };
   return Reanimated;
 });
 
@@ -253,3 +253,59 @@ jest.mock('@/utils/api', () => ({
   }),
   searchPlaces: jest.fn(async () => []),
 }));
+
+const fs = require('fs');
+const path = require('path');
+
+// Create a custom logger for tests
+const testLogger = {
+  log: (message, level = 'INFO') => {
+    const timestamp = new Date().toISOString();
+    const logEntry = `[${timestamp}] [${level}] ${message}\n`;
+
+    const logFile = path.join(__dirname, 'logs', 'debug', `test-debug-${new Date().toISOString().slice(0, 10)}.log`);
+
+    // Ensure debug directory exists
+    const debugDir = path.dirname(logFile);
+    if (!fs.existsSync(debugDir)) {
+      fs.mkdirSync(debugDir, { recursive: true });
+    }
+
+    fs.appendFileSync(logFile, logEntry);
+    console.log(`🔍 ${logEntry.trim()}`);
+  },
+
+  error: (message) => testLogger.log(message, 'ERROR'),
+  warn: (message) => testLogger.log(message, 'WARN'),
+  info: (message) => testLogger.log(message, 'INFO'),
+  debug: (message) => testLogger.log(message, 'DEBUG')
+};
+
+// Make logger available globally in tests
+global.testLogger = testLogger;
+
+// Log test start/end
+beforeEach(() => {
+  const testName = expect.getState().currentTestName || 'Unknown test';
+  testLogger.info(`Starting test: ${testName}`);
+});
+
+afterEach(() => {
+  const testName = expect.getState().currentTestName || 'Unknown test';
+  const testResult = expect.getState().isExpectingAssertions ? 'PASSED' : 'Status unknown';
+  testLogger.info(`Finished test: ${testName} - ${testResult}`);
+});
+
+// Log test failures
+const originalIt = global.it;
+global.it = (name, fn, timeout) => {
+  return originalIt(name, async (...args) => {
+    try {
+      await fn(...args);
+      testLogger.info(`✅ Test passed: ${name}`);
+    } catch (error) {
+      testLogger.error(`❌ Test failed: ${name} - Error: ${error.message}`);
+      throw error;
+    }
+  }, timeout);
+};
