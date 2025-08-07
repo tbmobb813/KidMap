@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
+import React, { useEffect } from "react";
+import { StyleSheet, Text, View, ScrollView, Pressable, Dimensions, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import Colors from "@/constants/colors";
 import MapPlaceholder from "@/components/MapPlaceholder";
 import RouteCard from "@/components/RouteCard";
+import SafetyPanel from "@/components/SafetyPanel";
+import TravelModeSelector from "@/components/TravelModeSelector";
 import { useNavigationStore } from "@/stores/navigationStore";
 import { Route } from "@/types/navigation";
 import { Navigation, MapPin, Search } from "lucide-react-native";
 import useLocation from "@/hooks/useLocation";
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 export default function MapScreen() {
   const router = useRouter();
@@ -18,9 +22,11 @@ export default function MapScreen() {
     destination,
     availableRoutes,
     selectedRoute,
+    selectedTravelMode,
     setOrigin,
     findRoutes,
-    selectRoute
+    selectRoute,
+    setTravelMode
   } = useNavigationStore();
 
   useEffect(() => {
@@ -56,7 +62,12 @@ export default function MapScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView 
+      style={styles.container}
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+      bounces={true}
+    >
       <View style={styles.mapContainer}>
         <MapPlaceholder 
           message={
@@ -66,6 +77,14 @@ export default function MapScreen() {
           } 
         />
       </View>
+
+      <SafetyPanel 
+        currentLocation={location} 
+        currentPlace={destination ? {
+          id: destination.id,
+          name: destination.name
+        } : undefined}
+      />
 
       <View style={styles.contentContainer}>
         <View style={styles.locationBar}>
@@ -108,8 +127,12 @@ export default function MapScreen() {
 
         {destination ? (
           <>
+            <TravelModeSelector 
+              selectedMode={selectedTravelMode}
+              onModeChange={setTravelMode}
+            />
             <Text style={styles.sectionTitle}>Available Routes</Text>
-            <ScrollView>
+            <View style={styles.routesContainer}>
               {availableRoutes.map(route => (
                 <RouteCard
                   key={route.id}
@@ -118,7 +141,7 @@ export default function MapScreen() {
                   isSelected={selectedRoute?.id === route.id}
                 />
               ))}
-            </ScrollView>
+            </View>
           </>
         ) : (
           <View style={styles.emptyStateContainer}>
@@ -135,7 +158,7 @@ export default function MapScreen() {
           </View>
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -144,12 +167,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
+  scrollContent: {
+    flexGrow: 1,
+    minHeight: screenHeight,
+  },
   mapContainer: {
-    height: 300,
+    height: Platform.select({
+      web: Math.min(screenHeight * 0.4, 400),
+      default: Math.min(screenHeight * 0.35, 300),
+    }),
+    minHeight: 250,
   },
   contentContainer: {
     flex: 1,
     padding: 16,
+    paddingBottom: 32,
+  },
+  routesContainer: {
+    gap: 12,
   },
   locationBar: {
     flexDirection: "row",
@@ -205,10 +240,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   emptyStateContainer: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    padding: 16,
+    padding: 32,
+    minHeight: 200,
   },
   emptyStateText: {
     marginTop: 16,
