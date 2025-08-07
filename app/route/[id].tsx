@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import Colors from "@/constants/colors";
 import DirectionStep from "@/components/DirectionStep";
 import MapPlaceholder from "@/components/MapPlaceholder";
+import SafetyPanel from "@/components/SafetyPanel";
 import { useNavigationStore } from "@/stores/navigationStore";
 import { Clock, Navigation, MapPin } from "lucide-react-native";
+import VoiceNavigation from "@/components/VoiceNavigation";
+import FunFactCard from "@/components/FunFactCard";
+import { getRandomFunFact } from "@/mocks/funFacts";
+import useLocation from "@/hooks/useLocation";
 
 export default function RouteDetailScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
+  const { location } = useLocation();
   
   const { 
     origin,
@@ -22,6 +28,9 @@ export default function RouteDetailScreen() {
   const route = selectedRoute?.id === id 
     ? selectedRoute 
     : availableRoutes.find(r => r.id === id);
+
+  const [showFunFact, setShowFunFact] = useState(true);
+  const [currentFunFact] = useState(getRandomFunFact("subway"));
 
   if (!route || !origin || !destination) {
     return (
@@ -42,6 +51,26 @@ export default function RouteDetailScreen() {
       <MapPlaceholder 
         message={`Map showing route from ${origin.name} to ${destination.name}`} 
       />
+      
+      <VoiceNavigation 
+        currentStep={route.steps[0]?.from ? `${route.steps[0].type === 'walk' ? 'Walk' : 'Take'} from ${route.steps[0].from} to ${route.steps[0].to}` : "Starting your journey"}
+      />
+
+      <SafetyPanel 
+        currentLocation={location} 
+        currentPlace={destination ? {
+          id: destination.id,
+          name: destination.name
+        } : undefined}
+      />
+
+      {showFunFact && (
+        <FunFactCard 
+          fact={currentFunFact}
+          location="Transit System"
+          onDismiss={() => setShowFunFact(false)}
+        />
+      )}
       
       <View style={styles.contentContainer}>
         <View style={styles.routeSummary}>
