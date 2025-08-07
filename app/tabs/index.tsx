@@ -1,46 +1,164 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, ScrollView, Pressable, FlatList } from "react-native";
+import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import Colors from "@/constants/colors";
-import SearchBar from "@/components/SearchBar";
+import SearchWithSuggestions from "@/components/SearchWithSuggestions";
 import PlaceCard from "@/components/PlaceCard";
 import CategoryButton from "@/components/CategoryButton";
+import SafetyPanel from "@/components/SafetyPanel";
+import RegionalFunFactCard from "@/components/RegionalFunFactCard";
+import UserStatsCard from "@/components/UserStatsCard";
+import WeatherCard from "@/components/WeatherCard";
+import AIJourneyCompanion from "@/components/AIJourneyCompanion";
+import VirtualPetCompanion from "@/components/VirtualPetCompanion";
+import SmartRouteSuggestions from "@/components/SmartRouteSuggestions";
+
+import EmptyState from "@/components/EmptyState";
+import PullToRefresh from "@/components/PullToRefresh";
 import { useNavigationStore } from "@/stores/navigationStore";
 import { PlaceCategory, Place } from "@/types/navigation";
 import { MapPin, Navigation } from "lucide-react-native";
 import useLocation from "@/hooks/useLocation";
+import { useGamificationStore } from "@/stores/gamificationStore";
+import { useRegionalData } from "@/hooks/useRegionalData";
+import { trackScreenView, trackUserAction } from "@/utils/analytics";
+import { useCategoryStore } from "@/stores/categoryStore";
+import { SafeZoneIndicator } from "@/components/SafeZoneIndicator";
 
-const categories: PlaceCategory[] = [
-  "home", "school", "park", "library", "store", "restaurant", "friend", "family"
-];
+type SearchSuggestion = {
+  id: string;
+  text: string;
+  type: "recent" | "popular" | "place";
+  place?: Place;
+};
+
+
 
 export default function HomeScreen() {
   const router = useRouter();
   const { location } = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
+  const [showFunFact, setShowFunFact] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState<Place | undefined>(undefined);
+  const [showPetCompanion, setShowPetCompanion] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [selectedDestination, setSelectedDestination] = useState<Place | undefined>(undefined);
   
   const { 
     favorites, 
     setDestination,
-    addToRecentSearches
+    addToRecentSearches,
+    recentSearches
   } = useNavigationStore();
+
+  const { userStats, completeTrip } = useGamificationStore();
+  const { formatters, regionalContent, currentRegion } = useRegionalData();
+  const { getApprovedCategories } = useCategoryStore();
+  
+  const approvedCategories = getApprovedCategories();
+
+  React.useEffect(() => {
+    trackScreenView('home');
+  }, []);
+
+  // Mock weather data with regional formatting
+  const mockWeather = {
+    condition: "Sunny",
+    temperature: 72,
+    recommendation: `Perfect weather for exploring ${currentRegion.name}! Don't forget sunscreen.`
+  };
+
+  // Generate search suggestions
+  const suggestions: SearchSuggestion[] = React.useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    
+    const searchSuggestions: SearchSuggestion[] = [];
+    
+    // Add recent searches
+    recentSearches.forEach(place => {
+      if (place.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+        searchSuggestions.push({
+          id: `recent-${place.id}`,
+          text: place.name,
+          type: "recent",
+          place,
+        });
+      }
+    });
+    
+    // Add favorites
+    favorites.forEach(place => {
+      if (place.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+        searchSuggestions.push({
+          id: `favorite-${place.id}`,
+          text: place.name,
+          type: "place",
+          place,
+        });
+      }
+    });
+    
+    // Add regional popular places
+    regionalContent.popularPlaces.forEach((place, index) => {
+      if (place.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+        searchSuggestions.push({
+          id: `popular-${index}`,
+          text: place.name,
+          type: "popular",
+          place: {
+            id: `popular-${index}`,
+            name: place.name,
+            address: place.description,
+            category: place.category as PlaceCategory,
+            coordinates: {
+              latitude: currentRegion.coordinates.latitude + (Math.random() - 0.5) * 0.01,
+              longitude: currentRegion.coordinates.longitude + (Math.random() - 0.5) * 0.01,
+            }
+          },
+        });
+      }
+    });
+    
+    return searchSuggestions;
+  }, [searchQuery, recentSearches, favorites, regionalContent.popularPlaces, currentRegion]);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    // Simulate refresh delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setRefreshing(false);
+    trackUserAction('pull_to_refresh', { screen: 'home' });
+  };
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
+      trackUserAction('search', { query: searchQuery });
       router.push("/search");
     }
   };
 
   const handlePlaceSelect = (place: Place) => {
     setDestination(place);
+    setSelectedDestination(place);
+    setIsNavigating(true);
     addToRecentSearches(place);
+    completeTrip("Current Location", place.name);
+    trackUserAction('select_place', { place_name: place.name, place_category: place.category });
     router.push("/map");
   };
 
-  const handleCategorySelect = (category: PlaceCategory) => {
+  const handleSuggestionSelect = (suggestion: SearchSuggestion) => {
+    if (suggestion.place) {
+      handlePlaceSelect(suggestion.place);
+    }
+  };
+
+  const handleCategorySelect = (categoryId: PlaceCategory | string) => {
+    trackUserAction('select_category', { category: categoryId });
     router.push({
       pathname: "/search",
-      params: { category }
+      params: { category: categoryId }
     });
   };
 
@@ -56,56 +174,111 @@ export default function HomeScreen() {
       }
     };
     
+    trackUserAction('use_current_location');
     handlePlaceSelect(currentPlace);
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.searchContainer}>
-        <SearchBar
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          onClear={() => setSearchQuery("")}
-          placeholder="Where do you want to go?"
+    <PullToRefresh onRefresh={handleRefresh} refreshing={refreshing}>
+      <View style={styles.container}>
+        <UserStatsCard 
+          stats={userStats} 
+          onPetClick={() => setShowPetCompanion(true)}
         />
-        <Pressable 
-          style={styles.currentLocationButton}
-          onPress={handleCurrentLocation}
-        >
-          <Navigation size={20} color={Colors.primary} />
-          <Text style={styles.currentLocationText}>Use my location</Text>
-        </Pressable>
-      </View>
-
-      <Text style={styles.sectionTitle}>Categories</Text>
-      <View style={styles.categoriesContainer}>
-        {categories.map((category) => (
-          <CategoryButton
-            key={category}
-            category={category}
-            onPress={handleCategorySelect}
+        
+        <SafeZoneIndicator />
+        
+        <WeatherCard weather={mockWeather} />
+        
+        {showFunFact && (
+          <RegionalFunFactCard 
+            onDismiss={() => setShowFunFact(false)}
           />
-        ))}
-      </View>
+        )}
 
-      <Text style={styles.sectionTitle}>Favorites</Text>
-      {favorites.length > 0 ? (
-        favorites.map((place) => (
-          <PlaceCard
-            key={place.id}
-            place={place}
-            onPress={handlePlaceSelect}
+        <AIJourneyCompanion 
+          currentLocation={location}
+          destination={selectedDestination}
+          isNavigating={isNavigating}
+        />
+
+        {selectedDestination && (
+          <SmartRouteSuggestions
+            destination={selectedDestination}
+            currentLocation={location}
+            timeOfDay={new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'afternoon' : 'evening'}
+            onSelectRoute={(suggestion) => {
+              console.log('Selected route:', suggestion);
+              trackUserAction('select_smart_route', { route_type: suggestion.type });
+            }}
           />
-        ))
-      ) : (
-        <View style={styles.emptyStateContainer}>
-          <MapPin size={40} color={Colors.textLight} />
-          <Text style={styles.emptyStateText}>
-            You don't have any favorite places yet
-          </Text>
+        )}
+
+        <SafetyPanel 
+          currentLocation={location} 
+          currentPlace={selectedPlace ? {
+            id: selectedPlace.id,
+            name: selectedPlace.name
+          } : undefined}
+        />
+
+        <View style={styles.searchContainer}>
+          <SearchWithSuggestions
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            onSelectSuggestion={handleSuggestionSelect}
+            suggestions={suggestions}
+            placeholder={`Where do you want to go in ${currentRegion.name}?`}
+          />
+          <Pressable 
+            style={styles.currentLocationButton}
+            onPress={handleCurrentLocation}
+          >
+            <Navigation size={20} color={Colors.primary} />
+            <Text style={styles.currentLocationText}>Use my location</Text>
+          </Pressable>
         </View>
-      )}
-    </ScrollView>
+
+        <Text style={styles.sectionTitle}>Categories</Text>
+        <View style={styles.categoriesContainer}>
+          {approvedCategories.map((category) => (
+            <CategoryButton
+              key={category.id}
+              customCategory={category}
+              onPress={handleCategorySelect}
+              size="large"
+            />
+          ))}
+        </View>
+
+        <Text style={styles.sectionTitle}>Favorites</Text>
+        {favorites.length > 0 ? (
+          favorites.map((place) => (
+            <PlaceCard
+              key={place.id}
+              place={place}
+              onPress={(selectedPlace) => {
+                setSelectedPlace(selectedPlace);
+                handlePlaceSelect(selectedPlace);
+              }}
+            />
+          ))
+        ) : (
+          <EmptyState
+            icon={MapPin}
+            title="No favorites yet"
+            description={`Add places you visit often in ${currentRegion.name} to see them here`}
+            actionText="Search Places"
+            onAction={() => router.push("/search")}
+          />
+        )}
+
+        <VirtualPetCompanion 
+          visible={showPetCompanion}
+          onClose={() => setShowPetCompanion(false)}
+        />
+      </View>
+    </PullToRefresh>
   );
 }
 
@@ -114,11 +287,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  contentContainer: {
-    padding: 16,
-  },
   searchContainer: {
     marginBottom: 24,
+    paddingHorizontal: 16,
   },
   currentLocationButton: {
     flexDirection: "row",
@@ -137,24 +308,13 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: Colors.text,
     marginBottom: 16,
+    paddingHorizontal: 16,
   },
   categoriesContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
     marginBottom: 24,
-  },
-  emptyStateContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: 32,
-  },
-  emptyStateText: {
-    marginTop: 16,
-    fontSize: 16,
-    color: Colors.textLight,
-    textAlign: "center",
+    paddingHorizontal: 16,
   },
 });
