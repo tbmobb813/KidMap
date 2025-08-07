@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView, Pressable, FlatList } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Pressable, Dimensions, Platform } from "react-native";
 import Colors from "@/constants/colors";
 import { subwayLines } from "@/mocks/transit";
-import TransitStepIndicator from "@/components/TransitStepIndicator";
 import SearchBar from "@/components/SearchBar";
 import { Clock, MapPin, AlertCircle, Bell } from "lucide-react-native";
 import LiveArrivalsCard from "@/components/LiveArrivalsCard";
 import { mockLiveArrivals, nearbyStations } from "@/mocks/liveArrivals";
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 type SubwayStatus = {
   id: string;
@@ -87,11 +88,12 @@ export default function TransitScreen() {
     </Pressable>
   );
 
-  const renderLineItem = ({ item }: { item: typeof subwayLines[0] }) => {
+  const renderLineItem = (item: typeof subwayLines[0]) => {
     const status = subwayStatus.find(s => s.id === item.id);
     
     return (
       <Pressable
+        key={item.id}
         style={[
           styles.lineItem,
           selectedLine === item.id && styles.selectedLine
@@ -110,7 +112,12 @@ export default function TransitScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView 
+      style={styles.container}
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+      bounces={true}
+    >
       <View style={styles.searchContainer}>
         <SearchBar
           value={searchQuery}
@@ -176,12 +183,9 @@ export default function TransitScreen() {
       </View>
 
       <Text style={styles.sectionTitle}>Subway Lines</Text>
-      <FlatList
-        data={subwayLines}
-        renderItem={renderLineItem}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.linesList}
-      />
+      <View style={styles.linesContainer}>
+        {subwayLines.map(renderLineItem)}
+      </View>
 
       {selectedLine && (
         <View style={styles.lineDetailsContainer}>
@@ -207,7 +211,7 @@ export default function TransitScreen() {
           </View>
         </View>
       )}
-    </View>
+    </ScrollView>
   );
 }
 
@@ -215,7 +219,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
+  },
+  scrollContent: {
+    flexGrow: 1,
     padding: 16,
+    paddingBottom: 32,
   },
   searchContainer: {
     marginBottom: 16,
@@ -262,8 +270,9 @@ const styles = StyleSheet.create({
     color: Colors.text,
     marginBottom: 16,
   },
-  linesList: {
-    paddingBottom: 16,
+  linesContainer: {
+    gap: 12,
+    marginBottom: 16,
   },
   lineItem: {
     flexDirection: "row",
@@ -326,15 +335,26 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   trainTimesContainer: {
-    flexDirection: "row",
+    flexDirection: Platform.select({
+      web: screenWidth > 600 ? "row" : "column",
+      default: "row",
+    }),
     justifyContent: "space-between",
+    gap: 8,
   },
   trainTime: {
     alignItems: "center",
     backgroundColor: "#F0F4FF",
     borderRadius: 8,
     padding: 12,
-    minWidth: 80,
+    minWidth: Platform.select({
+      web: screenWidth > 600 ? 80 : "100%",
+      default: 80,
+    }),
+    flex: Platform.select({
+      web: screenWidth > 600 ? 1 : undefined,
+      default: 1,
+    }),
   },
   trainTimeText: {
     fontSize: 16,
@@ -383,17 +403,24 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   quickActions: {
-    flexDirection: "row",
+    flexDirection: Platform.select({
+      web: screenWidth > 768 ? "row" : "column",
+      default: "row",
+    }),
     justifyContent: "space-between",
     gap: 12,
   },
   quickActionButton: {
-    flex: 1,
+    flex: Platform.select({
+      web: screenWidth > 768 ? 1 : undefined,
+      default: 1,
+    }),
     backgroundColor: Colors.card,
     borderRadius: 12,
     padding: 16,
     alignItems: "center",
     gap: 8,
+    minHeight: 80,
   },
   quickActionText: {
     fontSize: 12,
