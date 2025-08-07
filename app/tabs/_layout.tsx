@@ -1,7 +1,8 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import Colors from "@/constants/colors";
-import { Home, Map, Train, Settings } from "lucide-react-native";
+import { Home, Map, Train, Settings, Trophy } from "lucide-react-native";
+import { Platform } from "react-native";
 
 export default function TabLayout() {
   return (
@@ -14,10 +15,21 @@ export default function TabLayout() {
           fontWeight: "500",
         },
         tabBarStyle: {
-          height: 60,
-          paddingBottom: 8,
+          height: Platform.OS === 'android' ? 65 : 60,
+          paddingBottom: Platform.OS === 'android' ? 10 : 8,
+          paddingTop: Platform.OS === 'android' ? 5 : 0,
         },
         headerShadowVisible: false,
+        // Android-specific tab styling
+        ...(Platform.OS === 'android' && {
+          tabBarStyle: {
+            height: 65,
+            paddingBottom: 10,
+            paddingTop: 5,
+            elevation: 8,
+            borderTopWidth: 0,
+          },
+        }),
       }}
     >
       <Tabs.Screen
@@ -40,6 +52,13 @@ export default function TabLayout() {
         options={{
           title: "Transit",
           tabBarIcon: ({ color }) => <Train size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="achievements"
+        options={{
+          title: "Achievements",
+          tabBarIcon: ({ color }) => <Trophy size={24} color={color} />,
         }}
       />
       <Tabs.Screen
