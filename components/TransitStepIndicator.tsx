@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { TransitStep } from "@/types/navigation";
 import Colors from "@/constants/colors";
-import { Train, Bus, Navigation } from "lucide-react-native";
+import { Train, Bus, Navigation, Bike, Car } from "lucide-react-native";
 
 type TransitStepIndicatorProps = {
   step: TransitStep;
@@ -25,6 +25,10 @@ const TransitStepIndicator: React.FC<TransitStepIndicatorProps> = ({
         return <Bus size={iconSize} color={iconColor} />;
       case "walk":
         return <Navigation size={iconSize} color={iconColor} />;
+      case "bike":
+        return <Bike size={iconSize} color={iconColor} />;
+      case "car":
+        return <Car size={iconSize} color={iconColor} />;
       default:
         return null;
     }
@@ -38,6 +42,8 @@ const TransitStepIndicator: React.FC<TransitStepIndicatorProps> = ({
       case "train": return Colors.train;
       case "bus": return Colors.bus;
       case "walk": return Colors.textLight;
+      case "bike": return "#10B981"; // Green for biking
+      case "car": return "#6366F1"; // Indigo for driving
       default: return Colors.primary;
     }
   };
