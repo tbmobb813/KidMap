@@ -11,12 +11,12 @@ import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { Platform } from 'react-native'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import Colors from '@/constants/colors'
-import ErrorBoundary from '@/components/ErrorBoundary'
-import NetworkStatusBar from '@/components/NetworkStatusBar'
-import { trackScreenView } from '@/utils/analytics'
-import { performanceMonitor } from '@/utils/performance'
-import { useRegionStore } from '@/stores/regionStore'
+import Colors from '../src/constants/colors'
+import ErrorBoundary from '../src/components/ErrorBoundary'
+import NetworkStatusBar from '../src/components/NetworkStatusBar'
+import { trackScreenView } from '../src/utils/analytics'
+import { performanceMonitor } from '../src/utils/performance'
+import { useRegionStore } from '../src/stores/regionStore'
 
 // React Query client for caching and managing server state
 const queryClient = new QueryClient({

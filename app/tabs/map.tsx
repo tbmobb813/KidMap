@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Pressable } from 'react-native'
-import Colors from '@/constants/colors'
-import useLocation from '@/hooks/useLocation'
-import KidMap from '@/components/KidMap'
+import Colors from '../../src/constants/colors'
+import useLocation from '../../src/hooks/useLocation'
+import KidMap from '../../src/components/KidMap'
 import { MapPin, Navigation } from 'lucide-react-native'
 
 export default function MapScreen() {

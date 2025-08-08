@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tabs } from 'expo-router'
-import Colors from '@/constants/colors'
+import Colors from '../../src/constants/colors'
 import { Home, Map, Train, Settings, Trophy, Shield } from 'lucide-react-native'
 import { Platform } from 'react-native'
 

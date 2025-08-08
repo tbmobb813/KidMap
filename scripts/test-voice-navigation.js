@@ -9,7 +9,7 @@ console.log('==========================================')
 
 // Check if required files exist
 const requiredFiles = [
-  'utils/speechEngine.ts',
+  '@/utils/speechEngine.ts',
   'components/VoiceNavigation.tsx',
   'app/navigation.tsx',
 ]
@@ -121,3 +121,4 @@ if (allFilesExist) {
 } else {
   console.log('\n⚠️  Some issues found. Please check the missing files above.')
 }
+

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Pressable } from 'react-native'
-import Colors from '@/constants/colors'
+import Colors from '../../src/constants/colors'
 // Update the path below if your useLocation hook is in a different folder
-import useLocation from '../hooks/useLocation'
+import useLocation from '../../src/hooks/useLocation'
 // Update the import path if necessary; for example, if KidMap.tsx is in app/components:
-import KidMap from '../components/KidMap'
+import KidMap from '../../src/components/KidMap'
 import { MapPin, Navigation } from 'lucide-react-native'
 
 export default function MapScreen() {

@@ -47,6 +47,16 @@ export interface ParentSession {
   lastActivity: Date
 }
 
+export interface SafeZone {
+  id: string
+  name: string
+  radius: number // in meters
+  center: [number, number] // [latitude, longitude]
+  color?: string // for map display
+  createdAt: Date
+  updatedAt: Date
+}
+
 interface ParentalControlState {
   // Authentication state
   session: ParentSession | null
@@ -65,6 +75,31 @@ interface ParentalControlState {
     isInSafeZone: boolean
     currentSafeZone: string | null
   }
+
+  // Safe Zone Management
+  safeZones: SafeZone[]
+  setSafeZones: (zones: SafeZone[]) => void
+  addSafeZone: (zone: SafeZone) => void
+  removeSafeZone: (zoneId: string) => void
+
+  // Emergency Contacts Management
+  emergencyContacts: EmergencyContact[]
+  setEmergencyContacts: (contacts: EmergencyContact[]) => void
+  addEmergencyContact: (contact: EmergencyContact) => void
+  removeEmergencyContact: (contactId: string) => void
+
+  // Parental Lock
+  isLocked: boolean
+  lockScreen: () => void
+  unlockScreen: () => void
+
+  // Location Sharing
+  isLocationSharingEnabled: boolean
+  setLocationSharingEnabled: (enabled: boolean) => void
+
+  // Parental Lock Settings
+  isParentalLockEnabled: boolean
+  setParentalLockEnabled: (enabled: boolean) => void
 
   // Actions
   authenticateParent: (pin?: string, useBiometric?: boolean) => Promise<boolean>
@@ -130,6 +165,41 @@ export const useParentalControlStore = create<ParentalControlState>()(
         isInSafeZone: false,
         currentSafeZone: null,
       },
+      // Safe Zone Management
+      safeZones: [],
+      setSafeZones: (zones: SafeZone[]) => set({ safeZones: zones }),
+      addSafeZone: (zone: SafeZone) =>
+        set((state) => ({ safeZones: [...state.safeZones, zone] })),
+      removeSafeZone: (zoneId: string) =>
+        set((state) => ({
+          safeZones: state.safeZones.filter((z) => z.id !== zoneId),
+        })),
+      // Emergency Contacts Management
+      emergencyContacts: [],
+      setEmergencyContacts: (contacts: EmergencyContact[]) =>
+        set({ emergencyContacts: contacts }),
+      addEmergencyContact: (contact: EmergencyContact) =>
+        set((state) => ({
+          emergencyContacts: [...state.emergencyContacts, contact],
+        })),
+      removeEmergencyContact: (contactId: string) =>
+        set((state) => ({
+          emergencyContacts: state.emergencyContacts.filter(
+            (c) => c.id !== contactId,
+          ),
+        })),
+      // Parental Lock
+      isLocked: false,
+      lockScreen: () => set({ isLocked: true }),
+      unlockScreen: () => set({ isLocked: false }),
+      // Location Sharing
+      isLocationSharingEnabled: true,
+      setLocationSharingEnabled: (enabled: boolean) =>
+        set({ isLocationSharingEnabled: enabled }),
+      // Parental Lock Settings
+      isParentalLockEnabled: false,
+      setParentalLockEnabled: (enabled: boolean) =>
+        set({ isParentalLockEnabled: enabled }),
 
       authenticateParent: async (
         pin?: string,

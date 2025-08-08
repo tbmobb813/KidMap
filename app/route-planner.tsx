@@ -9,8 +9,8 @@ import {
   Alert,
 } from 'react-native'
 import { useRouter, useLocalSearchParams } from 'expo-router'
-import Colors from '@/constants/colors'
-import { RouteOption, getKidFriendlyRoutes } from '@/utils/routePlanner'
+import Colors from '../src/constants/colors'
+import { RouteOption, getKidFriendlyRoutes } from '../src/utils/routePlanner'
 import {
   MapPin,
   Clock,
@@ -19,10 +19,10 @@ import {
   Navigation,
   AlertTriangle,
 } from 'lucide-react-native'
-import AccessibleButton from '@/components/AccessibleButton'
-import LoadingSpinner from '@/components/LoadingSpinner'
-import useLocation from '@/hooks/useLocation'
-import { useNavigationStore } from '@/stores/navigationStore'
+import AccessibleButton from '../src/components/AccessibleButton'
+import LoadingSpinner from '../src/components/LoadingSpinner'
+import useLocation from '../src/hooks/useLocation'
+import { useNavigationStore } from '../src/stores/navigationStore'
 
 export default function RoutePlannerScreen() {
   const router = useRouter()

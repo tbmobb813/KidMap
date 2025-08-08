@@ -9,11 +9,11 @@ import {
   Dimensions,
 } from 'react-native'
 import { useRouter, useLocalSearchParams } from 'expo-router'
-import Colors from '@/constants/colors'
-import { RouteOption } from '@/utils/routePlanner'
-import KidMap from '@/components/KidMap'
-import VoiceNavigation from '@/components/VoiceNavigation'
-import SafeZoneAlert from '@/components/SafeZoneAlert'
+import Colors from '../src/constants/colors'
+import { RouteOption } from '../src/utils/routePlanner'
+import KidMap from '../src/components/KidMap'
+import VoiceNavigation from '../src/components/VoiceNavigation'
+import SafeZoneAlert from '../src/components/SafeZoneAlert'
 import {
   MapPin,
   Navigation,
@@ -23,13 +23,13 @@ import {
   Pause,
   Play,
 } from 'lucide-react-native'
-import AccessibleButton from '@/components/AccessibleButton'
-import useLocation from '@/hooks/useLocation'
-import { useGeofencing } from '@/hooks/useGeofencing'
-import { useNavigationStore } from '@/stores/navigationStore'
-import { useGamificationStore } from '@/stores/gamificationStore'
-import { speechEngine } from '@/utils/speechEngine'
-import { safeZoneAlertManager, SafeZoneEvent } from '@/utils/safeZoneAlerts'
+import AccessibleButton from '../src/components/AccessibleButton'
+import useLocation from '../src/hooks/useLocation'
+import { useGeofencing } from '../src/hooks/useGeofencing'
+import { useNavigationStore } from '../src/stores/navigationStore'
+import { useGamificationStore } from '../src/stores/gamificationStore'
+import { speechEngine } from '../src/utils/speechEngine'
+import { safeZoneAlertManager, SafeZoneEvent } from '../src/utils/safeZoneAlerts'
 
 const { height: screenHeight } = Dimensions.get('window')
 

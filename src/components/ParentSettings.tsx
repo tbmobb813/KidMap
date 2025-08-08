@@ -35,7 +35,7 @@ import Colors from '../constants/colors'
 import AccessibleButton from './AccessibleButton'
 import {
   useParentalControlStore,
-  ParentSettings,
+  ParentSettings as ParentSettingsType,
   EmergencyContact,
 } from '../stores/parentalControlStore'
 import * as LocalAuthentication from 'expo-local-authentication'
@@ -52,7 +52,7 @@ export default function ParentSettings({
   const { settings, updateSettings } = useParentalControlStore()
 
   const [editingSettings, setEditingSettings] =
-    useState<ParentSettings>(settings)
+    useState<ParentSettingsType>(settings)
   const [showPinSetup, setShowPinSetup] = useState(false)
   const [showContactModal, setShowContactModal] = useState(false)
   const [editingContact, setEditingContact] = useState<EmergencyContact | null>(
@@ -61,7 +61,7 @@ export default function ParentSettings({
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
   const handleSettingChange = useCallback(
-    (key: keyof ParentSettings, value: any) => {
+    (key: keyof ParentSettingsType, value: any) => {
       setEditingSettings((prev) => ({ ...prev, [key]: value }))
       setHasUnsavedChanges(true)
     },
@@ -69,7 +69,7 @@ export default function ParentSettings({
   )
 
   const handleNestedSettingChange = useCallback(
-    (parentKey: keyof ParentSettings, key: string, value: any) => {
+    (parentKey: keyof ParentSettingsType, key: string, value: any) => {
       setEditingSettings((prev) => ({
         ...prev,
         [parentKey]: { ...(prev[parentKey] as any), [key]: value },

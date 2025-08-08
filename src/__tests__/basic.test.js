@@ -1,3 +1,25 @@
+// TEMP: Inline test setup to bypass Babel config bug
+global.__DEV__ = true;
+global.fetch = require('node-fetch');
+require('@testing-library/jest-native/extend-expect');
+require('@testing-library/jest-dom/extend-expect');
+require('react-native-gesture-handler/jestSetup');
+
+// Mock React Native Reanimated
+jest.mock('react-native-reanimated', () => {
+  const Reanimated = require('react-native-reanimated/mock');
+  Reanimated.default.call = () => {};
+  return Reanimated;
+});
+
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper', () => ({
+  createAnimatedComponent: jest.fn((component) => component),
+  startOperationBatch: jest.fn(),
+  finishOperationBatch: jest.fn(),
+  flushQueue: jest.fn(),
+  API: {},
+}));
+
 const { testLogger, expectWithLog } = require('./utils/testHelpers')
 
 describe('Basic Tests', () => {

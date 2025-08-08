@@ -1,4 +1,4 @@
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { render, fireEvent, waitFor } from '@testing-library/react-native'
 
 describe('DevicePingControl Component', () => {
   const defaultProps = {

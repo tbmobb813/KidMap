@@ -9,7 +9,7 @@ console.log('=====================================')
 
 // Check if required files exist
 const requiredFiles = [
-  'utils/safeZoneAlerts.ts',
+  '@/utils/safeZoneAlerts.ts',
   'components/SafeZoneAlert.tsx',
   'components/SafeZoneSettings.tsx',
   'hooks/useGeofencing.ts',
@@ -198,3 +198,4 @@ console.log('2. Verify voice alerts during navigation')
 console.log('3. Check alert history and statistics')
 console.log('4. Configure quiet hours and cooldown settings')
 console.log('5. Test geofence entry/exit notifications')
+

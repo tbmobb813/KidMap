@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+echo "🔍 Detecting operating system..."
+
+if [[ "$OSTYPE" == "linux-gnu"* || "$OSTYPE" == "darwin"* ]]; then
+  echo "🐧 Detected Unix-based OS. Running Bash repair script..."
+  bash scripts/repair_project.sh
+elif [[ "$OSTYPE" == "msys"* || "$OSTYPE" == "win32" || "$OS" == "Windows_NT" ]]; then
+  echo "🪟 Detected Windows OS. Running PowerShell repair script..."
+  powershell -ExecutionPolicy Bypass -File scripts/repair_project.ps1
+else
+  echo "❌ Unsupported OS: $OSTYPE"
+  exit 1
+fi

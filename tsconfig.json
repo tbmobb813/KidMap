@@ -1,11 +1,12 @@
 {
-  "extends": "expo/tsconfig.base.json",
+  "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true,
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
-    }
+      "@/*": ["src/*"]
+    },
+    "strict": true
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],
-  "exclude": ["**/*_backup.*", "**/*_broken_backup.*", "node_modules"]
+  "include": ["src", "scripts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }

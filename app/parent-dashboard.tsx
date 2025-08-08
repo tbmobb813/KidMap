@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react'
-import ParentDashboard from '../components/ParentDashboard'
-import ParentLockScreen from '../components/ParentLockScreen'
+import ParentDashboard from '../src/components/ParentDashboard'
+import ParentLockScreen from '../src/components/ParentLockScreen'
 
 const AUTO_LOCK_TIMEOUT = 2 * 60 * 1000 // 2 minutes
 

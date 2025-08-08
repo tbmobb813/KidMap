@@ -8,17 +8,17 @@ import {
   Dimensions,
   RefreshControl,
 } from 'react-native'
-import Colors from '@/constants/colors'
-import SearchBar from '@/components/SearchBar'
+import Colors from '../../src/constants/colors'
+import SearchBar from '../../src/components/SearchBar'
 import { Clock, AlertCircle, RefreshCw } from 'lucide-react-native'
-import LiveArrivalsCard from '@/components/LiveArrivalsCard'
-import useLocation from '@/hooks/useLocation'
+import LiveArrivalsCard from '../../src/components/LiveArrivalsCard'
+import useLocation from '../../src/hooks/useLocation'
 import {
   getNearbyTransitStations,
   getTransitLineStatus,
   TransitStation,
   TransitLine,
-} from '@/utils/transitApi'
+} from '../../src/utils/transitApi'
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window')
 

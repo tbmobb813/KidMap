@@ -9,12 +9,12 @@ import {
   Platform,
   FlatList,
 } from 'react-native'
-import Colors from '@/constants/colors'
-import AchievementBadge from '@/components/AchievementBadge'
-import UserStatsCard from '@/components/UserStatsCard'
-import { useGamificationStore } from '@/stores/gamificationStore'
-import { achievementEngine } from '@/utils/achievementEngine'
-import type { UserStats } from '@/types/index'
+import Colors from '../../src/constants/colors'
+import AchievementBadge from '../../src/components/AchievementBadge'
+import UserStatsCard from '../../src/components/UserStatsCard'
+import { useGamificationStore } from '../../src/stores/gamificationStore'
+import { achievementEngine } from '../../src/utils/achievementEngine'
+import type { UserStats } from '../../src/types/index'
 import {
   Trophy,
   Star,

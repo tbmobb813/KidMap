@@ -21,7 +21,7 @@ function checkFile(filePath) {
 const criticalComponents = [
   'components/SafeZoneManager.tsx',
   'components/SafetyErrorBoundary.tsx',
-  'utils/safeZoneAlerts.ts',
+  '@/utils/safeZoneAlerts.ts',
   'constants/colors.ts',
   '__tests__/SafeZoneManager.test.tsx',
   '__tests__/safeZoneAlerts.test.ts',
@@ -106,3 +106,4 @@ console.log('2. Update mocks to match actual component interfaces')
 console.log('3. Simplify overly complex test scenarios')
 console.log('4. Ensure error boundaries are properly tested')
 console.log('5. Validate all safety components have comprehensive coverage')
+

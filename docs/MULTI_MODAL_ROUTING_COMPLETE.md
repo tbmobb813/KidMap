@@ -177,6 +177,7 @@
 - ```typescript
 
   ```
+
 - import { RouteIntegration } from './components/RouteIntegration';
 -
 - // In your main screen component:
@@ -196,6 +197,7 @@
 - ```
 
   ```
+
 -
 - This comprehensive system provides everything needed for safe, age-appropriate,
 - multi-modal transportation planning for children and families! 🚀

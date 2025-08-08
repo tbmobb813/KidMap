@@ -7,7 +7,7 @@ import {
   ScrollView,
   Pressable,
 } from 'react-native'
-import Colors from '@/constants/colors'
+import Colors from '../../src/constants/colors'
 import {
   Bell,
   Shield,
@@ -21,12 +21,12 @@ import {
   Settings,
   RefreshCw,
 } from 'lucide-react-native'
-import AccessibilitySettings from '@/components/AccessibilitySettings'
-import RegionSwitcher from '@/components/RegionSwitcher'
-import RegionalTransitCard from '@/components/RegionalTransitCard'
-import CityManagement from '@/components/CityManagement'
-import { useRegionStore } from '@/stores/regionStore'
-import { transitDataUpdater } from '@/utils/transitDataUpdater'
+import AccessibilitySettings from '../../src/components/AccessibilitySettings'
+import RegionSwitcher from '../../src/components/RegionSwitcher'
+import RegionalTransitCard from '../../src/components/RegionalTransitCard'
+import CityManagement from '../../src/components/CityManagement'
+import { useRegionStore } from '../../src/stores/regionStore'
+import { transitDataUpdater } from '../../src/utils/transitDataUpdater'
 
 type SettingItemProps = {
   icon: React.ReactNode

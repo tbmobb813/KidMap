@@ -1,8 +1,8 @@
 // app/tabs/safety.tsx - Safety tab integration
 import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
-import SafetyDashboard from '@/components/SafetyDashboard'
-import SafetyErrorBoundary from '@/components/SafetyErrorBoundary'
+import SafetyDashboard from '../../src/components/SafetyDashboard'
+import SafetyErrorBoundary from '../../src/components/SafetyErrorBoundary'
 
 export default function SafetyScreen() {
   return (

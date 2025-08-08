@@ -1,7 +1,3 @@
-import {
-  LOCATION_PERMISSION_DENIED,
-  LOCATION_FETCH_FAILED,
-} from '@/constants/strings'
 /**
  * useLocation custom hook for KidMap.
  * Handles geolocation for both web and native platforms.

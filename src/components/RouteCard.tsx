@@ -9,6 +9,7 @@ type RouteCardProps = {
   route: Route
   onPress: (route: Route) => void
   isSelected?: boolean
+  testID?: string
 }
 
 const RouteCard: React.FC<RouteCardProps> = ({

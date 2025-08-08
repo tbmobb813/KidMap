@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, FlatList } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import Colors from '@/constants/colors'
-import SearchBar from '@/components/SearchBar'
-import PlaceCard from '@/components/PlaceCard'
-import { useNavigationStore } from '@/stores/navigationStore'
+import Colors from '../src/constants/colors'
+import SearchBar from '../src/components/SearchBar'
+import PlaceCard from '../src/components/PlaceCard'
+import { useNavigationStore } from '../src/stores/navigationStore'
 import { MapPin } from 'lucide-react-native'
-import { Place, PlaceCategory } from '@/types/navigation'
-import { favoriteLocations, recentSearches } from '@/mocks/places'
+import { Place, PlaceCategory } from '../src/types/navigation'
+import { favoriteLocations, recentSearches } from '../src/mocks/places'
 
 // Mock search results based on query or category
 const getMockSearchResults = (
