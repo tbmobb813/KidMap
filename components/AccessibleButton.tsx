@@ -1,6 +1,6 @@
 import React from "react";
 import { Pressable, Text, StyleSheet, ViewStyle, TextStyle } from "react-native";
-import Colors from "@/constants/colors";
+import { theme } from "@/constants/theme";
 import { getAccessibilityLabel, getAccessibilityHint } from "@/utils/accessibility";
 
 type AccessibleButtonProps = {
@@ -80,15 +80,15 @@ const styles = StyleSheet.create({
     minHeight: 44, // Minimum touch target size
   },
   primaryButton: {
-    backgroundColor: Colors.primary,
+    backgroundColor: theme.colors.primary,
   },
   secondaryButton: {
-    backgroundColor: Colors.secondary,
+    backgroundColor: theme.colors.secondary,
   },
   outlineButton: {
     backgroundColor: "transparent",
     borderWidth: 2,
-    borderColor: Colors.primary,
+    borderColor: theme.colors.primary,
   },
   pressed: {
     opacity: 0.8,
@@ -97,22 +97,22 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   primaryText: {
-    color: "#FFFFFF",
+    color: theme.colors.white,
     fontSize: 16,
     fontWeight: "600",
   },
   secondaryText: {
-    color: "#FFFFFF",
+    color: theme.colors.white,
     fontSize: 16,
     fontWeight: "600",
   },
   outlineText: {
-    color: Colors.primary,
+    color: theme.colors.primary,
     fontSize: 16,
     fontWeight: "600",
   },
   disabledText: {
-    color: Colors.textLight,
+    color: theme.colors.textLight,
   },
 });
 

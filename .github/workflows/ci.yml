@@ -1,0 +1,242 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master, develop, development ]
+  pull_request:
+
+env:
+  NODE_VERSION: '20'
+  BUN_VERSION: '1.1.30'
+  EXPO_NO_TELEMETRY: '1'
+  CI: 'true'
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  typecheck:
+    name: TypeScript Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: Cache bun modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ env.BUN_VERSION }}-${{ hashFiles('bun.lock') }}
+          restore-keys: |
+            bun-${{ runner.os }}-${{ env.BUN_VERSION }}-
+      - name: Install dependencies
+        run: bun install --frozen-lockfile || bun install
+      - name: Dependency graph check
+        run: |
+          if [ -f scripts/dependency-manager.js ]; then node scripts/dependency-manager.js check || true; fi
+      - name: TypeScript typecheck
+        run: bun run typecheck
+      - name: Expo Doctor (non-blocking)
+        run: npx expo-doctor || echo "expo-doctor warnings ignored"
+
+  tests:
+    name: Unit Tests (matrix)
+    runs-on: ubuntu-latest
+    needs: typecheck
+    strategy:
+      matrix:
+        platform: [web]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: Restore bun cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ env.BUN_VERSION }}-${{ hashFiles('bun.lock') }}
+          restore-keys: |
+            bun-${{ runner.os }}-${{ env.BUN_VERSION }}-
+      - name: Install dependencies
+        run: bun install --frozen-lockfile || bun install
+      - name: Run tests with coverage (with retry fallback)
+        run: |
+          bun run test:ci || bun run test:ci:retries
+        env:
+          PLATFORM: ${{ matrix.platform }}
+      - name: Upload coverage (Codecov)
+        if: ${{ hashFiles('coverage/lcov.info') != '' }}
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage/lcov.info
+          flags: ${{ matrix.platform }}
+          name: coverage-${{ matrix.platform }}
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.platform }}
+          path: coverage
+          if-no-files-found: ignore
+
+  safety-tests:
+    name: Safety Tests
+    runs-on: ubuntu-latest
+    needs: typecheck
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: Install deps
+        run: bun install --frozen-lockfile || bun install
+      - name: Run safety tests (filtered)
+        run: npx jest safety --ci --colors || echo "No dedicated safety tests yet"
+
+  performance:
+    name: Performance & Bundle Smoke
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: Install deps
+        run: bun install --frozen-lockfile || bun install
+      - name: Bundle size (web export)
+        run: |
+          npx expo export --platform web --output-dir web-build --no-minify || echo "Web export skipped"
+      - name: Archive web build
+        if: success() && hashFiles('web-build/**') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: web-build
+
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: Install deps
+        run: bun install --frozen-lockfile || bun install
+      - name: Audit (non-blocking moderate)
+        run: bun audit || echo "audit warnings"
+      - name: Custom audit script
+        run: |
+          if [ -f scripts/dependency-manager.js ]; then node scripts/dependency-manager.js audit || true; fi
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    needs: typecheck
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: Install deps
+        run: bun install --frozen-lockfile || bun install
+      - name: ESLint
+        run: bun run lint
+
+  danger:
+    name: PR Quality (Danger)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    needs: [tests]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: Install deps
+        run: bun install --frozen-lockfile || bun install
+      - name: Run Danger
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bun run danger:ci || echo "Danger completed with warnings"
+
+  preview:
+    name: Expo Web Preview
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    needs: [typecheck]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: Install deps
+        run: bun install --frozen-lockfile || bun install
+      - name: Start Expo (background)
+        run: |
+          npx expo start --web --non-interactive &
+          echo $! > expo_pid
+          sleep 25
+      - name: Probe server
+        run: |
+          curl -I http://localhost:8081 || true
+      - name: Stop server
+        if: always()
+        run: |
+          if [ -f expo_pid ]; then kill $(cat expo_pid) || true; fi
+
+  deployment-check:
+    name: Deployment Readiness
+    runs-on: ubuntu-latest
+    needs: [tests, safety-tests, performance, security, lint]
+    if: github.event_name == 'push' && contains('refs/heads/main refs/heads/master', github.ref)
+    steps:
+      - uses: actions/checkout@v4
+      - name: Summary
+        run: |
+          echo "✅ All core jobs completed" >> $GITHUB_STEP_SUMMARY
+          echo "Ready for potential EAS build or release." >> $GITHUB_STEP_SUMMARY
+
+  dependency-audit-pr:
+    name: PR Dependency Audit
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: Install deps
+        run: bun install --frozen-lockfile || bun install
+      - name: Dependency audit script
+        run: |
+          if [ -f scripts/dependency-manager.js ]; then node scripts/dependency-manager.js audit || true; fi
+

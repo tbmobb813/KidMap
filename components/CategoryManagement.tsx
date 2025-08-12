@@ -4,6 +4,9 @@ import Colors from '@/constants/colors';
 import { CustomCategory } from '@/types/navigation';
 import { useCategoryManagement } from '@/stores/categoryStore';
 import { ArrowLeft, Plus, Edit3, Trash2, Check, X } from 'lucide-react-native';
+import { CategoryCreateSchema, CategoryUpdateSchema, safeParseWithToast } from '@/core/validation';
+import { useToast } from '@/hooks/useToast';
+import Toast from './Toast';
 import CategoryButton from './CategoryButton';
 
 type CategoryManagementProps = {
@@ -34,32 +37,35 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
   const [selectedColor, setSelectedColor] = useState('#007AFF');
 
   const approvedCategories = getApprovedCategories();
+  const { toast, showToast, hideToast } = useToast();
   const pendingCategories = getPendingCategories();
   const availableIcons = getAvailableIcons();
   const availableColors = getAvailableColors();
 
   const handleCreateCategory = async () => {
     if (!newCategoryName.trim()) {
-      Alert.alert('Error', 'Please enter a category name');
+      showToast('Please enter a category name', 'error');
       return;
     }
 
     if (!canCreateCategory(userMode)) {
-      Alert.alert('Limit Reached', `You can only create up to ${settings.maxCustomCategories} custom categories.`);
+      showToast(`Limit reached: max ${settings.maxCustomCategories} custom categories`, 'warning');
       return;
     }
 
     try {
       const isApproved = !needsApproval(userMode);
       
-      await addCategory({
+      const parsed = safeParseWithToast(CategoryCreateSchema, {
         name: newCategoryName.trim(),
         icon: selectedIcon,
         color: selectedColor,
         isDefault: false,
         createdBy: userMode,
         isApproved,
-      });
+      }, showToast);
+      if (!parsed) return;
+      await addCategory(parsed);
 
       setShowCreateModal(false);
       setNewCategoryName('');
@@ -67,35 +73,37 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
       setSelectedColor('#007AFF');
 
       if (needsApproval(userMode)) {
-        Alert.alert('Category Created', 'Your category has been created and is waiting for parent approval.');
+        showToast('Category created; awaiting approval', 'info');
       } else {
-        Alert.alert('Success', 'Category created successfully!');
+        showToast('Category created', 'success');
       }
     } catch (error) {
-      Alert.alert('Error', 'Failed to create category. Please try again.');
+      showToast('Failed to create category', 'error');
     }
   };
 
   const handleEditCategory = async () => {
     if (!editingCategory || !newCategoryName.trim()) {
-      Alert.alert('Error', 'Please enter a category name');
+      showToast('Please enter a category name', 'error');
       return;
     }
 
     try {
-      await updateCategory(editingCategory.id, {
+      const parsed = safeParseWithToast(CategoryUpdateSchema, {
         name: newCategoryName.trim(),
         icon: selectedIcon,
         color: selectedColor,
-      });
+      }, showToast);
+      if (!parsed) return;
+      await updateCategory(editingCategory.id, parsed);
 
       setEditingCategory(null);
       setNewCategoryName('');
       setSelectedIcon('MapPin');
       setSelectedColor('#007AFF');
-      Alert.alert('Success', 'Category updated successfully!');
+  showToast('Category updated', 'success');
     } catch (error) {
-      Alert.alert('Error', 'Failed to update category. Please try again.');
+  showToast('Failed to update category', 'error');
     }
   };
 
@@ -129,9 +137,9 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
   const handleApproveCategory = async (categoryId: string) => {
     try {
       await approveCategory(categoryId);
-      Alert.alert('Success', 'Category approved!');
+  showToast('Category approved', 'success');
     } catch (error) {
-      Alert.alert('Error', 'Failed to approve category. Please try again.');
+  showToast('Failed to approve category', 'error');
     }
   };
 
@@ -351,6 +359,12 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
       </ScrollView>
 
       <CategoryModal />
+      <Toast 
+        message={toast.message}
+        type={toast.type}
+        visible={toast.visible}
+        onHide={hideToast}
+      />
     </View>
   );
 };

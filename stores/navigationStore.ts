@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { Place, Route, PhotoCheckIn, TravelMode, RouteOptions } from "@/types/navigation";
+import { PhotoCheckInSchema } from '@/core/validation';
 import { favoriteLocations } from "@/mocks/places";
 import { sampleRoutes } from "@/mocks/transit";
 import { verifyLocationProximity } from "@/utils/locationUtils";
@@ -30,7 +31,7 @@ type NavigationState = {
   weatherInfo: WeatherInfo | null;
   selectedTravelMode: TravelMode;
   routeOptions: RouteOptions;
-  
+
   // Actions
   setOrigin: (place: Place | null) => void;
   setDestination: (place: Place | null) => void;
@@ -73,51 +74,51 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
     avoidHighways: false,
     accessibilityMode: false,
   },
-  
+
   setOrigin: (place) => set({ origin: place }),
-  
+
   setDestination: (place) => set({ destination: place }),
-  
+
   addToFavorites: (place) => set((state) => {
     // Check if already in favorites
     if (state.favorites.some(fav => fav.id === place.id)) {
       return state;
     }
-    
+
     const updatedPlace = { ...place, isFavorite: true };
     return { favorites: [...state.favorites, updatedPlace] };
   }),
-  
+
   removeFromFavorites: (placeId) => set((state) => ({
     favorites: state.favorites.filter(place => place.id !== placeId)
   })),
-  
+
   addToRecentSearches: (place) => set((state) => {
     // Remove if already exists to avoid duplicates
     const filteredSearches = state.recentSearches.filter(p => p.id !== place.id);
-    
+
     // Add to beginning of array, limit to 5 recent searches
-    return { 
-      recentSearches: [place, ...filteredSearches].slice(0, 5) 
+    return {
+      recentSearches: [place, ...filteredSearches].slice(0, 5)
     };
   }),
-  
+
   clearRecentSearches: () => set({ recentSearches: [] }),
-  
+
   setSearchQuery: (query) => set({ searchQuery: query }),
-  
+
   findRoutes: () => {
     const { origin, destination, selectedTravelMode, routeOptions } = get();
-    
+
     if (!origin || !destination) {
       set({ availableRoutes: [], selectedRoute: null });
       return;
     }
-    
+
     // In a real app, this would call an API to get routes based on travel mode
     // For now, we'll filter sample data based on travel mode
     let filteredRoutes = sampleRoutes;
-    
+
     if (selectedTravelMode === "walking") {
       // Generate walking routes (simplified)
       filteredRoutes = sampleRoutes.map(route => ({
@@ -161,33 +162,40 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
         totalDuration: Math.ceil(route.totalDuration * 0.4),
       }));
     }
-    
-    set({ 
+
+    set({
       availableRoutes: filteredRoutes,
-      selectedRoute: filteredRoutes[0] 
+      selectedRoute: filteredRoutes[0]
     });
   },
-  
+
   selectRoute: (route) => set({ selectedRoute: route }),
-  
-  clearRoute: () => set({ 
+
+  clearRoute: () => set({
     origin: null,
     destination: null,
     availableRoutes: [],
     selectedRoute: null,
     searchQuery: ""
   }),
-  
+
   updateAccessibilitySettings: (settings) => set((state) => ({
     accessibilitySettings: { ...state.accessibilitySettings, ...settings }
   })),
-  
-  addPhotoCheckIn: (checkIn) => set((state) => ({
-    photoCheckIns: [...state.photoCheckIns, { ...checkIn, id: Date.now().toString() }]
-  })),
-  
+
+  addPhotoCheckIn: (checkIn) => {
+    const parsed = PhotoCheckInSchema.safeParse(checkIn);
+    if (!parsed.success) {
+      console.warn('Invalid photo check-in:', parsed.error.issues);
+      return;
+    }
+    set((state) => ({
+      photoCheckIns: [...state.photoCheckIns, { ...parsed.data, id: Date.now().toString() }]
+    }));
+  },
+
   setWeatherInfo: (weather) => set({ weatherInfo: weather }),
-  
+
   setTravelMode: (mode) => {
     set({ selectedTravelMode: mode });
     // Automatically update route options and refind routes
@@ -197,7 +205,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
     }));
     findRoutes();
   },
-  
+
   updateRouteOptions: (options) => {
     set((state) => ({
       routeOptions: { ...state.routeOptions, ...options }
@@ -206,7 +214,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
     const { findRoutes } = get();
     findRoutes();
   },
-  
+
   addLocationVerifiedPhotoCheckIn: (checkIn, currentLocation, placeLocation) => {
     const verification = verifyLocationProximity(
       currentLocation.latitude,
@@ -215,7 +223,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
       placeLocation.longitude,
       100 // 100 meter radius
     );
-    
+
     const verifiedCheckIn = {
       ...checkIn,
       id: Date.now().toString(),
@@ -223,11 +231,11 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
       isLocationVerified: verification.isWithinRadius,
       distanceFromPlace: verification.distance,
     };
-    
+
     set((state) => ({
       photoCheckIns: [...state.photoCheckIns, verifiedCheckIn]
     }));
-    
+
     return verification;
   }
 }));

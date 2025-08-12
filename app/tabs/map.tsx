@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import Colors from "@/constants/colors";
 import MapPlaceholder from "@/components/MapPlaceholder";
 import RouteCard from "@/components/RouteCard";
-import SafetyPanel from "@/components/SafetyPanel";
+import SafetyPanel from "@/modules/safety/components/SafetyPanel";
 import TravelModeSelector from "@/components/TravelModeSelector";
 import { useNavigationStore } from "@/stores/navigationStore";
 import { Route } from "@/types/navigation";

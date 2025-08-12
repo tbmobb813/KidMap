@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Pressable, Alert, Platform, BackHandler } from "react-native";
+import { StyleSheet, Text, View, Pressable, Alert, Platform } from "react-native";
 import Colors from "@/constants/colors";
 import { Camera, MapPin } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigationStore } from "@/stores/navigationStore";
+import { PhotoCheckInSchema, safeParseWithToast } from '@/core/validation';
+import { useToast } from '@/hooks/useToast';
+import Toast from './Toast';
 
 type PhotoCheckInButtonProps = {
   placeName: string;
@@ -12,18 +15,22 @@ type PhotoCheckInButtonProps = {
 
 const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({ placeName, placeId }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const { toast, showToast, hideToast } = useToast();
   const { addPhotoCheckIn } = useNavigationStore();
 
   const handlePhotoCheckIn = async () => {
     if (Platform.OS === 'web') {
-      Alert.alert("Photo Check-in", "Camera not available on web. Check-in recorded!");
-      addPhotoCheckIn({
+      const data = {
         placeId,
         placeName,
         photoUrl: "https://via.placeholder.com/300x200?text=Check-in+Photo",
         timestamp: Date.now(),
         notes: "Checked in successfully!"
-      });
+      };
+      const parsed = safeParseWithToast(PhotoCheckInSchema, data, showToast);
+      if (!parsed) return;
+      addPhotoCheckIn(parsed);
+      showToast(`Check-in recorded for ${placeName}`, 'success');
       return;
     }
 
@@ -69,36 +76,46 @@ const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({ placeName, plac
       const result = await ImagePicker.launchCameraAsync(cameraOptions);
 
       if (!result.canceled && result.assets[0]) {
-        addPhotoCheckIn({
+        const data = {
           placeId,
           placeName,
           photoUrl: result.assets[0].uri,
           timestamp: Date.now(),
           notes: "Safe arrival confirmed!"
-        });
-        
-        Alert.alert("Check-in Complete!", `You've safely arrived at ${placeName}!`);
+        };
+        const parsed = safeParseWithToast(PhotoCheckInSchema, data, showToast);
+        if (!parsed) return;
+        addPhotoCheckIn(parsed);
+        showToast(`Arrived at ${placeName}!`, 'success');
       }
     } catch (error) {
       console.log("Camera error:", error);
-      Alert.alert("Error", "Could not take photo. Please try again.");
+      showToast('Could not take photo. Please try again.', 'error');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <Pressable 
-      style={[styles.container, isLoading && styles.loading]}
-      onPress={handlePhotoCheckIn}
-      disabled={isLoading}
-    >
-      <Camera size={20} color="#FFFFFF" />
-      <Text style={styles.text}>
-        {isLoading ? "Taking Photo..." : "Photo Check-in"}
-      </Text>
-      <MapPin size={16} color="#FFFFFF" style={styles.locationIcon} />
-    </Pressable>
+    <>
+      <Pressable 
+        style={[styles.container, isLoading && styles.loading]}
+        onPress={handlePhotoCheckIn}
+        disabled={isLoading}
+      >
+        <Camera size={20} color="#FFFFFF" />
+        <Text style={styles.text}>
+          {isLoading ? "Taking Photo..." : "Photo Check-in"}
+        </Text>
+        <MapPin size={16} color="#FFFFFF" style={styles.locationIcon} />
+      </Pressable>
+      <Toast 
+        message={toast.message} 
+        type={toast.type} 
+        visible={toast.visible} 
+        onHide={hideToast} 
+      />
+    </>
   );
 };
 

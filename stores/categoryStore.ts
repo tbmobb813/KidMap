@@ -2,6 +2,7 @@ import createContextHook from '@nkzw/create-context-hook';
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CustomCategory, CategoryManagementSettings, PlaceCategory } from '@/types/navigation';
+import { CategoryCreateSchema, CategoryUpdateSchema } from '@/core/validation';
 
 const DEFAULT_CATEGORIES: CustomCategory[] = [
   {
@@ -152,12 +153,15 @@ export const [CategoryProvider, useCategoryStoreInternal] = createContextHook(()
 
   // Add a new category
   const addCategory = async (category: Omit<CustomCategory, 'id' | 'createdAt'>) => {
+    const parsed = CategoryCreateSchema.safeParse(category);
+    if (!parsed.success) {
+      throw new Error(parsed.error.issues.map((i: any) => i.message).join('; '));
+    }
     const newCategory: CustomCategory = {
-      ...category,
+      ...parsed.data,
       id: `custom_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       createdAt: Date.now(),
     };
-
     const updatedCategories = [...categories, newCategory];
     await saveCategories(updatedCategories);
     return newCategory;
@@ -165,8 +169,12 @@ export const [CategoryProvider, useCategoryStoreInternal] = createContextHook(()
 
   // Update an existing category
   const updateCategory = async (id: string, updates: Partial<CustomCategory>) => {
-    const updatedCategories = categories.map(cat => 
-      cat.id === id ? { ...cat, ...updates } : cat
+    const parsed = CategoryUpdateSchema.safeParse(updates);
+    if (!parsed.success) {
+      throw new Error(parsed.error.issues.map((i: any) => i.message).join('; '));
+    }
+    const updatedCategories = categories.map(cat =>
+      cat.id === id ? { ...cat, ...parsed.data } : cat
     );
     await saveCategories(updatedCategories);
   };
@@ -250,28 +258,28 @@ export const useCategoryStore = () => {
       settings: DEFAULT_SETTINGS,
       isLoading: false,
       addCategory: async () => DEFAULT_CATEGORIES[0],
-      updateCategory: async () => {},
-      deleteCategory: async () => {},
-      approveCategory: async () => {},
+      updateCategory: async () => { },
+      deleteCategory: async () => { },
+      approveCategory: async () => { },
       getApprovedCategories: () => DEFAULT_CATEGORIES,
       getPendingCategories: () => [],
       getPlaceCategory: () => 'other' as const,
       getAvailableIcons: () => ['Home', 'GraduationCap', 'Trees'],
       getAvailableColors: () => ['#007AFF', '#FF9500', '#34C759'],
-      saveSettings: async () => {},
+      saveSettings: async () => { },
     };
   }
 };
 
 export const useCategoryManagement = () => {
   const store = useCategoryStore();
-  
+
   return {
     ...store,
     canCreateCategory: (createdBy: 'parent' | 'child') => {
       if (createdBy === 'parent') return true;
       if (!store.settings.allowChildToCreateCategories) return false;
-      
+
       const customCategoriesCount = store.categories.filter(cat => !cat.isDefault).length;
       return customCategoriesCount < store.settings.maxCustomCategories;
     },

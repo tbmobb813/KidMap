@@ -2,10 +2,26 @@
   "name": "expo-app",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "type": "commonjs",
   "scripts": {
     "start": "bunx rork start -p fwkirhovhuv8bp6hssbjv --tunnel",
     "start-web": "bunx rork start -p fwkirhovhuv8bp6hssbjv --web --tunnel",
-    "start-web-dev": "DEBUG=expo* bunx rork start -p fwkirhovhuv8bp6hssbjv --web --tunnel"
+    "start-web-dev": "DEBUG=expo* bunx rork start -p fwkirhovhuv8bp6hssbjv --web --tunnel",
+    "deps:check": "node scripts/dependency-manager.js check",
+    "deps:update": "node scripts/dependency-manager.js update",
+    "deps:fix": "node scripts/dependency-manager.js fix",
+    "deps:outdated": "node scripts/dependency-manager.js outdated",
+    "deps:peers": "node scripts/dependency-manager.js peers",
+    "deps:audit": "node scripts/dependency-manager.js audit",
+    "deps:clean": "rm -rf node_modules package-lock.json && npm install",
+    "postinstall": "npm run deps:peers",
+    "deps:auto": "node scripts/dependency-manager.js --auto-schedule",
+    "test": "jest",
+    "test:ci": "jest --ci --coverage --reporters=default --maxWorkers=50%",
+    "test:ci:retries": "jest --ci --coverage --reporters=default --retryTimes=2 --maxWorkers=50%",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx --max-warnings=0",
+    "danger:ci": "danger ci"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
@@ -13,7 +29,7 @@
     "@react-native-async-storage/async-storage": "2.1.2",
     "@react-navigation/native": "^7.1.6",
     "@tanstack/react-query": "^5.83.0",
-    "expo": "^53.0.4",
+    "expo": "^53.0.20",
     "expo-blur": "~14.1.4",
     "expo-constants": "~17.1.4",
     "expo-font": "~13.3.0",
@@ -41,13 +57,40 @@
     "react-native-screens": "~4.10.0",
     "react-native-svg": "15.11.2",
     "react-native-web": "^0.20.0",
+    "zod": "^4.0.17",
     "zustand": "^5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@expo/ngrok": "^4.1.0",
+    "@expo/webpack-config": "^19.0.1",
+    "@testing-library/jest-native": "^5.4.3",
+    "@testing-library/react-native": "^12.4.0",
+    "@types/jest": "^29.5.12",
     "@types/react": "~19.0.10",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "danger": "^12.3.0",
+    "eslint": "^9.5.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-native": "^4.0.0",
+    "jest": "^29.7.0",
+    "jest-expo": "^53.0.0",
+    "ts-jest": "^29.2.5",
     "typescript": "~5.8.3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix"
+    ]
+  },
+  "overrides": {
+    "lucide-react-native": {
+      "react": "$react",
+      "react-native": "$react-native"
+    }
   },
   "private": true
 }

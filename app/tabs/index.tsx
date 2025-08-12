@@ -5,7 +5,7 @@ import Colors from "@/constants/colors";
 import SearchWithSuggestions from "@/components/SearchWithSuggestions";
 import PlaceCard from "@/components/PlaceCard";
 import CategoryButton from "@/components/CategoryButton";
-import SafetyPanel from "@/components/SafetyPanel";
+import SafetyPanel from "@/modules/safety/components/SafetyPanel";
 import RegionalFunFactCard from "@/components/RegionalFunFactCard";
 import UserStatsCard from "@/components/UserStatsCard";
 import WeatherCard from "@/components/WeatherCard";
@@ -23,7 +23,7 @@ import { useGamificationStore } from "@/stores/gamificationStore";
 import { useRegionalData } from "@/hooks/useRegionalData";
 import { trackScreenView, trackUserAction } from "@/utils/analytics";
 import { useCategoryStore } from "@/stores/categoryStore";
-import { SafeZoneIndicator } from "@/components/SafeZoneIndicator";
+import { SafeZoneIndicator } from "@/modules/safety/components/SafeZoneIndicator";
 
 type SearchSuggestion = {
   id: string;

@@ -4,7 +4,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import Colors from "@/constants/colors";
 import DirectionStep from "@/components/DirectionStep";
 import MapPlaceholder from "@/components/MapPlaceholder";
-import SafetyPanel from "@/components/SafetyPanel";
+import SafetyPanel from "@/modules/safety/components/SafetyPanel";
 import { useNavigationStore } from "@/stores/navigationStore";
 import { Clock, Navigation, MapPin } from "lucide-react-native";
 import VoiceNavigation from "@/components/VoiceNavigation";
