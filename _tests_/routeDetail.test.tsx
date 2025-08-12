@@ -8,19 +8,18 @@ jest.mock('expo-router', () => ({
 }));
 
 // Mock navigation store
-jest.mock('@/stores/navigationStore', () => {
-  const actual = jest.requireActual('@/stores/navigationStore');
-  return {
-    useNavigationStore: () => ({
-      origin: { id: 'o1', name: 'Origin', address: 'Addr', category: 'other', coordinates: { latitude: 0, longitude: 0 } },
-      destination: { id: 'd1', name: 'Destination', address: 'Addr', category: 'other', coordinates: { latitude: 1, longitude: 1 } },
-      availableRoutes: [
-        { id: 'r1', totalDuration: 10, departureTime: '10:00', arrivalTime: '10:10', steps: [ { id: 's1', type: 'walk', from: 'Origin', to: 'Destination', duration: 10 } ] }
-      ],
-      selectedRoute: null,
-    })
-  };
-});
+jest.mock('@/stores/navigationStore', () => ({
+  useNavigationStore: () => ({
+    origin: { id: 'o1', name: 'Origin', address: 'Addr', category: 'other', coordinates: { latitude: 0, longitude: 0 } },
+    destination: { id: 'd1', name: 'Destination', address: 'Addr', category: 'other', coordinates: { latitude: 1, longitude: 1 } },
+    selectedRoute: null,
+  })
+}));
+
+// Mock routes query hook to return a consistent list
+jest.mock('@/hooks/useRoutesQuery', () => ({
+  useRoutesQuery: () => ({ data: [ { id: 'r1', totalDuration: 10, departureTime: '10:00', arrivalTime: '10:10', steps: [ { id: 's1', type: 'walk', from: 'Origin', to: 'Destination', duration: 10 } ] } ] })
+}));
 
 // Mock location hook
 jest.mock('@/hooks/useLocation', () => () => ({ location: { latitude:0, longitude:0, error:null }, hasLocation: true }));
@@ -40,12 +39,8 @@ describe('RouteDetailScreen', () => {
   });
 
   it('renders fallback when route missing', () => {
-    (jest.requireMock('@/stores/navigationStore').useNavigationStore as any) = () => ({
-      origin: null,
-      destination: null,
-      availableRoutes: [],
-      selectedRoute: null,
-    });
+  (jest.requireMock('@/stores/navigationStore').useNavigationStore as any) = () => ({ origin: null, destination: null, selectedRoute: null });
+  (jest.requireMock('@/hooks/useRoutesQuery').useRoutesQuery as any) = () => ({ data: [] });
     const { getByText } = render(<RouteDetailScreen />);
     expect(getByText('Route not found')).toBeTruthy();
   });

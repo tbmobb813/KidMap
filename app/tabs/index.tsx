@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
+import React, { useState, useCallback, useMemo } from "react";
+import { StyleSheet, Text, View, FlatList, Pressable, ListRenderItem } from "react-native";
 import { nav } from "@/shared/navigation/nav";
 import Colors from "@/constants/colors";
 import SearchWithSuggestions from "@/components/SearchWithSuggestions";
@@ -252,16 +252,25 @@ export default function HomeScreen() {
 
         <Text style={styles.sectionTitle}>Favorites</Text>
         {favorites.length > 0 ? (
-          favorites.map((place) => (
-            <PlaceCard
-              key={place.id}
-              place={place}
-              onPress={(selectedPlace) => {
-                setSelectedPlace(selectedPlace);
-                handlePlaceSelect(selectedPlace);
-              }}
-            />
-          ))
+          <FlatList
+            data={favorites}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <PlaceCard
+                place={item}
+                onPress={(selectedPlace) => {
+                  setSelectedPlace(selectedPlace);
+                  handlePlaceSelect(selectedPlace);
+                }}
+              />
+            )}
+            ItemSeparatorComponent={() => <View style={styles.favoriteSeparator} />}
+            initialNumToRender={6}
+            windowSize={8}
+            removeClippedSubviews
+            contentContainerStyle={styles.favoritesListContent}
+            testID="favorites-list"
+          />
         ) : (
           <EmptyState
             icon={MapPin}
@@ -315,5 +324,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 24,
     paddingHorizontal: 16,
+  },
+  favoriteSeparator: {
+    height: 12,
+  },
+  favoritesListContent: {
+    paddingHorizontal: 16,
+    paddingBottom: 32,
   },
 });

@@ -13,6 +13,7 @@ module.exports = {
         '^@/core/(.*)$': '<rootDir>/src/core/$1',
         '^@/shared/(.*)$': '<rootDir>/src/shared/$1',
         '^@/services/(.*)$': '<rootDir>/src/services/$1',
+        '^@/hooks-internal/(.*)$': '<rootDir>/src/hooks/$1',
         '^@/hooks/(.*)$': '<rootDir>/hooks/$1',
         '^@/utils/(.*)$': '<rootDir>/utils/$1',
         '^@/(.*)$': '<rootDir>/$1',
@@ -30,5 +31,13 @@ module.exports = {
     ],
     coverageDirectory: 'coverage',
     coverageReporters: ['text', 'lcov'],
+    coverageThreshold: {
+        global: {
+            lines: 0.8 * 100, // 80%
+            statements: 0.8 * 100,
+            branches: 0.7 * 100,
+            functions: 0.75 * 100,
+        }
+    },
     verbose: true,
 };

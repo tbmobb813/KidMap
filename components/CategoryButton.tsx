@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, Pressable, View } from "react-native";
 import Colors from "@/constants/colors";
+import { auditTouchTarget } from "@/utils/touchTargetAudit";
 import { PlaceCategory, CustomCategory } from "@/types/navigation";
 import { 
   Home, GraduationCap, BookOpen, Trees, ShoppingBag, Pizza, Users, Heart, MapPin,
@@ -108,6 +109,10 @@ const CategoryButtonComponent: React.FC<CategoryButtonProps> = ({
       default: return Colors.primary;
     }
   }
+
+  useEffect(() => {
+    auditTouchTarget({ name: 'CategoryButton', width: sizeStyles.width, height: sizeStyles.height, hitSlop: 8 });
+  }, [sizeStyles.width, sizeStyles.height]);
 
   return (
     <Pressable

@@ -25,7 +25,6 @@ type NavigationState = {
   recentSearches: Place[];
   origin: Place | null;
   destination: Place | null;
-  availableRoutes: Route[];
   selectedRoute: Route | null;
   searchQuery: string;
   accessibilitySettings: AccessibilitySettings;
@@ -60,7 +59,6 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
   recentSearches: [],
   origin: null,
   destination: null,
-  availableRoutes: [],
   selectedRoute: null,
   searchQuery: "",
   accessibilitySettings: {
@@ -117,20 +115,17 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
   findRoutesAsync: async () => {
     const { origin, destination, selectedTravelMode, routeOptions } = get();
     if (!origin || !destination) {
-      set({ availableRoutes: [], selectedRoute: null, routesLoading: false });
+      set({ selectedRoute: null, routesLoading: false });
       return;
     }
     set({ routesLoading: true });
     try {
       const routes = await fetchRoutes({ origin, destination, mode: selectedTravelMode, options: routeOptions });
       invariant(origin.name.length > 0 && destination.name.length > 0, 'Origin or destination missing name');
-      set({
-        availableRoutes: routes,
-        selectedRoute: routes[0] || null,
-      });
+      set({ selectedRoute: routes[0] || null });
     } catch (e) {
       console.warn('Failed to fetch routes', e);
-      set({ availableRoutes: [], selectedRoute: null });
+      set({ selectedRoute: null });
     } finally {
       set({ routesLoading: false });
     }
@@ -141,7 +136,6 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
   clearRoute: () => set({
     origin: null,
     destination: null,
-    availableRoutes: [],
     selectedRoute: null,
     searchQuery: ""
   }),

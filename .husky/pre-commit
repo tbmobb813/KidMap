@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+# Husky pre-commit hook: run ESLint (staged) + typecheck before allowing commit.
+
+echo "[husky] Running lint-staged..."
+npx lint-staged
+if [ $? -ne 0 ]; then
+  echo "[husky] lint-staged failed; aborting commit." >&2
+  exit 1
+fi
+
+echo "[husky] Running TypeScript typecheck..."
+npm run typecheck --silent
+if [ $? -ne 0 ]; then
+  echo "[husky] Typecheck failed; aborting commit." >&2
+  exit 1
+fi
+
+echo "[husky] Pre-commit checks passed."

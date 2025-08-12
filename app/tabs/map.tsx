@@ -1,5 +1,5 @@
-import React, { useEffect, useCallback } from "react";
-import { StyleSheet, Text, View, ScrollView, Pressable, Dimensions, Platform } from "react-native";
+import React, { useEffect, useCallback, useMemo, useRef } from "react";
+import { StyleSheet, Text, View, Pressable, Dimensions, Platform, FlatList, ListRenderItem } from "react-native";
 import { nav } from "@/shared/navigation/nav";
 import Colors from "@/constants/colors";
 import MapPlaceholder from "@/components/MapPlaceholder";
@@ -8,10 +8,12 @@ import SafetyPanel from "@/modules/safety/components/SafetyPanel";
 import FeatureErrorBoundary from "@/components/FeatureErrorBoundary";
 import TravelModeSelector from "@/components/TravelModeSelector";
 import { useNavigationStore } from "@/stores/navigationStore";
-import { useRoutesQuery } from '@/src/hooks/useRoutesQuery';
+import { useRoutesQuery } from '@/hooks/useRoutesQuery';
+import LoadingSpinner from '@/components/LoadingSpinner';
 import { Route } from "@/types/navigation";
 import { Navigation, MapPin, Search } from "lucide-react-native";
 import useLocation from "@/hooks/useLocation";
+import { mark, measure } from "@/utils/performanceMarks";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -21,7 +23,6 @@ export default function MapScreen() {
   const { 
     origin,
     destination,
-    availableRoutes, // legacy during transition
     selectedRoute,
     selectedTravelMode,
     setOrigin,
@@ -47,8 +48,17 @@ export default function MapScreen() {
     }
   }, [hasLocation, location.latitude, location.longitude, origin]);
 
-  // Legacy availableRoutes fallback; prefer query data
-  const routesToShow = destination ? (queryRoutes.length ? queryRoutes : availableRoutes) : [];
+  const routesToShow = destination ? queryRoutes : [];
+  const firstPaintDone = useRef(false);
+
+  useEffect(() => {
+    if (!firstPaintDone.current && destination && routesToShow.length > 0) {
+      firstPaintDone.current = true;
+      const keyId = `${origin?.id || 'origin'}->${destination.id}:${selectedTravelMode}`;
+      mark(`routes_first_paint:${keyId}`);
+      measure(`routes_time_to_first_paint:${keyId}`, `routes_fetch_start:${keyId}`, `routes_first_paint:${keyId}`);
+    }
+  }, [routesToShow.length, destination, origin?.id, selectedTravelMode]);
 
   const handleRouteSelect = useCallback((route: Route) => {
     selectRoute(route);
@@ -59,13 +69,16 @@ export default function MapScreen() {
     nav.push("/search");
   }, []);
 
-  return (
-    <ScrollView 
-      style={styles.container}
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-      bounces={true}
-    >
+  const renderRoute: ListRenderItem<Route> = useCallback(({ item }) => (
+    <RouteCard
+      route={item}
+      onPress={handleRouteSelect}
+      isSelected={selectedRoute?.id === item.id}
+    />
+  ), [handleRouteSelect, selectedRoute?.id]);
+
+  const listHeader = useMemo(() => (
+    <>
       <View style={styles.mapContainer}>
         <MapPlaceholder 
           message={
@@ -75,96 +88,75 @@ export default function MapScreen() {
           } 
         />
       </View>
-
       <FeatureErrorBoundary>
         <SafetyPanel 
           currentLocation={location} 
-          currentPlace={destination ? {
-            id: destination.id,
-            name: destination.name
-          } : undefined}
+          currentPlace={destination ? { id: destination.id, name: destination.name } : undefined}
         />
       </FeatureErrorBoundary>
-
-      <View style={styles.contentContainer}>
-        <View style={styles.locationBar}>
-          <View style={styles.locationPins}>
-            <View style={[styles.locationPin, styles.originPin]}>
-              <Navigation size={16} color="#FFFFFF" />
-            </View>
-            <View style={styles.locationConnector} />
-            <View style={[styles.locationPin, styles.destinationPin]}>
-              <MapPin size={16} color="#FFFFFF" />
-            </View>
+      <View style={styles.locationBar}>
+        <View style={styles.locationPins}>
+          <View style={[styles.locationPin, styles.originPin]}>
+            <Navigation size={16} color="#FFFFFF" />
           </View>
-          
-          <View style={styles.locationTexts}>
-            <Pressable style={styles.locationButton}>
-              <Text style={styles.locationText} numberOfLines={1}>
-                {origin?.name || "Select starting point"}
-              </Text>
-            </Pressable>
-            
-            <Pressable 
-              style={styles.locationButton}
-              onPress={handleSearchPress}
-            >
-              <Text 
-                style={[
-                  styles.locationText, 
-                  !destination && styles.placeholderText
-                ]} 
-                numberOfLines={1}
-              >
-                {destination?.name || "Where to?"}
-              </Text>
-              {!destination && (
-                <Search size={16} color={Colors.textLight} style={styles.searchIcon} />
-              )}
-            </Pressable>
+            <View style={styles.locationConnector} />
+          <View style={[styles.locationPin, styles.destinationPin]}>
+            <MapPin size={16} color="#FFFFFF" />
           </View>
         </View>
-
-        {destination ? (
-          <>
-            <TravelModeSelector 
-              selectedMode={selectedTravelMode}
-              onModeChange={setTravelMode}
-            />
-            <Text style={styles.sectionTitle}>Available Routes</Text>
-            <View style={styles.routesContainer}>
-              {isFetching && routesToShow.length === 0 && (
-                <Text style={styles.loadingText}>Loading routes...</Text>
-              )}
-              {!isFetching && routesToShow.length === 0 && (
-                <Text style={styles.noRoutesText}>No routes found. Try a different travel mode.</Text>
-              )}
-              {routesToShow.map((route: Route) => (
-                <RouteCard
-                  key={route.id}
-                  route={route}
-                  onPress={handleRouteSelect}
-                  isSelected={selectedRoute?.id === route.id}
-                />
-              ))}
-            </View>
-          </>
-        ) : (
-          <View style={styles.emptyStateContainer}>
-            <MapPin size={40} color={Colors.textLight} />
-            <Text style={styles.emptyStateText}>
-              Select a destination to see available routes
+        <View style={styles.locationTexts}>
+          <Pressable style={styles.locationButton}>
+            <Text style={styles.locationText} numberOfLines={1}>
+              {origin?.name || "Select starting point"}
             </Text>
-            <Pressable 
-              style={styles.searchButton}
-              onPress={handleSearchPress}
-            >
-              <Text style={styles.searchButtonText}>Search Places</Text>
-            </Pressable>
-          </View>
-        )}
+          </Pressable>
+          <Pressable style={styles.locationButton} onPress={handleSearchPress}>
+            <Text style={[styles.locationText, !destination && styles.placeholderText]} numberOfLines={1}>
+              {destination?.name || "Where to?"}
+            </Text>
+            {!destination && (
+              <Search size={16} color={Colors.textLight} style={styles.searchIcon} />
+            )}
+          </Pressable>
+        </View>
       </View>
-    </ScrollView>
+      {destination && (
+        <>
+          <TravelModeSelector selectedMode={selectedTravelMode} onModeChange={setTravelMode} />
+          <Text style={styles.sectionTitle}>Available Routes</Text>
+          {isFetching && routesToShow.length === 0 && (
+            <View style={styles.loadingContainer}><LoadingSpinner size="small" /></View>
+          )}
+          {!isFetching && routesToShow.length === 0 && (
+            <Text style={styles.noRoutesText}>No routes found. Try a different travel mode.</Text>
+          )}
+        </>
+      )}
+      {!destination && (
+        <View style={styles.emptyStateContainer}>
+          <MapPin size={40} color={Colors.textLight} />
+          <Text style={styles.emptyStateText}>Select a destination to see available routes</Text>
+          <Pressable style={styles.searchButton} onPress={handleSearchPress}>
+            <Text style={styles.searchButtonText}>Search Places</Text>
+          </Pressable>
+        </View>
+      )}
+    </>
+  ), [destination, location, origin, selectedTravelMode, setTravelMode, handleSearchPress, routesToShow.length, isFetching]);
+
+  return (
+    <FlatList
+      data={destination ? routesToShow : []}
+      keyExtractor={(item) => item.id}
+      renderItem={renderRoute}
+      ListHeaderComponent={listHeader}
+      contentContainerStyle={styles.listContent}
+      style={styles.container}
+      testID="routes-list"
+      initialNumToRender={5}
+      windowSize={7}
+      removeClippedSubviews
+    />
   );
 }
 
@@ -173,9 +165,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  scrollContent: {
-    flexGrow: 1,
+  listContent: {
+    paddingBottom: 32,
     minHeight: screenHeight,
+    paddingHorizontal: 16,
   },
   mapContainer: {
     height: Platform.select({
@@ -184,13 +177,11 @@ const styles = StyleSheet.create({
     }),
     minHeight: 250,
   },
-  contentContainer: {
-    flex: 1,
-    padding: 16,
-    paddingBottom: 32,
-  },
   routesContainer: {
     gap: 12,
+  },
+  loadingContainer: {
+    paddingVertical: 8,
   },
   noRoutesText: {
     fontSize: 14,

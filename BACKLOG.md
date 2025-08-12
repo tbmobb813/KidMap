@@ -9,7 +9,8 @@ Format
 (Details follow each table in expandable sections.)
 
 ---
-## Sprint 2 Candidate (Shortlist)
+
+## Sprint 2 (Completed)
 
 | ID | Title | Priority | Effort | Theme | Status |
 |----|-------|----------|--------|-------|--------|
@@ -18,16 +19,15 @@ Format
 | S2-3 | Refactor findRoutes to use Service + Caching | High | M | Performance & Data | Planned |
 | S2-4 | Virtualize Route List (FlatList) | High | S | Performance & Data | Planned |
 | S2-5 | Virtualize Favorites / Places List (FlatList) | Medium | S | Performance & Data | Planned |
-| S2-6 | Accessibility: Toast Focus & Screen Reader Announcements | High | M | Accessibility | Planned |
-| S2-7 | Accessibility: Minimum Touch Target Audit (>=48) | Medium | S | Accessibility | Planned |
-| S2-8 | Add Performance Marks (TTFR, Route Gen Time) | Medium | S | Performance & Data | Planned |
-| S2-9 | Route Query Cache Reuse Test & Metrics | Medium | S | Performance & Data | Planned |
-| S2-10 | Architecture Doc Expansion (Data Layer + A11y) | Medium | S | Docs | Planned |
-| S2-11 | Pre-commit Hooks (lint+type+test changed) | High | S | Tooling | Planned |
-| S2-12 | CI Optimization (parallel jest, coverage threshold) | Medium | M | Tooling | Planned |
+| S2-6 | Accessibility: Toast Focus & Screen Reader Announcements | High | M | Accessibility | Done |
+| S2-7 | Accessibility: Minimum Touch Target Audit (>=48) | Medium | S | Accessibility | Done |
+| S2-8 | Add Performance Marks (TTFR, Route Gen Time) | Medium | S | Performance & Data | Done |
+| S2-9 | Route Query Cache Reuse Test & Metrics | Medium | S | Performance & Data | Done |
+| S2-10 | Architecture Doc Expansion (Data Layer + A11y) | Medium | S | Docs | Done |
+| S2-11 | Pre-commit Hooks (lint+type+test changed) | High | S | Tooling | Done |
+| S2-12 | CI Optimization (parallel jest, coverage threshold) | Medium | M | Tooling | Done |
 
 ### Ticket Details
-
 
 #### S2-1 Integrate React Query Provider
 
@@ -90,7 +90,56 @@ Implement jest worker tuning, coverage thresholds (>=80% lines), optional node_m
 Acceptance: Local `npm test -- --coverage` meets thresholds; config committed.
 
 ---
- 
+
+## Sprint 3 Candidate (Shortlist)
+
+| ID | Title | Priority | Effort | Theme | Status |
+|----|-------|----------|--------|-------|--------|
+| S3-1 | Dark Mode & High Contrast Tokens | High | M | Accessibility | Planned |
+| S3-2 | Offline Route Cache Persistence | High | M | Performance & Data | Planned |
+| S3-3 | Voice Navigation Progressive Announcements | Medium | M | Accessibility | Planned |
+| S3-4 | Accessibility Announce API Unification | High | S | Accessibility | In Progress |
+| S3-5 | Invariant / Error Telemetry Bridge | Medium | S | Tooling | Planned |
+| S3-6 | Route Prefetch Heuristic (Predictive) | Medium | M | Performance & Data | Planned |
+| S3-7 | Dependency & License Audit CI Step | Low | S | Tooling | Planned |
+| S3-8 | Performance Budget Guard (Bundle Size) | Medium | S | Performance & Data | Planned |
+| S3-9 | Safety Event Streaming Stub (WebSocket) | Medium | M | Safety | Planned |
+| S3-T1 | Deprecate Legacy announceForAccessibility | Medium | XS | Accessibility | Planned |
+| S3-T2 | Consolidate Test Utilities | Low | XS | Testing | Planned |
+| S3-T3 | Jest Selective Suite Tagging | Low | S | Testing | Planned |
+
+### Sprint 3 Ticket Details (Summary)
+
+#### S3-1 Dark Mode & High Contrast Tokens
+System theme detection + manual toggle; semantic tokens with WCAG AA contrast; snapshot tests & contrast check script.
+
+#### S3-2 Offline Route Cache Persistence
+Persist React Query cache to AsyncStorage with versioning; rehydrate without refetch; tests for hydrate path & fetchCount stability.
+
+#### S3-3 Voice Navigation Progressive Announcements
+Announce next direction with distance thresholds; mute toggle; respects screen reader state.
+
+#### S3-4 Accessibility Announce API Unification
+Single `announce(message, { politeness })` with web live region; deprecate legacy helper; dedupe & debounce.
+
+#### S3-5 Invariant / Error Telemetry Bridge
+`reportError(error, context)` pluggable sink; integrate in boundaries & service catches.
+
+#### S3-6 Route Prefetch Heuristic
+Prefetch likely alternate routes / modes post selection (limited concurrency + metrics).
+
+#### S3-7 Dependency & License Audit CI Step
+Classify & allowlist licenses; fail on disallowed types.
+
+#### S3-8 Performance Budget Guard
+Baseline size snapshot + fail build on >10% growth (warn first iteration).
+
+#### S3-9 Safety Event Streaming Stub
+Mock WebSocket emitting safety events with reconnect backoff.
+
+#### S3-T1/T2/T3 Technical Debt
+Cleanup and test utility consolidation plus suite tagging to reduce runtime.
+
 ## Backlog (Future Sprints)
 
 | ID | Title | Priority | Effort | Theme | Status |
@@ -108,7 +157,7 @@ Acceptance: Local `npm test -- --coverage` meets thresholds; config committed.
 | B-11 | Theming System Elevation (CSS variables / RN tokens) | Medium | M | Design System | Backlog |
 
 ---
- 
+
 ## Icebox / Explore
 
 | ID | Idea | Notes |
@@ -119,14 +168,13 @@ Acceptance: Local `npm test -- --coverage` meets thresholds; config committed.
 | X-4 | Local Anomaly Detection for Safety Zones | Might leverage distance variance stats. |
 
 ---
- 
+
 ## Label Legend
 
 - Priority: High (user value / risk), Medium, Low
 - Effort: S (<1 day), M (1–2 days), L (multi-day / cross-cutting)
 - Theme: Performance & Data, Accessibility, Tooling, Docs, Testing, Safety, Engagement, Developer UX
 
- 
 ## Dependencies & Ordering Notes
 
 - S2-1 precedes S2-3 & S2-9.
@@ -134,7 +182,6 @@ Acceptance: Local `npm test -- --coverage` meets thresholds; config committed.
 - S2-4 benefits from S2-3 (stable data source) but can proceed in parallel.
 - Accessibility tasks independent of data layer changes.
 
- 
 ## Definition of Ready (DoR)
 
 A ticket is Ready when:
@@ -143,7 +190,6 @@ A ticket is Ready when:
 - No ambiguous external dependencies OR they’re documented
 - Test strategy identified
 
- 
 ## Definition of Done (DoD)
 
 - Code + tests merged green

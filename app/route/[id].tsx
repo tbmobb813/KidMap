@@ -8,6 +8,7 @@ import MapPlaceholder from "@/components/MapPlaceholder";
 import SafetyPanel from "@/modules/safety/components/SafetyPanel";
 import FeatureErrorBoundary from "@/components/FeatureErrorBoundary";
 import { useNavigationStore } from "@/stores/navigationStore";
+import { useRoutesQuery } from '@/hooks/useRoutesQuery';
 import { Clock, Navigation, MapPin } from "lucide-react-native";
 import VoiceNavigation from "@/components/VoiceNavigation";
 import FunFactCard from "@/components/FunFactCard";
@@ -21,9 +22,9 @@ export default function RouteDetailScreen() {
   const {
     origin,
     destination,
-    availableRoutes,
     selectedRoute
   } = useNavigationStore();
+  const { data: queriedRoutes = [] } = useRoutesQuery(origin, destination, origin && destination ? 'transit' : 'transit', { travelMode: 'transit', avoidHighways: false, avoidTolls: false, accessibilityMode: false });
 
   // Narrow to string id (expo-router param can be string | string[] | undefined)
   const routeId = Array.isArray(id) ? id[0] : id;
@@ -32,8 +33,8 @@ export default function RouteDetailScreen() {
   const route = useMemo(() => {
     if (!routeId) return null;
     if (selectedRoute && selectedRoute.id === routeId) return selectedRoute;
-    return availableRoutes.find(r => r.id === routeId) || null;
-  }, [routeId, selectedRoute, availableRoutes]);
+    return queriedRoutes.find(r => r.id === routeId) || null;
+  }, [routeId, selectedRoute, queriedRoutes]);
 
   // Derive first step voice prompt safely
   const firstStepInstruction = useMemo(() => {

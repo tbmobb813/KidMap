@@ -31,6 +31,9 @@
       ],
       "@/services/*": [
         "./src/services/*"
+      ],
+      "@/hooks-internal/*": [
+        "./src/hooks/*"
       ]
     }
   },

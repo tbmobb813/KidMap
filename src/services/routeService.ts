@@ -2,6 +2,11 @@ import { Route, TravelMode } from '@/types/navigation';
 import { sampleRoutes } from '@/mocks/transit';
 import { Place, RouteOptions } from '@/types/navigation';
 
+// Simple metrics collector (dev/test). Counts network-like fetches actually executed.
+let fetchCount = 0;
+export function __resetRouteServiceMetrics() { fetchCount = 0; }
+export function getRouteServiceMetrics() { return { fetchCount }; }
+
 export type FetchRoutesParams = {
     origin: Place;
     destination: Place;
@@ -15,6 +20,7 @@ const DEFAULT_LATENCY_MS = 120;
 export async function fetchRoutes({ origin, destination, mode, options }: FetchRoutesParams): Promise<Route[]> {
     // Simple artificial delay
     await new Promise(res => setTimeout(res, DEFAULT_LATENCY_MS));
+    fetchCount += 1;
 
     let base = sampleRoutes;
 

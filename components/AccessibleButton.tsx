@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Pressable, Text, StyleSheet, ViewStyle, TextStyle } from "react-native";
 import { theme } from "@/constants/theme";
 import { getAccessibilityLabel, getAccessibilityHint } from "@/utils/accessibility";
+import { auditTouchTarget } from "@/utils/touchTargetAudit";
 
 type AccessibleButtonProps = {
   title: string;
@@ -46,6 +47,10 @@ const AccessibleButton: React.FC<AccessibleButtonProps> = ({
     }
   };
 
+  useEffect(() => {
+    auditTouchTarget({ name: 'AccessibleButton', minHeight: 48 });
+  }, []);
+
   return (
     <Pressable
       style={({ pressed }) => [
@@ -77,7 +82,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44, // Minimum touch target size
+  minHeight: 48, // Updated to meet recommended 48x48 minimum
   },
   primaryButton: {
     backgroundColor: theme.colors.primary,
