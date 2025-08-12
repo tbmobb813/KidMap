@@ -9,6 +9,8 @@ import {
     ParentDashboardData,
     DevicePingRequest
 } from '../types/parental';
+import { SafeZoneCreateSchema, EmergencyContactCreateSchema, ParentalSettingsSchema } from '@/core/validation/safetySchemas';
+import { safeParseWithToast, ToastFn } from '@/core/validation';
 
 const DEFAULT_EMERGENCY_CONTACTS: EmergencyContact[] = [
     {
@@ -97,12 +99,18 @@ export const [ParentalProvider, useParentalStore] = createContextHook(() => {
     }, []);
 
     // Save functions
-    const saveSettings = async (newSettings: ParentalSettings) => {
+    const saveSettings = async (newSettings: ParentalSettings, toast?: ToastFn) => {
         try {
-            await AsyncStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(newSettings));
-            setSettings(newSettings);
+            const parsed = safeParseWithToast(ParentalSettingsSchema, newSettings, toast);
+            if (!parsed) return false;
+            await AsyncStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(parsed));
+            setSettings(parsed);
+            toast?.('Settings saved', 'success');
+            return true;
         } catch (error) {
             console.error('Failed to save settings:', error);
+            toast?.('Failed to save settings', 'error');
+            return false;
         }
     };
 
@@ -167,15 +175,22 @@ export const [ParentalProvider, useParentalStore] = createContextHook(() => {
     };
 
     // Safe zone management
-    const addSafeZone = async (safeZone: Omit<SafeZone, 'id' | 'createdAt'>) => {
+    const addSafeZone = async (safeZone: Omit<SafeZone, 'id' | 'createdAt'>, toast?: ToastFn) => {
+        const parsed = safeParseWithToast(SafeZoneCreateSchema, {
+            name: safeZone.name,
+            center: { latitude: safeZone.latitude, longitude: safeZone.longitude },
+            radius: safeZone.radius,
+            isActive: safeZone.isActive,
+        }, toast);
+        if (!parsed) return null;
         const newSafeZone: SafeZone = {
             ...safeZone,
             id: `safe_zone_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             createdAt: Date.now(),
         };
-
         const updatedSafeZones = [...safeZones, newSafeZone];
         await saveSafeZones(updatedSafeZones);
+        toast?.('Safe zone added', 'success');
         return newSafeZone;
     };
 
@@ -217,15 +232,17 @@ export const [ParentalProvider, useParentalStore] = createContextHook(() => {
     };
 
     // Emergency contact management
-    const addEmergencyContact = async (contact: Omit<EmergencyContact, 'id'>) => {
+    const addEmergencyContact = async (contact: Omit<EmergencyContact, 'id'>, toast?: ToastFn) => {
+        const parsed = safeParseWithToast(EmergencyContactCreateSchema, contact, toast);
+        if (!parsed) return null;
         const newContact: EmergencyContact = {
             ...contact,
             id: `contact_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         };
-
         const updatedContacts = [...settings.emergencyContacts, newContact];
         const newSettings = { ...settings, emergencyContacts: updatedContacts };
-        await saveSettings(newSettings);
+        await saveSettings(newSettings, toast);
+        toast?.('Emergency contact added', 'success');
         return newContact;
     };
 

@@ -1,4 +1,5 @@
 import { Link, Stack } from "expo-router";
+import { nav } from "@/shared/navigation/nav";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function NotFoundScreen() {
@@ -8,7 +9,7 @@ export default function NotFoundScreen() {
       <View style={styles.container}>
         <Text style={styles.title}>This screen doesn't exist.</Text>
 
-        <Link href="/" style={styles.link}>
+  <Link href={nav.href("/")} style={styles.link}>
           <Text style={styles.linkText}>Go to home screen!</Text>
         </Link>
       </View>

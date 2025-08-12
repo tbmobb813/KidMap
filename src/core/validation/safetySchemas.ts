@@ -20,6 +20,23 @@ export const EmergencyContactSchema = z.object({
     isPrimary: z.boolean(),
 });
 
+export const EmergencyContactCreateSchema = EmergencyContactSchema.omit({ id: true }).extend({
+    canReceiveAlerts: z.boolean().optional(),
+});
+
+export const ParentalSettingsSchema = z.object({
+    requirePinForParentMode: z.boolean(),
+    parentPin: z.string().min(4).max(8).regex(/^\d+$/, 'PIN must contain only numbers').optional(),
+    allowChildCategoryCreation: z.boolean(),
+    requireApprovalForCategories: z.boolean(),
+    maxCustomCategories: z.number().int().min(1).max(100),
+    safeZoneAlerts: z.boolean(),
+    checkInReminders: z.boolean(),
+    emergencyContacts: z.array(EmergencyContactSchema).default([]),
+});
+
+export const SafeZoneCreateSchema = SafeZoneSchema.omit({ id: true });
+
 export const PinSchema = z.string()
     .min(4, 'PIN must be at least 4 digits')
     .max(8, 'PIN must be no more than 8 digits')
@@ -27,3 +44,6 @@ export const PinSchema = z.string()
 
 export type SafeZoneData = z.infer<typeof SafeZoneSchema>;
 export type EmergencyContact = z.infer<typeof EmergencyContactSchema>;
+export type EmergencyContactCreate = z.infer<typeof EmergencyContactCreateSchema>;
+export type ParentalSettingsData = z.infer<typeof ParentalSettingsSchema>;
+export type SafeZoneCreate = z.infer<typeof SafeZoneCreateSchema>;

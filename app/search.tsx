@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, FlatList } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
+import { nav } from '@/shared/navigation/nav';
 import Colors from "@/constants/colors";
 import SearchBar from "@/components/SearchBar";
 import PlaceCard from "@/components/PlaceCard";
@@ -31,7 +32,6 @@ const getMockSearchResults = (query: string, category?: PlaceCategory): Place[] 
 };
 
 export default function SearchScreen() {
-  const router = useRouter();
   const params = useLocalSearchParams();
   const category = params.category as PlaceCategory;
   
@@ -59,7 +59,7 @@ export default function SearchScreen() {
   const handlePlaceSelect = (place: Place) => {
     setDestination(place);
     addToRecentSearches(place);
-    router.back();
+  nav.back();
   };
 
   return (

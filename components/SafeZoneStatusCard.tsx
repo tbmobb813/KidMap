@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Shield, MapPin, Clock, AlertTriangle } from 'lucide-react-native';
-import { useSafeZoneMonitor } from '@/hooks/useSafeZoneMonitor';
-import { useParentalStore } from '../src/modules/safety/stores/parentalStore';
+import { useSafeZoneMonitor } from '@/modules/safety/hooks/useSafeZoneMonitor';
+import { useParentalStore } from '@/modules/safety/stores/parentalStore';
+import type { SafeZone } from '@/modules/safety/types/parental';
 
 export const SafeZoneStatusCard: React.FC = () => {
   const { isMonitoring, getCurrentSafeZoneStatus, startMonitoring, stopMonitoring } = useSafeZoneMonitor();
@@ -84,7 +85,7 @@ export const SafeZoneStatusCard: React.FC = () => {
           {status.inside.length > 0 && (
             <View style={styles.insideZones}>
               <Text style={styles.sectionTitle}>Currently Inside:</Text>
-              {status.inside.map(zone => (
+              {status.inside.map((zone: SafeZone) => (
                 <View key={zone.id} style={styles.zoneItem}>
                   <View style={[styles.zoneDot, { backgroundColor: '#10B981' }]} />
                   <Text style={styles.zoneName}>{zone.name}</Text>

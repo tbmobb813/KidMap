@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
+import { nav } from '@/shared/navigation/nav';
 import Colors from "@/constants/colors";
 import DirectionStep from "@/components/DirectionStep";
 import MapPlaceholder from "@/components/MapPlaceholder";
@@ -13,7 +14,6 @@ import { getRandomFunFact } from "@/mocks/funFacts";
 import useLocation from "@/hooks/useLocation";
 
 export default function RouteDetailScreen() {
-  const router = useRouter();
   const { id } = useLocalSearchParams();
   const { location } = useLocation();
   
@@ -38,7 +38,7 @@ export default function RouteDetailScreen() {
         <Text style={styles.errorText}>Route not found</Text>
         <Pressable 
           style={styles.backButton}
-          onPress={() => router.back()}
+          onPress={() => nav.back()}
         >
           <Text style={styles.backButtonText}>Go Back</Text>
         </Pressable>

@@ -10,9 +10,9 @@ import CategoryManagement from "@/components/CategoryManagement";
 import PhotoCheckInHistory from "@/components/PhotoCheckInHistory";
 import { useRegionStore } from "@/stores/regionStore";
 import { transitDataUpdater } from "@/utils/transitDataUpdater";
-import { useParentalStore } from "../../src/modules/safety/stores/parentalStore";
+import { useParentalStore } from "@/modules/safety/stores/parentalStore";
 import PinAuthentication from "@/components/PinAuthentication";
-import ParentDashboard from "@/components/ParentDashboard";
+import ParentDashboard from "@/modules/safety/components/ParentDashboard";
 import NotificationStatusCard from "@/components/NotificationStatusCard";
 import SystemHealthMonitor from "@/components/SystemHealthMonitor";
 

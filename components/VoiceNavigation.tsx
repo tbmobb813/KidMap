@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Pressable, Alert } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import Colors from "@/constants/colors";
+import { useToast } from '@/hooks/useToast';
+import Toast from './Toast';
 import { Mic, MicOff, Volume2 } from "lucide-react-native";
 
 type VoiceNavigationProps = {
@@ -14,14 +16,15 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
 }) => {
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const { toast, showToast, hideToast } = useToast();
 
   const handleVoiceToggle = () => {
     if (isListening) {
       setIsListening(false);
-      Alert.alert("Voice stopped", "No longer listening for commands");
+      showToast('No longer listening for commands', 'info');
     } else {
       setIsListening(true);
-      Alert.alert("Voice activated", "Say 'help' for available commands");
+      showToast("Voice activated — say 'help' for commands", 'success');
       
       // Simulate stopping after 5 seconds
       setTimeout(() => {
@@ -31,8 +34,8 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
   };
 
   const handleSpeak = () => {
-    setIsSpeaking(true);
-    Alert.alert("Speaking", `"${currentStep}"`);
+  setIsSpeaking(true);
+  showToast(`"${currentStep}"`, 'info');
     
     // Simulate speaking duration
     setTimeout(() => {
@@ -85,6 +88,12 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
           <Text style={styles.commandText}>• "Repeat directions"</Text>
           <Text style={styles.commandText}>• "Call for help"</Text>
           <Text style={styles.commandText}>• "How much time left?"</Text>
+          <Toast 
+            message={toast.message}
+            type={toast.type}
+            visible={toast.visible}
+            onHide={hideToast}
+          />
         </View>
       )}
     </View>

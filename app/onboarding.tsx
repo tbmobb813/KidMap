@@ -2,13 +2,14 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { useRouter } from "expo-router";
 import OnboardingFlow from "@/components/OnboardingFlow";
+import { nav } from "@/shared/navigation/nav";
 import Colors from "@/constants/colors";
 
 export default function OnboardingScreen() {
   const router = useRouter();
 
   const handleOnboardingComplete = () => {
-    router.replace("/(tabs)");
+  nav.replaceTabs();
   };
 
   return (

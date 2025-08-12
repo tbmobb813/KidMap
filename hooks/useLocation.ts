@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import * as Location from "expo-location";
 import { Platform, Alert } from "react-native";
 
-type LocationData = {
+export type LocationData = {
   latitude: number;
   longitude: number;
   error: string | null;
@@ -15,12 +15,13 @@ export default function useLocation() {
     error: null,
   });
   const [loading, setLoading] = useState(true);
+  const hasLocation = !location.error && typeof location.latitude === 'number' && typeof location.longitude === 'number';
 
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
-        
+
         if (Platform.OS === "web") {
           // Web geolocation API
           if (navigator.geolocation) {
@@ -47,7 +48,7 @@ export default function useLocation() {
 
         // Request permissions for mobile platforms
         const { status } = await Location.requestForegroundPermissionsAsync();
-        
+
         if (status !== "granted") {
           // Android-specific permission handling
           if (Platform.OS === 'android') {
@@ -56,14 +57,16 @@ export default function useLocation() {
               "This app needs location access to show you nearby places and directions. Please enable location in your device settings.",
               [
                 { text: "Cancel", style: "cancel" },
-                { text: "Settings", onPress: () => {
-                  // On Android, we can't directly open settings, but we can guide the user
-                  Alert.alert("Enable Location", "Go to Settings > Apps > KidMap > Permissions > Location");
-                }}
+                {
+                  text: "Settings", onPress: () => {
+                    // On Android, we can't directly open settings, but we can guide the user
+                    Alert.alert("Enable Location", "Go to Settings > Apps > KidMap > Permissions > Location");
+                  }
+                }
               ]
             );
           }
-          
+
           setLocation(prev => ({
             ...prev,
             error: "Permission to access location was denied"
@@ -73,15 +76,15 @@ export default function useLocation() {
         }
 
         // Get current location with Android-optimized settings
-        const locationOptions = Platform.OS === 'android' 
+        const locationOptions = Platform.OS === 'android'
           ? {
-              accuracy: Location.Accuracy.Balanced,
-              timeout: 15000,
-              maximumAge: 10000,
-            }
+            accuracy: Location.Accuracy.Balanced,
+            timeout: 15000,
+            maximumAge: 10000,
+          }
           : {
-              accuracy: Location.Accuracy.Balanced,
-            };
+            accuracy: Location.Accuracy.Balanced,
+          };
 
         const currentLocation = await Location.getCurrentPositionAsync(locationOptions);
 
@@ -102,5 +105,7 @@ export default function useLocation() {
     })();
   }, []);
 
-  return { location, loading };
+  const safeCoordinates = () => hasLocation ? { latitude: location.latitude, longitude: location.longitude } : undefined;
+
+  return { location, loading, hasLocation, safeCoordinates };
 }

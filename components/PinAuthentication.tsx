@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Pressable, Alert, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Pressable, TextInput } from 'react-native';
 import Colors from '@/constants/colors';
 import { Lock, Eye, EyeOff } from 'lucide-react-native';
+import { useToast } from '@/hooks/useToast';
+import Toast from './Toast';
 
 type PinAuthenticationProps = {
   onAuthenticated: () => void;
@@ -23,10 +25,11 @@ const PinAuthentication: React.FC<PinAuthenticationProps> = ({
   const [showPin, setShowPin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState<'enter' | 'confirm'>('enter');
+  const { toast, showToast, hideToast } = useToast();
 
   const handlePinSubmit = async () => {
     if (pin.length < 4) {
-      Alert.alert('Invalid PIN', 'PIN must be at least 4 digits');
+      showToast('PIN must be at least 4 digits', 'error');
       return;
     }
 
@@ -37,7 +40,7 @@ const PinAuthentication: React.FC<PinAuthenticationProps> = ({
       }
 
       if (pin !== confirmPin) {
-        Alert.alert('PIN Mismatch', 'PINs do not match. Please try again.');
+        showToast('PINs do not match', 'error');
         setPin('');
         setConfirmPin('');
         setStep('enter');
@@ -53,7 +56,7 @@ const PinAuthentication: React.FC<PinAuthenticationProps> = ({
       await new Promise(resolve => setTimeout(resolve, 500));
       onAuthenticated();
     } catch (error) {
-      Alert.alert('Authentication Failed', 'Invalid PIN. Please try again.');
+      showToast('Authentication failed', 'error');
       setPin('');
       setConfirmPin('');
       setStep('enter');
@@ -182,6 +185,12 @@ const PinAuthentication: React.FC<PinAuthenticationProps> = ({
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </Pressable>
       </View>
+      <Toast 
+        message={toast.message}
+        type={toast.type}
+        visible={toast.visible}
+        onHide={hideToast}
+      />
     </View>
   );
 };

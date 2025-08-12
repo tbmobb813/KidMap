@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View, ScrollView, Pressable, TextInput, Alert } from "react-native";
 import Colors from "@/constants/colors";
 import { Search, Plus, MapPin, Trash2, Edit3, Globe, Clock, Phone } from "lucide-react-native";
+import { useToast } from '@/hooks/useToast';
+import Toast from './Toast';
 import { useRegionStore } from "@/stores/regionStore";
 import { RegionConfig } from "@/types/region";
 
@@ -32,9 +34,11 @@ export default function CityManagement({ onBack }: CityManagementProps) {
   const usRegions = getRegionsByCountry("United States");
   const internationalRegions = availableRegions.filter(r => r.country !== "United States");
 
+  const { toast, showToast, hideToast } = useToast();
+
   const handleDeleteRegion = (regionId: string) => {
     if (regionId === currentRegion.id) {
-      Alert.alert("Cannot Delete", "You cannot delete the currently selected region.");
+      showToast('Cannot delete the currently selected region', 'error');
       return;
     }
     
@@ -62,7 +66,7 @@ export default function CityManagement({ onBack }: CityManagementProps) {
           text: "Update", 
           onPress: () => {
             // In a real app, this would make API calls to update transit data
-            Alert.alert("Success", "Transit data updated successfully!");
+            showToast('Transit data updated', 'success');
           }
         }
       ]
@@ -193,7 +197,7 @@ export default function CityManagement({ onBack }: CityManagementProps) {
         ))}
       </View>
 
-      <View style={styles.infoSection}>
+  <View style={styles.infoSection}>
         <Text style={styles.infoTitle}>Transit Data Updates</Text>
         <Text style={styles.infoText}>
           Transit schedules and route information are automatically updated when available. 
@@ -203,6 +207,12 @@ export default function CityManagement({ onBack }: CityManagementProps) {
           Custom cities can be added with their own transit API endpoints for real-time data integration.
         </Text>
       </View>
+      <Toast 
+        message={toast.message}
+        type={toast.type}
+        visible={toast.visible}
+        onHide={hideToast}
+      />
     </ScrollView>
   );
 }
@@ -233,6 +243,7 @@ function AddEditRegionForm({ region, onSave, onCancel }: AddEditRegionFormProps)
 
   const handleSave = () => {
     if (!formData.id || !formData.name || !formData.country) {
+      // Using toast from parent not directly available here; simple fallback Alert kept or lift state.
       Alert.alert("Error", "Please fill in all required fields.");
       return;
     }

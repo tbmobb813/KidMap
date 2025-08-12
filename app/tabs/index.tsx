@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
-import { useRouter } from "expo-router";
+import { nav } from "@/shared/navigation/nav";
 import Colors from "@/constants/colors";
 import SearchWithSuggestions from "@/components/SearchWithSuggestions";
 import PlaceCard from "@/components/PlaceCard";
@@ -35,8 +35,7 @@ type SearchSuggestion = {
 
 
 export default function HomeScreen() {
-  const router = useRouter();
-  const { location } = useLocation();
+  const { location, hasLocation } = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [showFunFact, setShowFunFact] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -134,7 +133,7 @@ export default function HomeScreen() {
   const handleSearch = () => {
     if (searchQuery.trim()) {
       trackUserAction('search', { query: searchQuery });
-      router.push("/search");
+  nav.push("/search");
     }
   };
 
@@ -145,7 +144,7 @@ export default function HomeScreen() {
     addToRecentSearches(place);
     completeTrip("Current Location", place.name);
     trackUserAction('select_place', { place_name: place.name, place_category: place.category });
-    router.push("/map");
+  nav.push("/map");
   };
 
   const handleSuggestionSelect = (suggestion: SearchSuggestion) => {
@@ -156,13 +155,11 @@ export default function HomeScreen() {
 
   const handleCategorySelect = (categoryId: PlaceCategory | string) => {
     trackUserAction('select_category', { category: categoryId });
-    router.push({
-      pathname: "/search",
-      params: { category: categoryId }
-    });
+  nav.push("/search", { category: String(categoryId) });
   };
 
   const handleCurrentLocation = () => {
+    if (!hasLocation) return; // Guard against unavailable location
     const currentPlace = {
       id: "current-location",
       name: "Current Location",
@@ -173,7 +170,6 @@ export default function HomeScreen() {
         longitude: location.longitude
       }
     };
-    
     trackUserAction('use_current_location');
     handlePlaceSelect(currentPlace);
   };
@@ -269,7 +265,7 @@ export default function HomeScreen() {
             title="No favorites yet"
             description={`Add places you visit often in ${currentRegion.name} to see them here`}
             actionText="Search Places"
-            onAction={() => router.push("/search")}
+            onAction={() => nav.push("/search")}
           />
         )}
 

@@ -124,9 +124,9 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
           onPress: async () => {
             try {
               await deleteCategory(category.id);
-              Alert.alert('Success', 'Category deleted successfully!');
+              showToast('Category deleted', 'success');
             } catch (error) {
-              Alert.alert('Error', 'Failed to delete category. Please try again.');
+              showToast('Failed to delete category', 'error');
             }
           },
         },

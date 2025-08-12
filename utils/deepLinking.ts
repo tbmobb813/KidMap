@@ -1,5 +1,5 @@
 import { Linking } from "react-native";
-import { router } from "expo-router";
+import { nav } from "@/shared/navigation/nav";
 
 export type DeepLinkParams = {
   screen?: string;
@@ -15,23 +15,21 @@ export const handleDeepLink = (url: string) => {
     // Handle different deep link patterns
     if (path.startsWith('/route/')) {
       const routeId = path.split('/')[2];
-      router.push(`/route/${routeId}`);
+      nav.push("/route/:id", { id: routeId });
     } else if (path === '/search') {
-      router.push({
-        pathname: '/search',
-        params: searchParams,
-      });
+      const { category, ..._rest } = searchParams as Record<string, string>;
+      nav.push('/search', category ? { category } : undefined);
     } else if (path.startsWith('/place/')) {
       const placeId = path.split('/')[2];
       // Navigate to place details or set as destination
-      router.push('/map');
+      nav.push('/map');
     } else {
       // Default to home
-      router.push('/');
+      nav.push('/');
     }
   } catch (error) {
     console.error('Error handling deep link:', error);
-    router.push('/');
+    nav.push('/');
   }
 };
 
@@ -39,13 +37,13 @@ export const createShareableLink = (screen: string, params?: Record<string, stri
   const baseUrl = 'https://kidmap.app'; // Replace with your actual domain
   const url = new URL(baseUrl);
   url.pathname = screen;
-  
+
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
       url.searchParams.set(key, value);
     });
   }
-  
+
   return url.toString();
 };
 
