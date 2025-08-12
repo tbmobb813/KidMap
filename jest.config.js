@@ -12,6 +12,7 @@ module.exports = {
         '^@/modules/(.*)$': '<rootDir>/src/modules/$1',
         '^@/core/(.*)$': '<rootDir>/src/core/$1',
         '^@/shared/(.*)$': '<rootDir>/src/shared/$1',
+        '^@/services/(.*)$': '<rootDir>/src/services/$1',
         '^@/hooks/(.*)$': '<rootDir>/hooks/$1',
         '^@/utils/(.*)$': '<rootDir>/utils/$1',
         '^@/(.*)$': '<rootDir>/$1',

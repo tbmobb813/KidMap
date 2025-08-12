@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { invariant } from '@/utils/invariant';
 import { Place, Route, PhotoCheckIn, TravelMode, RouteOptions } from "@/types/navigation";
-import { fetchRoutes } from '../src/services/routeService';
+import { fetchRoutes } from '@/services/routeService';
 import { PhotoCheckInSchema } from '@/core/validation';
 import { favoriteLocations } from "@/mocks/places";
 import { sampleRoutes } from "@/mocks/transit";
@@ -166,7 +166,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
   setTravelMode: (mode) => {
     set({ selectedTravelMode: mode });
     // Automatically update route options and refind routes
-  const { findRoutes } = get();
+    const { findRoutes } = get();
     set((state) => ({
       routeOptions: { ...state.routeOptions, travelMode: mode }
     }));
@@ -178,7 +178,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
       routeOptions: { ...state.routeOptions, ...options }
     }));
     // Refind routes with new options
-  const { findRoutes } = get();
+    const { findRoutes } = get();
     findRoutes();
   },
 

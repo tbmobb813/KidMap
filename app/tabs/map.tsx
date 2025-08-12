@@ -8,6 +8,7 @@ import SafetyPanel from "@/modules/safety/components/SafetyPanel";
 import FeatureErrorBoundary from "@/components/FeatureErrorBoundary";
 import TravelModeSelector from "@/components/TravelModeSelector";
 import { useNavigationStore } from "@/stores/navigationStore";
+import { useRoutesQuery } from '@/src/hooks/useRoutesQuery';
 import { Route } from "@/types/navigation";
 import { Navigation, MapPin, Search } from "lucide-react-native";
 import useLocation from "@/hooks/useLocation";
@@ -20,14 +21,15 @@ export default function MapScreen() {
   const { 
     origin,
     destination,
-    availableRoutes,
+    availableRoutes, // legacy during transition
     selectedRoute,
     selectedTravelMode,
     setOrigin,
-    findRoutes,
     selectRoute,
     setTravelMode
   } = useNavigationStore();
+
+  const { data: queryRoutes = [], isFetching } = useRoutesQuery(origin, destination, selectedTravelMode, { travelMode: selectedTravelMode, avoidHighways: false, avoidTolls: false, accessibilityMode: false });
 
   useEffect(() => {
     // If no origin is set, use current location
@@ -45,12 +47,8 @@ export default function MapScreen() {
     }
   }, [hasLocation, location.latitude, location.longitude, origin]);
 
-  useEffect(() => {
-    // Find routes when both origin and destination are set
-    if (origin && destination) {
-      findRoutes();
-    }
-  }, [origin, destination]);
+  // Legacy availableRoutes fallback; prefer query data
+  const routesToShow = destination ? (queryRoutes.length ? queryRoutes : availableRoutes) : [];
 
   const handleRouteSelect = useCallback((route: Route) => {
     selectRoute(route);
@@ -135,18 +133,20 @@ export default function MapScreen() {
             />
             <Text style={styles.sectionTitle}>Available Routes</Text>
             <View style={styles.routesContainer}>
-              {availableRoutes.length === 0 ? (
-                <Text style={styles.noRoutesText}>No routes found. Try a different travel mode.</Text>
-              ) : (
-                availableRoutes.map(route => (
-                  <RouteCard
-                    key={route.id}
-                    route={route}
-                    onPress={handleRouteSelect}
-                    isSelected={selectedRoute?.id === route.id}
-                  />
-                ))
+              {isFetching && routesToShow.length === 0 && (
+                <Text style={styles.loadingText}>Loading routes...</Text>
               )}
+              {!isFetching && routesToShow.length === 0 && (
+                <Text style={styles.noRoutesText}>No routes found. Try a different travel mode.</Text>
+              )}
+              {routesToShow.map((route: Route) => (
+                <RouteCard
+                  key={route.id}
+                  route={route}
+                  onPress={handleRouteSelect}
+                  isSelected={selectedRoute?.id === route.id}
+                />
+              ))}
             </View>
           </>
         ) : (
@@ -196,6 +196,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.textLight,
     fontStyle: 'italic',
+    paddingVertical: 8,
+  },
+  loadingText: {
+    fontSize: 14,
+    color: Colors.textLight,
     paddingVertical: 8,
   },
   locationBar: {
