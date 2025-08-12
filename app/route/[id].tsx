@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { nav } from '@/shared/navigation/nav';
@@ -6,6 +6,7 @@ import Colors from "@/constants/colors";
 import DirectionStep from "@/components/DirectionStep";
 import MapPlaceholder from "@/components/MapPlaceholder";
 import SafetyPanel from "@/modules/safety/components/SafetyPanel";
+import FeatureErrorBoundary from "@/components/FeatureErrorBoundary";
 import { useNavigationStore } from "@/stores/navigationStore";
 import { Clock, Navigation, MapPin } from "lucide-react-native";
 import VoiceNavigation from "@/components/VoiceNavigation";
@@ -16,22 +17,37 @@ import useLocation from "@/hooks/useLocation";
 export default function RouteDetailScreen() {
   const { id } = useLocalSearchParams();
   const { location } = useLocation();
-  
-  const { 
+
+  const {
     origin,
     destination,
     availableRoutes,
     selectedRoute
   } = useNavigationStore();
 
-  // Find the route by ID
-  const route = selectedRoute?.id === id 
-    ? selectedRoute 
-    : availableRoutes.find(r => r.id === id);
+  // Narrow to string id (expo-router param can be string | string[] | undefined)
+  const routeId = Array.isArray(id) ? id[0] : id;
+
+  // Resolve the route deterministically
+  const route = useMemo(() => {
+    if (!routeId) return null;
+    if (selectedRoute && selectedRoute.id === routeId) return selectedRoute;
+    return availableRoutes.find(r => r.id === routeId) || null;
+  }, [routeId, selectedRoute, availableRoutes]);
+
+  // Derive first step voice prompt safely
+  const firstStepInstruction = useMemo(() => {
+    if (!route || !route.steps || route.steps.length === 0) return "Starting your journey";
+    const step = route.steps[0];
+    if (!step.from || !step.to) return "Starting your journey";
+    const verb = step.type === 'walk' ? 'Walk' : step.type === 'bike' ? 'Bike' : step.type === 'car' ? 'Drive' : 'Take';
+    return `${verb} from ${step.from} to ${step.to}`;
+  }, [route]);
 
   const [showFunFact, setShowFunFact] = useState(true);
   const [currentFunFact] = useState(getRandomFunFact("subway"));
 
+  // Unified guard ensures no unsafe property access below
   if (!route || !origin || !destination) {
     return (
       <View style={styles.errorContainer}>
@@ -48,21 +64,21 @@ export default function RouteDetailScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <MapPlaceholder 
-        message={`Map showing route from ${origin.name} to ${destination.name}`} 
-      />
-      
-      <VoiceNavigation 
-        currentStep={route.steps[0]?.from ? `${route.steps[0].type === 'walk' ? 'Walk' : 'Take'} from ${route.steps[0].from} to ${route.steps[0].to}` : "Starting your journey"}
+      <MapPlaceholder
+        message={`Map showing route from ${origin.name} to ${destination.name}`}
       />
 
-      <SafetyPanel 
-        currentLocation={location} 
-        currentPlace={destination ? {
-          id: destination.id,
-          name: destination.name
-        } : undefined}
-      />
+      <VoiceNavigation currentStep={firstStepInstruction} />
+
+      <FeatureErrorBoundary>
+        <SafetyPanel 
+          currentLocation={location} 
+          currentPlace={destination ? {
+            id: destination.id,
+            name: destination.name
+          } : undefined}
+        />
+      </FeatureErrorBoundary>
 
       {showFunFact && (
         <FunFactCard 

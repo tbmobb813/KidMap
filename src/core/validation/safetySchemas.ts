@@ -18,6 +18,7 @@ export const EmergencyContactSchema = z.object({
     }, 'Phone number format is invalid'),
     relationship: z.string().min(1, 'Contact relationship is required'),
     isPrimary: z.boolean(),
+    canReceiveAlerts: z.boolean().default(false),
 });
 
 export const EmergencyContactCreateSchema = EmergencyContactSchema.omit({ id: true }).extend({
@@ -37,6 +38,11 @@ export const ParentalSettingsSchema = z.object({
 
 export const SafeZoneCreateSchema = SafeZoneSchema.omit({ id: true });
 
+export const CheckInRequestCreateSchema = z.object({
+    message: z.string().min(1, 'Message required').max(240, 'Message too long'),
+    isUrgent: z.boolean().default(false),
+});
+
 export const PinSchema = z.string()
     .min(4, 'PIN must be at least 4 digits')
     .max(8, 'PIN must be no more than 8 digits')
@@ -47,3 +53,4 @@ export type EmergencyContact = z.infer<typeof EmergencyContactSchema>;
 export type EmergencyContactCreate = z.infer<typeof EmergencyContactCreateSchema>;
 export type ParentalSettingsData = z.infer<typeof ParentalSettingsSchema>;
 export type SafeZoneCreate = z.infer<typeof SafeZoneCreateSchema>;
+export type CheckInRequestCreate = z.infer<typeof CheckInRequestCreateSchema>;

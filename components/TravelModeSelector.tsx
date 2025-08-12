@@ -26,8 +26,13 @@ const TravelModeSelector: React.FC<TravelModeSelectorProps> = ({ selectedMode, o
           return (
             <Pressable
               key={mode}
+              accessibilityRole="button"
+              accessibilityLabel={`${label} travel mode`}
+              accessibilityState={{ selected: isSelected }}
+              hitSlop={6}
               style={[styles.modeButton, isSelected && styles.selectedMode]}
               onPress={() => onModeChange(mode)}
+              testID={`travel-mode-${mode}`}
             >
               <View style={[styles.iconContainer, isSelected && styles.selectedIcon]}>
                 {React.cloneElement(icon as React.ReactElement<{ color?: string }>, {

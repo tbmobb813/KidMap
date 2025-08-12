@@ -51,11 +51,16 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
 
       <View style={styles.controlsContainer}>
         <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={isListening ? 'Stop listening' : 'Activate voice commands'}
+          accessibilityState={{ selected: isListening }}
+          hitSlop={8}
           style={[
             styles.voiceButton,
             isListening && styles.listeningButton
           ]}
           onPress={handleVoiceToggle}
+          testID="voice-toggle"
         >
           {isListening ? (
             <MicOff size={24} color="#FFFFFF" />
@@ -68,11 +73,16 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
         </Pressable>
 
         <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={isSpeaking ? 'Repeating directions' : 'Repeat current step'}
+          accessibilityState={{ busy: isSpeaking }}
+          hitSlop={8}
           style={[
             styles.speakButton,
             isSpeaking && styles.speakingButton
           ]}
           onPress={handleSpeak}
+          testID="voice-repeat"
         >
           <Volume2 size={24} color="#FFFFFF" />
           <Text style={styles.buttonText}>

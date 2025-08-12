@@ -35,11 +35,15 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, onPress }) => {
 
   return (
     <Pressable 
+      accessibilityRole="button"
+      accessibilityLabel={`Place ${place.name}`}
+      hitSlop={8}
       style={({ pressed }) => [
         styles.container,
         pressed && styles.pressed
       ]}
       onPress={() => onPress(place)}
+      testID={`place-card-${place.id}`}
     >
       <View style={styles.iconContainer}>
         {getIcon()}

@@ -109,7 +109,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
 
   const handleDeleteCategory = (category: CustomCategory) => {
     if (category.isDefault) {
-      Alert.alert('Cannot Delete', 'Default categories cannot be deleted.');
+      showToast('Default categories cannot be deleted', 'warning');
       return;
     }
 

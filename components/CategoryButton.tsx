@@ -16,7 +16,7 @@ type CategoryButtonProps = {
   size?: 'small' | 'medium' | 'large';
 };
 
-const CategoryButton: React.FC<CategoryButtonProps> = ({ 
+const CategoryButtonComponent: React.FC<CategoryButtonProps> = ({ 
   category, 
   customCategory, 
   onPress, 
@@ -111,6 +111,9 @@ const CategoryButton: React.FC<CategoryButtonProps> = ({
 
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`${displayName} category button`}
+      hitSlop={8}
       style={({ pressed }) => [
         styles.container,
         {
@@ -132,6 +135,10 @@ const CategoryButton: React.FC<CategoryButtonProps> = ({
     </Pressable>
   );
 };
+
+const CategoryButton = React.memo(CategoryButtonComponent, (prev, next) => {
+  return prev.customCategory === next.customCategory && prev.category === next.category && prev.size === next.size;
+});
 
 const styles = StyleSheet.create({
   container: {

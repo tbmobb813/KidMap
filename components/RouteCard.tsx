@@ -6,36 +6,58 @@ import { Clock, ArrowRight } from "lucide-react-native";
 import TransitStepIndicator from "./TransitStepIndicator";
 
 type RouteCardProps = {
-  route: Route;
+  route: Route | null | undefined;
   onPress: (route: Route) => void;
   isSelected?: boolean;
 };
 
-const RouteCard: React.FC<RouteCardProps> = ({ route, onPress, isSelected = false }) => {
+const RouteCardComponent: React.FC<RouteCardProps> = ({ route, onPress, isSelected = false }) => {
+  if (!route) {
+    return (
+      <View style={[styles.container, styles.unavailable]}>
+        <Text style={styles.unavailableText}>Route unavailable</Text>
+      </View>
+    );
+  }
+
+  const durationLabel = Number.isFinite(route.totalDuration) ? `${route.totalDuration} min` : '--';
+  const departure = route.departureTime || '--';
+  const arrival = route.arrivalTime || '--';
+  const steps = Array.isArray(route.steps) ? route.steps : [];
+
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`Route option, duration ${durationLabel}`}
+      accessibilityState={{ selected: isSelected }}
+      hitSlop={8}
       style={({ pressed }) => [
         styles.container,
         isSelected && styles.selected,
         pressed && styles.pressed,
       ]}
       onPress={() => onPress(route)}
+      disabled={!route}
+      testID={`route-card-${route.id}`}
     >
       <View style={styles.timeContainer}>
-        <Text style={styles.duration}>{route.totalDuration} min</Text>
+        <Text style={styles.duration}>{durationLabel}</Text>
         <View style={styles.timeRow}>
           <Clock size={14} color={Colors.textLight} style={styles.clockIcon} />
           <Text style={styles.timeText}>
-            {route.departureTime} - {route.arrivalTime}
+            {departure} - {arrival}
           </Text>
         </View>
       </View>
 
       <View style={styles.stepsContainer}>
-        {route.steps.map((step, index) => (
+        {steps.length === 0 && (
+          <Text style={styles.emptySteps}>No steps</Text>
+        )}
+        {steps.map((step, index) => (
           <View key={step.id} style={styles.stepRow}>
             <TransitStepIndicator step={step} />
-            {index < route.steps.length - 1 && (
+            {index < steps.length - 1 && (
               <ArrowRight size={14} color={Colors.textLight} style={styles.arrowIcon} />
             )}
           </View>
@@ -44,6 +66,10 @@ const RouteCard: React.FC<RouteCardProps> = ({ route, onPress, isSelected = fals
     </Pressable>
   );
 };
+
+const RouteCard = React.memo(RouteCardComponent, (prev, next) => {
+  return prev.isSelected === next.isSelected && prev.route === next.route;
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -56,6 +82,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
+  },
+  unavailable: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  unavailableText: {
+    color: Colors.textLight,
+    fontSize: 14,
+    fontStyle: 'italic'
   },
   selected: {
     borderWidth: 2,
@@ -89,6 +124,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     flexWrap: "wrap",
+  },
+  emptySteps: {
+    fontSize: 12,
+    color: Colors.textLight,
   },
   stepRow: {
     flexDirection: "row",

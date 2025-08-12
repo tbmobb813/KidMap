@@ -6,6 +6,7 @@ import SearchWithSuggestions from "@/components/SearchWithSuggestions";
 import PlaceCard from "@/components/PlaceCard";
 import CategoryButton from "@/components/CategoryButton";
 import SafetyPanel from "@/modules/safety/components/SafetyPanel";
+import FeatureErrorBoundary from "@/components/FeatureErrorBoundary";
 import RegionalFunFactCard from "@/components/RegionalFunFactCard";
 import UserStatsCard from "@/components/UserStatsCard";
 import WeatherCard from "@/components/WeatherCard";
@@ -210,13 +211,15 @@ export default function HomeScreen() {
           />
         )}
 
-        <SafetyPanel 
-          currentLocation={location} 
-          currentPlace={selectedPlace ? {
-            id: selectedPlace.id,
-            name: selectedPlace.name
-          } : undefined}
-        />
+        <FeatureErrorBoundary>
+          <SafetyPanel 
+            currentLocation={location} 
+            currentPlace={selectedPlace ? {
+              id: selectedPlace.id,
+              name: selectedPlace.name
+            } : undefined}
+          />
+        </FeatureErrorBoundary>
 
         <View style={styles.searchContainer}>
           <SearchWithSuggestions

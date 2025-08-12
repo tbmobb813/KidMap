@@ -28,7 +28,10 @@ export const handleDeepLink = (url: string) => {
       nav.push('/');
     }
   } catch (error) {
-    console.error('Error handling deep link:', error);
+    // Suppress noisy stack trace in test environment while preserving behavior
+    if (process.env.NODE_ENV !== 'test') {
+      console.error('Error handling deep link:', error);
+    }
     nav.push('/');
   }
 };

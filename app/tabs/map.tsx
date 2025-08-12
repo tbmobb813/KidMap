@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { StyleSheet, Text, View, ScrollView, Pressable, Dimensions, Platform } from "react-native";
 import { nav } from "@/shared/navigation/nav";
 import Colors from "@/constants/colors";
 import MapPlaceholder from "@/components/MapPlaceholder";
 import RouteCard from "@/components/RouteCard";
 import SafetyPanel from "@/modules/safety/components/SafetyPanel";
+import FeatureErrorBoundary from "@/components/FeatureErrorBoundary";
 import TravelModeSelector from "@/components/TravelModeSelector";
 import { useNavigationStore } from "@/stores/navigationStore";
 import { Route } from "@/types/navigation";
@@ -51,14 +52,14 @@ export default function MapScreen() {
     }
   }, [origin, destination]);
 
-  const handleRouteSelect = (route: Route) => {
+  const handleRouteSelect = useCallback((route: Route) => {
     selectRoute(route);
-  nav.push("/route/:id", { id: route.id });
-  };
+    nav.push("/route/:id", { id: route.id });
+  }, [selectRoute]);
 
-  const handleSearchPress = () => {
-  nav.push("/search");
-  };
+  const handleSearchPress = useCallback(() => {
+    nav.push("/search");
+  }, []);
 
   return (
     <ScrollView 
@@ -77,13 +78,15 @@ export default function MapScreen() {
         />
       </View>
 
-      <SafetyPanel 
-        currentLocation={location} 
-        currentPlace={destination ? {
-          id: destination.id,
-          name: destination.name
-        } : undefined}
-      />
+      <FeatureErrorBoundary>
+        <SafetyPanel 
+          currentLocation={location} 
+          currentPlace={destination ? {
+            id: destination.id,
+            name: destination.name
+          } : undefined}
+        />
+      </FeatureErrorBoundary>
 
       <View style={styles.contentContainer}>
         <View style={styles.locationBar}>
@@ -132,14 +135,18 @@ export default function MapScreen() {
             />
             <Text style={styles.sectionTitle}>Available Routes</Text>
             <View style={styles.routesContainer}>
-              {availableRoutes.map(route => (
-                <RouteCard
-                  key={route.id}
-                  route={route}
-                  onPress={handleRouteSelect}
-                  isSelected={selectedRoute?.id === route.id}
-                />
-              ))}
+              {availableRoutes.length === 0 ? (
+                <Text style={styles.noRoutesText}>No routes found. Try a different travel mode.</Text>
+              ) : (
+                availableRoutes.map(route => (
+                  <RouteCard
+                    key={route.id}
+                    route={route}
+                    onPress={handleRouteSelect}
+                    isSelected={selectedRoute?.id === route.id}
+                  />
+                ))
+              )}
             </View>
           </>
         ) : (
@@ -184,6 +191,12 @@ const styles = StyleSheet.create({
   },
   routesContainer: {
     gap: 12,
+  },
+  noRoutesText: {
+    fontSize: 14,
+    color: Colors.textLight,
+    fontStyle: 'italic',
+    paddingVertical: 8,
   },
   locationBar: {
     flexDirection: "row",

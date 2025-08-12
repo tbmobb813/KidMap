@@ -9,7 +9,7 @@ import {
     ParentDashboardData,
     DevicePingRequest
 } from '../types/parental';
-import { SafeZoneCreateSchema, EmergencyContactCreateSchema, ParentalSettingsSchema } from '@/core/validation/safetySchemas';
+import { SafeZoneCreateSchema, EmergencyContactCreateSchema, ParentalSettingsSchema, CheckInRequestCreateSchema } from '@/core/validation/safetySchemas';
 import { safeParseWithToast, ToastFn } from '@/core/validation';
 
 const DEFAULT_EMERGENCY_CONTACTS: EmergencyContact[] = [
@@ -74,7 +74,14 @@ export const [ParentalProvider, useParentalStore] = createContextHook(() => {
                 ]);
 
                 if (storedSettings) {
-                    setSettings(JSON.parse(storedSettings));
+                    const raw = JSON.parse(storedSettings);
+                    if (raw && Array.isArray(raw.emergencyContacts)) {
+                        raw.emergencyContacts = raw.emergencyContacts.map((c: any) => ({
+                            ...c,
+                            canReceiveAlerts: typeof c.canReceiveAlerts === 'boolean' ? c.canReceiveAlerts : false,
+                        }));
+                    }
+                    setSettings(raw);
                 }
                 if (storedSafeZones) {
                     setSafeZones(JSON.parse(storedSafeZones));
@@ -207,18 +214,20 @@ export const [ParentalProvider, useParentalStore] = createContextHook(() => {
     };
 
     // Check-in request management
-    const requestCheckIn = async (message: string, isUrgent: boolean = false) => {
+    const requestCheckIn = async (message: string, isUrgent: boolean = false, toast?: ToastFn) => {
+        const parsed = safeParseWithToast(CheckInRequestCreateSchema, { message, isUrgent }, toast);
+        if (!parsed) return null;
         const newRequest: CheckInRequest = {
             id: `check_in_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-            childId: 'current_child', // In a real app, this would be the actual child ID
+            childId: 'current_child',
             requestedAt: Date.now(),
-            message,
-            isUrgent,
+            message: parsed.message,
+            isUrgent: parsed.isUrgent ?? false,
             status: 'pending',
         };
-
         const updatedRequests = [...checkInRequests, newRequest];
         await saveCheckInRequests(updatedRequests);
+        toast?.('Check-in requested', 'success');
         return newRequest;
     };
 

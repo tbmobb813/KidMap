@@ -1,0 +1,17 @@
+{
+    // Enable shell integration for PowerShell and suppress the enable prompt
+    "terminal.integrated.shellIntegration.enabled": true,
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        }
+    },
+    // Don't show repeated shell integration notifications
+    "terminal.integrated.shellIntegration.showWelcome": false,
+    "terminal.integrated.suggest.enabled": true,
+    // Optional: improve readability
+    "terminal.integrated.fontFamily": "Cascadia Code, Consolas, 'Courier New', monospace",
+    "terminal.integrated.fontSize": 13
+}

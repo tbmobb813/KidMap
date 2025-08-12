@@ -1,5 +1,7 @@
 import { create } from "zustand";
+import { invariant } from '@/utils/invariant';
 import { Place, Route, PhotoCheckIn, TravelMode, RouteOptions } from "@/types/navigation";
+import { fetchRoutes } from '../src/services/routeService';
 import { PhotoCheckInSchema } from '@/core/validation';
 import { favoriteLocations } from "@/mocks/places";
 import { sampleRoutes } from "@/mocks/transit";
@@ -31,6 +33,7 @@ type NavigationState = {
   weatherInfo: WeatherInfo | null;
   selectedTravelMode: TravelMode;
   routeOptions: RouteOptions;
+  routesLoading: boolean;
 
   // Actions
   setOrigin: (place: Place | null) => void;
@@ -41,6 +44,7 @@ type NavigationState = {
   clearRecentSearches: () => void;
   setSearchQuery: (query: string) => void;
   findRoutes: () => void;
+  findRoutesAsync: () => Promise<void>;
   selectRoute: (route: Route) => void;
   clearRoute: () => void;
   updateAccessibilitySettings: (settings: Partial<AccessibilitySettings>) => void;
@@ -74,6 +78,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
     avoidHighways: false,
     accessibilityMode: false,
   },
+  routesLoading: false,
 
   setOrigin: (place) => set({ origin: place }),
 
@@ -107,66 +112,28 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
 
   setSearchQuery: (query) => set({ searchQuery: query }),
 
-  findRoutes: () => {
-    const { origin, destination, selectedTravelMode, routeOptions } = get();
+  findRoutes: () => { get().findRoutesAsync(); },
 
+  findRoutesAsync: async () => {
+    const { origin, destination, selectedTravelMode, routeOptions } = get();
     if (!origin || !destination) {
-      set({ availableRoutes: [], selectedRoute: null });
+      set({ availableRoutes: [], selectedRoute: null, routesLoading: false });
       return;
     }
-
-    // In a real app, this would call an API to get routes based on travel mode
-    // For now, we'll filter sample data based on travel mode
-    let filteredRoutes = sampleRoutes;
-
-    if (selectedTravelMode === "walking") {
-      // Generate walking routes (simplified)
-      filteredRoutes = sampleRoutes.map(route => ({
-        ...route,
-        id: `walk_${route.id}`,
-        steps: [{
-          id: "walk_step",
-          type: "walk" as const,
-          from: origin.name,
-          to: destination.name,
-          duration: Math.ceil(route.totalDuration * 1.5), // Walking takes longer
-        }],
-        totalDuration: Math.ceil(route.totalDuration * 1.5),
-      }));
-    } else if (selectedTravelMode === "biking") {
-      // Generate biking routes (simplified)
-      filteredRoutes = sampleRoutes.map(route => ({
-        ...route,
-        id: `bike_${route.id}`,
-        steps: [{
-          id: "bike_step",
-          type: "bike" as const,
-          from: origin.name,
-          to: destination.name,
-          duration: Math.ceil(route.totalDuration * 0.7), // Biking is faster than walking
-        }],
-        totalDuration: Math.ceil(route.totalDuration * 0.7),
-      }));
-    } else if (selectedTravelMode === "driving") {
-      // Generate driving routes (simplified)
-      filteredRoutes = sampleRoutes.map(route => ({
-        ...route,
-        id: `drive_${route.id}`,
-        steps: [{
-          id: "drive_step",
-          type: "car" as const,
-          from: origin.name,
-          to: destination.name,
-          duration: Math.ceil(route.totalDuration * 0.4), // Driving is fastest
-        }],
-        totalDuration: Math.ceil(route.totalDuration * 0.4),
-      }));
+    set({ routesLoading: true });
+    try {
+      const routes = await fetchRoutes({ origin, destination, mode: selectedTravelMode, options: routeOptions });
+      invariant(origin.name.length > 0 && destination.name.length > 0, 'Origin or destination missing name');
+      set({
+        availableRoutes: routes,
+        selectedRoute: routes[0] || null,
+      });
+    } catch (e) {
+      console.warn('Failed to fetch routes', e);
+      set({ availableRoutes: [], selectedRoute: null });
+    } finally {
+      set({ routesLoading: false });
     }
-
-    set({
-      availableRoutes: filteredRoutes,
-      selectedRoute: filteredRoutes[0]
-    });
   },
 
   selectRoute: (route) => set({ selectedRoute: route }),
@@ -199,7 +166,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
   setTravelMode: (mode) => {
     set({ selectedTravelMode: mode });
     // Automatically update route options and refind routes
-    const { findRoutes } = get();
+  const { findRoutes } = get();
     set((state) => ({
       routeOptions: { ...state.routeOptions, travelMode: mode }
     }));
@@ -211,7 +178,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
       routeOptions: { ...state.routeOptions, ...options }
     }));
     // Refind routes with new options
-    const { findRoutes } = get();
+  const { findRoutes } = get();
     findRoutes();
   },
 

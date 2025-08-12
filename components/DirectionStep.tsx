@@ -6,40 +6,63 @@ import TransitStepIndicator from "./TransitStepIndicator";
 import { Clock, ArrowRight } from "lucide-react-native";
 
 type DirectionStepProps = {
-  step: TransitStep;
+  step: TransitStep | null | undefined;
   isLast: boolean;
 };
 
 const DirectionStep: React.FC<DirectionStepProps> = ({ step, isLast }) => {
+  // Defensive guards & fallbacks to avoid runtime crashes on malformed data
+  if (!step) {
+    return (
+      <View style={styles.container} accessible accessibilityRole="summary" accessibilityLabel="Unavailable step">
+        <View style={styles.leftColumn}>
+          <View style={[styles.placeholderIndicator, { backgroundColor: Colors.border }]} />
+          {!isLast && <View style={styles.connector} />}
+        </View>
+        <View style={styles.rightColumn}>
+          <Text style={styles.stepType}>Step unavailable</Text>
+          <Text style={styles.locationText}>Data missing</Text>
+        </View>
+      </View>
+    );
+  }
+
+  const typeLabel = step.type
+    ? step.type.charAt(0).toUpperCase() + step.type.slice(1)
+    : "Step";
+  const durationLabel = Number.isFinite(step.duration) ? `${step.duration} min` : "--";
+  const fromText = step.from || "Unknown start";
+  const toText = step.to || "Unknown destination";
+
   return (
-    <View style={styles.container}>
+    <View style={styles.container} accessibilityRole="summary" accessibilityLabel={`${typeLabel} step from ${fromText} to ${toText}`}>
       <View style={styles.leftColumn}>
-        <TransitStepIndicator step={step} size="large" />
+        <TransitStepIndicator step={step as TransitStep} size="large" />
         {!isLast && <View style={styles.connector} />}
       </View>
-      
+
       <View style={styles.rightColumn}>
         <View style={styles.headerRow}>
           <Text style={styles.stepType}>
-            {step.type.charAt(0).toUpperCase() + step.type.slice(1)}
+            {typeLabel}
             {step.line && ` Line ${step.line}`}
           </Text>
-          <Text style={styles.duration}>{step.duration} min</Text>
+          <Text style={styles.duration}>{durationLabel}</Text>
         </View>
-        
+
         <View style={styles.locationContainer}>
           <View style={styles.locationRow}>
             <Text style={styles.locationLabel}>From:</Text>
-            <Text style={styles.locationText}>{step.from}</Text>
+            <Text style={styles.locationText}>{fromText}</Text>
           </View>
-          
-          <View style={styles.locationRow}>
+
+            <View style={styles.locationRow}>
             <Text style={styles.locationLabel}>To:</Text>
-            <Text style={styles.locationText}>{step.to}</Text>
+            <Text style={styles.locationText}>{toText}</Text>
           </View>
         </View>
-        
-        {(step.departureTime && step.arrivalTime) && (
+
+        {step.departureTime && step.arrivalTime && (
           <View style={styles.timeContainer}>
             <Clock size={14} color={Colors.textLight} style={styles.clockIcon} />
             <Text style={styles.timeText}>
@@ -61,6 +84,12 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     marginBottom: 16,
+  },
+  placeholderIndicator: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    opacity: 0.5,
   },
   leftColumn: {
     alignItems: "center",
