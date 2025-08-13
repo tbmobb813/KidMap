@@ -1,7 +1,8 @@
+import { Cloud, Sun, CloudRain, Snowflake, Wind } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Colors from "@/constants/colors";
-import { Cloud, Sun, CloudRain, Snowflake, Wind } from "lucide-react-native";
+
+import { useTheme } from "@/constants/theme";
 import { WeatherInfo } from "@/types/navigation";
 
 type WeatherCardProps = {
@@ -9,6 +10,9 @@ type WeatherCardProps = {
 };
 
 const WeatherCard: React.FC<WeatherCardProps> = ({ weather }) => {
+  const theme = useTheme();
+  const styles = React.useMemo(() => createStyles(theme), [theme]);
+  
   const getWeatherIcon = () => {
     switch (weather.condition.toLowerCase()) {
       case "sunny":
@@ -20,7 +24,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ weather }) => {
       case "snowy":
         return <Snowflake size={24} color="#B0E0E6" />;
       default:
-        return <Wind size={24} color={Colors.textLight} />;
+        return <Wind size={24} color={theme.colors.textSecondary} />;
     }
   };
 
@@ -30,7 +34,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ weather }) => {
       case "cloudy": return "#F0F8FF";
       case "rainy": return "#E6F3FF";
       case "snowy": return "#F0F8FF";
-      default: return Colors.card;
+      default: return theme.colors.surface;
     }
   };
 
@@ -49,36 +53,36 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ weather }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    borderRadius: 12,
-    padding: 16,
-    margin: 16,
-    borderLeftWidth: 4,
-    borderLeftColor: Colors.primary,
+const createStyles = (theme: ReturnType<typeof useTheme>) => StyleSheet.create({
+  condition: {
+    color: theme.colors.textSecondary,
+    fontSize: 14,
+    textTransform: "capitalize",
   },
-  weatherInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
+  container: {
+    borderLeftColor: theme.colors.primary,
+    borderLeftWidth: 4,
+    borderRadius: 12,
+    margin: 16,
+    padding: 16,
+  },
+  recommendation: {
+    color: theme.colors.text,
+    fontSize: 14,
+    fontStyle: "italic",
+  },
+  temperature: {
+    color: theme.colors.text,
+    fontSize: 18,
+    fontWeight: "700",
   },
   textContainer: {
     marginLeft: 12,
   },
-  temperature: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: Colors.text,
-  },
-  condition: {
-    fontSize: 14,
-    color: Colors.textLight,
-    textTransform: "capitalize",
-  },
-  recommendation: {
-    fontSize: 14,
-    color: Colors.text,
-    fontStyle: "italic",
+  weatherInfo: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginBottom: 8,
   },
 });
 

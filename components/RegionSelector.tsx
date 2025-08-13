@@ -1,8 +1,10 @@
+import { MapPin, Check } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
-import Colors from "@/constants/colors";
+
+import { useTheme } from "@/constants/theme";
 import { RegionConfig } from "@/types/region";
-import { MapPin, Check } from "lucide-react-native";
+import { tint } from "@/utils/color";
 
 type RegionSelectorProps = {
   regions: RegionConfig[];
@@ -15,6 +17,8 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({
   selectedRegion,
   onSelectRegion,
 }) => {
+  const theme = useTheme();
+  const styles = React.useMemo(() => createStyles(theme), [theme]);
   const renderRegion = ({ item }: { item: RegionConfig }) => (
     <Pressable
       style={[
@@ -24,7 +28,7 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({
       onPress={() => onSelectRegion(item.id)}
     >
       <View style={styles.regionInfo}>
-        <MapPin size={24} color={Colors.primary} />
+        <MapPin size={24} color={theme.colors.primary} />
         <View style={styles.regionText}>
           <Text style={styles.regionName}>{item.name}</Text>
           <Text style={styles.regionCountry}>{item.country}</Text>
@@ -34,7 +38,7 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({
         </View>
       </View>
       {selectedRegion === item.id && (
-        <Check size={24} color={Colors.success} />
+        <Check size={24} color={theme.colors.success} />
       )}
     </Pressable>
   );
@@ -56,66 +60,66 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (theme: ReturnType<typeof useTheme>) => StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: Colors.text,
-    marginBottom: 8,
-    textAlign: "center",
+  regionCountry: {
+    color: theme.colors.textSecondary,
+    fontSize: 14,
+    marginBottom: 2,
   },
-  subtitle: {
-    fontSize: 16,
-    color: Colors.textLight,
-    textAlign: "center",
-    marginBottom: 24,
-    lineHeight: 22,
+  regionDetails: {
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+  },
+  regionInfo: {
+    alignItems: "center",
+    flexDirection: "row",
+    flex: 1,
+  },
+  regionItem: {
+    alignItems: "center",
+    backgroundColor: theme.colors.surface,
+    borderColor: "transparent",
+    borderRadius: 12,
+    borderWidth: 2,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 12,
+    padding: 16,
+  },
+  regionName: {
+    color: theme.colors.text,
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 4,
+  },
+  regionText: {
+    flex: 1,
+    marginLeft: 16,
   },
   regionsList: {
     paddingBottom: 16,
   },
-  regionItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    borderWidth: 2,
-    borderColor: "transparent",
-  },
   selectedRegion: {
-    borderColor: Colors.primary,
-    backgroundColor: "#F0F4FF",
+    backgroundColor: tint(theme.colors.primary),
+    borderColor: theme.colors.primary,
   },
-  regionInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
+  subtitle: {
+    color: theme.colors.textSecondary,
+    fontSize: 16,
+    lineHeight: 22,
+    marginBottom: 24,
+    textAlign: "center",
   },
-  regionText: {
-    marginLeft: 16,
-    flex: 1,
-  },
-  regionName: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: Colors.text,
-    marginBottom: 4,
-  },
-  regionCountry: {
-    fontSize: 14,
-    color: Colors.textLight,
-    marginBottom: 2,
-  },
-  regionDetails: {
-    fontSize: 12,
-    color: Colors.textLight,
+  title: {
+    color: theme.colors.text,
+    fontSize: 24,
+    fontWeight: "700",
+    marginBottom: 8,
+    textAlign: "center",
   },
 });
 

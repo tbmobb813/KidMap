@@ -1,0 +1,2099 @@
+{
+  "generatedAt": "2025-08-12T20:19:44.814Z",
+  "entries": [
+    {
+      "file": "app/+not_found.tsx",
+      "ruleId": "react/no-unescaped-entities",
+      "line": 11,
+      "message": "`'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`."
+    },
+    {
+      "file": "app/+not_found.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 32,
+      "message": "Color literal: { color: '#2e78b7' }"
+    },
+    {
+      "file": "app/index.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 23,
+      "message": "Color literal: { backgroundColor: '#f0f0f0' }"
+    },
+    {
+      "file": "app/index.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 30,
+      "message": "Color literal: { color: '#424242' }"
+    },
+    {
+      "file": "app/index.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 36,
+      "message": "Color literal: { color: '#2e7d32' }"
+    },
+    {
+      "file": "app/onboarding.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 10,
+      "message": "'router' is assigned a value but never used."
+    },
+    {
+      "file": "app/route/[id].tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 151,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "app/route/[id].tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 245,
+      "message": "Color literal: { backgroundColor: '#F0F4FF' }"
+    },
+    {
+      "file": "app/search.tsx",
+      "ruleId": "react/no-unescaped-entities",
+      "line": 118,
+      "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+    },
+    {
+      "file": "app/search.tsx",
+      "ruleId": "react/no-unescaped-entities",
+      "line": 118,
+      "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+    },
+    {
+      "file": "app/tabs/achievements.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 10,
+      "message": "'screenHeight' is assigned a value but never used."
+    },
+    {
+      "file": "app/tabs/achievements.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 173,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "app/tabs/achievements.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 202,
+      "message": "Color literal: { backgroundColor: '#F0FFF4' }"
+    },
+    {
+      "file": "app/tabs/achievements.tsx",
+      "ruleId": "react-native/no-unused-styles",
+      "line": 233,
+      "message": "Unused style detected: styles.journalList"
+    },
+    {
+      "file": "app/tabs/index.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 2,
+      "message": "'useCallback' is defined but never used."
+    },
+    {
+      "file": "app/tabs/index.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 2,
+      "message": "'useMemo' is defined but never used."
+    },
+    {
+      "file": "app/tabs/index.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 3,
+      "message": "'ListRenderItem' is defined but never used."
+    },
+    {
+      "file": "app/tabs/index.tsx",
+      "ruleId": "import/order",
+      "line": 5,
+      "message": "`@/components/WeatherCard` import should occur after import of `@/components/UserStatsCard`"
+    },
+    {
+      "file": "app/tabs/index.tsx",
+      "ruleId": "import/order",
+      "line": 8,
+      "message": "There should be no empty line within import group"
+    },
+    {
+      "file": "app/tabs/index.tsx",
+      "ruleId": "import/order",
+      "line": 8,
+      "message": "`@/components/VirtualPetCompanion` import should occur after import of `@/components/UserStatsCard`"
+    },
+    {
+      "file": "app/tabs/index.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 57,
+      "message": "'formatters' is assigned a value but never used."
+    },
+    {
+      "file": "app/tabs/index.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 135,
+      "message": "'handleSearch' is assigned a value but never used."
+    },
+    {
+      "file": "app/tabs/map.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 19,
+      "message": "'screenWidth' is assigned a value but never used."
+    },
+    {
+      "file": "app/tabs/map.tsx",
+      "ruleId": "react-hooks/exhaustive-deps",
+      "line": 50,
+      "message": "React Hook useEffect has a missing dependency: 'setOrigin'. Either include it or remove the dependency array."
+    },
+    {
+      "file": "app/tabs/map.tsx",
+      "ruleId": "react-native/no-unused-styles",
+      "line": 193,
+      "message": "Unused style detected: styles.loadingText"
+    },
+    {
+      "file": "app/tabs/map.tsx",
+      "ruleId": "react-native/no-unused-styles",
+      "line": 251,
+      "message": "Unused style detected: styles.routesContainer"
+    },
+    {
+      "file": "app/tabs/map.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 260,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "app/tabs/settings.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 48,
+      "message": "'authenticateParentMode' is assigned a value but never used."
+    },
+    {
+      "file": "app/tabs/settings.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 364,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "app/tabs/settings.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 396,
+      "message": "Color literal: { backgroundColor: '#EAEAEA' }"
+    },
+    {
+      "file": "app/tabs/settings.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 449,
+      "message": "Color literal: { backgroundColor: '#F0F4FF' }"
+    },
+    {
+      "file": "app/tabs/transit.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 11,
+      "message": "'screenHeight' is assigned a value but never used."
+    },
+    {
+      "file": "app/tabs/transit.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 220,
+      "message": "Color literal: { backgroundColor: '#FFF9E6' }"
+    },
+    {
+      "file": "app/tabs/transit.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 267,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "app/tabs/transit.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 335,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "app/tabs/transit.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 404,
+      "message": "Color literal: { backgroundColor: '#F0F4FF' }"
+    },
+    {
+      "file": "components/AccessibilitySettings.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 136,
+      "message": "Color literal: { backgroundColor: '#F0F4FF' }"
+    },
+    {
+      "file": "components/AccessibleButton.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 94,
+      "message": "Color literal: { backgroundColor: 'transparent' }"
+    },
+    {
+      "file": "components/AccessibleButton.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 110,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/AccessibleButton.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 118,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/AchievementBadge.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 3,
+      "message": "'View' is defined but never used."
+    },
+    {
+      "file": "components/AchievementBadge.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 75,
+      "message": "Color literal: { shadowColor: '#000' }"
+    },
+    {
+      "file": "components/AIJourneyCompanion.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 22,
+      "message": "'currentLocation' is defined but never used. Allowed unused args must match /^_/u."
+    },
+    {
+      "file": "components/AIJourneyCompanion.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 26,
+      "message": "'messages' is assigned a value but never used."
+    },
+    {
+      "file": "components/AIJourneyCompanion.tsx",
+      "ruleId": "react-hooks/exhaustive-deps",
+      "line": 38,
+      "message": "React Hook useEffect has missing dependencies: 'generateJourneyContent' and 'startCompanionAnimation'. Either include them or remove the dependency array."
+    },
+    {
+      "file": "components/AIJourneyCompanion.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 261,
+      "message": "Color literal: { backgroundColor: '#FFFFFF', shadowColor: '#000' }"
+    },
+    {
+      "file": "components/ArrivalAlert.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 68,
+      "message": "Color literal: { backgroundColor: '#FFF9E6', shadowColor: '#000' }"
+    },
+    {
+      "file": "components/CategoryButton.tsx",
+      "ruleId": "react-native/no-inline-styles",
+      "line": 138,
+      "message": "Inline style: { fontSize: \"size === 'small' ? 12 : size === 'medium' ? 14 : 16\" }"
+    },
+    {
+      "file": "components/CategoryButton.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 150,
+      "message": "Color literal: { shadowColor: '#000' }"
+    },
+    {
+      "file": "components/CategoryButton.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 168,
+      "message": "Color literal: { color: '#FFF', textShadowColor: 'rgba(0,0,0,0.3)' }"
+    },
+    {
+      "file": "components/CategoryManagement.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 22,
+      "message": "'categories' is assigned a value but never used."
+    },
+    {
+      "file": "components/CategoryManagement.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 83,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "components/CategoryManagement.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 108,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "components/CategoryManagement.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 131,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "components/CategoryManagement.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 144,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "components/CategoryManagement.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 386,
+      "message": "Color literal: { backgroundColor: '#34C759' }"
+    },
+    {
+      "file": "components/CategoryManagement.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 424,
+      "message": "Color literal: { borderColor: 'transparent' }"
+    },
+    {
+      "file": "components/CategoryManagement.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 438,
+      "message": "Color literal: { backgroundColor: '#FF3B30' }"
+    },
+    {
+      "file": "components/CategoryManagement.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 452,
+      "message": "Color literal: { borderColor: 'transparent' }"
+    },
+    {
+      "file": "components/CityManagement.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 61,
+      "message": "'regionId' is defined but never used. Allowed unused args must match /^_/u."
+    },
+    {
+      "file": "components/CityManagement.tsx",
+      "ruleId": "react/no-unescaped-entities",
+      "line": 206,
+      "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+    },
+    {
+      "file": "components/CityManagement.tsx",
+      "ruleId": "react/no-unescaped-entities",
+      "line": 206,
+      "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+    },
+    {
+      "file": "components/CityManagement.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 328,
+      "message": "Color literal: { backgroundColor: '#F0F4FF' }"
+    },
+    {
+      "file": "components/CityManagement.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 351,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/CityManagement.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 374,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/CityManagement.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 383,
+      "message": "Color literal: { backgroundColor: '#FFF0F0' }"
+    },
+    {
+      "file": "components/CityManagement.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 481,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/DirectionStep.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 1,
+      "message": "'ArrowRight' is defined but never used."
+    },
+    {
+      "file": "components/EmptyState.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 45,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/ErrorBoundary.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 85,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/FunFactCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 36,
+      "message": "Color literal: { backgroundColor: '#F0FFF4', shadowColor: '#000' }"
+    },
+    {
+      "file": "components/LiveArrivalsCard.tsx",
+      "ruleId": "react-hooks/exhaustive-deps",
+      "line": 43,
+      "message": "React Hook useEffect has a missing dependency: 'alertedArrivals'. Either include it or remove the dependency array."
+    },
+    {
+      "file": "components/LiveArrivalsCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 149,
+      "message": "Color literal: { backgroundColor: 'transparent' }"
+    },
+    {
+      "file": "components/LiveArrivalsCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 166,
+      "message": "Color literal: { shadowColor: '#000' }"
+    },
+    {
+      "file": "components/LiveArrivalsCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 247,
+      "message": "Color literal: { backgroundColor: '#FFF9E6' }"
+    },
+    {
+      "file": "components/MapPlaceholder.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 3,
+      "message": "'Dimensions' is defined but never used."
+    },
+    {
+      "file": "components/MapPlaceholder.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 33,
+      "message": "Color literal: { backgroundColor: '#FFFFFF', shadowColor: '#000' }"
+    },
+    {
+      "file": "components/NetworkStatusBar.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 1,
+      "message": "'Wifi' is defined but never used."
+    },
+    {
+      "file": "components/NetworkStatusBar.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 45,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/NotificationStatusCard.tsx",
+      "ruleId": "react-native/no-unused-styles",
+      "line": 115,
+      "message": "Unused style detected: styles.good"
+    },
+    {
+      "file": "components/NotificationStatusCard.tsx",
+      "ruleId": "react-native/no-unused-styles",
+      "line": 150,
+      "message": "Unused style detected: styles.warning"
+    },
+    {
+      "file": "components/OfflineIndicator.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 1,
+      "message": "'Wifi' is defined but never used."
+    },
+    {
+      "file": "components/OfflineIndicator.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 42,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/OnboardingFlow.tsx",
+      "ruleId": "react/no-unescaped-entities",
+      "line": 52,
+      "message": "`'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`."
+    },
+    {
+      "file": "components/OnboardingFlow.tsx",
+      "ruleId": "react/no-unescaped-entities",
+      "line": 189,
+      "message": "`'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`."
+    },
+    {
+      "file": "components/OnboardingFlow.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 218,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/OnboardingFlow.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 242,
+      "message": "Color literal: { borderColor: 'transparent' }"
+    },
+    {
+      "file": "components/OnboardingFlow.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 288,
+      "message": "Color literal: { backgroundColor: '#F0F4FF' }"
+    },
+    {
+      "file": "components/OnboardingFlow.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 296,
+      "message": "Color literal: { backgroundColor: '#F0FFF4' }"
+    },
+    {
+      "file": "components/OnboardingFlow.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 319,
+      "message": "Color literal: { borderColor: 'transparent' }"
+    },
+    {
+      "file": "components/OptimizedImage.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 11,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "components/PhotoCheckInButton.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 4,
+      "message": "'View' is defined but never used."
+    },
+    {
+      "file": "components/PhotoCheckInButton.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 126,
+      "message": "Color literal: { shadowColor: '#000' }"
+    },
+    {
+      "file": "components/PhotoCheckInButton.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 147,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/PhotoCheckInHistory.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 94,
+      "message": "Color literal: { shadowColor: '#000' }"
+    },
+    {
+      "file": "components/PhotoCheckInHistory.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 174,
+      "message": "Color literal: { backgroundColor: '#FEE2E2' }"
+    },
+    {
+      "file": "components/PhotoCheckInHistory.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 177,
+      "message": "Color literal: { color: '#EF4444' }"
+    },
+    {
+      "file": "components/PhotoCheckInHistory.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 192,
+      "message": "Color literal: { backgroundColor: '#DCFCE7' }"
+    },
+    {
+      "file": "components/PhotoCheckInHistory.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 195,
+      "message": "Color literal: { color: '#10B981' }"
+    },
+    {
+      "file": "components/PinAuthentication.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 61,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "components/PinAuthentication.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 233,
+      "message": "Color literal: { backgroundColor: '#F0F4FF' }"
+    },
+    {
+      "file": "components/PinAuthentication.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 245,
+      "message": "Color literal: { shadowColor: '#000' }"
+    },
+    {
+      "file": "components/PinAuthentication.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 258,
+      "message": "Color literal: { backgroundColor: 'transparent' }"
+    },
+    {
+      "file": "components/PinAuthentication.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 312,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/PlaceCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 65,
+      "message": "Color literal: { shadowColor: '#000' }"
+    },
+    {
+      "file": "components/PlaceCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 78,
+      "message": "Color literal: { backgroundColor: '#EEF2FF' }"
+    },
+    {
+      "file": "components/PlaceCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 93,
+      "message": "Color literal: { backgroundColor: '#EAEAEA' }"
+    },
+    {
+      "file": "components/RegionalFunFactCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 42,
+      "message": "Color literal: { backgroundColor: '#F0FFF4', shadowColor: '#000' }"
+    },
+    {
+      "file": "components/RegionalTransitCard.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 5,
+      "message": "'TransitStepIndicator' is defined but never used."
+    },
+    {
+      "file": "components/RegionSelector.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 79,
+      "message": "Color literal: { borderColor: 'transparent' }"
+    },
+    {
+      "file": "components/RegionSelector.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 103,
+      "message": "Color literal: { backgroundColor: '#F0F4FF' }"
+    },
+    {
+      "file": "components/RouteCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 83,
+      "message": "Color literal: { shadowColor: '#000' }"
+    },
+    {
+      "file": "components/RouteCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 104,
+      "message": "Color literal: { backgroundColor: '#EAEAEA' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-inline-styles",
+      "line": 50,
+      "message": "Inline style: { backgroundColor: \"isMonitoring ? '#10B981' : '#F59E0B'\" }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 50,
+      "message": "Color literal: { backgroundColor: \"isMonitoring ? '#10B981' : '#F59E0B'\" }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-inline-styles",
+      "line": 91,
+      "message": "Inline style: { backgroundColor: '#10B981' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 91,
+      "message": "Color literal: { backgroundColor: '#10B981' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-inline-styles",
+      "line": 113,
+      "message": "Inline style: { backgroundColor: \"isMonitoring ? '#EF4444' : '#10B981'\" }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 113,
+      "message": "Color literal: { backgroundColor: \"isMonitoring ? '#EF4444' : '#10B981'\" }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 127,
+      "message": "Color literal: { backgroundColor: '#FFFFFF', shadowColor: '#000' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 148,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 153,
+      "message": "Color literal: { borderTopColor: '#E5E7EB' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 166,
+      "message": "Color literal: { backgroundColor: '#F9FAFB' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 174,
+      "message": "Color literal: { color: '#374151' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 180,
+      "message": "Color literal: { backgroundColor: '#FEF3C7' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 188,
+      "message": "Color literal: { color: '#374151' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 197,
+      "message": "Color literal: { color: '#6B7280' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 203,
+      "message": "Color literal: { color: '#1F2937' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 213,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 218,
+      "message": "Color literal: { color: '#6B7280' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 224,
+      "message": "Color literal: { color: '#6B7280' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 229,
+      "message": "Color literal: { color: '#1F2937' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 236,
+      "message": "Color literal: { color: '#92400E' }"
+    },
+    {
+      "file": "components/SafeZoneStatusCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 252,
+      "message": "Color literal: { color: '#374151' }"
+    },
+    {
+      "file": "components/SearchBar.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 44,
+      "message": "Color literal: { shadowColor: '#000' }"
+    },
+    {
+      "file": "components/SearchWithSuggestions.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 108,
+      "message": "Color literal: { shadowColor: '#000' }"
+    },
+    {
+      "file": "components/SmartNotification.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 2,
+      "message": "'useState' is defined but never used."
+    },
+    {
+      "file": "components/SmartNotification.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 2,
+      "message": "'useEffect' is defined but never used."
+    },
+    {
+      "file": "components/SmartNotification.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 88,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/SmartNotification.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 93,
+      "message": "Color literal: { shadowColor: '#000' }"
+    },
+    {
+      "file": "components/SmartRouteSuggestions.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 19,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "components/SmartRouteSuggestions.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 33,
+      "message": "'currentLocation' is defined but never used. Allowed unused args must match /^_/u."
+    },
+    {
+      "file": "components/SmartRouteSuggestions.tsx",
+      "ruleId": "react-hooks/exhaustive-deps",
+      "line": 43,
+      "message": "React Hook useEffect has a missing dependency: 'generateSmartSuggestions'. Either include it or remove the dependency array."
+    },
+    {
+      "file": "components/SmartRouteSuggestions.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 226,
+      "message": "Color literal: { shadowColor: '#000' }"
+    },
+    {
+      "file": "components/SystemHealthMonitor.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 1,
+      "message": "'Wifi' is defined but never used."
+    },
+    {
+      "file": "components/SystemHealthMonitor.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 1,
+      "message": "'WifiOff' is defined but never used."
+    },
+    {
+      "file": "components/SystemHealthMonitor.tsx",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 54,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "components/SystemHealthMonitor.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 75,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "components/SystemHealthMonitor.tsx",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 88,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "components/SystemHealthMonitor.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 111,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "components/SystemHealthMonitor.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 122,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "components/SystemHealthMonitor.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 123,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "components/SystemHealthMonitor.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 123,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "components/SystemHealthMonitor.tsx",
+      "ruleId": "react-hooks/exhaustive-deps",
+      "line": 149,
+      "message": "React Hook useEffect has a missing dependency: 'runHealthChecks'. Either include it or remove the dependency array."
+    },
+    {
+      "file": "components/Toast.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 28,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "components/Toast.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 57,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "components/Toast.tsx",
+      "ruleId": "no-empty",
+      "line": 59,
+      "message": "Empty block statement."
+    },
+    {
+      "file": "components/Toast.tsx",
+      "ruleId": "react-hooks/exhaustive-deps",
+      "line": 70,
+      "message": "React Hook useEffect has missing dependencies: 'duration', 'fadeAnim', 'hideToast', 'message', 'slideAnim', and 'type'. Either include them or remove the dependency array."
+    },
+    {
+      "file": "components/Toast.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 111,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "components/Toast.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 134,
+      "message": "Color literal: { shadowColor: '#000' }"
+    },
+    {
+      "file": "components/TransitStepIndicator.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 93,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/TravelModeSelector.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 89,
+      "message": "Color literal: { backgroundColor: '#F0F4FF' }"
+    },
+    {
+      "file": "components/UserStatsCard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 78,
+      "message": "Color literal: { shadowColor: '#000' }"
+    },
+    {
+      "file": "components/VirtualPetCompanion.tsx",
+      "ruleId": "react-hooks/exhaustive-deps",
+      "line": 48,
+      "message": "React Hook useEffect has a missing dependency: 'startAnimations'. Either include it or remove the dependency array."
+    },
+    {
+      "file": "components/VirtualPetCompanion.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 321,
+      "message": "Color literal: { shadowColor: '#000' }"
+    },
+    {
+      "file": "components/VirtualPetCompanion.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 352,
+      "message": "Color literal: { backgroundColor: 'rgba(0, 0, 0, 0.5)' }"
+    },
+    {
+      "file": "components/VoiceNavigation.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 27,
+      "message": "'onVoiceCommand' is defined but never used. Allowed unused args must match /^_/u."
+    },
+    {
+      "file": "components/VoiceNavigation.tsx",
+      "ruleId": "react/no-unescaped-entities",
+      "line": 179,
+      "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+    },
+    {
+      "file": "components/VoiceNavigation.tsx",
+      "ruleId": "react/no-unescaped-entities",
+      "line": 179,
+      "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+    },
+    {
+      "file": "components/VoiceNavigation.tsx",
+      "ruleId": "react/no-unescaped-entities",
+      "line": 180,
+      "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+    },
+    {
+      "file": "components/VoiceNavigation.tsx",
+      "ruleId": "react/no-unescaped-entities",
+      "line": 180,
+      "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+    },
+    {
+      "file": "components/VoiceNavigation.tsx",
+      "ruleId": "react/no-unescaped-entities",
+      "line": 181,
+      "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+    },
+    {
+      "file": "components/VoiceNavigation.tsx",
+      "ruleId": "react/no-unescaped-entities",
+      "line": 181,
+      "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+    },
+    {
+      "file": "components/VoiceNavigation.tsx",
+      "ruleId": "react/no-unescaped-entities",
+      "line": 182,
+      "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+    },
+    {
+      "file": "components/VoiceNavigation.tsx",
+      "ruleId": "react/no-unescaped-entities",
+      "line": 182,
+      "message": "`\"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`."
+    },
+    {
+      "file": "components/VoiceNavigation.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 196,
+      "message": "Color literal: { color: '#FFFFFF' }"
+    },
+    {
+      "file": "components/VoiceNavigation.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 206,
+      "message": "Color literal: { backgroundColor: '#F9F9F9' }"
+    },
+    {
+      "file": "components/VoiceNavigation.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 254,
+      "message": "Color literal: { backgroundColor: '#F0F4FF' }"
+    },
+    {
+      "file": "constants/colors.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 108,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "Dangerfile.js",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 2,
+      "message": "'fail' is assigned a value but never used."
+    },
+    {
+      "file": "Dangerfile.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 2,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "eslint.config.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 4,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "eslint.config.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 5,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "eslint.config.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 20,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "eslint.config.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 24,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "eslint.config.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 25,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "eslint.config.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 26,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "eslint.config.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 27,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "eslint.config.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 28,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "hooks/useLocation.ts",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 37,
+      "message": "'error' is defined but never used. Allowed unused args must match /^_/u."
+    },
+    {
+      "file": "metro.config.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 1,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "mocks/transit.ts",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 1,
+      "message": "'TransitStep' is defined but never used."
+    },
+    {
+      "file": "scripts/build-production.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 3,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "scripts/build-production.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 4,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "scripts/build-production.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 5,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "scripts/build-production.js",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 14,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "scripts/build-production.js",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 23,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "scripts/build-production.js",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 33,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "scripts/build-production.js",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 43,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "scripts/build-production.js",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 52,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "scripts/dependency-manager.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 1,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "scripts/dependency-manager.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 2,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "scripts/dependency-manager.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 3,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "scripts/dependency-manager.js",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 28,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "scripts/dependency-manager.js",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 45,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "scripts/dependency-manager.js",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 56,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "scripts/dependency-manager.js",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 96,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "scripts/generate-eslint-baseline.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 2,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "scripts/generate-eslint-baseline.js",
+      "ruleId": "import/order",
+      "line": 2,
+      "message": "There should be at least one empty line between import groups"
+    },
+    {
+      "file": "scripts/generate-eslint-baseline.js",
+      "ruleId": "import/order",
+      "line": 2,
+      "message": "`eslint` import should occur after import of `path`"
+    },
+    {
+      "file": "scripts/generate-eslint-baseline.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 3,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "scripts/generate-eslint-baseline.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 4,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "scripts/lint-ci.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 2,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "scripts/lint-ci.js",
+      "ruleId": "import/order",
+      "line": 2,
+      "message": "There should be at least one empty line between import groups"
+    },
+    {
+      "file": "scripts/lint-ci.js",
+      "ruleId": "import/order",
+      "line": 2,
+      "message": "`eslint` import should occur after import of `path`"
+    },
+    {
+      "file": "scripts/lint-ci.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 3,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "scripts/lint-ci.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 4,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "scripts/lint-summary.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 2,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "scripts/pretypecheck-clean.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 4,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "scripts/pretypecheck-clean.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 5,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "src/core/validation/helpers.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 61,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "src/core/validation/helpers.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 62,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "src/core/validation/helpers.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 63,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "src/core/validation/helpers.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 66,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "src/core/validation/helpers.ts",
+      "ruleId": "@typescript-eslint/no-unsafe-function-type",
+      "line": 96,
+      "message": "The `Function` type accepts any function-like value.\nPrefer explicitly defining any function parameters and return type."
+    },
+    {
+      "file": "src/core/validation/helpers.ts",
+      "ruleId": "@typescript-eslint/no-unsafe-function-type",
+      "line": 96,
+      "message": "The `Function` type accepts any function-like value.\nPrefer explicitly defining any function parameters and return type."
+    },
+    {
+      "file": "src/core/validation/safetySchemas.ts",
+      "ruleId": "no-useless-escape",
+      "line": 17,
+      "message": "Unnecessary escape character: \\+."
+    },
+    {
+      "file": "src/core/validation/safetySchemas.ts",
+      "ruleId": "no-useless-escape",
+      "line": 17,
+      "message": "Unnecessary escape character: \\(."
+    },
+    {
+      "file": "src/core/validation/safetySchemas.ts",
+      "ruleId": "no-useless-escape",
+      "line": 17,
+      "message": "Unnecessary escape character: \\)."
+    },
+    {
+      "file": "src/modules/safety/components/ParentDashboard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 20,
+      "message": "Color literal: { backgroundColor: '#4A80F0' }"
+    },
+    {
+      "file": "src/modules/safety/components/ParentDashboard.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 21,
+      "message": "Color literal: { color: '#fff' }"
+    },
+    {
+      "file": "src/modules/safety/components/SafetyPanel.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 121,
+      "message": "Color literal: { color: '#FFF' }"
+    },
+    {
+      "file": "src/modules/safety/components/SafeZoneIndicator.tsx",
+      "ruleId": "react-native/no-color-literals",
+      "line": 17,
+      "message": "Color literal: { color: '#4B5563' }"
+    },
+    {
+      "file": "src/modules/safety/stores/parentalStore.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 81,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "src/services/routeService.ts",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 20,
+      "message": "'options' is defined but never used. Allowed unused args must match /^_/u."
+    },
+    {
+      "file": "src/shared/navigation/nav.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 31,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "src/shared/navigation/nav.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 33,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "src/shared/navigation/nav.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 34,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "src/shared/navigation/nav.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 39,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "src/shared/navigation/nav.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 41,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "src/shared/navigation/nav.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 42,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "src/shared/navigation/nav.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 45,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "src/shared/navigation/nav.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 50,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "src/shared/navigation/nav.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 58,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "src/shared/navigation/nav.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 60,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "src/shared/navigation/nav.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 61,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "stores/categoryStore.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 159,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "stores/categoryStore.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 175,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "stores/categoryStore.ts",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 254,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "stores/gamificationStore.ts",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 112,
+      "message": "'from' is defined but never used. Allowed unused args must match /^_/u."
+    },
+    {
+      "file": "stores/gamificationStore.ts",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 112,
+      "message": "'to' is defined but never used. Allowed unused args must match /^_/u."
+    },
+    {
+      "file": "stores/navigationStore.ts",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 5,
+      "message": "'sampleRoutes' is defined but never used."
+    },
+    {
+      "file": "stores/navigationStore.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 61,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "stores/navigationStore.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 105,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "stores/navigationStore.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 105,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "stores/regionStore.ts",
+      "ruleId": "import/order",
+      "line": 16,
+      "message": "`@/config/regions/seattle` import should occur before import of `@/config/regions/tokyo`"
+    },
+    {
+      "file": "utils/accessibility.ts",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 13,
+      "message": "'liveRegionPolite' is assigned a value but never used."
+    },
+    {
+      "file": "utils/accessibility.ts",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 14,
+      "message": "'liveRegionAssertive' is assigned a value but never used."
+    },
+    {
+      "file": "utils/accessibility.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 69,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/analytics.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 3,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/analytics.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 11,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/analytics.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 27,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/analytics.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 34,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/analytics.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 69,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/api.ts",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 2,
+      "message": "'Platform' is defined but never used."
+    },
+    {
+      "file": "utils/api.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 86,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/api.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 93,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/api.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 142,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/api.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 191,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/deepLinking.ts",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 21,
+      "message": "'_rest' is assigned a value but never used."
+    },
+    {
+      "file": "utils/deepLinking.ts",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 24,
+      "message": "'placeId' is assigned a value but never used."
+    },
+    {
+      "file": "utils/errorHandling.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 26,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/errorHandling.ts",
+      "ruleId": "no-case-declarations",
+      "line": 126,
+      "message": "Unexpected lexical declaration in case block."
+    },
+    {
+      "file": "utils/errorHandling.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 194,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/errorHandling.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 198,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/errorHandling.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 345,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/errorHandling.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 392,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/errorHandling.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 436,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/invariant.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 2,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/logger.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 16,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/logger.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 25,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/logger.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 36,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/logger.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 90,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/logger.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 94,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/logger.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 98,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/logger.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 102,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/logger.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 144,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/logger.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 145,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/logger.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 146,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/logger.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 147,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/notification.ts",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 40,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "utils/notification.ts",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 76,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "utils/notification.ts",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 97,
+      "message": "'Notifications' is assigned a value but never used."
+    },
+    {
+      "file": "utils/notification.ts",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 97,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "utils/notification.ts",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 101,
+      "message": "'error' is defined but never used."
+    },
+    {
+      "file": "utils/persistence.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 8,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/persistence.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 9,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/persistence.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 10,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/persistence.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 11,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/persistence.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 13,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/regionUtils.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 56,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/transitDataUpdater.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 12,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/transitDataUpdater.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 13,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/transitDataUpdater.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 14,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "utils/transitDataUpdater.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 133,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "webpack.config.js",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 1,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "_tests_/announceAPI.test.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 8,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/announceAPI.test.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 56,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/directionStep.test.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 7,
+      "message": "'baseStep' is assigned a value but never used."
+    },
+    {
+      "file": "_tests_/favoritesList.test.tsx",
+      "ruleId": "react/display-name",
+      "line": 35,
+      "message": "Component definition is missing display name"
+    },
+    {
+      "file": "_tests_/favoritesList.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 35,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/favoritesList.test.tsx",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 36,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "_tests_/favoritesList.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 44,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/persistence.test.ts",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 6,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "_tests_/persistence.test.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 16,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/persistence.test.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 22,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/persistence.test.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 27,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routeDetail.test.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 29,
+      "message": "'message' is defined but never used. Allowed unused args must match /^_/u."
+    },
+    {
+      "file": "_tests_/routeDetail.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 29,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routeDetail.test.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 30,
+      "message": "'currentStep' is defined but never used. Allowed unused args must match /^_/u."
+    },
+    {
+      "file": "_tests_/routeDetail.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 30,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routeDetail.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 32,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routeDetail.test.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 33,
+      "message": "'step' is defined but never used. Allowed unused args must match /^_/u."
+    },
+    {
+      "file": "_tests_/routeDetail.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 33,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routeDetail.test.tsx",
+      "ruleId": "@typescript-eslint/no-unused-vars",
+      "line": 34,
+      "message": "'onDismiss' is defined but never used. Allowed unused args must match /^_/u."
+    },
+    {
+      "file": "_tests_/routeDetail.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 34,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routeDetail.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 43,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routeDetail.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 44,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routesCacheMetrics.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 8,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routesCacheMetrics.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 9,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routesCacheMetrics.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 10,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routesCaching.test.tsx",
+      "ruleId": "import/order",
+      "line": 5,
+      "message": "`react` import should occur before import of `@/services/routeService`"
+    },
+    {
+      "file": "_tests_/routesCaching.test.tsx",
+      "ruleId": "import/order",
+      "line": 6,
+      "message": "`@testing-library/react-native` import should occur before import of `@/services/routeService`"
+    },
+    {
+      "file": "_tests_/routesCaching.test.tsx",
+      "ruleId": "import/order",
+      "line": 7,
+      "message": "`@tanstack/react-query` import should occur before import of `@/services/routeService`"
+    },
+    {
+      "file": "_tests_/routesCaching.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 16,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routesCaching.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 25,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routesCaching.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 26,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routesCaching.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 27,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routeService.test.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 4,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routeService.test.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 5,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/routeService.test.ts",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 6,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/safety.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 6,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/safety.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 7,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/safety.test.tsx",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 18,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "_tests_/safety.test.tsx",
+      "ruleId": "react-hooks/rules-of-hooks",
+      "line": 22,
+      "message": "React Hook \"React.useState\" is called in function \"default\" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word \"use\"."
+    },
+    {
+      "file": "_tests_/safety.test.tsx",
+      "ruleId": "react-hooks/rules-of-hooks",
+      "line": 23,
+      "message": "React Hook \"React.useEffect\" is called in function \"default\" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word \"use\"."
+    },
+    {
+      "file": "_tests_/safety.test.tsx",
+      "ruleId": "@typescript-eslint/no-explicit-any",
+      "line": 40,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "_tests_/toastAccessibility.test.tsx",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 21,
+      "message": "A `require()` style import is forbidden."
+    },
+    {
+      "file": "_tests_/voiceNavigation.test.tsx",
+      "ruleId": "@typescript-eslint/no-require-imports",
+      "line": 40,
+      "message": "A `require()` style import is forbidden."
+    }
+  ]
+}

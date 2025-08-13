@@ -24,10 +24,12 @@ Caching Behavior: Identical query keys reuse cache (validated by tests). Metrics
 
 1. User sets origin/destination (and optionally travel preferences) in navigation store.
 2. `useRoutesQuery` composes a composite key:
-	`[ 'routes', originId, destinationId, mode, travelMode, avoidHighways, avoidTolls, accessibilityMode ]`.
+ `[ 'routes', originId, destinationId, mode, travelMode, avoidHighways, avoidTolls, accessibilityMode ]`.
 3. React Query lookup:
-	- Cache hit (fresh): data returned synchronously, `routes_cache_hit:<key>` mark recorded.
-	- Cache miss/stale: service call executed; upon completion `routes_cache_miss:<key>` mark recorded.
+
+- Cache hit (fresh): data returned synchronously, `routes_cache_hit:<key>` mark recorded.
+- Cache miss/stale: service call executed; upon completion `routes_cache_miss:<key>` mark recorded.
+
 4. Service (`fetchRoutes`) simulates latency, transforms base sample routes per travel mode, increments a module-scoped `fetchCount` metric.
 5. Hook instrumentation marks start/end + measures duration: `routes_fetch_start:<key>`, `routes_fetch_end:<key>`, `routes_fetch_duration:<key>`.
 6. Map screen effect records first paint: `routes_first_paint:<key>` and measure `routes_time_to_first_paint:<key>` (from initial fetch start).

@@ -2,8 +2,8 @@ import { auditTouchTarget, MIN_TOUCH_TARGET } from '@/utils/touchTargetAudit';
 
 describe('touchTargetAudit', () => {
     const originalEnv = process.env.NODE_ENV;
-    beforeAll(() => { process.env.NODE_ENV = 'test'; });
-    afterAll(() => { process.env.NODE_ENV = originalEnv; });
+    beforeAll(() => { Object.defineProperty(process.env, 'NODE_ENV', { value: 'test', configurable: true }); });
+    afterAll(() => { Object.defineProperty(process.env, 'NODE_ENV', { value: originalEnv, configurable: true }); });
 
     it('passes components meeting minimum size', () => {
         const result = auditTouchTarget({ name: 'BigButton', width: MIN_TOUCH_TARGET, height: MIN_TOUCH_TARGET });

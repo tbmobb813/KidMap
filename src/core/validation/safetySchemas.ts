@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { LocationSchema } from './baseSchemas';
 
 export const SafeZoneSchema = z.object({
@@ -13,7 +14,8 @@ export const EmergencyContactSchema = z.object({
     id: z.string().min(1, 'Contact ID is required'),
     name: z.string().min(1, 'Contact name is required').max(150, 'Contact name exceeds 150 characters'),
     phone: z.string().min(1, 'Contact phone number is required').refine(v => {
-        const phoneRegex = /^[\+]?[1-9][\d\s\-\(\)]{7,15}$/;
+        // Basic international phone pattern: optional +, starting 1-9, 7-15 digits/space/()-
+        const phoneRegex = /^[+]?([1-9])[\d\s\-()]{7,15}$/;
         return phoneRegex.test(v.replace(/\s/g, ''));
     }, 'Phone number format is invalid'),
     relationship: z.string().min(1, 'Contact relationship is required'),

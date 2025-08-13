@@ -15,4 +15,12 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+echo "[husky] Checking for NEW ESLint issues against baseline..."
+npm run lint:ci --silent
+if [ $? -ne 0 ]; then
+  echo "[husky] New lint issues detected (not in baseline); aborting commit." >&2
+  echo "Run: npm run lint:summary or npm run lint to inspect, then fix or update baseline intentionally." >&2
+  exit 1
+fi
+
 echo "[husky] Pre-commit checks passed."

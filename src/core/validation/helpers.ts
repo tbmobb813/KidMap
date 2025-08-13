@@ -77,7 +77,7 @@ export function validateAndSanitizeFormData(
             continue;
         }
         if (typeof value === 'string') {
-            let sanitized = sanitizeInput(value, rules.maxLength);
+            const sanitized = sanitizeInput(value, rules.maxLength);
             if (rules.minLength && sanitized.length < rules.minLength) errors.push(`${key} must be at least ${rules.minLength} characters`);
             if (rules.maxLength && sanitized.length > rules.maxLength) warnings.push(`${key} was truncated to ${rules.maxLength} characters`);
             if (rules.pattern && !rules.pattern.test(sanitized)) errors.push(`${key} format is invalid`);
@@ -93,7 +93,12 @@ export function validateAndSanitizeFormData(
 /**
  * Deprecated: Prefer structured logging wrappers elsewhere.
  */
-export function logValidationResult(context: string, result: ValidationResult, log: { warn: Function; debug: Function }) {
+export interface ValidationLogger {
+    warn?: (message: string, meta?: any) => void;
+    debug?: (message: string, meta?: any) => void;
+}
+
+export function logValidationResult(context: string, result: ValidationResult, log: ValidationLogger) {
     if (!result.isValid) log.warn?.(`Validation failed for ${context}`, { errors: result.errors });
     if (result.warnings?.length) log.warn?.(`Validation warnings for ${context}`, { warnings: result.warnings });
     if (result.isValid && !result.warnings?.length) log.debug?.(`Validation passed for ${context}`);

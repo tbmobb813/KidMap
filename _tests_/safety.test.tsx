@@ -1,11 +1,10 @@
-import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
+import React from 'react';
 import { act } from 'react-test-renderer';
 
 // --- Mocks (must be declared before importing hook) ---
 let mockSafeZones: any[] = [];
 let setLocationState: ((loc: any) => void) | null = null;
-let currentLocation = { latitude: 0, longitude: 0, error: null };
 
 jest.mock('@/modules/safety/stores/parentalStore', () => ({
   useParentalStore: () => ({
@@ -16,29 +15,27 @@ jest.mock('@/modules/safety/stores/parentalStore', () => ({
 
 jest.mock('@/hooks/useLocation', () => {
   const React = require('react');
-  return {
-    __esModule: true,
-    default: () => {
-      const [loc, setLoc] = React.useState(currentLocation);
-      React.useEffect(() => { setLocationState = setLoc; }, []);
-      return {
-        location: loc,
-        hasLocation: !loc.error,
-        loading: false,
-        safeCoordinates: () => (!loc.error ? { latitude: loc.latitude, longitude: loc.longitude } : undefined),
-      };
-    },
-  };
+  function useLocationMock() {
+    const [loc, setLoc] = React.useState({ latitude: 0, longitude: 0, error: null });
+    React.useEffect(() => { setLocationState = setLoc; }, []);
+    return {
+      location: loc,
+      hasLocation: !loc.error,
+      loading: false,
+      safeCoordinates: () => (!loc.error ? { latitude: loc.latitude, longitude: loc.longitude } : undefined),
+    };
+  }
+  return { __esModule: true, default: useLocationMock };
 });
 
 // Now import the hook after mocks so they take effect
-// eslint-disable-next-line import/first
+ 
 import { useSafeZoneMonitor } from '@/modules/safety/hooks/useSafeZoneMonitor';
 
 // Helper to update mock location with re-render
 const updateLocation = (lat: number, lon: number, error: string | null = null) => {
-  currentLocation = { latitude: lat, longitude: lon, error } as any;
-  act(() => { setLocationState?.(currentLocation); });
+  const newLocation = { latitude: lat, longitude: lon, error } as any;
+  act(() => { setLocationState?.(newLocation); });
 };
 
 const TestHarness: React.FC<{ onUpdate: (m: ReturnType<typeof useSafeZoneMonitor>) => void }> = ({ onUpdate }) => {

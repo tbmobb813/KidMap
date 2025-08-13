@@ -1,8 +1,10 @@
+import { Image } from "expo-image";
+import { ImageOff } from "lucide-react-native";
 import React, { useState } from "react";
 import { StyleSheet, View, ActivityIndicator } from "react-native";
-import { Image } from "expo-image";
-import Colors from "@/constants/colors";
-import { ImageOff } from "lucide-react-native";
+
+import { useTheme } from "@/constants/theme";
+
 
 type OptimizedImageProps = {
   source: { uri: string } | number;
@@ -35,10 +37,13 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     onError?.();
   };
 
+  const theme = useTheme();
+  const styles = React.useMemo(() => createStyles(theme), [theme]);
+
   if (error) {
     return (
       <View style={[styles.errorContainer, style]}>
-        <ImageOff size={24} color={Colors.textLight} />
+        <ImageOff size={24} color={theme.colors.textSecondary} />
       </View>
     );
   }
@@ -47,7 +52,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     <View style={style}>
       <Image
         source={source}
-        style={[StyleSheet.absoluteFill]}
+        style={StyleSheet.absoluteFill}
         contentFit={contentFit}
         placeholder={placeholder}
         onLoad={handleLoad}
@@ -56,24 +61,23 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       />
       {loading && (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="small" color={Colors.primary} />
+          <ActivityIndicator size="small" color={theme.colors.primary} />
         </View>
       )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
+const createStyles = (theme: ReturnType<typeof useTheme>) => StyleSheet.create({
   errorContainer: {
-    backgroundColor: Colors.border,
-    justifyContent: "center",
     alignItems: "center",
+    backgroundColor: theme.colors.border,
+    justifyContent: "center",
   },
   loadingContainer: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
+    justifyContent: "center",
   },
 });
 

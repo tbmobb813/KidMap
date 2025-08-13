@@ -1,8 +1,9 @@
-import React from "react";
-import { StyleSheet, Text, View, Pressable } from "react-native";
-import { Achievement } from "@/types/gamification";
-import Colors from "@/constants/colors";
 import { Star, Lock } from "lucide-react-native";
+import React from "react";
+import { StyleSheet, Text, Pressable } from "react-native";
+
+import { useTheme } from "@/constants/theme";
+import { Achievement } from "@/types/gamification";
 
 type AchievementBadgeProps = {
   achievement: Achievement;
@@ -10,11 +11,12 @@ type AchievementBadgeProps = {
   size?: "small" | "medium" | "large";
 };
 
-const AchievementBadge: React.FC<AchievementBadgeProps> = ({ 
-  achievement, 
+const AchievementBadge: React.FC<AchievementBadgeProps> = ({
+  achievement,
   onPress,
-  size = "medium" 
+  size = "medium"
 }) => {
+  const theme = useTheme();
   const getDimensions = () => {
     switch (size) {
       case "small": return { width: 60, height: 60, fontSize: 20, textSize: 10 };
@@ -27,44 +29,46 @@ const AchievementBadge: React.FC<AchievementBadgeProps> = ({
 
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`${achievement.title} badge`}
       style={({ pressed }) => [
         styles.container,
         {
           width: dimensions.width,
           height: dimensions.height,
-          backgroundColor: achievement.unlocked ? Colors.secondary : Colors.border
+          backgroundColor: achievement.unlocked ? theme.colors.secondary : theme.colors.border,
+          shadowColor: theme.colors.text,
+          borderWidth: achievement.unlocked ? 0 : 1,
+          borderColor: theme.colors.border
         },
         pressed && styles.pressed
       ]}
       onPress={onPress}
       disabled={!achievement.unlocked}
+      testID={`achievement-badge-${achievement.id}`}
     >
       {achievement.unlocked ? (
         <>
-          <Text style={[styles.icon, { fontSize: dimensions.fontSize }]}>
-            {achievement.icon}
-          </Text>
-          <Star size={16} color="#FFD700" style={styles.star} />
+          <Text style={[styles.icon, { fontSize: dimensions.fontSize, color: theme.colors.primaryForeground }]}> {achievement.icon} </Text>
+          <Star size={16} color={theme.colors.warning} style={styles.star} />
         </>
       ) : (
-        <Lock size={24} color={Colors.textLight} />
+        <Lock size={24} color={theme.colors.textSecondary} />
       )}
-      
-      <Text 
+
+      <Text
         style={[
-          styles.title, 
-          { fontSize: dimensions.textSize },
-          !achievement.unlocked && styles.lockedText
-        ]} 
+          styles.title,
+          { fontSize: dimensions.textSize, color: theme.colors.text },
+          !achievement.unlocked && { color: theme.colors.textSecondary }
+        ]}
         numberOfLines={2}
       >
         {achievement.title}
       </Text>
-      
+
       {achievement.unlocked && (
-        <Text style={[styles.points, { fontSize: dimensions.textSize - 2 }]}>
-          +{achievement.points}
-        </Text>
+        <Text style={[styles.points, { fontSize: dimensions.textSize - 2, color: theme.colors.primary }]}>+{achievement.points}</Text>
       )}
     </Pressable>
   );
@@ -72,42 +76,36 @@ const AchievementBadge: React.FC<AchievementBadgeProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 16,
-    padding: 8,
     alignItems: "center",
+    borderRadius: 16,
+    elevation: 3,
     justifyContent: "center",
     margin: 4,
+    padding: 8,
     position: "relative",
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+  },
+  icon: {
+    marginBottom: 4,
+  },
+  points: {
+    fontWeight: "700",
   },
   pressed: {
     opacity: 0.8,
     transform: [{ scale: 0.95 }],
   },
-  icon: {
-    marginBottom: 4,
-  },
   star: {
     position: "absolute",
-    top: 4,
     right: 4,
+    top: 4,
   },
   title: {
     fontWeight: "600",
-    color: Colors.text,
-    textAlign: "center",
     marginBottom: 2,
-  },
-  lockedText: {
-    color: Colors.textLight,
-  },
-  points: {
-    color: Colors.primary,
-    fontWeight: "700",
+    textAlign: "center",
   },
 });
 

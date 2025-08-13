@@ -1,21 +1,23 @@
+import { useLocalSearchParams } from "expo-router";
+import { Clock, Navigation, MapPin } from "lucide-react-native";
 import React, { useMemo, useState } from "react";
 import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
-import { useLocalSearchParams } from "expo-router";
-import { nav } from '@/shared/navigation/nav';
-import Colors from "@/constants/colors";
+
 import DirectionStep from "@/components/DirectionStep";
-import MapPlaceholder from "@/components/MapPlaceholder";
-import SafetyPanel from "@/modules/safety/components/SafetyPanel";
 import FeatureErrorBoundary from "@/components/FeatureErrorBoundary";
-import { useNavigationStore } from "@/stores/navigationStore";
-import { useRoutesQuery } from '@/hooks/useRoutesQuery';
-import { Clock, Navigation, MapPin } from "lucide-react-native";
-import VoiceNavigation from "@/components/VoiceNavigation";
 import FunFactCard from "@/components/FunFactCard";
-import { getRandomFunFact } from "@/mocks/funFacts";
+import MapPlaceholder from "@/components/MapPlaceholder";
+import VoiceNavigation from "@/components/VoiceNavigation";
+import { useTheme } from "@/constants/theme";
 import useLocation from "@/hooks/useLocation";
+import { useRoutesQuery } from '@/hooks/useRoutesQuery';
+import { getRandomFunFact } from "@/mocks/funFacts";
+import SafetyPanel from "@/modules/safety/components/SafetyPanel";
+import { nav } from '@/shared/navigation/nav';
+import { useNavigationStore } from "@/stores/navigationStore";
 
 export default function RouteDetailScreen() {
+  const theme = useTheme();
   const { id } = useLocalSearchParams();
   const { location } = useLocation();
 
@@ -36,14 +38,7 @@ export default function RouteDetailScreen() {
     return queriedRoutes.find(r => r.id === routeId) || null;
   }, [routeId, selectedRoute, queriedRoutes]);
 
-  // Derive first step voice prompt safely
-  const firstStepInstruction = useMemo(() => {
-    if (!route || !route.steps || route.steps.length === 0) return "Starting your journey";
-    const step = route.steps[0];
-    if (!step.from || !step.to) return "Starting your journey";
-    const verb = step.type === 'walk' ? 'Walk' : step.type === 'bike' ? 'Bike' : step.type === 'car' ? 'Drive' : 'Take';
-    return `${verb} from ${step.from} to ${step.to}`;
-  }, [route]);
+  // (S3-3) VoiceNavigation now handles formatting & sequencing internally
 
   const [showFunFact, setShowFunFact] = useState(true);
   const [currentFunFact] = useState(getRandomFunFact("subway"));
@@ -51,25 +46,25 @@ export default function RouteDetailScreen() {
   // Unified guard ensures no unsafe property access below
   if (!route || !origin || !destination) {
     return (
-      <View style={styles.errorContainer}>
+    <View style={[styles.errorContainer,{ backgroundColor: theme.colors.background }] }>
         <Text style={styles.errorText}>Route not found</Text>
         <Pressable 
-          style={styles.backButton}
+      style={[styles.backButton,{ backgroundColor: theme.colors.primary }] }
           onPress={() => nav.back()}
         >
-          <Text style={styles.backButtonText}>Go Back</Text>
+      <Text style={[styles.backButtonText,{ color: theme.colors.primaryForeground }]}>Go Back</Text>
         </Pressable>
       </View>
     );
   }
 
   return (
-    <ScrollView style={styles.container}>
+  <ScrollView style={[styles.container,{ backgroundColor: theme.colors.background }] }>
       <MapPlaceholder
         message={`Map showing route from ${origin.name} to ${destination.name}`}
       />
 
-      <VoiceNavigation currentStep={firstStepInstruction} />
+  <VoiceNavigation steps={route.steps} />
 
       <FeatureErrorBoundary>
         <SafetyPanel 
@@ -93,8 +88,8 @@ export default function RouteDetailScreen() {
         <View style={styles.routeSummary}>
           <View style={styles.locationContainer}>
             <View style={styles.locationRow}>
-              <View style={[styles.locationPin, styles.originPin]}>
-                <Navigation size={16} color="#FFFFFF" />
+              <View style={[styles.locationPin,{ backgroundColor: theme.colors.primary }]}>
+                <Navigation size={16} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
               </View>
               <Text style={styles.locationText} numberOfLines={1}>
                 {origin.name}
@@ -104,8 +99,8 @@ export default function RouteDetailScreen() {
             <View style={styles.locationConnector} />
             
             <View style={styles.locationRow}>
-              <View style={[styles.locationPin, styles.destinationPin]}>
-                <MapPin size={16} color="#FFFFFF" />
+              <View style={[styles.locationPin,{ backgroundColor: theme.colors.secondary }]}>
+                <MapPin size={16} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
               </View>
               <Text style={styles.locationText} numberOfLines={1}>
                 {destination.name}
@@ -113,18 +108,18 @@ export default function RouteDetailScreen() {
             </View>
           </View>
           
-          <View style={styles.timeInfo}>
-            <Text style={styles.duration}>{route.totalDuration} min</Text>
+          <View style={[styles.timeInfo,{ borderTopColor: theme.colors.border }] }>
+            <Text style={[styles.duration,{ color: theme.colors.text }]}>{route.totalDuration} min</Text>
             <View style={styles.timeRow}>
-              <Clock size={14} color={Colors.textLight} style={styles.clockIcon} />
-              <Text style={styles.timeText}>
+              <Clock size={14} color={theme.colors.textSecondary} style={styles.clockIcon} />
+              <Text style={[styles.timeText,{ color: theme.colors.textSecondary }] }>
                 {route.departureTime} - {route.arrivalTime}
               </Text>
             </View>
           </View>
         </View>
         
-        <Text style={styles.sectionTitle}>Step by Step Directions</Text>
+  <Text style={[styles.sectionTitle,{ color: theme.colors.text }]}>Step by Step Directions</Text>
         
         <View style={styles.stepsContainer}>
           {route.steps.map((step, index) => (
@@ -136,9 +131,9 @@ export default function RouteDetailScreen() {
           ))}
         </View>
         
-        <View style={styles.tipContainer}>
-          <Text style={styles.tipTitle}>Kid-Friendly Tip</Text>
-          <Text style={styles.tipText}>
+        <View style={[styles.tipContainer,{ borderLeftColor: theme.colors.primary }] }>
+          <Text style={[styles.tipTitle,{ color: theme.colors.primary }]}>Kid-Friendly Tip</Text>
+          <Text style={[styles.tipText,{ color: theme.colors.text }] }>
             Remember to stay with an adult and keep your phone with you at all times!
           </Text>
         </View>
@@ -148,123 +143,102 @@ export default function RouteDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
+  backButton: {
+    borderRadius: 8,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
   },
-  contentContainer: {
-    padding: 16,
-  },
-  routeSummary: {
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 24,
-  },
-  locationContainer: {
-    marginBottom: 16,
-  },
-  locationRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  locationPin: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 12,
-  },
-  originPin: {
-    backgroundColor: Colors.primary,
-  },
-  destinationPin: {
-    backgroundColor: Colors.secondary,
-  },
-  locationText: {
+  backButtonText: {
     fontSize: 16,
-    color: Colors.text,
-    flex: 1,
-  },
-  locationConnector: {
-    width: 2,
-    height: 24,
-    backgroundColor: Colors.border,
-    marginLeft: 13,
-    marginBottom: 8,
-  },
-  timeInfo: {
-    borderTopWidth: 1,
-    borderTopColor: Colors.border,
-    paddingTop: 16,
-  },
-  duration: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: Colors.text,
-    marginBottom: 4,
-  },
-  timeRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    fontWeight: "600",
   },
   clockIcon: {
     marginRight: 4,
   },
-  timeText: {
-    fontSize: 14,
-    color: Colors.textLight,
+  container: { flex: 1 },
+  contentContainer: {
+    padding: 16,
+  },
+  destinationPin: {},
+  duration: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 4,
+  },
+  errorContainer: {
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "center",
+    padding: 16,
+  },
+  errorText: {
+    fontSize: 18,
+    marginBottom: 24,
+  },
+  locationConnector: {
+    height: 24,
+    marginBottom: 8,
+    marginLeft: 13,
+    width: 2,
+  },
+  locationContainer: {
+    marginBottom: 16,
+  },
+  locationPin: {
+    alignItems: "center",
+    borderRadius: 14,
+    height: 28,
+    justifyContent: "center",
+    marginRight: 12,
+    width: 28,
+  },
+  locationRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginBottom: 8,
+  },
+  locationText: {
+    flex: 1,
+    fontSize: 16,
+  },
+  originPin: {},
+  routeSummary: {
+    borderRadius: 12,
+    marginBottom: 24,
+    padding: 16,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "700",
-    color: Colors.text,
     marginBottom: 16,
   },
   stepsContainer: {
     marginBottom: 24,
   },
+  timeInfo: {
+    borderTopWidth: 1,
+    paddingTop: 16,
+  },
+  timeRow: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  timeText: {
+    fontSize: 14,
+  },
   tipContainer: {
-    backgroundColor: "#F0F4FF",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 24,
     borderLeftWidth: 4,
-    borderLeftColor: Colors.primary,
+    borderRadius: 12,
+    marginBottom: 24,
+    padding: 16,
+  },
+  tipText: {
+    fontSize: 14,
+    lineHeight: 20,
   },
   tipTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: Colors.primary,
     marginBottom: 8,
-  },
-  tipText: {
-    fontSize: 14,
-    color: Colors.text,
-    lineHeight: 20,
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 16,
-  },
-  errorText: {
-    fontSize: 18,
-    color: Colors.text,
-    marginBottom: 24,
-  },
-  backButton: {
-    backgroundColor: Colors.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-  },
-  backButtonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "600",
   },
 });

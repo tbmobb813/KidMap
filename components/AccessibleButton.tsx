@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Pressable, Text, StyleSheet, ViewStyle, TextStyle } from "react-native";
+
 import { theme } from "@/constants/theme";
 import { getAccessibilityLabel, getAccessibilityHint } from "@/utils/accessibility";
 import { auditTouchTarget } from "@/utils/touchTargetAudit";
@@ -77,47 +78,47 @@ const AccessibleButton: React.FC<AccessibleButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
     alignItems: "center",
+    borderRadius: 8,
     justifyContent: "center",
-  minHeight: 48, // Updated to meet recommended 48x48 minimum
-  },
-  primaryButton: {
-    backgroundColor: theme.colors.primary,
-  },
-  secondaryButton: {
-    backgroundColor: theme.colors.secondary,
-  },
-  outlineButton: {
-    backgroundColor: "transparent",
-    borderWidth: 2,
-    borderColor: theme.colors.primary,
-  },
-  pressed: {
-    opacity: 0.8,
+    minHeight: 48,
+    paddingHorizontal: 24,
+  paddingVertical: 12, // Updated to meet recommended 48x48 minimum
   },
   disabled: {
     opacity: 0.5,
   },
-  primaryText: {
-    color: theme.colors.white,
-    fontSize: 16,
-    fontWeight: "600",
+  disabledText: {
+    color: theme.colors.textSecondary || '/*TODO theme*/ theme.colors.placeholder /*#888888*/',
   },
-  secondaryText: {
-    color: theme.colors.white,
-    fontSize: 16,
-    fontWeight: "600",
+  outlineButton: {
+    backgroundColor: "transparent",
+    borderColor: theme.colors.primary,
+    borderWidth: 2,
   },
   outlineText: {
     color: theme.colors.primary,
     fontSize: 16,
     fontWeight: "600",
   },
-  disabledText: {
-    color: theme.colors.textLight,
+  pressed: {
+    opacity: 0.8,
+  },
+  primaryButton: {
+    backgroundColor: theme.colors.primary,
+  },
+  primaryText: {
+    color: '/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/',
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  secondaryButton: {
+    backgroundColor: theme.colors.secondary,
+  },
+  secondaryText: {
+    color: '/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/',
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
 

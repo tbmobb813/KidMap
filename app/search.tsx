@@ -1,14 +1,15 @@
+import { useLocalSearchParams } from "expo-router";
+import { MapPin } from "lucide-react-native";
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, FlatList } from "react-native";
-import { useLocalSearchParams } from "expo-router";
-import { nav } from '@/shared/navigation/nav';
-import Colors from "@/constants/colors";
-import SearchBar from "@/components/SearchBar";
+
 import PlaceCard from "@/components/PlaceCard";
-import { useNavigationStore } from "@/stores/navigationStore";
-import { MapPin } from "lucide-react-native";
-import { Place, PlaceCategory } from "@/types/navigation";
+import SearchBar from "@/components/SearchBar";
+import { useTheme } from "@/constants/theme";
 import { favoriteLocations, recentSearches } from "@/mocks/places";
+import { nav } from '@/shared/navigation/nav';
+import { useNavigationStore } from "@/stores/navigationStore";
+import { Place, PlaceCategory } from "@/types/navigation";
 
 // Mock search results based on query or category
 const getMockSearchResults = (query: string, category?: PlaceCategory): Place[] => {
@@ -32,6 +33,7 @@ const getMockSearchResults = (query: string, category?: PlaceCategory): Place[] 
 };
 
 export default function SearchScreen() {
+  const theme = useTheme();
   const params = useLocalSearchParams();
   const category = params.category as PlaceCategory;
   
@@ -63,7 +65,7 @@ export default function SearchScreen() {
   };
 
   return (
-    <View style={styles.container}>
+  <View style={[styles.container,{ backgroundColor: theme.colors.background }] }>
       <View style={styles.searchContainer}>
         <SearchBar
           value={searchQuery}
@@ -112,9 +114,9 @@ export default function SearchScreen() {
       ) : (
         searchQuery.length > 0 && (
           <View style={styles.emptyStateContainer}>
-            <MapPin size={40} color={Colors.textLight} />
+            <MapPin size={40} color={theme.colors.textSecondary} />
             <Text style={styles.emptyStateText}>
-              No places found for "{searchQuery}"
+              No places found for &quot;{searchQuery}&quot;
             </Text>
           </View>
         )
@@ -126,8 +128,21 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
     padding: 16,
+  },
+  emptyStateContainer: {
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "center",
+    padding: 16,
+  },
+  emptyStateText: {
+    fontSize: 16,
+    marginTop: 16,
+    textAlign: "center",
+  },
+  resultsList: {
+    paddingBottom: 16,
   },
   searchContainer: {
     marginBottom: 24,
@@ -135,22 +150,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: "700",
-    color: Colors.text,
     marginBottom: 16,
-  },
-  resultsList: {
-    paddingBottom: 16,
-  },
-  emptyStateContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 16,
-  },
-  emptyStateText: {
-    marginTop: 16,
-    fontSize: 16,
-    color: Colors.textLight,
-    textAlign: "center",
   },
 });

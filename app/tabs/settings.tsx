@@ -1,20 +1,21 @@
+import { Bell, Shield, MapPin, Clock, HelpCircle, Info, ChevronRight, Eye, Globe, Settings, RefreshCw, Palette, Lock, Camera } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, View, Switch, ScrollView, Pressable } from "react-native";
-import Colors from "@/constants/colors";
-import { Bell, Shield, MapPin, Clock, HelpCircle, Info, ChevronRight, Eye, Globe, Settings, RefreshCw, Palette, Lock, Camera } from "lucide-react-native";
+
 import AccessibilitySettings from "@/components/AccessibilitySettings";
-import RegionSwitcher from "@/components/RegionSwitcher";
-import RegionalTransitCard from "@/components/RegionalTransitCard";
-import CityManagement from "@/components/CityManagement";
 import CategoryManagement from "@/components/CategoryManagement";
+import CityManagement from "@/components/CityManagement";
+import NotificationStatusCard from "@/components/NotificationStatusCard";
 import PhotoCheckInHistory from "@/components/PhotoCheckInHistory";
+import PinAuthentication from "@/components/PinAuthentication";
+import RegionalTransitCard from "@/components/RegionalTransitCard";
+import RegionSwitcher from "@/components/RegionSwitcher";
+import SystemHealthMonitor from "@/components/SystemHealthMonitor";
+import { useTheme } from "@/constants/theme";
+import ParentDashboard from "@/modules/safety/components/ParentDashboard";
+import { useParentalStore } from "@/modules/safety/stores/parentalStore";
 import { useRegionStore } from "@/stores/regionStore";
 import { transitDataUpdater } from "@/utils/transitDataUpdater";
-import { useParentalStore } from "@/modules/safety/stores/parentalStore";
-import PinAuthentication from "@/components/PinAuthentication";
-import ParentDashboard from "@/modules/safety/components/ParentDashboard";
-import NotificationStatusCard from "@/components/NotificationStatusCard";
-import SystemHealthMonitor from "@/components/SystemHealthMonitor";
 
 type SettingItemProps = {
   icon: React.ReactNode;
@@ -30,7 +31,38 @@ type LinkItemProps = {
   onPress: () => void;
 };
 
+const createStyles = (theme: ReturnType<typeof useTheme>) => StyleSheet.create({
+  activeUnit: { backgroundColor: theme.colors.primary },
+  activeUnitText: { color: theme.colors.primaryForeground },
+  backButton: { alignSelf: 'flex-start' },
+  backButtonText: { color: theme.colors.primary, fontSize: 16, fontWeight: '600' },
+  backHeader: { borderBottomColor: theme.colors.border, borderBottomWidth: 1, padding: 16 },
+  container: { backgroundColor: theme.colors.background, flex: 1 },
+  fullScreenContainer: { backgroundColor: theme.colors.background, flex: 1 },
+  linkItem: { alignItems: 'center', borderRadius: 12, flexDirection: 'row', marginBottom: 12, padding: 16 },
+  linkTitle: { flex: 1, fontSize: 16, fontWeight: '600' },
+  preferenceContent: { flex: 1, marginLeft: 16 },
+  preferenceItem: { alignItems: 'center', borderRadius: 12, flexDirection: 'row', marginBottom: 12, padding: 16 },
+  preferenceTitle: { fontSize: 16, fontWeight: '600', marginBottom: 8, color: theme.colors.text },
+  regionContainer: { alignItems: 'flex-start' },
+  regionText: { fontSize: 12, marginTop: 4, color: theme.colors.textSecondary },
+  section: { marginBottom: 16, padding: 16 },
+  sectionTitle: { fontSize: 18, fontWeight: '700', marginBottom: 16 },
+  settingContent: { flex: 1 },
+  settingDescription: { fontSize: 14 },
+  settingIcon: { alignItems: 'center', borderRadius: 20, height: 40, justifyContent: 'center', marginRight: 16, width: 40 },
+  settingItem: { alignItems: 'center', borderRadius: 12, flexDirection: 'row', marginBottom: 12, padding: 16 },
+  settingTitle: { fontSize: 16, fontWeight: '600', marginBottom: 4 },
+  unitButton: { alignItems: 'center', borderRadius: 6, flex: 1, paddingHorizontal: 16, paddingVertical: 8 },
+  unitText: { fontSize: 14, fontWeight: '500' },
+  unitsToggle: { borderRadius: 8, flexDirection: 'row', padding: 2 },
+  versionContainer: { alignItems: 'center', padding: 24 },
+  versionText: { fontSize: 14 },
+});
+
 export default function SettingsScreen() {
+  const theme = useTheme();
+  const styles = React.useMemo(() => createStyles(theme), [theme]);
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
   const [safetyAlertsEnabled, setSafetyAlertsEnabled] = React.useState(true);
   const [locationHistoryEnabled, setLocationHistoryEnabled] = React.useState(false);
@@ -44,35 +76,36 @@ export default function SettingsScreen() {
   const [showParentDashboard, setShowParentDashboard] = React.useState(false);
   
   const { currentRegion, userPreferences, updatePreferences } = useRegionStore();
-  const { isParentMode, authenticateParentMode, exitParentMode } = useParentalStore();
+  const { isParentMode, exitParentMode } = useParentalStore();
 
   const SettingItem: React.FC<SettingItemProps> = ({ icon, title, description, value, onValueChange }) => (
-    <View style={styles.settingItem}>
-      <View style={styles.settingIcon}>{icon}</View>
+    <View style={[styles.settingItem,{ backgroundColor: theme.colors.surface }] }>
+      <View style={[styles.settingIcon,{ backgroundColor: theme.colors.surfaceAlt }] }>{icon}</View>
       <View style={styles.settingContent}>
-        <Text style={styles.settingTitle}>{title}</Text>
-        <Text style={styles.settingDescription}>{description}</Text>
+        <Text style={[styles.settingTitle,{ color: theme.colors.text }]}>{title}</Text>
+        <Text style={[styles.settingDescription,{ color: theme.colors.textSecondary }]}>{description}</Text>
       </View>
       <Switch
         value={value}
         onValueChange={onValueChange}
-        trackColor={{ false: "#E0E0E0", true: Colors.primary }}
-        thumbColor="#FFFFFF"
+        trackColor={{ false: theme.colors.border, true: theme.colors.primary }}
+        thumbColor={theme.colors.primaryForeground}
       />
     </View>
   );
 
   const LinkItem: React.FC<LinkItemProps> = ({ icon, title, onPress }) => (
-    <Pressable 
+    <Pressable
       style={({ pressed }) => [
         styles.linkItem,
-        pressed && styles.linkItemPressed
+        { backgroundColor: theme.colors.surface },
+        pressed && { opacity: 0.8, backgroundColor: theme.colors.surfaceAlt }
       ]}
       onPress={onPress}
     >
-      <View style={styles.settingIcon}>{icon}</View>
-      <Text style={styles.linkTitle}>{title}</Text>
-      <ChevronRight size={20} color={Colors.textLight} />
+      <View style={[styles.settingIcon,{ backgroundColor: theme.colors.surfaceAlt }]}>{icon}</View>
+      <Text style={[styles.linkTitle,{ color: theme.colors.text }]}>{title}</Text>
+      <ChevronRight size={20} color={theme.colors.textSecondary} />
     </Pressable>
   );
 
@@ -117,7 +150,7 @@ export default function SettingsScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
+  <ScrollView style={[styles.container,{ backgroundColor: theme.colors.background }] }>
       {showPinAuth ? (
         <PinAuthentication
           onAuthenticated={handlePinAuthenticated}
@@ -146,19 +179,19 @@ export default function SettingsScreen() {
       ) : (
         <>
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Region & Location</Text>
+            <Text style={[styles.sectionTitle,{ color: theme.colors.text }]}>Region & Location</Text>
             <View style={styles.regionContainer}>
               <RegionSwitcher />
             </View>
             
             <LinkItem
-              icon={<Settings size={24} color={Colors.primary} />}
+              icon={<Settings size={24} color={theme.colors.primary} />}
               title="Manage Cities"
               onPress={() => setShowCityManagement(true)}
             />
             
             <LinkItem
-              icon={<RefreshCw size={24} color={Colors.primary} />}
+              icon={<RefreshCw size={24} color={theme.colors.primary} />}
               title="Update Transit Data"
               onPress={handleTransitDataUpdate}
             />
@@ -167,19 +200,19 @@ export default function SettingsScreen() {
           <RegionalTransitCard />
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Parental Controls</Text>
+            <Text style={[styles.sectionTitle,{ color: theme.colors.text }]}>Parental Controls</Text>
             
             <LinkItem
-              icon={<Lock size={24} color={Colors.primary} />}
+              icon={<Lock size={24} color={theme.colors.primary} />}
               title={isParentMode ? "Exit Parent Mode" : "Parent Dashboard"}
               onPress={handleParentModeToggle}
             />
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>User Mode</Text>
+            <Text style={[styles.sectionTitle,{ color: theme.colors.text }]}>User Mode</Text>
             <View style={styles.preferenceItem}>
-              <Settings size={24} color={Colors.primary} />
+              <Settings size={24} color={theme.colors.primary} />
               <View style={styles.preferenceContent}>
                 <Text style={styles.preferenceTitle}>Current Mode</Text>
                 <View style={styles.unitsToggle}>
@@ -217,32 +250,32 @@ export default function SettingsScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Categories</Text>
+            <Text style={[styles.sectionTitle,{ color: theme.colors.text }]}>Categories</Text>
             
             <LinkItem
-              icon={<Palette size={24} color={Colors.primary} />}
+              icon={<Palette size={24} color={theme.colors.primary} />}
               title="Manage Categories"
               onPress={() => setShowCategoryManagement(true)}
             />
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Safety & Check-ins</Text>
+            <Text style={[styles.sectionTitle,{ color: theme.colors.text }]}>Safety & Check-ins</Text>
             
             <LinkItem
-              icon={<Camera size={24} color={Colors.primary} />}
+              icon={<Camera size={24} color={theme.colors.primary} />}
               title="Photo Check-in History"
               onPress={() => setShowPhotoHistory(true)}
             />
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>App Settings</Text>
+            <Text style={[styles.sectionTitle,{ color: theme.colors.text }]}>App Settings</Text>
             
             <NotificationStatusCard testId="notification-status" />
             
             <SettingItem
-              icon={<Bell size={24} color={Colors.primary} />}
+              icon={<Bell size={24} color={theme.colors.primary} />}
               title="Notifications"
               description="Get alerts about transit delays and updates"
               value={notificationsEnabled}
@@ -250,7 +283,7 @@ export default function SettingsScreen() {
             />
             
             <SettingItem
-              icon={<Shield size={24} color={Colors.primary} />}
+              icon={<Shield size={24} color={theme.colors.primary} />}
               title="Safety Alerts"
               description="Receive important safety information"
               value={safetyAlertsEnabled}
@@ -258,7 +291,7 @@ export default function SettingsScreen() {
             />
             
             <SettingItem
-              icon={<MapPin size={24} color={Colors.primary} />}
+              icon={<MapPin size={24} color={theme.colors.primary} />}
               title="Save Location History"
               description="Store places you've visited"
               value={locationHistoryEnabled}
@@ -266,7 +299,7 @@ export default function SettingsScreen() {
             />
             
             <SettingItem
-              icon={<Clock size={24} color={Colors.primary} />}
+              icon={<Clock size={24} color={theme.colors.primary} />}
               title="Simplified Directions"
               description="Show easier-to-follow directions"
               value={simplifiedDirections}
@@ -275,10 +308,10 @@ export default function SettingsScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Regional Preferences</Text>
+            <Text style={[styles.sectionTitle,{ color: theme.colors.text }]}>Regional Preferences</Text>
             
             <View style={styles.preferenceItem}>
-              <Globe size={24} color={Colors.primary} />
+              <Globe size={24} color={theme.colors.primary} />
               <View style={styles.preferenceContent}>
                 <Text style={styles.preferenceTitle}>Units</Text>
                 <View style={styles.unitsToggle}>
@@ -316,39 +349,39 @@ export default function SettingsScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>System Status</Text>
+            <Text style={[styles.sectionTitle,{ color: theme.colors.text }]}>System Status</Text>
             <SystemHealthMonitor testId="system-health" />
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Help & Information</Text>
+            <Text style={[styles.sectionTitle,{ color: theme.colors.text }]}>Help & Information</Text>
             
             <LinkItem
-              icon={<HelpCircle size={24} color={Colors.primary} />}
+              icon={<HelpCircle size={24} color={theme.colors.primary} />}
               title="Help Center"
               onPress={() => {}}
             />
             
             <LinkItem
-              icon={<Info size={24} color={Colors.primary} />}
+              icon={<Info size={24} color={theme.colors.primary} />}
               title="About KidMap"
               onPress={() => {}}
             />
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Accessibility</Text>
+            <Text style={[styles.sectionTitle,{ color: theme.colors.text }]}>Accessibility</Text>
             
             <LinkItem
-              icon={<Eye size={24} color={Colors.primary} />}
+              icon={<Eye size={24} color={theme.colors.primary} />}
               title="Accessibility Settings"
               onPress={() => setShowAccessibility(true)}
             />
           </View>
 
           <View style={styles.versionContainer}>
-            <Text style={styles.versionText}>KidMap v1.0.0</Text>
-            <Text style={styles.regionText}>Configured for {currentRegion.name}</Text>
+            <Text style={[styles.versionText,{ color: theme.colors.textSecondary }]}>KidMap v1.0.0</Text>
+            <Text style={[styles.regionText,{ color: theme.colors.textSecondary }]}>Configured for {currentRegion.name}</Text>
           </View>
         </>
       )}
@@ -356,142 +389,3 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
-  section: {
-    padding: 16,
-    marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: Colors.text,
-    marginBottom: 16,
-  },
-  regionContainer: {
-    alignItems: "flex-start",
-  },
-  settingItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-  },
-  settingIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#F0F4FF",
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 16,
-  },
-  settingContent: {
-    flex: 1,
-  },
-  settingTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.text,
-    marginBottom: 4,
-  },
-  settingDescription: {
-    fontSize: 14,
-    color: Colors.textLight,
-  },
-  linkItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-  },
-  linkItemPressed: {
-    opacity: 0.8,
-    backgroundColor: "#EAEAEA",
-  },
-  linkTitle: {
-    flex: 1,
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.text,
-  },
-  preferenceItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-  },
-  preferenceContent: {
-    flex: 1,
-    marginLeft: 16,
-  },
-  preferenceTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.text,
-    marginBottom: 8,
-  },
-  unitsToggle: {
-    flexDirection: "row",
-    backgroundColor: Colors.border,
-    borderRadius: 8,
-    padding: 2,
-  },
-  unitButton: {
-    flex: 1,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 6,
-    alignItems: "center",
-  },
-  activeUnit: {
-    backgroundColor: Colors.primary,
-  },
-  unitText: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: Colors.textLight,
-  },
-  activeUnitText: {
-    color: "#FFFFFF",
-  },
-  versionContainer: {
-    alignItems: "center",
-    padding: 24,
-  },
-  versionText: {
-    fontSize: 14,
-    color: Colors.textLight,
-  },
-  regionText: {
-    fontSize: 12,
-    color: Colors.textLight,
-    marginTop: 4,
-  },
-  fullScreenContainer: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
-  backHeader: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-  },
-  backButton: {
-    alignSelf: 'flex-start',
-  },
-  backButtonText: {
-    fontSize: 16,
-    color: Colors.primary,
-    fontWeight: '600',
-  },
-});

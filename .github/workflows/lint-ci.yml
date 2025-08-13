@@ -1,0 +1,24 @@
+name: Lint (Baseline Gate)
+
+on:
+  pull_request:
+    branches: [ development, main ]
+  push:
+    branches: [ development ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci --no-audit --no-fund
+      - name: Baseline gate
+        run: npm run lint:ci
+      - name: Summary (always)
+        if: always()
+        run: npm run lint:summary || true

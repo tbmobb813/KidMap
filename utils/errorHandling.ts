@@ -1,8 +1,9 @@
-import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { log } from './logger';
 import React from 'react';
+import { Platform } from 'react-native';
 import { View, Text, Pressable } from 'react-native';
+
+import { log } from './logger';
 
 // Enhanced error handling utilities for safety-critical operations
 
@@ -69,16 +70,16 @@ export async function withRetry<T>(
     try {
       log.debug(`Attempting ${context} (attempt ${attempt}/${options.maxAttempts})`);
       const result = await operation();
-      
+
       if (attempt > 1) {
         log.info(`${context} succeeded after ${attempt} attempts`);
       }
-      
+
       return result;
     } catch (error) {
       lastError = error as Error;
-      
-      log.warn(`${context} failed on attempt ${attempt}`, { 
+
+      log.warn(`${context} failed on attempt ${attempt}`, {
         error: lastError.message,
         attempt,
         maxAttempts: options.maxAttempts
@@ -94,7 +95,7 @@ export async function withRetry<T>(
       if (attempt < options.maxAttempts) {
         log.debug(`Waiting ${delay}ms before retry`);
         await new Promise(resolve => setTimeout(resolve, delay));
-        
+
         // Apply backoff multiplier
         if (options.backoffMultiplier) {
           delay = Math.min(
@@ -117,47 +118,48 @@ export class SafeAsyncStorage {
     recovery: ErrorRecoveryStrategy = { strategy: 'retry' }
   ): Promise<T | null> {
     const retryOptions = DEFAULT_RETRY_CONFIG.storage;
-    
+
     try {
       return await withRetry(async () => {
         switch (operation.operation) {
-          case 'get':
+          case 'get': {
             const stored = await AsyncStorage.getItem(operation.key);
             return stored ? JSON.parse(stored) : null;
-          
-          case 'set':
+          }
+          case 'set': {
             await AsyncStorage.setItem(operation.key, JSON.stringify(operation.value));
             return operation.value;
-          
-          case 'remove':
+          }
+          case 'remove': {
             await AsyncStorage.removeItem(operation.key);
             return null;
-          
-          default:
+          }
+          default: {
             throw new Error(`Unknown storage operation: ${operation.operation}`);
+          }
         }
       }, retryOptions, `AsyncStorage ${operation.operation} ${operation.key}`);
-      
+
     } catch (error) {
       const err = error as Error;
       log.error(`Storage operation failed: ${operation.operation} ${operation.key}`, err);
-      
+
       // Apply recovery strategy
       switch (recovery.strategy) {
         case 'fallback':
           log.info(`Using fallback value for ${operation.key}`);
           return recovery.fallbackValue || null;
-        
+
         case 'ignore':
           log.info(`Ignoring storage error for ${operation.key}`);
           return null;
-        
+
         case 'escalate':
           if (recovery.onError) {
             recovery.onError(err);
           }
           throw err;
-        
+
         case 'retry':
         default:
           throw err;
@@ -166,7 +168,7 @@ export class SafeAsyncStorage {
   }
 
   static async getItem<T>(
-    key: string, 
+    key: string,
     fallbackValue?: T,
     recovery: ErrorRecoveryStrategy = { strategy: 'fallback', fallbackValue }
   ): Promise<T | null> {
@@ -174,7 +176,7 @@ export class SafeAsyncStorage {
   }
 
   static async setItem<T>(
-    key: string, 
+    key: string,
     value: T,
     recovery: ErrorRecoveryStrategy = { strategy: 'retry' }
   ): Promise<T | null> {
@@ -195,29 +197,27 @@ export class SafeAsyncStorage {
   ): Promise<(T | null)[]> {
     const results: (T | null)[] = [];
     const completedOperations: StorageOperation<any>[] = [];
-    
+
     try {
       for (const operation of operations) {
         const result = await this.performOperation(operation, recovery);
         results.push(result);
         completedOperations.push(operation);
       }
-      
       return results;
     } catch (error) {
-      // Rollback completed operations if possible
-      log.warn('Batch operation failed, attempting rollback', { 
-        completed: completedOperations.length,
-        total: operations.length
-      });
-      
-      // For set operations, we can't easily rollback, but we can log
-      for (const op of completedOperations) {
-        if (op.operation === 'set') {
-          log.warn(`Cannot rollback set operation for ${op.key}`);
+      {
+        // Scoped block to avoid no-case-declarations issues if refactored inside switch in future
+        log.warn('Batch operation failed, attempting rollback', {
+          completed: completedOperations.length,
+          total: operations.length
+        });
+        for (const op of completedOperations) {
+          if (op.operation === 'set') {
+            log.warn(`Cannot rollback set operation for ${op.key}`);
+          }
         }
       }
-      
       throw error;
     }
   }
@@ -234,16 +234,16 @@ export function createSafetyErrorBoundary(
   > {
     constructor(props: { children: React.ReactNode }) {
       super(props);
-      this.state = { 
-        hasError: false, 
-        error: null, 
+      this.state = {
+        hasError: false,
+        error: null,
         errorId: `${componentName}_${Date.now()}`
       };
     }
 
     static getDerivedStateFromError(error: Error) {
-      return { 
-        hasError: true, 
+      return {
+        hasError: true,
         error,
         errorId: `error_${Date.now()}`
       };
@@ -288,8 +288,8 @@ export function createSafetyErrorBoundary(
 
     retry = () => {
       log.info(`Retrying ${componentName} after error`);
-      this.setState({ 
-        hasError: false, 
+      this.setState({
+        hasError: false,
         error: null,
         errorId: `${componentName}_${Date.now()}`
       });
@@ -348,7 +348,7 @@ export function handleLocationError(error: any): {
   suggestedAction?: string;
 } {
   const errorCode = error?.code || error?.PERMISSION_DENIED || 'UNKNOWN';
-  
+
   switch (errorCode) {
     case 1: // PERMISSION_DENIED
     case 'PERMISSION_DENIED':
@@ -358,7 +358,7 @@ export function handleLocationError(error: any): {
         canRetry: true,
         suggestedAction: "Please enable location access in your device settings"
       };
-    
+
     case 2: // POSITION_UNAVAILABLE
     case 'POSITION_UNAVAILABLE':
       return {
@@ -367,7 +367,7 @@ export function handleLocationError(error: any): {
         canRetry: true,
         suggestedAction: "Try moving to an area with better GPS signal"
       };
-    
+
     case 3: // TIMEOUT
     case 'TIMEOUT':
       return {
@@ -376,7 +376,7 @@ export function handleLocationError(error: any): {
         canRetry: true,
         suggestedAction: "Please try again in a moment"
       };
-    
+
     default:
       return {
         userMessage: "Having trouble with location services",
@@ -395,7 +395,7 @@ export function handleNetworkError(error: any): {
   isOffline: boolean;
 } {
   const message = error?.message?.toLowerCase() || '';
-  
+
   if (message.includes('network') || message.includes('offline') || message.includes('internet')) {
     return {
       userMessage: "No internet connection",
@@ -404,7 +404,7 @@ export function handleNetworkError(error: any): {
       isOffline: true
     };
   }
-  
+
   if (message.includes('timeout')) {
     return {
       userMessage: "Connection is slow, please wait",
@@ -413,7 +413,7 @@ export function handleNetworkError(error: any): {
       isOffline: false
     };
   }
-  
+
   if (message.includes('404') || message.includes('not found')) {
     return {
       userMessage: "Service temporarily unavailable",
@@ -422,7 +422,7 @@ export function handleNetworkError(error: any): {
       isOffline: false
     };
   }
-  
+
   return {
     userMessage: "Connection problem, please try again",
     technicalMessage: error?.message || "Unknown network error",
@@ -439,7 +439,7 @@ export function handleCameraError(error: any): {
   requiresPermission: boolean;
 } {
   const message = error?.message?.toLowerCase() || '';
-  
+
   if (message.includes('permission') || message.includes('denied')) {
     return {
       userMessage: "Camera permission is needed for photo check-ins",
@@ -448,7 +448,7 @@ export function handleCameraError(error: any): {
       requiresPermission: true
     };
   }
-  
+
   if (message.includes('unavailable') || message.includes('not available')) {
     return {
       userMessage: "Camera is not available on this device",
@@ -457,7 +457,7 @@ export function handleCameraError(error: any): {
       requiresPermission: false
     };
   }
-  
+
   if (message.includes('cancelled') || message.includes('canceled')) {
     return {
       userMessage: "Photo was cancelled",
@@ -466,7 +466,7 @@ export function handleCameraError(error: any): {
       requiresPermission: false
     };
   }
-  
+
   return {
     userMessage: "Camera error, please try again",
     technicalMessage: error?.message || "Unknown camera error",

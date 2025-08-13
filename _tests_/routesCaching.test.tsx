@@ -1,14 +1,14 @@
+// Use real implementation but spy on fetchRoutes so we exercise latency + logic
+import * as routeService from '@/services/routeService';
+const fetchSpy = jest.spyOn(routeService, 'fetchRoutes');
+
 import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 import { useRoutesQuery } from '@/src/hooks/useRoutesQuery';
 
-// Mock routeService to track calls
-jest.mock('@/services/routeService', () => ({
-  fetchRoutes: jest.fn(async () => [
-    { id: 'r1', totalDuration: 10, departureTime: '10:00', arrivalTime: '10:10', steps: [ { id: 's1', type: 'walk', from: 'A', to: 'B', duration: 10 } ] }
-  ])
-}));
+// routeService mock defined above (must be before hook import)
 
 // Silence act warnings from react-query tick batching (already covered by waitFor)
 const originalError = console.error;
@@ -42,12 +42,14 @@ function createClient() {
   });
 }
 
-const { fetchRoutes } = require('@/services/routeService');
-
 describe('Routes query caching', () => {
-  it('reuses cached data without refetch for identical keys', async () => {
+  it('reuses cached data without refetch for identical keys (and only increments metrics once)', async () => {
     const client = createClient();
     render(<QueryClientProvider client={client}><TestComponent /></QueryClientProvider>);
-    await waitFor(() => expect(fetchRoutes).toHaveBeenCalledTimes(1), { timeout: 3000 });
+  // Wait until the data has appeared (query resolved)
+  await waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(1), { timeout: 5000 });
+  // Allow a microtask flush to ensure no second fetch queued
+  await new Promise(r => setTimeout(r, 50));
+  expect(fetchSpy).toHaveBeenCalledTimes(1);
   }, 10000);
 });

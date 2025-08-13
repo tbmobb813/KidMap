@@ -1,9 +1,11 @@
+import { Clock } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { TransitStep } from "@/types/navigation";
-import Colors from "@/constants/colors";
+
 import TransitStepIndicator from "./TransitStepIndicator";
-import { Clock, ArrowRight } from "lucide-react-native";
+
+import { useTheme } from "@/constants/theme";
+import { TransitStep } from "@/types/navigation";
 
 type DirectionStepProps = {
   step: TransitStep | null | undefined;
@@ -11,12 +13,13 @@ type DirectionStepProps = {
 };
 
 const DirectionStep: React.FC<DirectionStepProps> = ({ step, isLast }) => {
+  const theme = useTheme();
   // Defensive guards & fallbacks to avoid runtime crashes on malformed data
   if (!step) {
     return (
       <View style={styles.container} accessible accessibilityRole="summary" accessibilityLabel="Unavailable step">
         <View style={styles.leftColumn}>
-          <View style={[styles.placeholderIndicator, { backgroundColor: Colors.border }]} />
+          <View style={[styles.placeholderIndicator, { backgroundColor: theme.colors.border }]} />
           {!isLast && <View style={styles.connector} />}
         </View>
         <View style={styles.rightColumn}>
@@ -43,33 +46,33 @@ const DirectionStep: React.FC<DirectionStepProps> = ({ step, isLast }) => {
 
       <View style={styles.rightColumn}>
         <View style={styles.headerRow}>
-          <Text style={styles.stepType}>
+          <Text style={[styles.stepType, { color: theme.colors.text }]}> 
             {typeLabel}
             {step.line && ` Line ${step.line}`}
           </Text>
-          <Text style={styles.duration}>{durationLabel}</Text>
+          <Text style={[styles.duration, { color: theme.colors.primary }]}>{durationLabel}</Text>
         </View>
 
-        <View style={styles.locationContainer}>
+        <View style={[styles.locationContainer, { backgroundColor: theme.colors.surface, shadowColor: theme.colors.text, borderColor: theme.colors.border }]}> 
           <View style={styles.locationRow}>
-            <Text style={styles.locationLabel}>From:</Text>
-            <Text style={styles.locationText}>{fromText}</Text>
+            <Text style={[styles.locationLabel, { color: theme.colors.textSecondary }]}>From:</Text>
+            <Text style={[styles.locationText, { color: theme.colors.text }]}>{fromText}</Text>
           </View>
 
             <View style={styles.locationRow}>
-            <Text style={styles.locationLabel}>To:</Text>
-            <Text style={styles.locationText}>{toText}</Text>
+            <Text style={[styles.locationLabel, { color: theme.colors.textSecondary }]}>To:</Text>
+            <Text style={[styles.locationText, { color: theme.colors.text }]}>{toText}</Text>
           </View>
         </View>
 
         {step.departureTime && step.arrivalTime && (
           <View style={styles.timeContainer}>
-            <Clock size={14} color={Colors.textLight} style={styles.clockIcon} />
-            <Text style={styles.timeText}>
+            <Clock size={14} color={theme.colors.textSecondary} style={styles.clockIcon} />
+            <Text style={[styles.timeText, { color: theme.colors.textSecondary }]}>
               {step.departureTime} - {step.arrivalTime}
             </Text>
             {step.stops !== undefined && (
-              <Text style={styles.stopsText}>
+              <Text style={[styles.stopsText, { color: theme.colors.textSecondary }]}>
                 {step.stops} {step.stops === 1 ? "stop" : "stops"}
               </Text>
             )}
@@ -81,82 +84,76 @@ const DirectionStep: React.FC<DirectionStepProps> = ({ step, isLast }) => {
 };
 
 const styles = StyleSheet.create({
+  clockIcon: {
+    marginRight: 4,
+  },
+  connector: {
+    backgroundColor: '#000', // will be overridden dynamically where needed in future (kept simple)
+    flex: 1,
+    marginBottom: -8,
+    marginTop: 8,
+    width: 2,
+  },
   container: {
     flexDirection: "row",
     marginBottom: 16,
   },
-  placeholderIndicator: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    opacity: 0.5,
+  duration: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  headerRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 8,
   },
   leftColumn: {
     alignItems: "center",
     marginRight: 16,
   },
-  connector: {
-    width: 2,
-    flex: 1,
-    backgroundColor: Colors.border,
-    marginTop: 8,
-    marginBottom: -8,
-  },
-  rightColumn: {
-    flex: 1,
-  },
-  headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  stepType: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.text,
-  },
-  duration: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: Colors.primary,
-  },
   locationContainer: {
-    backgroundColor: Colors.card,
     borderRadius: 8,
-    padding: 12,
+    borderWidth: 1,
     marginBottom: 8,
+    padding: 12,
+  },
+  locationLabel: {
+    fontSize: 14,
+    width: 50,
   },
   locationRow: {
     flexDirection: "row",
     marginBottom: 4,
   },
-  locationLabel: {
-    width: 50,
-    fontSize: 14,
-    color: Colors.textLight,
-  },
   locationText: {
     flex: 1,
     fontSize: 14,
-    color: Colors.text,
     fontWeight: "500",
   },
-  timeContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+  placeholderIndicator: {
+    borderRadius: 20,
+    height: 40,
+    opacity: 0.5,
+    width: 40,
   },
-  clockIcon: {
-    marginRight: 4,
+  rightColumn: {
+    flex: 1,
   },
-  timeText: {
-    fontSize: 14,
-    color: Colors.textLight,
-    marginRight: 8,
+  stepType: {
+    fontSize: 16,
+    fontWeight: "600",
   },
   stopsText: {
     fontSize: 14,
-    color: Colors.textLight,
+  },
+  timeContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  timeText: {
+    fontSize: 14,
+    marginRight: 8,
   },
 });
 

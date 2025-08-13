@@ -1,5 +1,7 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
+
+import { render } from './testUtils';
+
 import RouteDetailScreen from '@/app/route/[id]';
 
 // Mock expo-router useLocalSearchParams
@@ -25,12 +27,12 @@ jest.mock('@/hooks/useRoutesQuery', () => ({
 jest.mock('@/hooks/useLocation', () => () => ({ location: { latitude:0, longitude:0, error:null }, hasLocation: true }));
 
 // Mock child components with simple placeholders to avoid complexity
-jest.mock('@/components/MapPlaceholder', () => ({ message }: any) => null);
-jest.mock('@/components/VoiceNavigation', () => ({ currentStep }: any) => null);
+jest.mock('@/components/MapPlaceholder', () => ({ _message }: any) => null);
+jest.mock('@/components/VoiceNavigation', () => ({ _currentStep }: any) => null);
 jest.mock('@/modules/safety/components/SafetyPanel', () => () => null);
 jest.mock('@/components/FeatureErrorBoundary', () => ({ children }: any) => children);
-jest.mock('@/components/DirectionStep', () => ({ step }: any) => null);
-jest.mock('@/components/FunFactCard', () => ({ onDismiss }: any) => null);
+jest.mock('@/components/DirectionStep', () => ({ _step }: any) => null);
+jest.mock('@/components/FunFactCard', () => ({ _onDismiss }: any) => null);
 
 describe('RouteDetailScreen', () => {
   it('renders route content when data available', () => {

@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Pressable, Animated } from 'react-native';
-import Colors from '@/constants/colors';
 import { Bot, Volume2, VolumeX, Sparkles } from 'lucide-react-native';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { StyleSheet, Text, View, Pressable, Animated } from 'react-native';
+
+import { useTheme } from '@/constants/theme';
+import { track } from '@/telemetry';
 import { Place } from '@/types/navigation';
 
 type AIJourneyCompanionProps = {
@@ -18,25 +20,25 @@ type CompanionMessage = {
 };
 
 const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
-  currentLocation,
+  currentLocation: _currentLocation,
   destination,
   isNavigating
 }) => {
-  const [messages, setMessages] = useState<CompanionMessage[]>([]);
+  const theme = useTheme();
   const [currentMessage, setCurrentMessage] = useState<CompanionMessage | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [companionMood, setCompanionMood] = useState<'happy' | 'excited' | 'curious'>('happy');
-  const pulseAnim = new Animated.Value(1);
+  const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    if (isNavigating && destination) {
+  if (isNavigating && destination) {
       generateJourneyContent();
       startCompanionAnimation();
     }
   }, [isNavigating, destination]);
 
-  const startCompanionAnimation = () => {
+  const startCompanionAnimation = useCallback(() => {
     Animated.loop(
       Animated.sequence([
         Animated.timing(pulseAnim, {
@@ -51,13 +53,13 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
         }),
       ])
     ).start();
-  };
+  }, [pulseAnim]);
 
-  const generateJourneyContent = async () => {
+  const generateJourneyContent = useCallback(async () => {
     if (!destination) return;
 
     try {
-      const response = await fetch('https://toolkit.rork.com/text/llm/', {
+  const response = await fetch('https://toolkit.rork.com/text/llm/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,9 +87,9 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
         timestamp: new Date()
       };
 
-      setMessages(prev => [...prev, newMessage]);
       setCurrentMessage(newMessage);
       setCompanionMood('excited');
+  track({ type: 'ai_companion_interaction', action: 'story_generated', destinationId: destination.id, destinationName: destination.name });
     } catch (error) {
       console.log('AI companion error:', error);
       // Fallback to predefined messages
@@ -99,7 +101,7 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
       };
       setCurrentMessage(fallbackMessage);
     }
-  };
+  }, [destination, setCurrentMessage, setCompanionMood]);
 
   const generateQuiz = async () => {
     if (!destination) return;
@@ -133,9 +135,9 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
         timestamp: new Date()
       };
 
-      setMessages(prev => [...prev, quizMessage]);
       setCurrentMessage(quizMessage);
       setCompanionMood('curious');
+  track({ type: 'ai_companion_interaction', action: 'quiz', destinationId: destination.id, destinationName: destination.name });
     } catch (error) {
       console.log('Quiz generation error:', error);
     }
@@ -154,21 +156,21 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.surface, shadowColor: theme.colors.text }] }>
       <Pressable 
         style={styles.companionButton}
         onPress={() => setIsExpanded(!isExpanded)}
       >
         <Animated.View 
-          style={[styles.avatar, { transform: [{ scale: pulseAnim }] }]}
+          style={[styles.avatar, { transform: [{ scale: pulseAnim }], backgroundColor: theme.colors.primary }]}
         >
           <Text style={styles.avatarEmoji}>{getMoodEmoji()}</Text>
-          <Bot size={16} color={Colors.white} style={styles.botIcon} />
+          <Bot size={16} color={theme.colors.primaryForeground} style={styles.botIcon} />
         </Animated.View>
         
         <View style={styles.messagePreview}>
-          <Text style={styles.companionName}>Buddy</Text>
-          <Text style={styles.messageText} numberOfLines={1}>
+          <Text style={[styles.companionName, { color: theme.colors.primary }]}>Buddy</Text>
+          <Text style={[styles.messageText, { color: theme.colors.textSecondary }]} numberOfLines={1}>
             {currentMessage.text}
           </Text>
         </View>
@@ -178,26 +180,26 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
           onPress={() => setVoiceEnabled(!voiceEnabled)}
         >
           {voiceEnabled ? (
-            <Volume2 size={16} color={Colors.primary} />
+            <Volume2 size={16} color={theme.colors.primary} />
           ) : (
-            <VolumeX size={16} color={Colors.textLight} />
+            <VolumeX size={16} color={theme.colors.textSecondary} />
           )}
         </Pressable>
       </Pressable>
 
       {isExpanded && (
-        <View style={styles.expandedContent}>
-          <Text style={styles.fullMessage}>{currentMessage.text}</Text>
+        <View style={[styles.expandedContent, { borderTopColor: theme.colors.border }] }>
+          <Text style={[styles.fullMessage, { color: theme.colors.text }]}>{currentMessage.text}</Text>
           
           <View style={styles.actionButtons}>
-            <Pressable style={styles.actionButton} onPress={generateQuiz}>
-              <Sparkles size={16} color={Colors.primary} />
-              <Text style={styles.actionButtonText}>Quiz Me!</Text>
+            <Pressable style={[styles.actionButton, { backgroundColor: theme.colors.surfaceAlt }]} onPress={generateQuiz}>
+              <Sparkles size={16} color={theme.colors.primary} />
+              <Text style={[styles.actionButtonText, { color: theme.colors.primary }]}>Quiz Me!</Text>
             </Pressable>
             
-            <Pressable style={styles.actionButton} onPress={generateJourneyContent}>
-              <Bot size={16} color={Colors.primary} />
-              <Text style={styles.actionButtonText}>Tell Me More</Text>
+            <Pressable style={[styles.actionButton, { backgroundColor: theme.colors.surfaceAlt }]} onPress={() => { generateJourneyContent(); if (destination) track({ type: 'ai_companion_interaction', action: 'more', destinationId: destination.id, destinationName: destination.name }); }}>
+              <Bot size={16} color={theme.colors.primary} />
+              <Text style={[styles.actionButtonText, { color: theme.colors.primary }]}>Tell Me More</Text>
             </Pressable>
           </View>
         </View>
@@ -207,88 +209,75 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    margin: 16,
-    backgroundColor: Colors.white,
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  companionButton: {
-    flexDirection: 'row',
+  actionButton: {
     alignItems: 'center',
-    padding: 16,
-  },
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: Colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-    position: 'relative',
-  },
-  avatarEmoji: {
-    fontSize: 20,
-    position: 'absolute',
-    top: -4,
-    right: -4,
-  },
-  botIcon: {
-    opacity: 0.8,
-  },
-  messagePreview: {
+    borderRadius: 8,
     flex: 1,
-  },
-  companionName: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: Colors.primary,
-    marginBottom: 2,
-  },
-  messageText: {
-    fontSize: 14,
-    color: Colors.text,
-    lineHeight: 18,
-  },
-  voiceButton: {
-    padding: 8,
-  },
-  expandedContent: {
+    flexDirection: 'row',
+    gap: 6,
+    justifyContent: 'center',
     paddingHorizontal: 16,
-    paddingBottom: 16,
-    borderTopWidth: 1,
-    borderTopColor: Colors.border,
+    paddingVertical: 12,
   },
-  fullMessage: {
-    fontSize: 14,
-    color: Colors.text,
-    lineHeight: 20,
-    marginBottom: 16,
+  actionButtonText: {
+    fontSize: 12,
+    fontWeight: '600',
   },
   actionButtons: {
     flexDirection: 'row',
     gap: 12,
   },
-  actionButton: {
-    flex: 1,
-    flexDirection: 'row',
+  avatar: {
     alignItems: 'center',
+    borderRadius: 24,
+    height: 48,
     justifyContent: 'center',
-    backgroundColor: Colors.primaryLight,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    gap: 6,
+    marginRight: 12,
+    position: 'relative',
+    width: 48,
   },
-  actionButtonText: {
-    fontSize: 12,
+  avatarEmoji: {
+    fontSize: 20,
+    position: 'absolute',
+    right: -4,
+    top: -4,
+  },
+  botIcon: { opacity: 0.8 },
+  companionButton: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 16,
+  },
+  companionName: {
+    fontSize: 14,
     fontWeight: '600',
-    color: Colors.primary,
+    marginBottom: 2,
+  },
+  container: {
+    borderRadius: 16,
+    elevation: 4,
+    margin: 16,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+  },
+  expandedContent: {
+    borderTopWidth: 1,
+    paddingBottom: 16,
+    paddingHorizontal: 16,
+  },
+  fullMessage: {
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 16,
+  },
+  messagePreview: { flex: 1 },
+  messageText: {
+    fontSize: 14,
+    lineHeight: 18,
+  },
+  voiceButton: {
+    padding: 8,
   },
 });
 

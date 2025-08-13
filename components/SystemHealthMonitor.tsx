@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { AlertTriangle, CheckCircle, RefreshCw } from 'lucide-react-native';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text, View, Pressable, Platform } from 'react-native';
-import { AlertTriangle, CheckCircle, RefreshCw, Wifi, WifiOff } from 'lucide-react-native';
-import Colors from '@/constants/colors';
+
+import { useTheme } from '@/constants/theme';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
+import { tint } from '@/utils/color';
 
 type SystemHealthMonitorProps = {
   testId?: string;
@@ -20,8 +22,10 @@ const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({ testId }) => 
   const [healthChecks, setHealthChecks] = useState<HealthCheck[]>([]);
   const [isRunningChecks, setIsRunningChecks] = useState(false);
   const { isConnected } = useNetworkStatus();
+  const theme = useTheme();
+  const styles = React.useMemo(() => createStyles(theme), [theme]);
 
-  const runHealthChecks = async () => {
+  const runHealthChecks = useCallback(async () => {
     setIsRunningChecks(true);
     const checks: HealthCheck[] = [];
     const now = Date.now();
@@ -71,7 +75,7 @@ const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({ testId }) => 
           lastChecked: now,
         });
       }
-    } catch (error) {
+    } catch {
       checks.push({
         id: 'storage',
         name: 'Local Storage',
@@ -107,7 +111,7 @@ const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({ testId }) => 
           lastChecked: now,
         });
       }
-    } catch (error) {
+    } catch {
       checks.push({
         id: 'location',
         name: 'Location Services',
@@ -136,7 +140,7 @@ const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({ testId }) => 
 
     setHealthChecks(checks);
     setIsRunningChecks(false);
-  };
+  }, [isConnected]);
 
   useEffect(() => {
     runHealthChecks();
@@ -145,7 +149,7 @@ const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({ testId }) => 
     const interval = setInterval(runHealthChecks, 5 * 60 * 1000);
     
     return () => clearInterval(interval);
-  }, [isConnected]);
+  }, [isConnected, runHealthChecks]);
 
   const getOverallStatus = (): 'healthy' | 'warning' | 'error' => {
     if (healthChecks.some(check => check.status === 'error')) return 'error';
@@ -156,22 +160,22 @@ const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({ testId }) => 
   const getStatusIcon = (status: 'healthy' | 'warning' | 'error') => {
     switch (status) {
       case 'healthy':
-        return <CheckCircle size={16} color={Colors.success} />;
+        return <CheckCircle size={16} color={theme.colors.success} />;
       case 'warning':
-        return <AlertTriangle size={16} color={Colors.warning} />;
+        return <AlertTriangle size={16} color={theme.colors.warning} />;
       case 'error':
-        return <AlertTriangle size={16} color={Colors.error} />;
+        return <AlertTriangle size={16} color={theme.colors.error} />;
     }
   };
 
   const getStatusColor = (status: 'healthy' | 'warning' | 'error') => {
     switch (status) {
       case 'healthy':
-        return Colors.success;
+        return theme.colors.success;
       case 'warning':
-        return Colors.warning;
+        return theme.colors.warning;
       case 'error':
-        return Colors.error;
+        return theme.colors.error;
     }
   };
 
@@ -196,7 +200,7 @@ const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({ testId }) => 
         >
           <RefreshCw 
             size={16} 
-            color={isRunningChecks ? Colors.textLight : Colors.primary} 
+            color={isRunningChecks ? theme.colors.textSecondary : theme.colors.primary} 
             style={isRunningChecks ? styles.spinning : undefined}
           />
         </Pressable>
@@ -246,32 +250,75 @@ const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({ testId }) => 
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (theme: ReturnType<typeof useTheme>) => StyleSheet.create({
+  actionSection: {
+    backgroundColor: tint(theme.colors.error),
+    borderColor: theme.colors.error + '30',
+    borderRadius: 8,
+    borderWidth: 1,
+    marginTop: 12,
+    padding: 12,
+  },
+  actionText: {
+    color: theme.colors.textSecondary,
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  actionTitle: {
+    color: theme.colors.error,
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  checkHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 4,
+  },
+  checkItem: {
+    backgroundColor: theme.colors.surfaceAlt,
+    borderRadius: 8,
+    padding: 12,
+  },
+  checkMessage: {
+    color: theme.colors.textSecondary,
+    fontSize: 13,
+    marginBottom: 4,
+  },
+  checkName: {
+    color: theme.colors.text,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  checkTime: {
+    color: theme.colors.textSecondary,
+    fontSize: 11,
+  },
+  checksList: {
+    gap: 8,
+  },
   container: {
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 12,
-    padding: 16,
     marginVertical: 8,
+    padding: 16,
+  },
+  errorSummary: {
+    color: theme.colors.error,
+    fontSize: 14,
+    fontWeight: '500',
   },
   header: {
-    flexDirection: 'row',
     alignItems: 'center',
+    flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 12,
   },
-  statusIndicator: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  statusText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
   refreshButton: {
-    padding: 8,
+    backgroundColor: theme.colors.surfaceAlt,
     borderRadius: 8,
-    backgroundColor: Colors.androidRipple,
+    padding: 8,
   },
   refreshButtonDisabled: {
     opacity: 0.5,
@@ -279,68 +326,25 @@ const styles = StyleSheet.create({
   spinning: {
     // Note: CSS animation would be needed for web, this is just a placeholder
   },
+  statusIndicator: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 8,
+  },
+  statusText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
   summary: {
+    backgroundColor: theme.colors.surfaceAlt,
+    borderRadius: 8,
     marginBottom: 12,
     padding: 8,
-    backgroundColor: Colors.androidRipple,
-    borderRadius: 8,
-  },
-  errorSummary: {
-    color: Colors.error,
-    fontSize: 14,
-    fontWeight: '500',
   },
   warningSummary: {
-    color: Colors.warning,
+    color: theme.colors.warning,
     fontSize: 14,
     fontWeight: '500',
-  },
-  checksList: {
-    gap: 8,
-  },
-  checkItem: {
-    padding: 12,
-    backgroundColor: Colors.androidRipple,
-    borderRadius: 8,
-  },
-  checkHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 4,
-  },
-  checkName: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: Colors.text,
-  },
-  checkMessage: {
-    fontSize: 13,
-    color: Colors.textLight,
-    marginBottom: 4,
-  },
-  checkTime: {
-    fontSize: 11,
-    color: Colors.textLight,
-  },
-  actionSection: {
-    marginTop: 12,
-    padding: 12,
-    backgroundColor: Colors.error + '10',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: Colors.error + '30',
-  },
-  actionTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: Colors.error,
-    marginBottom: 8,
-  },
-  actionText: {
-    fontSize: 13,
-    color: Colors.textLight,
-    lineHeight: 18,
   },
 });
 

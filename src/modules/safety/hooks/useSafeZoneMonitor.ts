@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+
 import type { SafeZone } from '../types/parental';
+
 // Use alias path for easier mocking in tests
-import { useParentalStore } from '@/modules/safety/stores/parentalStore';
-import useLocation from '@/hooks/useLocation';
 import { SafeZoneSchema } from '@/core/validation/safetySchemas';
+import useLocation from '@/hooks/useLocation';
+import { useParentalStore } from '@/modules/safety/stores/parentalStore';
 
 export type SafeZoneStatus = {
     inside: SafeZone[];

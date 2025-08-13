@@ -1,5 +1,5 @@
-import { RegionConfig } from "@/types/region";
 import { useRegionStore } from "@/stores/regionStore";
+import { RegionConfig } from "@/types/region";
 
 export type TransitDataUpdateResult = {
   success: boolean;

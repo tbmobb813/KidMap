@@ -1,12 +1,10 @@
 /**
  * Jest configuration for Expo + React Native + TypeScript.
  */
+/* eslint-env node */
 module.exports = {
     preset: 'jest-expo',
     testEnvironment: 'jsdom',
-    transform: {
-        '^.+\\.(ts|tsx)$': 'ts-jest',
-    },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
     moduleNameMapper: {
         '^@/modules/(.*)$': '<rootDir>/src/modules/$1',
@@ -16,9 +14,10 @@ module.exports = {
         '^@/hooks-internal/(.*)$': '<rootDir>/src/hooks/$1',
         '^@/hooks/(.*)$': '<rootDir>/hooks/$1',
         '^@/utils/(.*)$': '<rootDir>/utils/$1',
+        '^@/telemetry$': '<rootDir>/src/telemetry/index.ts',
         '^@/(.*)$': '<rootDir>/$1',
     },
-    setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],
+    setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
     testMatch: [
         '<rootDir>/_tests_/**/*.(test|spec).(ts|tsx|js)',
         '<rootDir>/__tests__/**/*.(test|spec).(ts|tsx|js)'
@@ -39,5 +38,9 @@ module.exports = {
             functions: 0.75 * 100,
         }
     },
+    // Allow transpiling of RN/Expo and specific ESM deps; rely on jest-expo's babel config
+    transformIgnorePatterns: [
+        'node_modules/(?!(react-native|@react-native|@react-navigation|@react-native-async-storage|expo(nent)?|expo-modules-core|@expo|@unimodules|@nkzw/create-context-hook)/)'
+    ],
     verbose: true,
 };

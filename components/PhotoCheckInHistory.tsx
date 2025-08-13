@@ -1,8 +1,10 @@
+import { CheckCircle, XCircle, MapPin, Clock } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
+
+import { useTheme } from "@/constants/theme";
 import { useNavigationStore } from "@/stores/navigationStore";
-import Colors from "@/constants/colors";
-import { CheckCircle, XCircle, MapPin, Clock } from "lucide-react-native";
+import { tint } from "@/utils/color";
 import { formatDistance, getLocationAccuracyDescription } from "@/utils/locationUtils";
 
 const PhotoCheckInHistory: React.FC = () => {
@@ -13,10 +15,13 @@ const PhotoCheckInHistory: React.FC = () => {
     return date.toLocaleDateString() + " " + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
+  const theme = useTheme();
+  const styles = React.useMemo(() => createStyles(theme), [theme]);
+
   if (photoCheckIns.length === 0) {
     return (
       <View style={styles.emptyContainer}>
-        <MapPin size={40} color={Colors.textLight} />
+        <MapPin size={40} color={theme.colors.textSecondary} />
         <Text style={styles.emptyText}>No check-ins yet</Text>
         <Text style={styles.emptySubtext}>
           Take a photo check-in when you arrive at your destination!
@@ -35,7 +40,7 @@ const PhotoCheckInHistory: React.FC = () => {
             <View style={styles.headerLeft}>
               <Text style={styles.placeName}>{checkIn.placeName}</Text>
               <View style={styles.timestampRow}>
-                <Clock size={14} color={Colors.textLight} />
+                <Clock size={14} color={theme.colors.textSecondary} />
                 <Text style={styles.timestamp}>
                   {formatTimestamp(checkIn.timestamp)}
                 </Text>
@@ -48,9 +53,9 @@ const PhotoCheckInHistory: React.FC = () => {
                 checkIn.isLocationVerified ? styles.verifiedBadge : styles.unverifiedBadge
               ]}>
                 {checkIn.isLocationVerified ? (
-                  <CheckCircle size={16} color="#10B981" />
+                  <CheckCircle size={16} color={theme.colors.success} />
                 ) : (
-                  <XCircle size={16} color="#EF4444" />
+                  <XCircle size={16} color={theme.colors.error} />
                 )}
                 <Text style={[
                   styles.verificationText,
@@ -70,7 +75,7 @@ const PhotoCheckInHistory: React.FC = () => {
           
           {checkIn.distanceFromPlace !== undefined && (
             <View style={styles.locationInfo}>
-              <MapPin size={14} color={Colors.textLight} />
+              <MapPin size={14} color={theme.colors.textSecondary} />
               <Text style={styles.locationText}>
                 {getLocationAccuracyDescription(checkIn.distanceFromPlace)} 
                 ({formatDistance(checkIn.distanceFromPlace)} from destination)
@@ -82,117 +87,116 @@ const PhotoCheckInHistory: React.FC = () => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-    padding: 16,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: Colors.text,
-    marginBottom: 16,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 32,
-  },
-  emptyText: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: Colors.text,
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  emptySubtext: {
-    fontSize: 14,
-    color: Colors.textLight,
-    textAlign: "center",
-    lineHeight: 20,
+const createStyles = (theme: ReturnType<typeof useTheme>) => StyleSheet.create({
+  cardHeader: {
+    alignItems: "flex-start",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 12,
   },
   checkInCard: {
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 12,
-    padding: 16,
+    elevation: 3,
     marginBottom: 16,
-    shadowColor: "#000",
+    padding: 16,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
   },
-  cardHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: 12,
+  container: {
+    backgroundColor: theme.colors.background,
+    flex: 1,
+    padding: 16,
+  },
+  emptyContainer: {
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "center",
+    padding: 32,
+  },
+  emptySubtext: {
+    color: theme.colors.textSecondary,
+    fontSize: 14,
+    lineHeight: 20,
+    textAlign: "center",
+  },
+  emptyText: {
+    color: theme.colors.text,
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 8,
+    marginTop: 16,
   },
   headerLeft: {
     flex: 1,
   },
+  locationInfo: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 4,
+  },
+  locationText: {
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+  },
+  notes: {
+    color: theme.colors.text,
+    fontSize: 14,
+    fontStyle: "italic",
+    marginBottom: 8,
+  },
+  photo: {
+    borderRadius: 8,
+    height: 200,
+    marginBottom: 12,
+    width: "100%",
+  },
   placeName: {
+    color: theme.colors.text,
     fontSize: 16,
     fontWeight: "600",
-    color: Colors.text,
     marginBottom: 4,
   },
-  timestampRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-  },
   timestamp: {
+    color: theme.colors.textSecondary,
     fontSize: 12,
-    color: Colors.textLight,
   },
-  verificationBadge: {
-    flexDirection: "row",
+  timestampRow: {
     alignItems: "center",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+    flexDirection: "row",
     gap: 4,
   },
-  verifiedBadge: {
-    backgroundColor: "#DCFCE7",
+  title: {
+    color: theme.colors.text,
+    fontSize: 20,
+    fontWeight: "700",
+    marginBottom: 16,
   },
   unverifiedBadge: {
-    backgroundColor: "#FEE2E2",
+    backgroundColor: tint(theme.colors.error),
+  },
+  unverifiedText: {
+    color: theme.colors.error,
+  },
+  verificationBadge: {
+    alignItems: "center",
+    borderRadius: 12,
+    flexDirection: "row",
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
   verificationText: {
     fontSize: 12,
     fontWeight: "600",
   },
+  verifiedBadge: {
+    backgroundColor: tint(theme.colors.success),
+  },
   verifiedText: {
-    color: "#10B981",
-  },
-  unverifiedText: {
-    color: "#EF4444",
-  },
-  photo: {
-    width: "100%",
-    height: 200,
-    borderRadius: 8,
-    marginBottom: 12,
-  },
-  notes: {
-    fontSize: 14,
-    color: Colors.text,
-    fontStyle: "italic",
-    marginBottom: 8,
-  },
-  locationInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-  },
-  locationText: {
-    fontSize: 12,
-    color: Colors.textLight,
+    color: theme.colors.success,
   },
 });
 

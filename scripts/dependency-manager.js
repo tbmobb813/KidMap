@@ -25,7 +25,7 @@ class DependencyManager {
       });
 
       return Object.keys(outdated);
-    } catch (error) {
+    } catch {
       console.log('✅ All packages are up to date!');
       return [];
     }
@@ -42,7 +42,7 @@ class DependencyManager {
       }
       console.log('✅ No peer dependency issues found!');
       return true;
-    } catch (error) {
+    } catch {
       console.log('⚠️  Peer dependency issues detected');
       return false;
     }
@@ -53,7 +53,7 @@ class DependencyManager {
     try {
       execSync('npm audit --audit-level=moderate', { stdio: 'inherit' });
       console.log('✅ No security vulnerabilities found!');
-    } catch (error) {
+    } catch {
       console.log('⚠️  Security vulnerabilities found. Run "npm audit fix" to resolve.');
     }
   }
@@ -93,7 +93,7 @@ class DependencyManager {
     // Fix security issues
     try {
       execSync('npm audit fix', { stdio: 'inherit' });
-    } catch (error) {
+    } catch {
       console.log('⚠️  Some security issues require manual attention');
     }
 
@@ -105,6 +105,7 @@ class DependencyManager {
 }
 
 // CLI interface
+/* global setInterval */
 const command = process.argv[2];
 const manager = new DependencyManager();
 

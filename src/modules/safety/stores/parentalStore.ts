@@ -1,6 +1,7 @@
 import createContextHook from '@nkzw/create-context-hook';
-import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useEffect } from 'react';
+
 import {
     SafeZone,
     CheckInRequest,
@@ -9,8 +10,9 @@ import {
     ParentDashboardData,
     DevicePingRequest
 } from '../types/parental';
-import { SafeZoneCreateSchema, EmergencyContactCreateSchema, ParentalSettingsSchema, CheckInRequestCreateSchema } from '@/core/validation/safetySchemas';
+
 import { safeParseWithToast, ToastFn } from '@/core/validation';
+import { SafeZoneCreateSchema, EmergencyContactCreateSchema, ParentalSettingsSchema, CheckInRequestCreateSchema } from '@/core/validation/safetySchemas';
 
 const DEFAULT_EMERGENCY_CONTACTS: EmergencyContact[] = [
     {

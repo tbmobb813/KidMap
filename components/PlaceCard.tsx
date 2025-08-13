@@ -1,8 +1,9 @@
+import { Home, School, BookOpen, Trees, Store, Utensils, Users, Heart, MapPin } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
+
+import { useTheme } from "@/constants/theme";
 import { Place } from "@/types/navigation";
-import Colors from "@/constants/colors";
-import { Home, School, BookOpen, Trees, Store, Utensils, Users, Heart, MapPin } from "lucide-react-native";
 
 type PlaceCardProps = {
   place: Place;
@@ -10,37 +11,39 @@ type PlaceCardProps = {
 };
 
 const PlaceCard: React.FC<PlaceCardProps> = ({ place, onPress }) => {
+  const theme = useTheme();
   const getIcon = () => {
     switch (place.category) {
       case "home":
-        return <Home size={24} color={Colors.primary} />;
+        return <Home size={24} color={theme.colors.primary} />;
       case "school":
-        return <School size={24} color={Colors.primary} />;
+        return <School size={24} color={theme.colors.primary} />;
       case "library":
-        return <BookOpen size={24} color={Colors.primary} />;
+        return <BookOpen size={24} color={theme.colors.primary} />;
       case "park":
-        return <Trees size={24} color={Colors.primary} />;
+        return <Trees size={24} color={theme.colors.primary} />;
       case "store":
-        return <Store size={24} color={Colors.primary} />;
+        return <Store size={24} color={theme.colors.primary} />;
       case "restaurant":
-        return <Utensils size={24} color={Colors.primary} />;
+        return <Utensils size={24} color={theme.colors.primary} />;
       case "friend":
-        return <Users size={24} color={Colors.primary} />;
+        return <Users size={24} color={theme.colors.primary} />;
       case "family":
-        return <Heart size={24} color={Colors.primary} />;
+        return <Heart size={24} color={theme.colors.primary} />;
       default:
-        return <MapPin size={24} color={Colors.primary} />;
+        return <MapPin size={24} color={theme.colors.primary} />;
     }
   };
 
   return (
-    <Pressable 
+  <Pressable 
       accessibilityRole="button"
       accessibilityLabel={`Place ${place.name}`}
       hitSlop={8}
       style={({ pressed }) => [
-        styles.container,
-        pressed && styles.pressed
+    styles.container,
+    { backgroundColor: theme.colors.surface, shadowColor: theme.colors.text },
+    pressed && [{ backgroundColor: theme.colors.surfaceAlt }, styles.pressed]
       ]}
       onPress={() => onPress(place)}
       testID={`place-card-${place.id}`}
@@ -49,52 +52,47 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, onPress }) => {
         {getIcon()}
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.name}>{place.name}</Text>
-        <Text style={styles.address} numberOfLines={1}>{place.address}</Text>
+    <Text style={[styles.name, { color: theme.colors.text }]}>{place.name}</Text>
+    <Text style={[styles.address, { color: theme.colors.textSecondary }]} numberOfLines={1}>{place.address}</Text>
       </View>
     </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
+  address: {
+    fontSize: 14,
+  },
   container: {
-    flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Colors.card,
     borderRadius: 12,
-    padding: 16,
+    elevation: 2,
+    flexDirection: "row",
     marginBottom: 12,
-    shadowColor: "#000",
+    padding: 16,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,
-  },
-  pressed: {
-    opacity: 0.8,
-    backgroundColor: "#EAEAEA",
   },
   iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: "#EEF2FF",
-    justifyContent: "center",
     alignItems: "center",
+    backgroundColor: 'transparent',
+    borderRadius: 24,
+    height: 48,
+    justifyContent: "center",
     marginRight: 16,
-  },
-  textContainer: {
-    flex: 1,
+    width: 48,
   },
   name: {
     fontSize: 16,
     fontWeight: "600",
-    color: Colors.text,
     marginBottom: 4,
   },
-  address: {
-    fontSize: 14,
-    color: Colors.textLight,
+  pressed: {
+    opacity: 0.8,
+  },
+  textContainer: {
+    flex: 1,
   },
 });
 

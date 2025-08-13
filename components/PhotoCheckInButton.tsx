@@ -1,12 +1,15 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Pressable, Alert, Platform } from "react-native";
-import Colors from "@/constants/colors";
-import { Camera, MapPin } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
-import { useNavigationStore } from "@/stores/navigationStore";
+import { Camera, MapPin } from "lucide-react-native";
+import React, { useState, useMemo } from "react";
+import { StyleSheet, Text, Pressable, Alert, Platform } from "react-native";
+
+import Toast from './Toast';
+
+import { useTheme } from "@/constants/theme";
 import { PhotoCheckInSchema, safeParseWithToast } from '@/core/validation';
 import { useToast } from '@/hooks/useToast';
-import Toast from './Toast';
+import { useNavigationStore } from "@/stores/navigationStore";
+
 
 type PhotoCheckInButtonProps = {
   placeName: string;
@@ -17,6 +20,8 @@ const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({ placeName, plac
   const [isLoading, setIsLoading] = useState(false);
   const { toast, showToast, hideToast } = useToast();
   const { addPhotoCheckIn } = useNavigationStore();
+  const theme = useTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]);
 
   const handlePhotoCheckIn = async () => {
     if (Platform.OS === 'web') {
@@ -103,11 +108,11 @@ const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({ placeName, plac
         onPress={handlePhotoCheckIn}
         disabled={isLoading}
       >
-        <Camera size={20} color="#FFFFFF" />
+        <Camera size={20} color={theme.colors.secondary} />
         <Text style={styles.text}>
           {isLoading ? "Taking Photo..." : "Photo Check-in"}
         </Text>
-        <MapPin size={16} color="#FFFFFF" style={styles.locationIcon} />
+        <MapPin size={16} color={theme.colors.secondary} style={styles.locationIcon} />
       </Pressable>
       <Toast 
         message={toast.message} 
@@ -119,32 +124,32 @@ const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({ placeName, plac
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (theme: any) => StyleSheet.create({
   container: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 12,
-    padding: 16,
-    margin: 16,
-    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: theme.colors.secondary,
+    borderRadius: 12,
+    elevation: 3,
+    flexDirection: "row",
     gap: 8,
-    shadowColor: "#000",
+    justifyContent: "center",
+    margin: 16,
+    padding: 16,
+    shadowColor: theme.colors.shadow,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
   },
   loading: {
     opacity: 0.7,
   },
-  text: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "600",
-  },
   locationIcon: {
     marginLeft: 4,
+  },
+  text: {
+    color: theme.colors.onSecondary,
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
 

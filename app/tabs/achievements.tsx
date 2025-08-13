@@ -1,14 +1,18 @@
+import { Trophy, Star, Target, Calendar } from "lucide-react-native";
 import React, { useState } from "react";
 import { StyleSheet, Text, View, ScrollView, Pressable, Dimensions, Platform } from "react-native";
-import Colors from "@/constants/colors";
+
 import AchievementBadge from "@/components/AchievementBadge";
 import UserStatsCard from "@/components/UserStatsCard";
+import { useTheme } from "@/constants/theme";
 import { useGamificationStore } from "@/stores/gamificationStore";
-import { Trophy, Star, Target, Calendar } from "lucide-react-native";
+import { tint } from "@/utils/color";
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
 
 export default function AchievementsScreen() {
+  const theme = useTheme();
+  const styles = React.useMemo(() => createStyles(theme), [theme]);
   const { achievements, userStats, tripJournal } = useGamificationStore();
   const [selectedTab, setSelectedTab] = useState<"achievements" | "journal">("achievements");
 
@@ -23,11 +27,11 @@ export default function AchievementsScreen() {
         </Text>
         <View style={styles.ratingContainer}>
           {[1, 2, 3, 4, 5].map(star => (
-            <Star 
+              <Star 
               key={star}
               size={16} 
-              color={star <= item.rating ? "#FFD700" : Colors.border}
-              fill={star <= item.rating ? "#FFD700" : "transparent"}
+              color={star <= item.rating ? theme.colors.warning : theme.colors.border}
+              fill={star <= item.rating ? theme.colors.warning : "transparent"}
             />
           ))}
         </View>
@@ -69,7 +73,7 @@ export default function AchievementsScreen() {
           ]}
           onPress={() => setSelectedTab("achievements")}
         >
-          <Trophy size={20} color={selectedTab === "achievements" ? "#FFFFFF" : Colors.primary} />
+          <Trophy size={20} color={selectedTab === "achievements" ? theme.colors.primaryForeground : theme.colors.primary} />
           <Text style={[
             styles.tabText,
             selectedTab === "achievements" && styles.activeTabText
@@ -85,7 +89,7 @@ export default function AchievementsScreen() {
           ]}
           onPress={() => setSelectedTab("journal")}
         >
-          <Calendar size={20} color={selectedTab === "journal" ? "#FFFFFF" : Colors.primary} />
+          <Calendar size={20} color={selectedTab === "journal" ? theme.colors.primaryForeground : theme.colors.primary} />
           <Text style={[
             styles.tabText,
             selectedTab === "journal" && styles.activeTabText
@@ -142,7 +146,7 @@ export default function AchievementsScreen() {
               </View>
             ) : (
               <View style={styles.emptyState}>
-                <Target size={40} color={Colors.textLight} />
+                <Target size={40} color={theme.colors.textSecondary} />
                 <Text style={styles.emptyText}>
                   Start your first trip to begin your journey journal!
                 </Text>
@@ -155,128 +159,128 @@ export default function AchievementsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    paddingBottom: 32,
-  },
-  tabContainer: {
-    flexDirection: "row",
-    margin: 16,
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: 4,
-  },
-  tab: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 12,
-    borderRadius: 8,
-    gap: 8,
-  },
-  activeTab: {
-    backgroundColor: Colors.primary,
-  },
-  tabText: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: Colors.primary,
-  },
-  activeTabText: {
-    color: "#FFFFFF",
-  },
-  content: {
-    flex: 1,
-    padding: 16,
-    minHeight: 200,
-  },
-  journalContainer: {
-    gap: 12,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: Colors.text,
-    marginBottom: 16,
-  },
+const createStyles = (theme: ReturnType<typeof useTheme>) => StyleSheet.create({
   achievementsGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
+    gap: 16,
     justifyContent: Platform.select({
       web: screenWidth > 768 ? "space-around" : "center",
       default: "space-around",
     }),
-    gap: 16,
     marginBottom: 24,
+  },
+  activeTab: {
+  backgroundColor: theme.colors.primary,
+  },
+  activeTabText: {
+  color: theme.colors.primaryForeground,
+  },
+  container: {
+  backgroundColor: theme.colors.background,
+    flex: 1,
+  },
+  content: {
+    flex: 1,
+    minHeight: 200,
+    padding: 16,
+  },
+  emptyState: {
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: 300,
+    padding: 32,
+  },
+  emptyText: {
+  color: theme.colors.textSecondary,
+    fontSize: 16,
+    marginTop: 16,
+    textAlign: "center",
+  },
+  funFact: {
+  color: theme.colors.text,
+    fontSize: 12,
+    marginBottom: 2,
+  },
+  funFactsContainer: {
+    backgroundColor: tint(theme.colors.secondary),
+    borderRadius: 8,
+    padding: 12,
+  },
+  funFactsTitle: {
+  color: theme.colors.secondary,
+    fontSize: 12,
+    fontWeight: "600",
+    marginBottom: 4,
+  },
+  journalContainer: {
+    gap: 12,
+  },
+  journalDate: {
+  color: theme.colors.textSecondary,
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  journalEntry: {
+  backgroundColor: theme.colors.surface,
+    borderRadius: 12,
+    marginBottom: 12,
+    padding: 16,
+  },
+  journalHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 8,
   },
   journalList: {
     paddingBottom: 16,
   },
-  journalEntry: {
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-  },
-  journalHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  journalNotes: {
+  color: theme.colors.text,
+    fontSize: 14,
+    fontStyle: "italic",
     marginBottom: 8,
   },
-  journalDate: {
-    fontSize: 14,
-    color: Colors.textLight,
-    fontWeight: "500",
+  journalRoute: {
+  color: theme.colors.text,
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 8,
   },
   ratingContainer: {
     flexDirection: "row",
     gap: 2,
   },
-  journalRoute: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.text,
-    marginBottom: 8,
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: 32,
   },
-  journalNotes: {
-    fontSize: 14,
-    color: Colors.text,
-    marginBottom: 8,
-    fontStyle: "italic",
+  sectionTitle: {
+  color: theme.colors.text,
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 16,
   },
-  funFactsContainer: {
-    backgroundColor: "#F0FFF4",
-    borderRadius: 8,
-    padding: 12,
-  },
-  funFactsTitle: {
-    fontSize: 12,
-    fontWeight: "600",
-    color: Colors.secondary,
-    marginBottom: 4,
-  },
-  funFact: {
-    fontSize: 12,
-    color: Colors.text,
-    marginBottom: 2,
-  },
-  emptyState: {
+  tab: {
     alignItems: "center",
+    borderRadius: 8,
+    flex: 1,
+    flexDirection: "row",
+    gap: 8,
     justifyContent: "center",
-    padding: 32,
-    minHeight: 300,
+    paddingVertical: 12,
   },
-  emptyText: {
-    marginTop: 16,
-    fontSize: 16,
-    color: Colors.textLight,
-    textAlign: "center",
+  tabContainer: {
+  backgroundColor: theme.colors.surface,
+    borderRadius: 12,
+    flexDirection: "row",
+    margin: 16,
+    padding: 4,
+  },
+  tabText: {
+  color: theme.colors.primary,
+    fontSize: 14,
+    fontWeight: "600",
   },
 });

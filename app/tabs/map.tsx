@@ -1,23 +1,27 @@
+import { Navigation, MapPin, Search } from "lucide-react-native";
 import React, { useEffect, useCallback, useMemo, useRef } from "react";
 import { StyleSheet, Text, View, Pressable, Dimensions, Platform, FlatList, ListRenderItem } from "react-native";
-import { nav } from "@/shared/navigation/nav";
-import Colors from "@/constants/colors";
+
+import FeatureErrorBoundary from "@/components/FeatureErrorBoundary";
+import LoadingSpinner from '@/components/LoadingSpinner';
 import MapPlaceholder from "@/components/MapPlaceholder";
 import RouteCard from "@/components/RouteCard";
-import SafetyPanel from "@/modules/safety/components/SafetyPanel";
-import FeatureErrorBoundary from "@/components/FeatureErrorBoundary";
 import TravelModeSelector from "@/components/TravelModeSelector";
-import { useNavigationStore } from "@/stores/navigationStore";
-import { useRoutesQuery } from '@/hooks/useRoutesQuery';
-import LoadingSpinner from '@/components/LoadingSpinner';
-import { Route } from "@/types/navigation";
-import { Navigation, MapPin, Search } from "lucide-react-native";
+import { useTheme } from "@/constants/theme";
 import useLocation from "@/hooks/useLocation";
+import { useRoutePrefetch } from '@/hooks/useRoutePrefetch';
+import { useRoutesQuery } from '@/hooks/useRoutesQuery';
+import SafetyPanel from "@/modules/safety/components/SafetyPanel";
+import { nav } from "@/shared/navigation/nav";
+import { useNavigationStore } from "@/stores/navigationStore";
+import { Route } from "@/types/navigation";
 import { mark, measure } from "@/utils/performanceMarks";
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { height: screenHeight } = Dimensions.get('window');
 
 export default function MapScreen() {
+  const theme = useTheme();
+  const styles = React.useMemo(() => createStyles(theme), [theme]);
   const { location, hasLocation } = useLocation();
   
   const { 
@@ -31,6 +35,9 @@ export default function MapScreen() {
   } = useNavigationStore();
 
   const { data: queryRoutes = [], isFetching } = useRoutesQuery(origin, destination, selectedTravelMode, { travelMode: selectedTravelMode, avoidHighways: false, avoidTolls: false, accessibilityMode: false });
+
+  // Kick off background prefetch of alternate travel mode routes
+  useRoutePrefetch();
 
   useEffect(() => {
     // If no origin is set, use current location
@@ -46,7 +53,7 @@ export default function MapScreen() {
         }
       });
     }
-  }, [hasLocation, location.latitude, location.longitude, origin]);
+  }, [hasLocation, location.latitude, location.longitude, origin, setOrigin]);
 
   const routesToShow = destination ? queryRoutes : [];
   const firstPaintDone = useRef(false);
@@ -77,8 +84,9 @@ export default function MapScreen() {
     />
   ), [handleRouteSelect, selectedRoute?.id]);
 
-  const listHeader = useMemo(() => (
-    <>
+  const listHeader = useMemo(() => {
+    // styles object stable due to memo in parent, safe to ignore exhaustive deps
+    return <>
       <View style={styles.mapContainer}>
         <MapPlaceholder 
           message={
@@ -97,11 +105,11 @@ export default function MapScreen() {
       <View style={styles.locationBar}>
         <View style={styles.locationPins}>
           <View style={[styles.locationPin, styles.originPin]}>
-            <Navigation size={16} color="#FFFFFF" />
+            <Navigation size={16} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
           </View>
             <View style={styles.locationConnector} />
           <View style={[styles.locationPin, styles.destinationPin]}>
-            <MapPin size={16} color="#FFFFFF" />
+            <MapPin size={16} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
           </View>
         </View>
         <View style={styles.locationTexts}>
@@ -115,7 +123,7 @@ export default function MapScreen() {
               {destination?.name || "Where to?"}
             </Text>
             {!destination && (
-              <Search size={16} color={Colors.textLight} style={styles.searchIcon} />
+              <Search size={16} color={theme.colors.textSecondary} style={styles.searchIcon} />
             )}
           </Pressable>
         </View>
@@ -134,15 +142,16 @@ export default function MapScreen() {
       )}
       {!destination && (
         <View style={styles.emptyStateContainer}>
-          <MapPin size={40} color={Colors.textLight} />
+          <MapPin size={40} color={theme.colors.textSecondary} />
           <Text style={styles.emptyStateText}>Select a destination to see available routes</Text>
           <Pressable style={styles.searchButton} onPress={handleSearchPress}>
             <Text style={styles.searchButtonText}>Search Places</Text>
           </Pressable>
         </View>
       )}
-    </>
-  ), [destination, location, origin, selectedTravelMode, setTravelMode, handleSearchPress, routesToShow.length, isFetching]);
+    </>;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [destination, selectedTravelMode, setTravelMode, handleSearchPress, routesToShow.length, isFetching]);
 
   return (
     <FlatList
@@ -159,16 +168,73 @@ export default function MapScreen() {
     />
   );
 }
-
-const styles = StyleSheet.create({
+const createStyles = (theme: ReturnType<typeof useTheme>) => StyleSheet.create({
   container: {
+    backgroundColor: theme.colors.background,
     flex: 1,
-    backgroundColor: Colors.background,
+  },
+  destinationPin: {
+    backgroundColor: theme.colors.secondary,
+  },
+  emptyStateContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: 200,
+    padding: 32,
+  },
+  emptyStateText: {
+    color: theme.colors.textSecondary,
+    fontSize: 16,
+    marginBottom: 24,
+    marginTop: 16,
+    textAlign: "center",
   },
   listContent: {
-    paddingBottom: 32,
     minHeight: screenHeight,
+    paddingBottom: 32,
     paddingHorizontal: 16,
+  },
+  loadingContainer: {
+    paddingVertical: 8,
+  },
+  loadingText: {
+    color: theme.colors.textSecondary,
+    fontSize: 14,
+    paddingVertical: 8,
+  },
+  locationBar: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: 12,
+    flexDirection: "row",
+    marginBottom: 16,
+    padding: 16,
+  },
+  locationButton: {
+    justifyContent: "center",
+    paddingVertical: 8,
+  },
+  locationConnector: {
+    backgroundColor: theme.colors.border,
+    height: 24,
+    width: 2,
+  },
+  locationPin: {
+    alignItems: "center",
+    borderRadius: 14,
+    height: 28,
+    justifyContent: "center",
+    width: 28,
+  },
+  locationPins: {
+    alignItems: "center",
+    marginRight: 16,
+  },
+  locationText: {
+    color: theme.colors.text,
+    fontSize: 16,
+  },
+  locationTexts: {
+    flex: 1,
   },
   mapContainer: {
     height: Platform.select({
@@ -177,98 +243,40 @@ const styles = StyleSheet.create({
     }),
     minHeight: 250,
   },
-  routesContainer: {
-    gap: 12,
-  },
-  loadingContainer: {
-    paddingVertical: 8,
-  },
   noRoutesText: {
+    color: theme.colors.textSecondary,
     fontSize: 14,
-    color: Colors.textLight,
     fontStyle: 'italic',
     paddingVertical: 8,
   },
-  loadingText: {
-    fontSize: 14,
-    color: Colors.textLight,
-    paddingVertical: 8,
-  },
-  locationBar: {
-    flexDirection: "row",
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-  },
-  locationPins: {
-    alignItems: "center",
-    marginRight: 16,
-  },
-  locationPin: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   originPin: {
-    backgroundColor: Colors.primary,
-  },
-  destinationPin: {
-    backgroundColor: Colors.secondary,
-  },
-  locationConnector: {
-    width: 2,
-    height: 24,
-    backgroundColor: Colors.border,
-  },
-  locationTexts: {
-    flex: 1,
-  },
-  locationButton: {
-    paddingVertical: 8,
-    justifyContent: "center",
-  },
-  locationText: {
-    fontSize: 16,
-    color: Colors.text,
+    backgroundColor: theme.colors.primary,
   },
   placeholderText: {
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
+  },
+  routesContainer: {
+    gap: 12,
+  },
+  searchButton: {
+    backgroundColor: theme.colors.primary,
+    borderRadius: 8,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+  },
+  searchButtonText: {
+    color: theme.colors.primaryForeground,
+    fontSize: 16,
+    fontWeight: "600",
   },
   searchIcon: {
     position: "absolute",
     right: 0,
   },
   sectionTitle: {
+    color: theme.colors.text,
     fontSize: 18,
     fontWeight: "700",
-    color: Colors.text,
     marginBottom: 16,
-  },
-  emptyStateContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 32,
-    minHeight: 200,
-  },
-  emptyStateText: {
-    marginTop: 16,
-    marginBottom: 24,
-    fontSize: 16,
-    color: Colors.textLight,
-    textAlign: "center",
-  },
-  searchButton: {
-    backgroundColor: Colors.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-  },
-  searchButtonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "600",
   },
 });

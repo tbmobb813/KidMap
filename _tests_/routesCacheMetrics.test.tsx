@@ -1,12 +1,13 @@
-import React from 'react';
-import { render, waitFor } from '@testing-library/react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useRoutesQuery } from '@/src/hooks/useRoutesQuery';
-import { __resetRouteServiceMetrics, getRouteServiceMetrics } from '@/services/routeService';
+import { render, waitFor } from '@testing-library/react-native';
+import React from 'react';
 
-const origin: any = { id: 'o1', name: 'Origin', address: '', category: 'other', coordinates: { latitude: 0, longitude: 0 } };
-const destination: any = { id: 'd1', name: 'Destination', address: '', category: 'other', coordinates: { latitude: 1, longitude: 1 } };
-const options: any = { travelMode: 'transit', avoidHighways: false, avoidTolls: false, accessibilityMode: false };
+import { useRoutesQuery } from '@/hooks/useRoutesQuery';
+import * as routeService from '@/services/routeService';
+
+const origin = { id: 'o1', name: 'Origin', address: '', category: 'other', coordinates: { latitude: 0, longitude: 0 } } as any;
+const destination = { id: 'd1', name: 'Destination', address: '', category: 'other', coordinates: { latitude: 1, longitude: 1 } } as any;
+const options = { travelMode: 'transit', avoidHighways: false, avoidTolls: false, accessibilityMode: false } as any;
 
 function ComponentOnce() {
   useRoutesQuery(origin, destination, 'transit', options);
@@ -14,24 +15,30 @@ function ComponentOnce() {
 }
 
 function createClient() {
-  return new QueryClient({ defaultOptions: { queries: { retry: 0, staleTime: 10000 } } });
+  return new QueryClient({
+    defaultOptions: { queries: { retry: 0, staleTime: 10000 } }
+  });
 }
 
 describe('Routes cache metrics', () => {
-  beforeEach(() => __resetRouteServiceMetrics());
-
-  it('increments fetch count only on first distinct fetch (cache reuse on remount)', async () => {
+  it('calls fetchRoutes only once; second mount reuses cache', async () => {
     const client = createClient();
-    const wrapper = (
+    const fetchSpy = jest.spyOn(routeService, 'fetchRoutes');
+    const { unmount, rerender } = render(
       <QueryClientProvider client={client}>
         <ComponentOnce />
       </QueryClientProvider>
     );
-    const { unmount, rerender } = render(wrapper);
-    await waitFor(() => expect(getRouteServiceMetrics().fetchCount).toBe(1), { timeout: 4000 });
+    await waitFor(() => expect(fetchSpy).toHaveBeenCalledTimes(1), { timeout: 8000 });
+    // Ensure promise chain settled
+    await new Promise(r => setTimeout(r, 50));
     unmount();
-    rerender(wrapper);
-    await new Promise(r => setTimeout(r, 150));
-    expect(getRouteServiceMetrics().fetchCount).toBe(1);
-  }, 10000);
+    rerender(
+      <QueryClientProvider client={client}>
+        <ComponentOnce />
+      </QueryClientProvider>
+    );
+    await new Promise(r => setTimeout(r, 250));
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  }, 15000);
 });

@@ -1,7 +1,8 @@
+import { CheckCircle, AlertCircle, Info, X } from "lucide-react-native";
 import React, { useEffect, useRef } from "react";
 import { StyleSheet, Text, Animated, Platform, AccessibilityInfo, findNodeHandle } from "react-native";
-import Colors from "@/constants/colors";
-import { CheckCircle, AlertCircle, Info, X } from "lucide-react-native";
+
+import { useTheme } from "@/constants/theme";
 import { announce } from "@/utils/accessibility";
 
 type ToastType = "success" | "error" | "info" | "warning";
@@ -24,8 +25,9 @@ const typeLabels: Record<ToastType, string> = {
 const Toast: React.FC<ToastProps> = ({ message, type, visible, onHide, duration = 3000 }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(-100)).current;
-  const viewRef = useRef<Animated.View | null>(null);
+  const viewRef = useRef<any>(null);
   const announcedRef = useRef(false);
+  const theme = useTheme();
 
   useEffect(() => {
     if (visible) {
@@ -54,7 +56,9 @@ const Toast: React.FC<ToastProps> = ({ message, type, visible, onHide, duration 
             if (handle) {
               (AccessibilityInfo as any)?.setAccessibilityFocus?.(handle);
             }
-          } catch {}
+          } catch (_error) {
+            // Swallow focus errors (best-effort focus attempt may fail on some platforms)
+          }
         }, 50);
       }
 
@@ -65,7 +69,7 @@ const Toast: React.FC<ToastProps> = ({ message, type, visible, onHide, duration 
       return () => clearTimeout(timer);
     }
     announcedRef.current = false; // reset when hidden
-  }, [visible]);
+  }, [visible, fadeAnim, slideAnim, duration, type, message]);
 
   const hideToast = () => {
     Animated.parallel([
@@ -86,19 +90,19 @@ const Toast: React.FC<ToastProps> = ({ message, type, visible, onHide, duration 
 
   const getIcon = () => {
     switch (type) {
-      case "success": return <CheckCircle size={20} color={Colors.success} />;
-      case "error": return <X size={20} color={Colors.error} />;
-      case "warning": return <AlertCircle size={20} color={Colors.warning} />;
-      case "info": return <Info size={20} color={Colors.primary} />;
+      case "success": return <CheckCircle size={20} color={theme.colors.success} />;
+      case "error": return <X size={20} color={theme.colors.error} />;
+      case "warning": return <AlertCircle size={20} color={theme.colors.warning} />;
+      case "info": return <Info size={20} color={theme.colors.info} />;
     }
   };
 
   const getBackgroundColor = () => {
     switch (type) {
-      case "success": return "#F0FFF4";
-      case "error": return "#FFF5F5";
-      case "warning": return "#FFFBF0";
-      case "info": return "#F0F4FF";
+      case "success": return theme.colors.surfaceAlt;
+      case "error": return theme.colors.surfaceAlt;
+      case "warning": return theme.colors.surfaceAlt;
+      case "info": return theme.colors.surfaceAlt;
     }
   };
 
@@ -123,33 +127,32 @@ const Toast: React.FC<ToastProps> = ({ message, type, visible, onHide, duration 
       testID="toast-alert"
     >
       {getIcon()}
-      <Text style={styles.message}>{message}</Text>
+  <Text style={[styles.message,{color: theme.colors.text}]}>{message}</Text>
     </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    position: "absolute",
-    top: 60,
-    left: 16,
-    right: 16,
-    flexDirection: "row",
     alignItems: "center",
-    padding: 16,
     borderRadius: 12,
-    shadowColor: "#000",
+    elevation: 5,
+    flexDirection: "row",
+    gap: 12,
+    left: 16,
+    padding: 16,
+    position: "absolute",
+    right: 16,
+    shadowColor: "/*TODO theme*/ theme.colors.placeholder /*#000*/",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 5,
+    top: 60,
     zIndex: 1000,
-    gap: 12,
   },
   message: {
     flex: 1,
     fontSize: 14,
-    color: Colors.text,
     fontWeight: "500",
   },
 });

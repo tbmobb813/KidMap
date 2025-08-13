@@ -1,15 +1,17 @@
-import React from "react";
 import { Tabs } from "expo-router";
-import Colors from "@/constants/colors";
 import { Home, Map, Train, Settings, Trophy } from "lucide-react-native";
+import React from "react";
 import { Platform } from "react-native";
 
+import { useTheme } from "@/constants/theme";
+
 export default function TabLayout() {
+  const theme = useTheme();
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors.primary,
-        tabBarInactiveTintColor: Colors.textLight,
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.textSecondary,
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: "500",
@@ -18,9 +20,11 @@ export default function TabLayout() {
           height: Platform.OS === 'android' ? 65 : 60,
           paddingBottom: Platform.OS === 'android' ? 10 : 8,
           paddingTop: Platform.OS === 'android' ? 5 : 0,
+          backgroundColor: theme.colors.surface,
+          borderTopColor: theme.colors.border,
+          borderTopWidth: Platform.OS === 'android' ? 0 : 1,
         },
         headerShadowVisible: false,
-        // Android-specific tab styling
         ...(Platform.OS === 'android' && {
           tabBarStyle: {
             height: 65,
@@ -28,6 +32,7 @@ export default function TabLayout() {
             paddingTop: 5,
             elevation: 8,
             borderTopWidth: 0,
+            backgroundColor: theme.colors.surface,
           },
         }),
       }}

@@ -1,8 +1,9 @@
 import createContextHook from '@nkzw/create-context-hook';
-import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CustomCategory, CategoryManagementSettings, PlaceCategory } from '@/types/navigation';
+import { useState, useEffect } from 'react';
+
 import { CategoryCreateSchema, CategoryUpdateSchema } from '@/core/validation';
+import { CustomCategory, CategoryManagementSettings, PlaceCategory } from '@/types/navigation';
 
 const DEFAULT_CATEGORIES: CustomCategory[] = [
   {
@@ -250,7 +251,7 @@ export const [CategoryProvider, useCategoryStoreInternal] = createContextHook(()
 export const useCategoryStore = () => {
   try {
     return useCategoryStoreInternal();
-  } catch (error) {
+  } catch (_error) {
     console.warn('CategoryStore not available, using fallback');
     // Return fallback values
     return {

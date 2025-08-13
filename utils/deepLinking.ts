@@ -1,4 +1,5 @@
 import { Linking } from "react-native";
+
 import { nav } from "@/shared/navigation/nav";
 
 export type DeepLinkParams = {
@@ -17,10 +18,10 @@ export const handleDeepLink = (url: string) => {
       const routeId = path.split('/')[2];
       nav.push("/route/:id", { id: routeId });
     } else if (path === '/search') {
-      const { category, ..._rest } = searchParams as Record<string, string>;
+      const { category } = searchParams as Record<string, string>;
       nav.push('/search', category ? { category } : undefined);
     } else if (path.startsWith('/place/')) {
-      const placeId = path.split('/')[2];
+      // const placeId = path.split('/')[2];
       // Navigate to place details or set as destination
       nav.push('/map');
     } else {

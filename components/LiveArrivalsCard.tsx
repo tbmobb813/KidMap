@@ -1,8 +1,10 @@
+import { Clock, MapPin, RefreshCw, Bell } from "lucide-react-native";
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
-import Colors from "@/constants/colors";
+
 import TransitStepIndicator from "./TransitStepIndicator";
-import { Clock, MapPin, RefreshCw, Bell } from "lucide-react-native";
+
+import { useTheme } from "@/constants/theme";
 
 export type LiveArrival = {
   id: string;
@@ -22,13 +24,14 @@ type LiveArrivalsCardProps = {
   isRefreshing?: boolean;
 };
 
-const LiveArrivalsCard: React.FC<LiveArrivalsCardProps> = ({ 
-  stationName, 
-  arrivals, 
+const LiveArrivalsCard: React.FC<LiveArrivalsCardProps> = ({
+  stationName,
+  arrivals,
   lastUpdated = "Just now",
   onRefresh,
   isRefreshing = false
 }) => {
+  const theme = useTheme();
   const [alertedArrivals, setAlertedArrivals] = useState<Set<string>>(new Set());
 
   // Alert for trains arriving soon
@@ -41,9 +44,9 @@ const LiveArrivalsCard: React.FC<LiveArrivalsCardProps> = ({
   }, [arrivals]);
 
   const getArrivalTimeColor = (minutes: number) => {
-    if (minutes === 0) return Colors.error;
-    if (minutes <= 2) return Colors.warning;
-    return Colors.primary;
+    if (minutes === 0) return theme.colors.error;
+    if (minutes <= 2) return theme.colors.warning;
+    return theme.colors.primary;
   };
 
   const getArrivalTimeText = (minutes: number) => {
@@ -55,7 +58,7 @@ const LiveArrivalsCard: React.FC<LiveArrivalsCardProps> = ({
   const renderArrival = ({ item }: { item: LiveArrival }) => (
     <View style={[
       styles.arrivalItem,
-      item.arrivalTime <= 1 && styles.urgentArrival
+      item.arrivalTime <= 1 && [styles.urgentArrival, { borderLeftColor: theme.colors.warning, backgroundColor: theme.colors.surfaceAlt }]
     ]}>
       <TransitStepIndicator 
         step={{
@@ -70,16 +73,16 @@ const LiveArrivalsCard: React.FC<LiveArrivalsCardProps> = ({
         size="medium"
       />
       <View style={styles.arrivalInfo}>
-        <Text style={styles.destinationText} numberOfLines={1}>
+        <Text style={[styles.destinationText, { color: theme.colors.text }]} numberOfLines={1}>
           {item.destination}
         </Text>
         {item.platform && (
-          <Text style={styles.platformText}>Platform {item.platform}</Text>
+          <Text style={[styles.platformText, { color: theme.colors.textSecondary }]}>Platform {item.platform}</Text>
         )}
       </View>
       <View style={styles.timeContainer}>
         {item.arrivalTime <= 1 && (
-          <Bell size={14} color={Colors.warning} style={styles.alertIcon} />
+          <Bell size={14} color={theme.colors.warning} style={styles.alertIcon} />
         )}
         <Text style={[
           styles.arrivalTime,
@@ -92,16 +95,16 @@ const LiveArrivalsCard: React.FC<LiveArrivalsCardProps> = ({
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container, { backgroundColor: theme.colors.surface, shadowColor: theme.colors.text }]}> 
+      <View style={[styles.header, { borderBottomColor: theme.colors.border }]}> 
         <View style={styles.stationInfo}>
-          <MapPin size={20} color={Colors.primary} style={styles.stationIcon} />
-          <Text style={styles.stationName}>{stationName}</Text>
+          <MapPin size={20} color={theme.colors.primary} style={styles.stationIcon} />
+          <Text style={[styles.stationName, { color: theme.colors.text }]}>{stationName}</Text>
         </View>
         <View style={styles.headerActions}>
           <View style={styles.updateInfo}>
-            <Clock size={14} color={Colors.textLight} />
-            <Text style={styles.updateText}>{lastUpdated}</Text>
+            <Clock size={14} color={theme.colors.textSecondary} />
+            <Text style={[styles.updateText, { color: theme.colors.textSecondary }]}>{lastUpdated}</Text>
           </View>
           {onRefresh && (
             <Pressable 
@@ -111,7 +114,7 @@ const LiveArrivalsCard: React.FC<LiveArrivalsCardProps> = ({
             >
               <RefreshCw 
                 size={16} 
-                color={Colors.primary} 
+                color={theme.colors.primary} 
                 style={[styles.refreshIcon, isRefreshing && styles.spinning]}
               />
             </Pressable>
@@ -129,7 +132,7 @@ const LiveArrivalsCard: React.FC<LiveArrivalsCardProps> = ({
         />
       ) : (
         <View style={styles.emptyState}>
-          <Text style={styles.emptyText}>No arrivals scheduled</Text>
+          <Text style={[styles.emptyText, { color: theme.colors.textSecondary }]}>No arrivals scheduled</Text>
         </View>
       )}
     </View>
@@ -137,53 +140,67 @@ const LiveArrivalsCard: React.FC<LiveArrivalsCardProps> = ({
 };
 
 const styles = StyleSheet.create({
+  alertIcon: {
+    // Alert icon styles
+  },
+  arrivalInfo: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  arrivalItem: {
+    alignItems: "center",
+    backgroundColor: "transparent",
+    borderRadius: 8,
+    flexDirection: "row",
+    paddingHorizontal: 8,
+    paddingVertical: 12,
+  },
+  arrivalTime: {
+    fontSize: 16,
+    fontWeight: "700",
+    minWidth: 50,
+    textAlign: "right",
+  },
+  arrivalsList: {
+    gap: 8,
+  },
   container: {
-    backgroundColor: Colors.card,
     borderRadius: 12,
-    padding: 16,
+    elevation: 2,
     marginBottom: 16,
-    shadowColor: "#000",
+    padding: 16,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,
+  },
+  destinationText: {
+    fontSize: 15,
+    fontWeight: "600",
+    marginBottom: 2,
+  },
+  emptyState: {
+    alignItems: "center",
+    paddingVertical: 24,
+  },
+  emptyText: {
+    fontSize: 14,
   },
   header: {
+    alignItems: "center",
+    borderBottomWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
     marginBottom: 16,
     paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-  },
-  stationInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  stationIcon: {
-    marginRight: 8,
-  },
-  stationName: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.text,
-    flex: 1,
   },
   headerActions: {
-    flexDirection: "row",
     alignItems: "center",
+    flexDirection: "row",
     gap: 12,
   },
-  updateInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  updateText: {
+  platformText: {
     fontSize: 12,
-    color: Colors.textLight,
-    marginLeft: 4,
+    fontWeight: "500",
   },
   refreshButton: {
     padding: 4,
@@ -194,58 +211,34 @@ const styles = StyleSheet.create({
   spinning: {
     // Animation styles for spinning refresh icon
   },
-  arrivalsList: {
-    gap: 8,
+  stationIcon: {
+    marginRight: 8,
   },
-  arrivalItem: {
-    flexDirection: "row",
+  stationInfo: {
     alignItems: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 8,
-    borderRadius: 8,
-    backgroundColor: "transparent",
-  },
-  urgentArrival: {
-    backgroundColor: "#FFF9E6",
-    borderLeftWidth: 3,
-    borderLeftColor: Colors.warning,
-  },
-  arrivalInfo: {
+    flexDirection: "row",
     flex: 1,
-    marginLeft: 12,
   },
-  destinationText: {
-    fontSize: 15,
+  stationName: {
+    flex: 1,
+    fontSize: 16,
     fontWeight: "600",
-    color: Colors.text,
-    marginBottom: 2,
-  },
-  platformText: {
-    fontSize: 12,
-    color: Colors.textLight,
-    fontWeight: "500",
   },
   timeContainer: {
-    flexDirection: "row",
     alignItems: "center",
+    flexDirection: "row",
     gap: 4,
   },
-  alertIcon: {
-    // Alert icon styles
-  },
-  arrivalTime: {
-    fontSize: 16,
-    fontWeight: "700",
-    minWidth: 50,
-    textAlign: "right",
-  },
-  emptyState: {
+  updateInfo: {
     alignItems: "center",
-    paddingVertical: 24,
+    flexDirection: "row",
   },
-  emptyText: {
-    fontSize: 14,
-    color: Colors.textLight,
+  updateText: {
+    fontSize: 12,
+    marginLeft: 4,
+  },
+  urgentArrival: {
+  borderLeftWidth: 3,
   },
 });
 

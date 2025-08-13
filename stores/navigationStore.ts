@@ -1,11 +1,13 @@
 import { create } from "zustand";
-import { invariant } from '@/utils/invariant';
-import { Place, Route, PhotoCheckIn, TravelMode, RouteOptions } from "@/types/navigation";
-import { fetchRoutes } from '@/services/routeService';
+
 import { PhotoCheckInSchema } from '@/core/validation';
 import { favoriteLocations } from "@/mocks/places";
-import { sampleRoutes } from "@/mocks/transit";
+// import { sampleRoutes } from "@/mocks/transit";
+import { fetchRoutes } from '@/services/routeService';
+import { Place, Route, PhotoCheckIn, TravelMode, RouteOptions } from "@/types/navigation";
+import { invariant } from '@/utils/invariant';
 import { verifyLocationProximity } from "@/utils/locationUtils";
+import { savePersistedState, loadPersistedState } from '@/utils/persistence';
 
 type AccessibilitySettings = {
   largeText: boolean;
@@ -33,6 +35,8 @@ type NavigationState = {
   selectedTravelMode: TravelMode;
   routeOptions: RouteOptions;
   routesLoading: boolean;
+  isHydrated: boolean;
+  hydrate: () => Promise<void>;
 
   // Actions
   setOrigin: (place: Place | null) => void;
@@ -53,6 +57,17 @@ type NavigationState = {
   updateRouteOptions: (options: Partial<RouteOptions>) => void;
   addLocationVerifiedPhotoCheckIn: (checkIn: Omit<PhotoCheckIn, 'id'>, currentLocation: { latitude: number; longitude: number }, placeLocation: { latitude: number; longitude: number }) => { isWithinRadius: boolean; distance: number };
 };
+
+let persistTimer: any = null;
+const PERSIST_DEBOUNCE_MS = 300;
+
+function schedulePersist(get: () => NavigationState) {
+  if (persistTimer) clearTimeout(persistTimer);
+  persistTimer = setTimeout(() => {
+    const { favorites, recentSearches, accessibilitySettings, photoCheckIns, selectedTravelMode, routeOptions } = get();
+    savePersistedState({ favorites, recentSearches, accessibilitySettings, photoCheckIns, selectedTravelMode, routeOptions });
+  }, PERSIST_DEBOUNCE_MS);
+}
 
 export const useNavigationStore = create<NavigationState>((set, get) => ({
   favorites: favoriteLocations,
@@ -77,10 +92,28 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
     accessibilityMode: false,
   },
   routesLoading: false,
+  isHydrated: false,
+  hydrate: async () => {
+    try {
+      const data = await loadPersistedState();
+      if (data) {
+        set({
+          favorites: data.favorites ?? [],
+          recentSearches: data.recentSearches ?? [],
+          accessibilitySettings: data.accessibilitySettings ?? get().accessibilitySettings,
+          photoCheckIns: data.photoCheckIns ?? [],
+          selectedTravelMode: (['transit', 'walking', 'biking', 'driving'] as const).includes((data as any).selectedTravelMode) ? (data as any).selectedTravelMode as TravelMode : 'transit',
+          routeOptions: data.routeOptions ?? get().routeOptions,
+        });
+      }
+    } finally {
+      set({ isHydrated: true });
+    }
+  },
 
-  setOrigin: (place) => set({ origin: place }),
+  setOrigin: (place) => { set({ origin: place }); schedulePersist(get); },
 
-  setDestination: (place) => set({ destination: place }),
+  setDestination: (place) => { set({ destination: place }); schedulePersist(get); },
 
   addToFavorites: (place) => set((state) => {
     // Check if already in favorites
@@ -89,24 +122,30 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
     }
 
     const updatedPlace = { ...place, isFavorite: true };
-    return { favorites: [...state.favorites, updatedPlace] };
+    const next = { favorites: [...state.favorites, updatedPlace] } as Partial<NavigationState>;
+    schedulePersist(() => ({ ...state, ...next } as NavigationState));
+    return next;
   }),
 
-  removeFromFavorites: (placeId) => set((state) => ({
-    favorites: state.favorites.filter(place => place.id !== placeId)
-  })),
+  removeFromFavorites: (placeId) => set((state) => {
+    const next = { favorites: state.favorites.filter(place => place.id !== placeId) } as Partial<NavigationState>;
+    schedulePersist(() => ({ ...state, ...next } as NavigationState));
+    return next;
+  }),
 
   addToRecentSearches: (place) => set((state) => {
     // Remove if already exists to avoid duplicates
     const filteredSearches = state.recentSearches.filter(p => p.id !== place.id);
 
     // Add to beginning of array, limit to 5 recent searches
-    return {
+    const next = {
       recentSearches: [place, ...filteredSearches].slice(0, 5)
-    };
+    } as Partial<NavigationState>;
+    schedulePersist(() => ({ ...state, ...next } as NavigationState));
+    return next;
   }),
 
-  clearRecentSearches: () => set({ recentSearches: [] }),
+  clearRecentSearches: () => { set({ recentSearches: [] }); schedulePersist(get); },
 
   setSearchQuery: (query) => set({ searchQuery: query }),
 
@@ -140,9 +179,11 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
     searchQuery: ""
   }),
 
-  updateAccessibilitySettings: (settings) => set((state) => ({
-    accessibilitySettings: { ...state.accessibilitySettings, ...settings }
-  })),
+  updateAccessibilitySettings: (settings) => set((state) => {
+    const next = { accessibilitySettings: { ...state.accessibilitySettings, ...settings } } as Partial<NavigationState>;
+    schedulePersist(() => ({ ...state, ...next } as NavigationState));
+    return next;
+  }),
 
   addPhotoCheckIn: (checkIn) => {
     const parsed = PhotoCheckInSchema.safeParse(checkIn);
@@ -150,9 +191,11 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
       console.warn('Invalid photo check-in:', parsed.error.issues);
       return;
     }
-    set((state) => ({
-      photoCheckIns: [...state.photoCheckIns, { ...parsed.data, id: Date.now().toString() }]
-    }));
+    set((state) => {
+      const next = { photoCheckIns: [...state.photoCheckIns, { ...parsed.data, id: Date.now().toString() }] } as Partial<NavigationState>;
+      schedulePersist(() => ({ ...state, ...next } as NavigationState));
+      return next;
+    });
   },
 
   setWeatherInfo: (weather) => set({ weatherInfo: weather }),
@@ -165,6 +208,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
       routeOptions: { ...state.routeOptions, travelMode: mode }
     }));
     findRoutes();
+    schedulePersist(get);
   },
 
   updateRouteOptions: (options) => {
@@ -174,6 +218,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
     // Refind routes with new options
     const { findRoutes } = get();
     findRoutes();
+    schedulePersist(get);
   },
 
   addLocationVerifiedPhotoCheckIn: (checkIn, currentLocation, placeLocation) => {
@@ -193,9 +238,11 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
       distanceFromPlace: verification.distance,
     };
 
-    set((state) => ({
-      photoCheckIns: [...state.photoCheckIns, verifiedCheckIn]
-    }));
+    set((state) => {
+      const next = { photoCheckIns: [...state.photoCheckIns, verifiedCheckIn] } as Partial<NavigationState>;
+      schedulePersist(() => ({ ...state, ...next } as NavigationState));
+      return next;
+    });
 
     return verification;
   }

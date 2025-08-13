@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
 import * as Location from "expo-location";
+import { useState, useEffect } from "react";
 import { Platform, Alert } from "react-native";
 
 export type LocationData = {
@@ -34,7 +34,7 @@ export default function useLocation() {
                 });
                 setLoading(false);
               },
-              (error) => {
+              (_error) => {
                 setLocation(prev => ({
                   ...prev,
                   error: "Could not get your location"

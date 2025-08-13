@@ -1,11 +1,14 @@
+import { Train, Bus, Navigation, Ship } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, View, FlatList } from "react-native";
-import Colors from "@/constants/colors";
+
+
+import { useTheme } from "@/constants/theme";
 import { useRegionStore } from "@/stores/regionStore";
-import TransitStepIndicator from "./TransitStepIndicator";
-import { Train, Bus, Navigation, Ship } from "lucide-react-native";
 
 const RegionalTransitCard: React.FC = () => {
+  const theme = useTheme();
+  const styles = React.useMemo(() => createStyles(theme), [theme]);
   const { currentRegion, getCurrentTransitSystems } = useRegionStore();
   const transitSystems = getCurrentTransitSystems();
 
@@ -13,15 +16,15 @@ const RegionalTransitCard: React.FC = () => {
     switch (type) {
       case "subway":
       case "train":
-        return <Train size={20} color="#FFFFFF" />;
+  return <Train size={20} color={theme.colors.primaryForeground} />;
       case "bus":
-        return <Bus size={20} color="#FFFFFF" />;
+  return <Bus size={20} color={theme.colors.primaryForeground} />;
       case "tram":
-        return <Navigation size={20} color="#FFFFFF" />;
+  return <Navigation size={20} color={theme.colors.primaryForeground} />;
       case "ferry":
-        return <Ship size={20} color="#FFFFFF" />;
+  return <Ship size={20} color={theme.colors.primaryForeground} />;
       default:
-        return <Train size={20} color="#FFFFFF" />;
+  return <Train size={20} color={theme.colors.primaryForeground} />;
     }
   };
 
@@ -64,68 +67,61 @@ const RegionalTransitCard: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (theme: ReturnType<typeof useTheme>) => StyleSheet.create({
   container: {
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 12,
-    padding: 16,
     margin: 16,
+    padding: 16,
+  },
+  footer: {
+    borderTopColor: theme.colors.border,
+    borderTopWidth: 1,
+    marginTop: 16,
+    paddingTop: 12,
+  },
+  footerText: {
+    color: theme.colors.error,
+    fontSize: 14,
+    fontWeight: "600",
+    textAlign: "center",
   },
   header: {
+    borderBottomColor: theme.colors.border,
+    borderBottomWidth: 1,
     marginBottom: 16,
     paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: Colors.text,
-    marginBottom: 4,
   },
   subtitle: {
+    color: theme.colors.textSecondary,
     fontSize: 14,
-    color: Colors.textLight,
   },
-  transitList: {
-    gap: 12,
-  },
-  transitItem: {
-    flexDirection: "row",
-    alignItems: "center",
+  title: {
+    color: theme.colors.text,
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 4,
   },
   transitIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: "center",
     alignItems: "center",
+    borderRadius: 20,
+    height: 40,
+    justifyContent: "center",
     marginRight: 12,
+    width: 40,
   },
-  transitInfo: {
-    flex: 1,
-  },
+  transitInfo: { flex: 1 },
+  transitItem: { alignItems: "center", flexDirection: "row" },
+  transitList: { gap: 12 },
   transitName: {
+    color: theme.colors.text,
     fontSize: 16,
     fontWeight: "600",
-    color: Colors.text,
     marginBottom: 2,
   },
   transitType: {
+    color: theme.colors.textSecondary,
     fontSize: 12,
-    color: Colors.textLight,
-  },
-  footer: {
-    marginTop: 16,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: Colors.border,
-  },
-  footerText: {
-    fontSize: 14,
-    color: Colors.error,
-    fontWeight: "600",
-    textAlign: "center",
   },
 });
 

@@ -1,8 +1,9 @@
+import { Train, Bus, Navigation, Bike, Car } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+
+import { useTheme } from "@/constants/theme";
 import { TransitStep } from "@/types/navigation";
-import Colors from "@/constants/colors";
-import { Train, Bus, Navigation, Bike, Car } from "lucide-react-native";
 
 type TransitStepIndicatorProps = {
   step: TransitStep;
@@ -13,9 +14,10 @@ const TransitStepIndicator: React.FC<TransitStepIndicatorProps> = ({
   step, 
   size = "medium" 
 }) => {
+  const theme = useTheme();
   const getIcon = () => {
     const iconSize = size === "small" ? 14 : size === "medium" ? 18 : 24;
-    const iconColor = "#FFFFFF";
+    const iconColor = theme.colors.primaryForeground;
     
     switch (step.type) {
       case "subway":
@@ -36,15 +38,14 @@ const TransitStepIndicator: React.FC<TransitStepIndicatorProps> = ({
 
   const getBackgroundColor = () => {
     if (step.color) return step.color;
-    
     switch (step.type) {
-      case "subway": return Colors.subway;
-      case "train": return Colors.train;
-      case "bus": return Colors.bus;
-      case "walk": return Colors.textLight;
-      case "bike": return "#10B981"; // Green for biking
-      case "car": return "#6366F1"; // Indigo for driving
-      default: return Colors.primary;
+      case "subway": return theme.colors.subway;
+      case "train": return theme.colors.train;
+      case "bus": return theme.colors.bus;
+      case "walk": return theme.colors.textSecondary;
+      case "bike": return theme.colors.success; // repurpose success as green
+      case "car": return theme.colors.info; // repurpose info as indigo/blue accent
+      default: return theme.colors.primary;
     }
   };
 
@@ -85,14 +86,8 @@ const TransitStepIndicator: React.FC<TransitStepIndicatorProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  lineText: {
-    color: "#FFFFFF",
-    fontWeight: "700",
-  },
+  container: { alignItems: "center", justifyContent: "center" },
+  lineText: { color: '#FFFFFF', fontWeight: "700" },
 });
 
 export default TransitStepIndicator;

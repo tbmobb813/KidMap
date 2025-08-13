@@ -1,9 +1,11 @@
+import { Clock, ArrowRight } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import { Route } from "@/types/navigation";
-import Colors from "@/constants/colors";
-import { Clock, ArrowRight } from "lucide-react-native";
+
 import TransitStepIndicator from "./TransitStepIndicator";
+
+import { useTheme } from '@/constants/theme';
+import { Route } from "@/types/navigation";
 
 type RouteCardProps = {
   route: Route | null | undefined;
@@ -12,6 +14,7 @@ type RouteCardProps = {
 };
 
 const RouteCardComponent: React.FC<RouteCardProps> = ({ route, onPress, isSelected = false }) => {
+  const theme = useTheme();
   if (!route) {
     return (
       <View style={[styles.container, styles.unavailable]}>
@@ -33,18 +36,19 @@ const RouteCardComponent: React.FC<RouteCardProps> = ({ route, onPress, isSelect
       hitSlop={8}
       style={({ pressed }) => [
         styles.container,
+        { backgroundColor: theme.colors.surface, shadowColor: theme.colors.text, borderColor: isSelected ? theme.colors.primary : 'transparent' },
         isSelected && styles.selected,
-        pressed && styles.pressed,
+        pressed && [{ backgroundColor: theme.colors.surfaceAlt }, styles.pressed],
       ]}
       onPress={() => onPress(route)}
       disabled={!route}
       testID={`route-card-${route.id}`}
     >
       <View style={styles.timeContainer}>
-        <Text style={styles.duration}>{durationLabel}</Text>
+        <Text style={[styles.duration, { color: theme.colors.text }]}>{durationLabel}</Text>
         <View style={styles.timeRow}>
-          <Clock size={14} color={Colors.textLight} style={styles.clockIcon} />
-          <Text style={styles.timeText}>
+          <Clock size={14} color={theme.colors.textSecondary} style={styles.clockIcon} />
+          <Text style={[styles.timeText, { color: theme.colors.textSecondary }]}>
             {departure} - {arrival}
           </Text>
         </View>
@@ -52,13 +56,13 @@ const RouteCardComponent: React.FC<RouteCardProps> = ({ route, onPress, isSelect
 
       <View style={styles.stepsContainer}>
         {steps.length === 0 && (
-          <Text style={styles.emptySteps}>No steps</Text>
+          <Text style={[styles.emptySteps, { color: theme.colors.textSecondary }]}>No steps</Text>
         )}
         {steps.map((step, index) => (
           <View key={step.id} style={styles.stepRow}>
             <TransitStepIndicator step={step} />
             {index < steps.length - 1 && (
-              <ArrowRight size={14} color={Colors.textLight} style={styles.arrowIcon} />
+              <ArrowRight size={14} color={theme.colors.textSecondary} style={styles.arrowIcon} />
             )}
           </View>
         ))}
@@ -72,70 +76,61 @@ const RouteCard = React.memo(RouteCardComponent, (prev, next) => {
 });
 
 const styles = StyleSheet.create({
+  arrowIcon: {
+    marginHorizontal: 4,
+  },
+  clockIcon: {
+    marginRight: 4,
+  },
   container: {
-    backgroundColor: Colors.card,
     borderRadius: 12,
-    padding: 16,
+    elevation: 2,
     marginBottom: 12,
-    shadowColor: "#000",
+    padding: 16,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,
+    borderWidth: 2,
+  },
+  duration: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 4,
+  },
+  emptySteps: {
+    fontSize: 12,
+  },
+  pressed: {
+    opacity: 0.85,
+  },
+  selected: {},
+  stepRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginRight: 4,
+  },
+  stepsContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  timeContainer: {
+    marginBottom: 12,
+  },
+  timeRow: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  timeText: {
+    fontSize: 14,
   },
   unavailable: {
     alignItems: 'center',
     justifyContent: 'center'
   },
   unavailableText: {
-    color: Colors.textLight,
     fontSize: 14,
     fontStyle: 'italic'
-  },
-  selected: {
-    borderWidth: 2,
-    borderColor: Colors.primary,
-  },
-  pressed: {
-    opacity: 0.8,
-    backgroundColor: "#EAEAEA",
-  },
-  timeContainer: {
-    marginBottom: 12,
-  },
-  duration: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: Colors.text,
-    marginBottom: 4,
-  },
-  timeRow: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  clockIcon: {
-    marginRight: 4,
-  },
-  timeText: {
-    fontSize: 14,
-    color: Colors.textLight,
-  },
-  stepsContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    flexWrap: "wrap",
-  },
-  emptySteps: {
-    fontSize: 12,
-    color: Colors.textLight,
-  },
-  stepRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: 4,
-  },
-  arrowIcon: {
-    marginHorizontal: 4,
   },
 });
 

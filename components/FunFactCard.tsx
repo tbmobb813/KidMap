@@ -1,7 +1,8 @@
+import { Lightbulb, X } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import Colors from "@/constants/colors";
-import { Lightbulb, X } from "lucide-react-native";
+
+import { useTheme } from '@/constants/theme';
 
 type FunFactCardProps = {
   fact: string;
@@ -10,44 +11,48 @@ type FunFactCardProps = {
 };
 
 const FunFactCard: React.FC<FunFactCardProps> = ({ fact, location, onDismiss }) => {
+  const theme = useTheme();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.surface, borderLeftColor: theme.colors.secondary, shadowColor: theme.colors.text }]}>
       <View style={styles.header}>
         <View style={styles.iconContainer}>
-          <Lightbulb size={20} color={Colors.secondary} />
+          <Lightbulb size={20} color={theme.colors.secondary} />
         </View>
-        <Text style={styles.title}>
+        <Text style={[styles.title, { color: theme.colors.text }]}>
           {location ? `Fun Fact about ${location}` : "Did You Know?"}
         </Text>
         {onDismiss && (
           <Pressable style={styles.dismissButton} onPress={onDismiss}>
-            <X size={16} color={Colors.textLight} />
+            <X size={16} color={theme.colors.textSecondary} />
           </Pressable>
         )}
       </View>
-      
-      <Text style={styles.factText}>{fact}</Text>
+      <Text style={[styles.factText, { color: theme.colors.textSecondary }]}>{fact}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F0FFF4",
-    borderRadius: 12,
-    padding: 16,
-    margin: 16,
     borderLeftWidth: 4,
-    borderLeftColor: Colors.secondary,
-    shadowColor: "#000",
+    borderRadius: 12,
+    elevation: 2,
+    margin: 16,
+    padding: 16,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,
+  },
+  dismissButton: {
+    padding: 4,
+  },
+  factText: {
+    fontSize: 14,
+    lineHeight: 20,
   },
   header: {
-    flexDirection: "row",
     alignItems: "center",
+    flexDirection: "row",
     marginBottom: 8,
   },
   iconContainer: {
@@ -56,16 +61,7 @@ const styles = StyleSheet.create({
   title: {
     flex: 1,
     fontSize: 14,
-    fontWeight: "600",
-    color: Colors.text,
-  },
-  dismissButton: {
-    padding: 4,
-  },
-  factText: {
-    fontSize: 14,
-    color: Colors.text,
-    lineHeight: 20,
+    fontWeight: '600',
   },
 });
 

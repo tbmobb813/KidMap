@@ -1,7 +1,8 @@
+import { LucideIcon } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import Colors from "@/constants/colors";
-import { LucideIcon } from "lucide-react-native";
+
+import { useTheme } from '@/constants/theme';
 
 type EmptyStateProps = {
   icon: LucideIcon;
@@ -18,16 +19,17 @@ const EmptyState: React.FC<EmptyStateProps> = ({
   actionText,
   onAction,
 }) => {
+  const theme = useTheme();
   return (
-    <View style={styles.container}>
-      <View style={styles.iconContainer}>
-        <Icon size={48} color={Colors.textLight} />
+    <View style={[styles.container, { backgroundColor: 'transparent' }] }>
+      <View style={[styles.iconContainer, { backgroundColor: theme.colors.surface }] }>
+        <Icon size={48} color={theme.colors.textSecondary} />
       </View>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.description}>{description}</Text>
+      <Text style={[styles.title, { color: theme.colors.text }]}>{title}</Text>
+      <Text style={[styles.description, { color: theme.colors.textSecondary }]}>{description}</Text>
       {actionText && onAction && (
-        <Pressable style={styles.actionButton} onPress={onAction}>
-          <Text style={styles.actionText}>{actionText}</Text>
+        <Pressable style={[styles.actionButton, { backgroundColor: theme.colors.primary }]} onPress={onAction}>
+          <Text style={[styles.actionText, { color: theme.colors.primaryForeground }]}>{actionText}</Text>
         </Pressable>
       )}
     </View>
@@ -35,45 +37,40 @@ const EmptyState: React.FC<EmptyStateProps> = ({
 };
 
 const styles = StyleSheet.create({
+  actionButton: {
+    borderRadius: 8,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+  },
+  actionText: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
   container: {
+    alignItems: "center",
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
     padding: 32,
-  },
-  iconContainer: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-    backgroundColor: Colors.card,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 24,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: Colors.text,
-    marginBottom: 8,
-    textAlign: "center",
   },
   description: {
     fontSize: 16,
-    color: Colors.textLight,
-    textAlign: "center",
     lineHeight: 24,
     marginBottom: 24,
+    textAlign: 'center',
   },
-  actionButton: {
-    backgroundColor: Colors.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
+  iconContainer: {
+    alignItems: 'center',
+    borderRadius: 48,
+    height: 96,
+    justifyContent: 'center',
+    marginBottom: 24,
+    width: 96,
   },
-  actionText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "600",
+  title: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 8,
+    textAlign: 'center',
   },
 });
 

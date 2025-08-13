@@ -1,5 +1,5 @@
 /* Basic Danger rules */
-const { danger, fail, warn, message } = require('danger');
+const { danger, warn, message } = require('danger');
 
 // PR size
 if (danger.github.pr.additions + danger.github.pr.deletions > 1200) {

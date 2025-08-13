@@ -1,18 +1,14 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
-import RouteCard from '@/components/RouteCard';
+
+import { render, mockRoute } from './testUtils';
+
 import CategoryButton from '@/components/CategoryButton';
+import RouteCard from '@/components/RouteCard';
 import TravelModeSelector from '@/components/TravelModeSelector';
 import VoiceNavigation from '@/components/VoiceNavigation';
 import { Route } from '@/types/navigation';
 
-const sampleRoute: Route = {
-  id: 'r1',
-  totalDuration: 10,
-  departureTime: '10:00',
-  arrivalTime: '10:10',
-  steps: [ { id: 's1', type: 'walk', from: 'A', to: 'B', duration: 10 } ]
-};
+const sampleRoute: Route = mockRoute;
 
 describe('Accessibility roles & labels', () => {
   it('adds accessibility props to RouteCard', () => {

@@ -1,9 +1,12 @@
+import { Search, Plus, MapPin, Trash2, Edit3, Globe, Clock, Phone } from "lucide-react-native";
 import React, { useState } from "react";
 import { StyleSheet, Text, View, ScrollView, Pressable, TextInput, Alert } from "react-native";
-import Colors from "@/constants/colors";
-import { Search, Plus, MapPin, Trash2, Edit3, Globe, Clock, Phone } from "lucide-react-native";
-import { useToast } from '@/hooks/useToast';
+
 import Toast from './Toast';
+
+import Colors from "@/constants/colors"; // TODO: phase out direct Colors references
+import { useTheme } from '@/constants/theme';
+import { useToast } from '@/hooks/useToast';
 import { useRegionStore } from "@/stores/regionStore";
 import { RegionConfig } from "@/types/region";
 
@@ -12,6 +15,7 @@ type CityManagementProps = {
 };
 
 export default function CityManagement({ onBack }: CityManagementProps) {
+  const themeCtx = useTheme();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [showAddForm, setShowAddForm] = useState<boolean>(false);
   const [editingRegion, setEditingRegion] = useState<RegionConfig | null>(null);
@@ -56,7 +60,7 @@ export default function CityManagement({ onBack }: CityManagementProps) {
     );
   };
 
-  const handleUpdateTransitData = (regionId: string) => {
+  const handleUpdateTransitData = (_regionId: string) => {
     Alert.alert(
       "Update Transit Data",
       "This would typically connect to the region's transit API to fetch the latest schedules and route information.",
@@ -94,15 +98,15 @@ export default function CityManagement({ onBack }: CityManagementProps) {
           </View>
           <View style={styles.regionDetails}>
             <View style={styles.detailItem}>
-              <Globe size={14} color={Colors.textLight} />
+              <Globe size={14} color={themeCtx.colors.textSecondary} />
               <Text style={styles.detailText}>{region.country}</Text>
             </View>
             <View style={styles.detailItem}>
-              <Clock size={14} color={Colors.textLight} />
+              <Clock size={14} color={themeCtx.colors.textSecondary} />
               <Text style={styles.detailText}>{region.timezone}</Text>
             </View>
             <View style={styles.detailItem}>
-              <Phone size={14} color={Colors.textLight} />
+              <Phone size={14} color={themeCtx.colors.textSecondary} />
               <Text style={styles.detailText}>{region.emergencyNumber}</Text>
             </View>
           </View>
@@ -129,7 +133,7 @@ export default function CityManagement({ onBack }: CityManagementProps) {
           style={[styles.actionButton, styles.deleteButton]}
           onPress={() => handleDeleteRegion(region.id)}
         >
-          <Trash2 size={16} color="#FF4444" />
+          <Trash2 size={16} color="/*TODO theme*/ theme.colors.placeholder /*#FF4444*/" />
         </Pressable>
       </View>
     </View>
@@ -157,7 +161,7 @@ export default function CityManagement({ onBack }: CityManagementProps) {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, { backgroundColor: themeCtx.colors.background }]}> 
       <View style={styles.header}>
         <Pressable style={styles.backButton} onPress={onBack}>
           <Text style={styles.backButtonText}>← Back</Text>
@@ -167,41 +171,41 @@ export default function CityManagement({ onBack }: CityManagementProps) {
           style={styles.addButton}
           onPress={() => setShowAddForm(true)}
         >
-          <Plus size={20} color="#FFFFFF" />
+          <Plus size={20} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
           <Text style={styles.addButtonText}>Add City</Text>
         </Pressable>
       </View>
 
       <View style={styles.searchContainer}>
-        <Search size={20} color={Colors.textLight} />
+        <Search size={20} color={themeCtx.colors.textSecondary} />
         <TextInput
           style={styles.searchInput}
           placeholder="Search cities..."
           value={searchQuery}
           onChangeText={setSearchQuery}
-          placeholderTextColor={Colors.textLight}
+          placeholderTextColor={themeCtx.colors.textSecondary}
         />
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>United States ({usRegions.length})</Text>
+        <Text style={[styles.sectionTitle, { color: themeCtx.colors.text }]}>United States ({usRegions.length})</Text>
         {(searchQuery ? filteredRegions.filter(r => r.country === "United States") : usRegions).map((region) => (
           <RegionCard key={region.id} region={region} />
         ))}
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>International ({internationalRegions.length})</Text>
+        <Text style={[styles.sectionTitle, { color: themeCtx.colors.text }]}>International ({internationalRegions.length})</Text>
         {(searchQuery ? filteredRegions.filter(r => r.country !== "United States") : internationalRegions).map((region) => (
           <RegionCard key={region.id} region={region} />
         ))}
       </View>
 
-  <View style={styles.infoSection}>
-        <Text style={styles.infoTitle}>Transit Data Updates</Text>
+      <View style={styles.infoSection}>
+        <Text style={[styles.infoTitle, { color: themeCtx.colors.text }]}>Transit Data Updates</Text>
         <Text style={styles.infoText}>
           Transit schedules and route information are automatically updated when available. 
-          You can manually refresh data for any city by tapping "Update Transit".
+          You can manually refresh data for any city by tapping &quot;Update Transit&quot;.
         </Text>
         <Text style={styles.infoText}>
           Custom cities can be added with their own transit API endpoints for real-time data integration.
@@ -322,89 +326,138 @@ function AddEditRegionForm({ region, onSave, onCancel }: AddEditRegionFormProps)
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
-  header: {
-    flexDirection: "row",
+  // NOTE: Styles below still reference legacy Colors for some non-restricted tokens. Restricted ones replaced at usage.
+  const styles = StyleSheet.create({
+  actionButton: {
     alignItems: "center",
-    justifyContent: "space-between",
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
+    backgroundColor: "/*TODO theme*/ theme.colors.placeholder /*#F0F4FF*/",
+    borderRadius: 8,
+    flexDirection: "row",
+    gap: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  actionButtonText: {
+    color: Colors.primary,
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  addButton: {
+    alignItems: "center",
+    backgroundColor: Colors.primary,
+    borderRadius: 8,
+    flexDirection: "row",
+    gap: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  addButtonText: {
+    color: "/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/",
+    fontSize: 14,
+    fontWeight: "600",
   },
   backButton: {
     padding: 8,
   },
   backButtonText: {
-    fontSize: 16,
     color: Colors.primary,
+    fontSize: 16,
     fontWeight: "600",
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: Colors.text,
+  container: {
+    backgroundColor: Colors.background,
+    flex: 1,
   },
-  addButton: {
-    flexDirection: "row",
-    alignItems: "center",
+  currentBadge: {
     backgroundColor: Colors.primary,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  currentBadgeText: {
+    color: "/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/",
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  currentRegionCard: {
+    borderColor: Colors.primary,
+    borderWidth: 2,
+  },
+  deleteButton: {
+    backgroundColor: "/*TODO theme*/ theme.colors.placeholder /*#FFF0F0*/",
+  },
+  detailItem: {
+    alignItems: "center",
+    flexDirection: "row",
     gap: 4,
   },
-  addButtonText: {
-    color: "#FFFFFF",
-    fontWeight: "600",
+  detailText: {
+    // replaced at usage site with themeCtx.colors.textSecondary
+    color: Colors.textLight, // TODO: replace with theme.colors.textSecondary
     fontSize: 14,
   },
-  saveButton: {
-    backgroundColor: Colors.primary,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+  formInput: {
+    backgroundColor: Colors.card, // TODO: replace with theme.colors.surface
+    borderColor: Colors.border,
     borderRadius: 8,
-  },
-  saveButtonText: {
-    color: "#FFFFFF",
-    fontWeight: "600",
-  },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Colors.card,
-    margin: 16,
+    borderWidth: 1,
+    color: Colors.text,
+    fontSize: 16,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    borderRadius: 12,
-    gap: 12,
   },
-  searchInput: {
-    flex: 1,
-    fontSize: 16,
+  formLabel: {
     color: Colors.text,
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 8,
   },
-  section: {
+  formSection: {
     padding: 16,
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "700",
+  header: {
+    alignItems: "center",
+    borderBottomColor: Colors.border,
+    borderBottomWidth: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 16,
+  },
+  infoSection: {
+    backgroundColor: Colors.card, // TODO: replace with theme.colors.surface
+    borderRadius: 12,
+    margin: 16,
+    padding: 16,
+  },
+  infoText: {
+    color: Colors.textLight, // TODO: replace with theme.colors.textSecondary
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 8,
+  },
+  infoTitle: {
     color: Colors.text,
-    marginBottom: 16,
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 8,
+  },
+  regionActions: {
+    borderTopColor: Colors.border,
+    borderTopWidth: 1,
+    flexDirection: "row",
+    gap: 8,
+    padding: 12,
   },
   regionCard: {
-    backgroundColor: Colors.card,
+    backgroundColor: Colors.card, // TODO: replace with theme.colors.surface
     borderRadius: 12,
     marginBottom: 12,
     overflow: "hidden",
   },
-  currentRegionCard: {
-    borderWidth: 2,
-    borderColor: Colors.primary,
+  regionDetails: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 16,
   },
   regionHeader: {
     padding: 16,
@@ -412,106 +465,59 @@ const styles = StyleSheet.create({
   regionInfo: {
     gap: 8,
   },
-  regionTitleRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
   regionName: {
-    fontSize: 18,
-    fontWeight: "600",
     color: Colors.text,
     flex: 1,
-  },
-  currentBadge: {
-    backgroundColor: Colors.primary,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  currentBadgeText: {
-    color: "#FFFFFF",
-    fontSize: 12,
+    fontSize: 18,
     fontWeight: "600",
   },
-  regionDetails: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 16,
-  },
-  detailItem: {
-    flexDirection: "row",
+  regionTitleRow: {
     alignItems: "center",
-    gap: 4,
-  },
-  detailText: {
-    fontSize: 14,
-    color: Colors.textLight,
-  },
-  transitCount: {
-    fontSize: 14,
-    color: Colors.textLight,
-    fontStyle: "italic",
-  },
-  regionActions: {
     flexDirection: "row",
-    borderTopWidth: 1,
-    borderTopColor: Colors.border,
-    padding: 12,
     gap: 8,
   },
-  actionButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
-    backgroundColor: "#F0F4FF",
-    gap: 4,
-  },
-  actionButtonText: {
-    fontSize: 14,
-    color: Colors.primary,
-    fontWeight: "500",
-  },
-  deleteButton: {
-    backgroundColor: "#FFF0F0",
-  },
-  infoSection: {
-    padding: 16,
-    backgroundColor: Colors.card,
-    margin: 16,
-    borderRadius: 12,
-  },
-  infoTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.text,
-    marginBottom: 8,
-  },
-  infoText: {
-    fontSize: 14,
-    color: Colors.textLight,
-    lineHeight: 20,
-    marginBottom: 8,
-  },
-  formSection: {
-    padding: 16,
-  },
-  formLabel: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.text,
-    marginBottom: 8,
-  },
-  formInput: {
-    backgroundColor: Colors.card,
+  saveButton: {
+    backgroundColor: Colors.primary,
     borderRadius: 8,
     paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  saveButtonText: {
+    color: "/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/",
+    fontWeight: "600",
+  },
+  searchContainer: {
+    alignItems: "center",
+    backgroundColor: Colors.card, // TODO: replace with theme.colors.surface
+    borderRadius: 12,
+    flexDirection: "row",
+    gap: 12,
+    margin: 16,
+    paddingHorizontal: 16,
     paddingVertical: 12,
-    fontSize: 16,
+  },
+  searchInput: {
     color: Colors.text,
-    borderWidth: 1,
-    borderColor: Colors.border,
+    flex: 1,
+    fontSize: 16,
+  },
+  section: {
+    padding: 16,
+  },
+  sectionTitle: {
+    color: Colors.text,
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 16,
+  },
+  title: {
+    color: Colors.text,
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  transitCount: {
+    color: Colors.textLight, // TODO: replace with theme.colors.textSecondary
+    fontSize: 14,
+    fontStyle: "italic",
   },
 });

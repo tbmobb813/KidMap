@@ -1,8 +1,10 @@
+import { Trophy, MapPin, Zap, Target } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import Colors from "@/constants/colors";
-import { Trophy, MapPin, Zap, Target } from "lucide-react-native";
+
+import { useTheme } from "@/constants/theme";
 import { UserStats } from "@/types/gamification";
+import { tint } from "@/utils/color";
 
 type UserStatsCardProps = {
   stats: UserStats;
@@ -10,6 +12,9 @@ type UserStatsCardProps = {
 };
 
 const UserStatsCard: React.FC<UserStatsCardProps> = ({ stats, onPetClick }) => {
+  const theme = useTheme();
+  const styles = React.useMemo(() => createStyles(theme), [theme]);
+  
   const getProgressToNextLevel = () => {
     const pointsForCurrentLevel = (stats.level - 1) * 200;
     const pointsForNextLevel = stats.level * 200;
@@ -21,7 +26,7 @@ const UserStatsCard: React.FC<UserStatsCardProps> = ({ stats, onPetClick }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.levelContainer}>
-          <Trophy size={24} color={Colors.primary} />
+          <Trophy size={24} color={theme.colors.primary} />
           <Text style={styles.levelText}>Level {stats.level}</Text>
         </View>
         
@@ -52,19 +57,19 @@ const UserStatsCard: React.FC<UserStatsCardProps> = ({ stats, onPetClick }) => {
 
       <View style={styles.statsGrid}>
         <View style={styles.statItem}>
-          <MapPin size={20} color={Colors.secondary} />
+          <MapPin size={20} color={theme.colors.secondary} />
           <Text style={styles.statNumber}>{stats.totalTrips}</Text>
           <Text style={styles.statLabel}>Trips</Text>
         </View>
 
         <View style={styles.statItem}>
-          <Target size={20} color={Colors.primary} />
+          <Target size={20} color={theme.colors.primary} />
           <Text style={styles.statNumber}>{stats.placesVisited}</Text>
           <Text style={styles.statLabel}>Places</Text>
         </View>
 
         <View style={styles.statItem}>
-          <Zap size={20} color={Colors.warning} />
+          <Zap size={20} color={theme.colors.warning} />
           <Text style={styles.statNumber}>{stats.streakDays}</Text>
           <Text style={styles.statLabel}>Day Streak</Text>
         </View>
@@ -73,97 +78,97 @@ const UserStatsCard: React.FC<UserStatsCardProps> = ({ stats, onPetClick }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (theme: ReturnType<typeof useTheme>) => StyleSheet.create({
   container: {
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 16,
-    padding: 20,
+    elevation: 3,
     margin: 16,
-    shadowColor: "#000",
+    padding: 20,
+    shadowColor: theme.colors.text,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
   },
   header: {
+    alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
     marginBottom: 16,
-  },
-  levelContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  levelText: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: Colors.text,
   },
   headerRight: {
     alignItems: 'flex-end',
     gap: 8,
   },
-  pointsText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.primary,
+  levelContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 8,
+  },
+  levelText: {
+    color: theme.colors.text,
+    fontSize: 20,
+    fontWeight: "700",
   },
   petButton: {
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: Colors.primaryLight,
+    backgroundColor: tint(theme.colors.primary),
     borderRadius: 8,
-    padding: 8,
+    justifyContent: 'center',
     minWidth: 50,
+    padding: 8,
   },
   petEmoji: {
     fontSize: 20,
     marginBottom: 2,
   },
   petText: {
+    color: theme.colors.primary,
     fontSize: 10,
     fontWeight: '600',
-    color: Colors.primary,
+  },
+  pointsText: {
+    color: theme.colors.primary,
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  progressBar: {
+    backgroundColor: theme.colors.border,
+    borderRadius: 4,
+    height: 8,
+    marginBottom: 8,
+    overflow: "hidden",
   },
   progressContainer: {
     marginBottom: 20,
   },
-  progressBar: {
-    height: 8,
-    backgroundColor: Colors.border,
-    borderRadius: 4,
-    overflow: "hidden",
-    marginBottom: 8,
-  },
   progressFill: {
-    height: "100%",
-    backgroundColor: Colors.primary,
+    backgroundColor: theme.colors.primary,
     borderRadius: 4,
+    height: "100%",
   },
   progressText: {
+    color: theme.colors.textSecondary,
     fontSize: 12,
-    color: Colors.textLight,
     textAlign: "center",
-  },
-  statsGrid: {
-    flexDirection: "row",
-    justifyContent: "space-around",
   },
   statItem: {
     alignItems: "center",
     gap: 4,
   },
+  statLabel: {
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+    fontWeight: "500",
+  },
   statNumber: {
+    color: theme.colors.text,
     fontSize: 18,
     fontWeight: "700",
-    color: Colors.text,
   },
-  statLabel: {
-    fontSize: 12,
-    color: Colors.textLight,
-    fontWeight: "500",
+  statsGrid: {
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
 });
 

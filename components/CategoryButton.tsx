@@ -1,14 +1,15 @@
-import React, { useEffect } from "react";
-import { StyleSheet, Text, Pressable, View } from "react-native";
-import Colors from "@/constants/colors";
-import { auditTouchTarget } from "@/utils/touchTargetAudit";
-import { PlaceCategory, CustomCategory } from "@/types/navigation";
 import { 
   Home, GraduationCap, BookOpen, Trees, ShoppingBag, Pizza, Users, Heart, MapPin,
   Car, Bike, Bus, Train, Plane, Hospital, Church, Building, Gamepad2, Music,
   Camera, Gift, Coffee, Apple, Dumbbell, Palette, Star, Sun, Moon, Cloud,
   Umbrella, Flower
 } from "lucide-react-native";
+import React, { useEffect } from "react";
+import { StyleSheet, Text, Pressable, View } from "react-native";
+
+import { useTheme } from '@/constants/theme';
+import { PlaceCategory, CustomCategory } from "@/types/navigation";
+import { auditTouchTarget } from "@/utils/touchTargetAudit";
 
 type CategoryButtonProps = {
   category?: PlaceCategory;
@@ -23,8 +24,9 @@ const CategoryButtonComponent: React.FC<CategoryButtonProps> = ({
   onPress, 
   size = 'large' 
 }) => {
+  const theme = useTheme();
   const getIcon = (iconName: string, iconSize: number) => {
-    const iconProps = { size: iconSize, color: "#FFF" };
+  const iconProps = { size: iconSize, color: theme.colors.primaryForeground };
     
     switch (iconName) {
       case "Home": return <Home {...iconProps} />;
@@ -97,16 +99,17 @@ const CategoryButtonComponent: React.FC<CategoryButtonProps> = ({
   }
 
   function getDefaultColor(cat: PlaceCategory): string {
+    // Map categories to semantic theme colors to preserve contrast.
     switch (cat) {
-      case "home": return Colors.primary;
-      case "school": return "#FF9500";
-      case "library": return "#9C27B0";
-      case "park": return Colors.secondary;
-      case "store": return "#4285F4";
-      case "restaurant": return "#FF6B6B";
-      case "friend": return "#00BCD4";
-      case "family": return "#FF4081";
-      default: return Colors.primary;
+      case 'home': return theme.colors.primary;
+      case 'school': return theme.colors.warning; // visually distinct
+      case 'library': return theme.colors.info;   // reuse info color
+      case 'park': return theme.colors.success;
+      case 'store': return theme.colors.secondary;
+      case 'restaurant': return theme.colors.error;
+      case 'friend': return theme.colors.focus;
+      case 'family': return theme.colors.secondary;
+      default: return theme.colors.primary;
     }
   }
 
@@ -115,16 +118,19 @@ const CategoryButtonComponent: React.FC<CategoryButtonProps> = ({
   }, [sizeStyles.width, sizeStyles.height]);
 
   return (
-    <Pressable
+  <Pressable
       accessibilityRole="button"
       accessibilityLabel={`${displayName} category button`}
       hitSlop={8}
       style={({ pressed }) => [
         styles.container,
         {
-          backgroundColor,
+      backgroundColor,
           width: sizeStyles.width,
           height: sizeStyles.height,
+      borderWidth: 2,
+      borderColor: theme.colors.border,
+      shadowColor: theme.colors.text,
         },
         pressed && styles.pressed
       ]}
@@ -134,7 +140,7 @@ const CategoryButtonComponent: React.FC<CategoryButtonProps> = ({
       <View style={styles.iconContainer}>
         {getIcon(iconName, sizeStyles.iconSize)}
       </View>
-      <Text style={[styles.text, { fontSize: size === 'small' ? 12 : size === 'medium' ? 14 : 16 }]}>
+    <Text style={[styles.text, { fontSize: size === 'small' ? 12 : size === 'medium' ? 14 : 16, color: theme.colors.primaryForeground }]}>
         {displayName}
       </Text>
     </Pressable>
@@ -147,28 +153,26 @@ const CategoryButton = React.memo(CategoryButtonComponent, (prev, next) => {
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: 'center',
     borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
+    elevation: 6,
+    justifyContent: 'center',
     margin: 8,
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
-    elevation: 6,
+  },
+  iconContainer: {
+    marginBottom: 8,
   },
   pressed: {
     opacity: 0.8,
     transform: [{ scale: 0.95 }],
   },
-  iconContainer: {
-    marginBottom: 8,
-  },
   text: {
-    color: "#FFF",
-    fontWeight: "700",
-    textAlign: "center",
-    textShadowColor: "rgba(0,0,0,0.3)",
+    fontWeight: '700',
+    textAlign: 'center',
+    textShadowColor: 'rgba(0,0,0,0.3)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 2,
   },

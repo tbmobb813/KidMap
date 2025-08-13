@@ -1,5 +1,6 @@
-import { handleDeepLink } from "@/utils/deepLinking";
 import { router } from "expo-router";
+
+import { handleDeepLink } from "@/utils/deepLinking";
 
 jest.mock("expo-router", () => ({
     router: {

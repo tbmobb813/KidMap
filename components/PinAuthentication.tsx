@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Pressable, TextInput } from 'react-native';
-import Colors from '@/constants/colors';
 import { Lock, Eye, EyeOff } from 'lucide-react-native';
-import { useToast } from '@/hooks/useToast';
+import React, { useState, useMemo } from 'react';
+import { StyleSheet, Text, View, Pressable, TextInput } from 'react-native';
+
 import Toast from './Toast';
+
+import { useTheme } from '@/constants/theme';
+import { useToast } from '@/hooks/useToast';
+import { tint } from '@/utils/color';
+
 
 type PinAuthenticationProps = {
   onAuthenticated: () => void;
@@ -55,7 +59,7 @@ const PinAuthentication: React.FC<PinAuthenticationProps> = ({
       // For now, we'll simulate authentication
       await new Promise(resolve => setTimeout(resolve, 500));
       onAuthenticated();
-    } catch (error) {
+  } catch {
       showToast('Authentication failed', 'error');
       setPin('');
       setConfirmPin('');
@@ -89,11 +93,14 @@ const PinAuthentication: React.FC<PinAuthenticationProps> = ({
   const currentTitle = step === 'enter' ? title : 'Confirm PIN';
   const currentSubtitle = step === 'enter' ? subtitle : 'Enter your PIN again to confirm';
 
+  const theme = useTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.iconContainer}>
-          <Lock size={32} color={Colors.primary} />
+          <Lock size={32} color={theme.colors.primary} />
         </View>
         <Text style={styles.title}>{currentTitle}</Text>
         <Text style={styles.subtitle}>{currentSubtitle}</Text>
@@ -116,9 +123,9 @@ const PinAuthentication: React.FC<PinAuthenticationProps> = ({
             onPress={() => setShowPin(!showPin)}
           >
             {showPin ? (
-              <EyeOff size={20} color={Colors.textLight} />
+              <EyeOff size={20} color={theme.colors.textSecondary} />
             ) : (
-              <Eye size={20} color={Colors.textLight} />
+              <Eye size={20} color={theme.colors.textSecondary} />
             )}
           </Pressable>
         </View>
@@ -195,133 +202,133 @@ const PinAuthentication: React.FC<PinAuthenticationProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (theme: ReturnType<typeof useTheme>) => StyleSheet.create({
+  actionButton: {
+    alignItems: 'center',
+    borderRadius: theme.radius.lg,
+    paddingVertical: 16,
+  },
+  actions: {
+    gap: 12,
+  },
+  cancelButton: {
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
+    borderWidth: 1,
+  },
+  cancelButtonText: {
+    color: theme.colors.text,
+    fontSize: 16,
+    fontWeight: '600',
+  },
   container: {
+    backgroundColor: theme.colors.background,
     flex: 1,
-    backgroundColor: Colors.background,
-    padding: 24,
     justifyContent: 'center',
+    padding: 24,
+  },
+  eyeButton: {
+    padding: 4,
   },
   header: {
     alignItems: 'center',
     marginBottom: 40,
   },
   iconContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#F0F4FF',
-    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: tint(theme.colors.primary),
+    borderRadius: 40,
+    height: 80,
+    justifyContent: 'center',
     marginBottom: 16,
+    width: 80,
   },
-  title: {
+  keypad: {
+    marginBottom: 40,
+  },
+  keypadButton: {
+    alignItems: 'center',
+    backgroundColor: theme.colors.surface,
+    borderRadius: 30,
+    elevation: 2,
+    height: 60,
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    width: 60,
+  },
+  keypadButtonEmpty: {
+    backgroundColor: 'transparent',
+    elevation: 0,
+    shadowOpacity: 0,
+  },
+  keypadButtonText: {
+    color: theme.colors.text,
     fontSize: 24,
-    fontWeight: '700',
-    color: Colors.text,
-    marginBottom: 8,
+    fontWeight: '600',
   },
-  subtitle: {
-    fontSize: 16,
-    color: Colors.textLight,
-    textAlign: 'center',
-    lineHeight: 22,
+  keypadRow: {
+    flexDirection: 'row',
+    gap: 20,
+    justifyContent: 'center',
+    marginBottom: 16,
   },
   pinContainer: {
     alignItems: 'center',
     marginBottom: 40,
   },
-  pinInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    marginBottom: 20,
-    borderWidth: 2,
-    borderColor: Colors.border,
+  pinDot: {
+    backgroundColor: theme.colors.border,
+    borderRadius: 6,
+    height: 12,
+    width: 12,
   },
-  pinInput: {
-    flex: 1,
-    fontSize: 18,
-    fontWeight: '600',
-    color: Colors.text,
-    letterSpacing: 4,
-  },
-  eyeButton: {
-    padding: 4,
+  pinDotFilled: {
+    backgroundColor: theme.colors.primary,
   },
   pinDots: {
     flexDirection: 'row',
     gap: 12,
   },
-  pinDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: Colors.border,
-  },
-  pinDotFilled: {
-    backgroundColor: Colors.primary,
-  },
-  keypad: {
-    marginBottom: 40,
-  },
-  keypadRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 16,
-    gap: 20,
-  },
-  keypadButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: Colors.card,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  keypadButtonEmpty: {
-    backgroundColor: 'transparent',
-    shadowOpacity: 0,
-    elevation: 0,
-  },
-  keypadButtonText: {
-    fontSize: 24,
+  pinInput: {
+    color: theme.colors.text,
+    flex: 1,
+    fontSize: 18,
     fontWeight: '600',
-    color: Colors.text,
+    letterSpacing: 4,
   },
-  actions: {
-    gap: 12,
-  },
-  actionButton: {
-    borderRadius: 12,
-    paddingVertical: 16,
+  pinInputContainer: {
     alignItems: 'center',
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
+    borderRadius: 12,
+    borderWidth: 2,
+    flexDirection: 'row',
+    marginBottom: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   submitButton: {
-    backgroundColor: Colors.primary,
+    backgroundColor: theme.colors.primary,
   },
   submitButtonText: {
-    color: '#FFFFFF',
+    color: theme.colors.primaryForeground,
     fontSize: 16,
     fontWeight: '600',
   },
-  cancelButton: {
-    backgroundColor: Colors.card,
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  cancelButtonText: {
-    color: Colors.text,
+  subtitle: {
+    color: theme.colors.textSecondary,
     fontSize: 16,
-    fontWeight: '600',
+    lineHeight: 22,
+    textAlign: 'center',
+  },
+  title: {
+    color: theme.colors.text,
+    fontSize: 24,
+    fontWeight: '700',
+    marginBottom: 8,
   },
 });
 

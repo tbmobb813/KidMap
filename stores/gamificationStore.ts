@@ -1,6 +1,7 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { Achievement, UserStats, SafetyContact, TripJournal } from "@/types/gamification";
 
 type GamificationState = {
@@ -8,7 +9,7 @@ type GamificationState = {
   achievements: Achievement[];
   safetyContacts: SafetyContact[];
   tripJournal: TripJournal[];
-  
+
   // Actions
   addPoints: (points: number) => void;
   unlockAchievement: (achievementId: string) => void;
@@ -37,7 +38,7 @@ const initialAchievements: Achievement[] = [
   },
   {
     id: "neighborhood-navigator",
-    title: "Neighborhood Navigator", 
+    title: "Neighborhood Navigator",
     description: "Visit 10 different places",
     icon: "🗺️",
     points: 150,
@@ -79,7 +80,7 @@ export const useGamificationStore = create<GamificationState>()(
       addPoints: (points) => set((state) => {
         const newPoints = state.userStats.totalPoints + points;
         const newLevel = Math.floor(newPoints / 200) + 1;
-        
+
         return {
           userStats: {
             ...state.userStats,
@@ -94,7 +95,7 @@ export const useGamificationStore = create<GamificationState>()(
         if (!achievement || achievement.unlocked) return state;
 
         const updatedAchievements = state.achievements.map(a =>
-          a.id === achievementId 
+          a.id === achievementId
             ? { ...a, unlocked: true, unlockedAt: new Date() }
             : a
         );
@@ -108,7 +109,7 @@ export const useGamificationStore = create<GamificationState>()(
         };
       }),
 
-      completeTrip: (from, to) => set((state) => {
+      completeTrip: (_from, _to) => set((state) => {
         const newStats = {
           ...state.userStats,
           totalTrips: state.userStats.totalTrips + 1,

@@ -1,30 +1,30 @@
+import { MapPin, Navigation } from "lucide-react-native";
 import React, { useState, useCallback, useMemo } from "react";
 import { StyleSheet, Text, View, FlatList, Pressable, ListRenderItem } from "react-native";
-import { nav } from "@/shared/navigation/nav";
-import Colors from "@/constants/colors";
-import SearchWithSuggestions from "@/components/SearchWithSuggestions";
-import PlaceCard from "@/components/PlaceCard";
-import CategoryButton from "@/components/CategoryButton";
-import SafetyPanel from "@/modules/safety/components/SafetyPanel";
-import FeatureErrorBoundary from "@/components/FeatureErrorBoundary";
-import RegionalFunFactCard from "@/components/RegionalFunFactCard";
-import UserStatsCard from "@/components/UserStatsCard";
-import WeatherCard from "@/components/WeatherCard";
-import AIJourneyCompanion from "@/components/AIJourneyCompanion";
-import VirtualPetCompanion from "@/components/VirtualPetCompanion";
-import SmartRouteSuggestions from "@/components/SmartRouteSuggestions";
 
+import AIJourneyCompanion from "@/components/AIJourneyCompanion";
+import CategoryButton from "@/components/CategoryButton";
 import EmptyState from "@/components/EmptyState";
+import FeatureErrorBoundary from "@/components/FeatureErrorBoundary";
+import PlaceCard from "@/components/PlaceCard";
 import PullToRefresh from "@/components/PullToRefresh";
+import RegionalFunFactCard from "@/components/RegionalFunFactCard";
+import SearchWithSuggestions from "@/components/SearchWithSuggestions";
+import SmartRouteSuggestions from "@/components/SmartRouteSuggestions";
+import UserStatsCard from "@/components/UserStatsCard";
+import VirtualPetCompanion from "@/components/VirtualPetCompanion";
+import WeatherCard from "@/components/WeatherCard";
+import Colors from "@/constants/colors";
+import useLocation from "@/hooks/useLocation";
+import { useRegionalData } from "@/hooks/useRegionalData";
+import SafetyPanel from "@/modules/safety/components/SafetyPanel";
+import { SafeZoneIndicator } from "@/modules/safety/components/SafeZoneIndicator";
+import { nav } from "@/shared/navigation/nav";
+import { useCategoryStore } from "@/stores/categoryStore";
+import { useGamificationStore } from "@/stores/gamificationStore";
 import { useNavigationStore } from "@/stores/navigationStore";
 import { PlaceCategory, Place } from "@/types/navigation";
-import { MapPin, Navigation } from "lucide-react-native";
-import useLocation from "@/hooks/useLocation";
-import { useGamificationStore } from "@/stores/gamificationStore";
-import { useRegionalData } from "@/hooks/useRegionalData";
 import { trackScreenView, trackUserAction } from "@/utils/analytics";
-import { useCategoryStore } from "@/stores/categoryStore";
-import { SafeZoneIndicator } from "@/modules/safety/components/SafeZoneIndicator";
 
 type SearchSuggestion = {
   id: string;
@@ -291,33 +291,6 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
-  searchContainer: {
-    marginBottom: 24,
-    paddingHorizontal: 16,
-  },
-  currentLocationButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 12,
-    paddingVertical: 8,
-  },
-  currentLocationText: {
-    marginLeft: 8,
-    fontSize: 14,
-    color: Colors.primary,
-    fontWeight: "500",
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: Colors.text,
-    marginBottom: 16,
-    paddingHorizontal: 16,
-  },
   categoriesContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -325,11 +298,38 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     paddingHorizontal: 16,
   },
+  container: {
+    backgroundColor: Colors.background,
+    flex: 1,
+  },
+  currentLocationButton: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginTop: 12,
+    paddingVertical: 8,
+  },
+  currentLocationText: {
+    color: Colors.primary,
+    fontSize: 14,
+    fontWeight: "500",
+    marginLeft: 8,
+  },
   favoriteSeparator: {
     height: 12,
   },
   favoritesListContent: {
-    paddingHorizontal: 16,
     paddingBottom: 32,
+    paddingHorizontal: 16,
+  },
+  searchContainer: {
+    marginBottom: 24,
+    paddingHorizontal: 16,
+  },
+  sectionTitle: {
+    color: Colors.text,
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 16,
+    paddingHorizontal: 16,
   },
 });

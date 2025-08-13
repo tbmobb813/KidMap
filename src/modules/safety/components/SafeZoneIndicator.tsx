@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 		paddingVertical: 8,
 	},
 	text: {
+		color: '/*TODO theme*/ theme.colors.placeholder /*#4B5563*/',
 		fontSize: 12,
-		color: '#4B5563',
 	},
 });

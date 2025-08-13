@@ -1,7 +1,8 @@
-import React from "react";
+import { WifiOff, RefreshCw } from "lucide-react-native";
+import React, { useMemo } from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import Colors from "@/constants/colors";
-import { WifiOff, Wifi, RefreshCw } from "lucide-react-native";
+
+import { useTheme } from "@/constants/theme";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 
 type NetworkStatusBarProps = {
@@ -10,43 +11,46 @@ type NetworkStatusBarProps = {
 
 const NetworkStatusBar: React.FC<NetworkStatusBarProps> = ({ onRetry }) => {
   const { isConnected, isInternetReachable } = useNetworkStatus();
+  const theme = useTheme();
+  
+  const styles = useMemo(() => createStyles(theme), [theme]);
 
   if (isConnected && isInternetReachable) return null;
 
   return (
     <View style={styles.container}>
-      <WifiOff size={16} color="#FFFFFF" />
+      <WifiOff size={16} color={theme.colors.error} />
       <Text style={styles.text}>
         {!isConnected ? "No connection" : "Limited connectivity"}
       </Text>
       {onRetry && (
         <Pressable style={styles.retryButton} onPress={onRetry}>
-          <RefreshCw size={14} color="#FFFFFF" />
+          <RefreshCw size={14} color={theme.colors.error} />
         </Pressable>
       )}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (theme: any) => StyleSheet.create({
   container: {
-    backgroundColor: Colors.error,
-    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    backgroundColor: theme.colors.error,
+    flexDirection: "row",
     gap: 8,
-  },
-  text: {
-    color: "#FFFFFF",
-    fontSize: 12,
-    fontWeight: "600",
-    flex: 1,
-    textAlign: "center",
+    justifyContent: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
   },
   retryButton: {
     padding: 4,
+  },
+  text: {
+    color: theme.colors.onError,
+    flex: 1,
+    fontSize: 12,
+    fontWeight: "600",
+    textAlign: "center",
   },
 });
 

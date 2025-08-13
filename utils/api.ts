@@ -1,8 +1,8 @@
-import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { Platform } from 'react-native';
 
-const API_BASE_URL = __DEV__ 
-  ? 'http://localhost:3000/api' 
+const API_BASE_URL = __DEV__
+  ? 'http://localhost:3000/api'
   : 'https://your-production-api.com/api';
 
 const API_TIMEOUT = 10000; // 10 seconds
@@ -37,7 +37,7 @@ class ApiClient {
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
     const url = `${this.baseURL}${endpoint}`;
-    
+
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       ...(options.headers as Record<string, string>),
@@ -67,14 +67,14 @@ class ApiClient {
       return data;
     } catch (error) {
       clearTimeout(timeoutId);
-      
+
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
           throw new Error('Request timeout');
         }
         throw error;
       }
-      
+
       throw new Error('Unknown error occurred');
     }
   }
@@ -116,24 +116,24 @@ export const apiClient = new ApiClient(API_BASE_URL);
 
 // Specific API functions
 export const transitApi = {
-  getRoutes: (from: string, to: string) => 
+  getRoutes: (from: string, to: string) =>
     apiClient.get(`/transit/routes?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`),
-  
-  getLiveArrivals: (stopId: string) => 
+
+  getLiveArrivals: (stopId: string) =>
     apiClient.get(`/transit/arrivals/${stopId}`),
-  
-  getStops: (lat: number, lng: number, radius: number = 500) => 
+
+  getStops: (lat: number, lng: number, radius: number = 500) =>
     apiClient.get(`/transit/stops?lat=${lat}&lng=${lng}&radius=${radius}`),
 };
 
 export const placesApi = {
-  search: (query: string, location?: { lat: number; lng: number }) => 
+  search: (query: string, location?: { lat: number; lng: number }) =>
     apiClient.get(`/places/search?q=${encodeURIComponent(query)}${location ? `&lat=${location.lat}&lng=${location.lng}` : ''}`),
-  
-  getDetails: (placeId: string) => 
+
+  getDetails: (placeId: string) =>
     apiClient.get(`/places/${placeId}`),
-  
-  getNearby: (lat: number, lng: number, type?: string) => 
+
+  getNearby: (lat: number, lng: number, type?: string) =>
     apiClient.get(`/places/nearby?lat=${lat}&lng=${lng}${type ? `&type=${type}` : ''}`),
 };
 
@@ -141,7 +141,7 @@ export const userApi = {
   getProfile: () => apiClient.get('/user/profile'),
   updateProfile: (data: any) => apiClient.put('/user/profile', data),
   getAchievements: () => apiClient.get('/user/achievements'),
-  checkIn: (placeId: string, photo?: string) => 
+  checkIn: (placeId: string, photo?: string) =>
     apiClient.post('/user/checkin', { placeId, photo }),
 };
 
@@ -197,17 +197,17 @@ export const createNetworkAwareApi = <T extends any[], R>(
     try {
       // Try network request first
       const response = await apiFunction(...args);
-      
+
       // Cache successful response
       if (response.success) {
         await offlineStorage.cacheResponse(cacheKey, response);
       }
-      
+
       return response;
     } catch (error) {
       // Fallback to cache on network error
       console.warn('Network request failed, trying cache:', error);
-      
+
       const cached = await offlineStorage.getCachedResponse<ApiResponse<R>>(cacheKey, maxAge);
       if (cached) {
         return {
@@ -215,7 +215,7 @@ export const createNetworkAwareApi = <T extends any[], R>(
           message: 'Showing cached data (offline)',
         };
       }
-      
+
       throw error;
     }
   };

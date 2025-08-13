@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ScrollView, RefreshControl, Platform } from "react-native";
-import Colors from "@/constants/colors";
+
+import { useTheme } from "@/constants/theme";
 
 type PullToRefreshProps = {
   children: React.ReactNode;
@@ -14,6 +15,7 @@ const PullToRefresh: React.FC<PullToRefreshProps> = ({
   refreshing = false,
 }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const theme = useTheme();
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -30,9 +32,9 @@ const PullToRefresh: React.FC<PullToRefreshProps> = ({
         <RefreshControl
           refreshing={refreshing || isRefreshing}
           onRefresh={handleRefresh}
-          tintColor={Colors.primary}
-          colors={[Colors.primary]}
-          progressBackgroundColor={Colors.card}
+          tintColor={theme.colors.primary}
+          colors={[theme.colors.primary]}
+          progressBackgroundColor={theme.colors.surface}
           // Android-specific styling
           {...(Platform.OS === 'android' && {
             progressViewOffset: 20,

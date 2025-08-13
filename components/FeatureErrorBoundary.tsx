@@ -1,4 +1,5 @@
 import React from 'react';
+
 import ErrorBoundary from '@/components/ErrorBoundary';
 
 // Simple wrapper allowing per-feature fallback customization later

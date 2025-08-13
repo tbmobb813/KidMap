@@ -1,22 +1,60 @@
-import React, { useState } from "react";
+import { Mic, MicOff, Volume2, ArrowLeft, ArrowRight } from "lucide-react-native";
+import React, { useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import Colors from "@/constants/colors";
-import { useToast } from '@/hooks/useToast';
+
 import Toast from './Toast';
-import { Mic, MicOff, Volume2 } from "lucide-react-native";
+
+import { useTheme } from "@/constants/theme";
+import { useToast } from '@/hooks/useToast';
+import { useNavigationStore } from '@/stores/navigationStore';
+import { TransitStep } from '@/types/navigation';
+import { announce } from '@/utils/accessibility';
 
 type VoiceNavigationProps = {
+  /** Legacy single step string (fallback if steps not provided) */
   currentStep?: string;
+  /** Full list of transit steps to enable step-by-step voice navigation */
+  steps?: TransitStep[];
+  /** Initial index into steps (default 0) */
+  initialIndex?: number;
   onVoiceCommand?: (command: string) => void;
 };
 
 const VoiceNavigation: React.FC<VoiceNavigationProps> = ({ 
   currentStep = "Walk to Main Street Station",
-  onVoiceCommand 
+  steps,
+  initialIndex = 0,
+  onVoiceCommand: _onVoiceCommand 
 }) => {
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [stepIndex, setStepIndex] = useState(initialIndex);
   const { toast, showToast, hideToast } = useToast();
+  const { accessibilitySettings } = useNavigationStore();
+  const theme = useTheme();
+  const styles = React.useMemo(() => createStyles(theme), [theme]);
+
+  // Format an instruction for a given step
+  const formatStepInstruction = (step: TransitStep): string => {
+    const verb = step.type === 'walk' ? 'Walk' : step.type === 'bike' ? 'Bike' : step.type === 'car' ? 'Drive' : step.type === 'train' || step.type === 'subway' ? 'Take' : step.type === 'bus' ? 'Take' : 'Go';
+    const from = step.from || 'start';
+    const to = step.to || 'destination';
+    return `${verb} from ${from} to ${to}`;
+  };
+
+  const activeInstruction = useMemo(() => {
+    if (steps && steps.length > 0 && steps[stepIndex]) {
+      return formatStepInstruction(steps[stepIndex]);
+    }
+    return currentStep;
+  }, [steps, stepIndex, currentStep]);
+
+  // Announce automatically when step changes if voiceDescriptions enabled
+  useEffect(() => {
+    if (accessibilitySettings.voiceDescriptions && steps && steps.length > 0) {
+      announce(activeInstruction, { politeness: 'polite' });
+    }
+  }, [activeInstruction, accessibilitySettings.voiceDescriptions, steps]);
 
   const handleVoiceToggle = () => {
     if (isListening) {
@@ -34,22 +72,52 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
   };
 
   const handleSpeak = () => {
-  setIsSpeaking(true);
-  showToast(`"${currentStep}"`, 'info');
-    
-    // Simulate speaking duration
-    setTimeout(() => {
-      setIsSpeaking(false);
-    }, 2000);
+    setIsSpeaking(true);
+    const phrase = `"${activeInstruction}"`;
+    showToast(phrase, 'info');
+    // Always (re)announce repeat regardless of dedupe
+    if (accessibilitySettings.voiceDescriptions) {
+      announce(activeInstruction, { politeness: 'assertive', dedupe: false });
+    }
+    setTimeout(() => { setIsSpeaking(false); }, 2000);
+  };
+
+  const handlePrev = () => {
+    if (!steps) return;
+    setStepIndex((i) => Math.max(0, i - 1));
+  };
+
+  const handleNext = () => {
+    if (!steps) return;
+    setStepIndex((i) => Math.min(steps.length - 1, i + 1));
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.stepContainer}>
-        <Text style={styles.stepText}>{currentStep}</Text>
+        <Text style={styles.stepText} testID="voice-active-instruction">{activeInstruction}</Text>
+        {steps && steps.length > 0 && (
+          <Text style={styles.stepMeta} accessibilityLabel={`Step ${stepIndex + 1} of ${steps.length}`}>{`Step ${stepIndex + 1}/${steps.length}`}</Text>
+        )}
       </View>
 
       <View style={styles.controlsContainer}>
+        {steps && steps.length > 0 && (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={stepIndex === 0 ? 'Previous step (disabled)' : 'Go to previous step'}
+            accessibilityState={{ disabled: stepIndex === 0 }}
+            hitSlop={8}
+            style={[styles.navButton, stepIndex === 0 && styles.navButtonDisabled]}
+            onPress={handlePrev}
+            disabled={stepIndex === 0}
+            testID="voice-prev"
+          >
+            <ArrowLeft size={20} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
+            <Text style={styles.buttonText}>Prev</Text>
+          </Pressable>
+        )}
+
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={isListening ? 'Stop listening' : 'Activate voice commands'}
@@ -63,9 +131,9 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
           testID="voice-toggle"
         >
           {isListening ? (
-            <MicOff size={24} color="#FFFFFF" />
+            <MicOff size={24} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
           ) : (
-            <Mic size={24} color="#FFFFFF" />
+            <Mic size={24} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
           )}
           <Text style={styles.buttonText}>
             {isListening ? "Stop" : "Voice"}
@@ -84,20 +152,36 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
           onPress={handleSpeak}
           testID="voice-repeat"
         >
-          <Volume2 size={24} color="#FFFFFF" />
+          <Volume2 size={24} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
           <Text style={styles.buttonText}>
             {isSpeaking ? "Speaking..." : "Repeat"}
           </Text>
         </Pressable>
+
+        {steps && steps.length > 0 && (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={stepIndex === steps.length - 1 ? 'Next step (disabled)' : 'Go to next step'}
+            accessibilityState={{ disabled: stepIndex === steps.length - 1 }}
+            hitSlop={8}
+            style={[styles.navButton, stepIndex === steps.length - 1 && styles.navButtonDisabled]}
+            onPress={handleNext}
+            disabled={stepIndex === steps.length - 1}
+            testID="voice-next"
+          >
+            <ArrowRight size={20} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
+            <Text style={styles.buttonText}>Next</Text>
+          </Pressable>
+        )}
       </View>
 
       {isListening && (
         <View style={styles.commandsContainer}>
           <Text style={styles.commandsTitle}>Voice Commands:</Text>
-          <Text style={styles.commandText}>• "Where am I?"</Text>
-          <Text style={styles.commandText}>• "Repeat directions"</Text>
-          <Text style={styles.commandText}>• "Call for help"</Text>
-          <Text style={styles.commandText}>• "How much time left?"</Text>
+          <Text style={styles.commandText}>• &quot;Where am I?&quot;</Text>
+          <Text style={styles.commandText}>• &quot;Repeat directions&quot;</Text>
+          <Text style={styles.commandText}>• &quot;Call for help&quot;</Text>
+          <Text style={styles.commandText}>• &quot;How much time left?&quot;</Text>
           <Toast 
             message={toast.message}
             type={toast.type}
@@ -110,73 +194,90 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: 16,
-    margin: 16,
-  },
-  stepContainer: {
-    backgroundColor: "#F0F4FF",
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 16,
-  },
-  stepText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.text,
-    textAlign: "center",
-  },
-  controlsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    gap: 16,
-  },
-  voiceButton: {
-    flex: 1,
-    backgroundColor: Colors.primary,
-    borderRadius: 8,
-    padding: 12,
-    alignItems: "center",
-    gap: 4,
-  },
-  listeningButton: {
-    backgroundColor: Colors.error,
-  },
-  speakButton: {
-    flex: 1,
-    backgroundColor: Colors.secondary,
-    borderRadius: 8,
-    padding: 12,
-    alignItems: "center",
-    gap: 4,
-  },
-  speakingButton: {
-    backgroundColor: Colors.warning,
-  },
+const createStyles = (theme: ReturnType<typeof useTheme>) => StyleSheet.create({
   buttonText: {
     color: "#FFFFFF",
     fontSize: 12,
     fontWeight: "600",
   },
+  commandText: {
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+    marginBottom: 4,
+  },
   commandsContainer: {
-    marginTop: 16,
-    backgroundColor: "#F9F9F9",
+    backgroundColor: theme.colors.surfaceAlt,
     borderRadius: 8,
+    marginTop: 16,
     padding: 12,
   },
   commandsTitle: {
+    color: theme.colors.text,
     fontSize: 14,
     fontWeight: "600",
-    color: Colors.text,
     marginBottom: 8,
   },
-  commandText: {
+  container: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: 12,
+    margin: 16,
+    padding: 16,
+  },
+  controlsContainer: {
+    flexDirection: "row",
+    gap: 16,
+    justifyContent: "space-around",
+  },
+  listeningButton: {
+    backgroundColor: theme.colors.error,
+  },
+  navButton: {
+    alignItems: 'center',
+    backgroundColor: theme.colors.secondary,
+    borderRadius: 8,
+    flex: 1,
+    gap: 4,
+    padding: 12,
+  },
+  navButtonDisabled: {
+    backgroundColor: theme.colors.border,
+  },
+  speakButton: {
+    alignItems: "center",
+    backgroundColor: theme.colors.secondary,
+    borderRadius: 8,
+    flex: 1,
+    gap: 4,
+    padding: 12,
+  },
+  speakingButton: {
+    backgroundColor: theme.colors.warning,
+  },
+  stepContainer: {
+    backgroundColor: theme.colors.surfaceAlt,
+    borderRadius: 8,
+    marginBottom: 16,
+    padding: 12,
+  },
+  stepMeta: {
+    color: theme.colors.textSecondary,
     fontSize: 12,
-    color: Colors.textLight,
-    marginBottom: 4,
+    marginTop: 4,
+    textAlign: 'center'
+  },
+  stepText: {
+    color: theme.colors.text,
+    fontSize: 16,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  voiceButton: {
+    alignItems: "center",
+    backgroundColor: theme.colors.primary,
+    borderRadius: 8,
+    flex: 1,
+    gap: 4,
+    padding: 12,
   },
 });
 

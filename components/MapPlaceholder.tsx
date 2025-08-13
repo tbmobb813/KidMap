@@ -1,7 +1,8 @@
-import React from "react";
-import { StyleSheet, View, Text, Dimensions } from "react-native";
-import Colors from "@/constants/colors";
 import { MapPin } from "lucide-react-native";
+import React, { useMemo } from "react";
+import { StyleSheet, View, Text } from "react-native";
+
+import { useTheme } from "@/constants/theme";
 
 type MapPlaceholderProps = {
   message?: string;
@@ -10,42 +11,45 @@ type MapPlaceholderProps = {
 const MapPlaceholder: React.FC<MapPlaceholderProps> = ({ 
   message = "Map will appear here" 
 }) => {
+  const theme = useTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]);
+
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
-        <MapPin size={40} color={Colors.primary} />
+        <MapPin size={40} color={theme.colors.primary} />
       </View>
       <Text style={styles.message}>{message}</Text>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (theme: any) => StyleSheet.create({
   container: {
-    width: "100%",
-    height: 300,
-    backgroundColor: Colors.mapWater,
-    justifyContent: "center",
     alignItems: "center",
+    backgroundColor: theme.colors.surfaceAlt,
     borderRadius: 12,
+    height: 300,
+    justifyContent: "center",
+    width: "100%",
   },
   iconContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: "#FFFFFF",
-    justifyContent: "center",
     alignItems: "center",
+    backgroundColor: theme.colors.surface,
+    borderRadius: 40,
+    elevation: 3,
+    height: 80,
+    justifyContent: "center",
     marginBottom: 16,
-    shadowColor: "#000",
+    shadowColor: theme.colors.shadow,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
+    width: 80,
   },
   message: {
+    color: theme.colors.text,
     fontSize: 16,
-    color: Colors.text,
     fontWeight: "500",
   },
 });

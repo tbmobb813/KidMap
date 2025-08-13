@@ -1,9 +1,12 @@
+import { MapPin, Settings, Shield, CheckCircle } from "lucide-react-native";
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Pressable, ScrollView } from "react-native";
-import Colors from "@/constants/colors";
+
 import RegionSelector from "./RegionSelector";
+
+import Colors from "@/constants/colors"; // legacy
+import { useTheme } from '@/constants/theme';
 import { useRegionStore } from "@/stores/regionStore";
-import { MapPin, Settings, Shield, CheckCircle } from "lucide-react-native";
 
 type OnboardingStep = "welcome" | "region" | "preferences" | "safety" | "complete";
 
@@ -13,6 +16,7 @@ type OnboardingFlowProps = {
 
 const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
   const [currentStep, setCurrentStep] = useState<OnboardingStep>("welcome");
+  const theme = useTheme();
   const {
     availableRegions,
     userPreferences,
@@ -42,12 +46,12 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
   const renderWelcome = () => (
     <View style={styles.stepContainer}>
       <View style={styles.iconContainer}>
-        <MapPin size={48} color={Colors.primary} />
+  <MapPin size={48} color={theme.colors.primary} />
       </View>
-      <Text style={styles.stepTitle}>Welcome to KidMap!</Text>
+  <Text style={[styles.stepTitle,{ color: theme.colors.text }]}>Welcome to KidMap!</Text>
       <Text style={styles.stepDescription}>
         KidMap helps kids navigate public transportation safely and confidently. 
-        Let's set up your app for your city and preferences.
+        Let&apos;s set up your app for your city and preferences.
       </Text>
       <Pressable style={styles.primaryButton} onPress={() => setCurrentStep("region")}>
         <Text style={styles.buttonText}>Get Started</Text>
@@ -66,9 +70,9 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
   const renderPreferences = () => (
     <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContentContainer}>
       <View style={styles.iconContainer}>
-        <Settings size={48} color={Colors.primary} />
+  <Settings size={48} color={theme.colors.primary} />
       </View>
-      <Text style={styles.stepTitle}>Customize Your Experience</Text>
+  <Text style={[styles.stepTitle,{ color: theme.colors.text }]}>Customize Your Experience</Text>
       <Text style={styles.stepDescription}>
         Set your preferences to make KidMap work best for you.
       </Text>
@@ -120,7 +124,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
         >
           <Text style={styles.toggleText}>Enable accessibility features</Text>
           {userPreferences.accessibilityMode && (
-            <CheckCircle size={20} color={Colors.success} />
+            <CheckCircle size={20} color={theme.colors.success} />
           )}
         </Pressable>
       </View>
@@ -134,7 +138,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
   const renderSafety = () => (
     <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContentContainer}>
       <View style={styles.iconContainer}>
-        <Shield size={48} color={Colors.primary} />
+  <Shield size={48} color={theme.colors.primary} />
       </View>
       <Text style={styles.stepTitle}>Safety First</Text>
       <Text style={styles.stepDescription}>
@@ -143,15 +147,15 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
 
       <View style={styles.safetyFeatures}>
         <View style={styles.featureItem}>
-          <Shield size={24} color={Colors.success} />
+          <Shield size={24} color={theme.colors.success} />
           <Text style={styles.featureText}>Emergency contact buttons</Text>
         </View>
         <View style={styles.featureItem}>
-          <MapPin size={24} color={Colors.success} />
+          <MapPin size={24} color={theme.colors.success} />
           <Text style={styles.featureText}>Location sharing with parents</Text>
         </View>
         <View style={styles.featureItem}>
-          <CheckCircle size={24} color={Colors.success} />
+          <CheckCircle size={24} color={theme.colors.success} />
           <Text style={styles.featureText}>Safe arrival notifications</Text>
         </View>
       </View>
@@ -168,7 +172,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
         >
           <Text style={styles.toggleText}>Enable parental controls</Text>
           {userPreferences.parentalControls && (
-            <CheckCircle size={20} color={Colors.success} />
+            <CheckCircle size={20} color={theme.colors.success} />
           )}
         </Pressable>
       </View>
@@ -182,9 +186,9 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
   const renderComplete = () => (
     <View style={styles.stepContainer}>
       <View style={styles.iconContainer}>
-        <CheckCircle size={48} color={Colors.success} />
+  <CheckCircle size={48} color={theme.colors.success} />
       </View>
-      <Text style={styles.stepTitle}>You're All Set!</Text>
+  <Text style={[styles.stepTitle,{ color: theme.colors.text }]}>You&apos;re All Set!</Text>
       <Text style={styles.stepDescription}>
         KidMap is now configured for your region and preferences. 
         Start exploring your city safely!
@@ -213,120 +217,120 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
 };
 
 const styles = StyleSheet.create({
+  buttonText: {
+    color: "/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/",
+    fontSize: 18,
+    fontWeight: "600",
+  },
   container: {
-    flex: 1,
     backgroundColor: Colors.background,
-  },
-  stepContainer: {
-    flex: 1,
-    padding: 24,
-    justifyContent: "center",
-  },
-  scrollContainer: {
     flex: 1,
   },
-  scrollContentContainer: {
-    padding: 24,
-    flexGrow: 1,
-    justifyContent: "center",
+  featureItem: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 12,
+    marginBottom: 16,
+  },
+  featureText: {
+    color: Colors.text,
+    fontSize: 16,
+    fontWeight: "500",
   },
   iconContainer: {
     alignItems: "center",
     marginBottom: 24,
   },
-  stepTitle: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: Colors.text,
-    textAlign: "center",
-    marginBottom: 16,
-  },
-  stepDescription: {
-    fontSize: 16,
-    color: Colors.textLight,
-    textAlign: "center",
-    lineHeight: 24,
-    marginBottom: 32,
-  },
-  primaryButton: {
-    backgroundColor: Colors.primary,
-    borderRadius: 12,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
+  optionButton: {
     alignItems: "center",
-    marginTop: 24,
-  },
-  buttonText: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  preferenceSection: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: Colors.text,
-    marginBottom: 12,
+    backgroundColor: Colors.card, // TODO: replace with theme.colors.surface
+    borderColor: "transparent",
+    borderRadius: 8,
+    borderWidth: 2,
+    flex: 1,
+    padding: 16,
   },
   optionRow: {
     flexDirection: "row",
     gap: 12,
   },
-  optionButton: {
-    flex: 1,
-    backgroundColor: Colors.card,
-    borderRadius: 8,
-    padding: 16,
+  optionText: {
+    color: Colors.text,
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  preferenceSection: {
+    marginBottom: 24,
+  },
+  primaryButton: {
     alignItems: "center",
-    borderWidth: 2,
-    borderColor: "transparent",
+    backgroundColor: Colors.primary,
+    borderRadius: 12,
+    marginTop: 24,
+    paddingHorizontal: 32,
+    paddingVertical: 16,
+  },
+  safetyFeatures: {
+    marginBottom: 24,
+  },
+  scrollContainer: {
+    flex: 1,
+  },
+  scrollContentContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
+    padding: 24,
+  },
+  sectionTitle: {
+    color: Colors.text,
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 12,
   },
   selectedOption: {
+    backgroundColor: "/*TODO theme*/ theme.colors.placeholder /*#F0F4FF*/",
     borderColor: Colors.primary,
-    backgroundColor: "#F0F4FF",
-  },
-  optionText: {
-    fontSize: 14,
-    color: Colors.text,
-    fontWeight: "500",
   },
   selectedOptionText: {
     color: Colors.primary,
     fontWeight: "600",
   },
-  toggleOption: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: Colors.card,
-    borderRadius: 8,
-    padding: 16,
-    borderWidth: 2,
-    borderColor: "transparent",
-  },
   selectedToggle: {
+    backgroundColor: "/*TODO theme*/ theme.colors.placeholder /*#F0FFF4*/",
     borderColor: Colors.success,
-    backgroundColor: "#F0FFF4",
+  },
+  stepContainer: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 24,
+  },
+  stepDescription: {
+    color: Colors.textLight, // TODO: replace with theme.colors.textSecondary
+    fontSize: 16,
+    lineHeight: 24,
+    marginBottom: 32,
+    textAlign: "center",
+  },
+  stepTitle: {
+    color: Colors.text,
+    fontSize: 28,
+    fontWeight: "700",
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  toggleOption: {
+    alignItems: "center",
+    backgroundColor: Colors.card, // TODO: replace with theme.colors.surface
+    borderColor: "transparent",
+    borderRadius: 8,
+    borderWidth: 2,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 16,
   },
   toggleText: {
-    fontSize: 16,
     color: Colors.text,
-    fontWeight: "500",
-  },
-  safetyFeatures: {
-    marginBottom: 24,
-  },
-  featureItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 16,
-    gap: 12,
-  },
-  featureText: {
     fontSize: 16,
-    color: Colors.text,
     fontWeight: "500",
   },
 });

@@ -1,30 +1,33 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { useSafeZoneMonitor } from '../hooks/useSafeZoneMonitor';
-import Colors from '@/constants/colors';
+
+import { useTheme } from '@/constants/theme';
+import { useSafeZoneMonitor } from '@/modules/safety/hooks/useSafeZoneMonitor';
+
 
 const SafetyDashboard: React.FC = () => {
   const { isMonitoring, getCurrentSafeZoneStatus, events } = useSafeZoneMonitor();
+  const theme = useTheme();
   const status = getCurrentSafeZoneStatus();
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>Safety Dashboard</Text>
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Monitoring</Text>
-        <Text style={styles.value}>{isMonitoring ? 'Active' : 'Inactive'}</Text>
+    <ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]} contentContainerStyle={styles.content}>
+      <Text style={[styles.title, { color: theme.colors.text }]}>Safety Dashboard</Text>
+      <View style={[styles.card, { backgroundColor: theme.colors.surface, shadowColor: theme.colors.text }]}> 
+        <Text style={[styles.cardTitle, { color: theme.colors.textSecondary }]}>Monitoring</Text>
+        <Text style={[styles.value, { color: isMonitoring ? theme.colors.success : theme.colors.error }]}>{isMonitoring ? 'Active' : 'Inactive'}</Text>
       </View>
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Safe Zones Inside</Text>
-        <Text style={styles.value}>{status?.inside.length ?? 0} / {status?.totalActive ?? 0}</Text>
+      <View style={[styles.card, { backgroundColor: theme.colors.surface, shadowColor: theme.colors.text }]}> 
+        <Text style={[styles.cardTitle, { color: theme.colors.textSecondary }]}>Safe Zones Inside</Text>
+        <Text style={[styles.value, { color: theme.colors.primary }]}>{status?.inside.length ?? 0} / {status?.totalActive ?? 0}</Text>
         {!!status?.inside.length && status.inside.map(z => (
-          <Text key={z.id} style={styles.listItem}>• {z.name}</Text>
+          <Text key={z.id} style={[styles.listItem, { color: theme.colors.textSecondary }]}>• {z.name}</Text>
         ))}
       </View>
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Recent Events</Text>
-        {events.length === 0 && <Text style={styles.empty}>No events yet</Text>}
+      <View style={[styles.card, { backgroundColor: theme.colors.surface, shadowColor: theme.colors.text }]}> 
+        <Text style={[styles.cardTitle, { color: theme.colors.textSecondary }]}>Recent Events</Text>
+        {events.length === 0 && <Text style={[styles.empty, { color: theme.colors.textSecondary }]}>No events yet</Text>}
         {events.slice(0,5).map(e => (
-          <Text key={e.id} style={styles.listItem}>{e.type === 'entry' ? '⬤' : '○'} {e.zoneName}</Text>
+          <Text key={e.id} style={[styles.listItem, { color: theme.colors.textSecondary }]}>{e.type === 'entry' ? '⬤' : '○'} {e.zoneName}</Text>
         ))}
       </View>
     </ScrollView>
@@ -34,12 +37,12 @@ const SafetyDashboard: React.FC = () => {
 export default SafetyDashboard;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background },
+  card: { borderRadius: 12, marginBottom: 16, padding: 16, elevation: 2, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 3 },
+  cardTitle: { fontSize: 14, fontWeight: '600', marginBottom: 8 },
+  container: { flex: 1 },
   content: { padding: 16 },
-  title: { fontSize: 20, fontWeight: '700', color: Colors.text, marginBottom: 16 },
-  card: { backgroundColor: Colors.card, padding: 16, borderRadius: 12, marginBottom: 16 },
-  cardTitle: { fontSize: 14, fontWeight: '600', color: Colors.text, marginBottom: 8 },
-  value: { fontSize: 16, fontWeight: '700', color: Colors.primary, marginBottom: 4 },
-  listItem: { fontSize: 12, color: Colors.textLight },
-  empty: { fontSize: 12, color: Colors.textLight, fontStyle: 'italic' },
+  empty: { fontSize: 12, fontStyle: 'italic' },
+  listItem: { fontSize: 12 },
+  title: { fontSize: 20, fontWeight: '700', marginBottom: 16 },
+  value: { fontSize: 16, fontWeight: '700', marginBottom: 4 },
 });

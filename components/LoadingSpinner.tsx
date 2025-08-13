@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { StyleSheet, View, Animated, Platform } from "react-native";
-import Colors from "@/constants/colors";
+
+import { useTheme } from '@/constants/theme';
 
 type LoadingSpinnerProps = {
   size?: "small" | "medium" | "large";
@@ -8,9 +9,11 @@ type LoadingSpinnerProps = {
 };
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
-  size = "medium", 
-  color = Colors.primary 
+  size = 'medium', 
+  color 
 }) => {
+  const theme = useTheme();
+  const resolvedColor = color || theme.colors.primary;
   const spinValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -48,8 +51,8 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
           {
             width: dimensions,
             height: dimensions,
-            borderColor: `${color}20`,
-            borderTopColor: color,
+            borderColor: `${resolvedColor}20`,
+            borderTopColor: resolvedColor,
             transform: [{ rotate: spin }],
           },
         ]}
@@ -60,12 +63,12 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
   },
   spinner: {
-    borderWidth: 3,
     borderRadius: 50,
+    borderWidth: 3,
   },
 });
 

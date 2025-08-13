@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { LocationSchema } from './baseSchemas';
 
 export const PhotoCheckInSchema = z.object({

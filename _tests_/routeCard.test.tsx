@@ -1,18 +1,13 @@
+import { fireEvent } from '@testing-library/react-native';
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+
+import { render, mockRoute } from './testUtils';
+
 import RouteCard from '@/components/RouteCard';
 import { Route } from '@/types/navigation';
 
-const route: Route = {
-  id: 'r1',
-  totalDuration: 12,
-  departureTime: '09:00',
-  arrivalTime: '09:12',
-  steps: [
-    { id: 's1', type: 'walk', from: 'A', to: 'B', duration: 5 },
-    { id: 's2', type: 'bus', from: 'B', to: 'C', duration: 7 }
-  ]
-};
+
+const route: Route = mockRoute;
 
 describe('RouteCard nullability safeguards', () => {
   it('renders unavailable state when route is null', () => {
@@ -29,7 +24,7 @@ describe('RouteCard nullability safeguards', () => {
   it('fires onPress with valid route', () => {
     const onPress = jest.fn();
     const { getByText } = render(<RouteCard route={route} onPress={onPress} />);
-    fireEvent.press(getByText('12 min'));
+    fireEvent.press(getByText('25 min'));
     expect(onPress).toHaveBeenCalledWith(route);
   });
 });

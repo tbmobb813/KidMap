@@ -111,33 +111,43 @@ Acceptance: Local `npm test -- --coverage` meets thresholds; config committed.
 ### Sprint 3 Ticket Details (Summary)
 
 #### S3-1 Dark Mode & High Contrast Tokens
+
 System theme detection + manual toggle; semantic tokens with WCAG AA contrast; snapshot tests & contrast check script.
 
 #### S3-2 Offline Route Cache Persistence
+
 Persist React Query cache to AsyncStorage with versioning; rehydrate without refetch; tests for hydrate path & fetchCount stability.
 
 #### S3-3 Voice Navigation Progressive Announcements
+
 Announce next direction with distance thresholds; mute toggle; respects screen reader state.
 
 #### S3-4 Accessibility Announce API Unification
+
 Single `announce(message, { politeness })` with web live region; deprecate legacy helper; dedupe & debounce.
 
 #### S3-5 Invariant / Error Telemetry Bridge
+
 `reportError(error, context)` pluggable sink; integrate in boundaries & service catches.
 
 #### S3-6 Route Prefetch Heuristic
+
 Prefetch likely alternate routes / modes post selection (limited concurrency + metrics).
 
 #### S3-7 Dependency & License Audit CI Step
+
 Classify & allowlist licenses; fail on disallowed types.
 
 #### S3-8 Performance Budget Guard
+
 Baseline size snapshot + fail build on >10% growth (warn first iteration).
 
 #### S3-9 Safety Event Streaming Stub
+
 Mock WebSocket emitting safety events with reconnect backoff.
 
 #### S3-T1/T2/T3 Technical Debt
+
 Cleanup and test utility consolidation plus suite tagging to reduce runtime.
 
 ## Backlog (Future Sprints)

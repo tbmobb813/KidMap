@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { WifiOff } from "lucide-react-native";
+import React, { useState, useEffect, useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Colors from "@/constants/colors";
-import { WifiOff, Wifi } from "lucide-react-native";
+
+import { useTheme } from "@/constants/theme";
 
 const OfflineIndicator: React.FC = () => {
   const [isOnline, setIsOnline] = useState(true);
+  const theme = useTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]);
 
   // Simulate network status checking
   useEffect(() => {
@@ -22,24 +25,24 @@ const OfflineIndicator: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <WifiOff size={16} color="#FFFFFF" />
+      <WifiOff size={16} color={theme.colors.warning} />
       <Text style={styles.text}>Offline Mode - Limited features available</Text>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (theme: any) => StyleSheet.create({
   container: {
-    backgroundColor: Colors.warning,
-    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    backgroundColor: theme.colors.warning,
+    flexDirection: "row",
     gap: 8,
+    justifyContent: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
   },
   text: {
-    color: "#FFFFFF",
+    color: theme.colors.onWarning,
     fontSize: 12,
     fontWeight: "600",
   },

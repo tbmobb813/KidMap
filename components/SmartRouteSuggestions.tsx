@@ -1,7 +1,8 @@
+import { Cloud, Sun, CloudRain, Users, Clock, Zap, MapPin } from 'lucide-react-native';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native';
-import Colors from '@/constants/colors';
-import { Cloud, Sun, CloudRain, Users, Clock, Zap, MapPin } from 'lucide-react-native';
+
+import { useTheme } from '@/constants/theme';
 import { Place } from '@/types/navigation';
 
 type WeatherCondition = 'sunny' | 'cloudy' | 'rainy' | 'stormy';
@@ -130,9 +131,9 @@ const SmartRouteSuggestions: React.FC<SmartRouteSuggestionsProps> = ({
 
   const getCrowdColor = () => {
     switch (crowdLevel) {
-      case 'low': return '#4CAF50';
-      case 'medium': return '#FF9800';
-      case 'high': return '#F44336';
+      case 'low': return '/*TODO theme*/ theme.colors.placeholder /*#4CAF50*/';
+      case 'medium': return '/*TODO theme*/ theme.colors.placeholder /*#FF9800*/';
+      case 'high': return '/*TODO theme*/ theme.colors.placeholder /*#F44336*/';
     }
   };
 
@@ -154,13 +155,45 @@ const SmartRouteSuggestions: React.FC<SmartRouteSuggestionsProps> = ({
     return () => clearInterval(interval);
   }, []);
 
+  const theme = useTheme();
+  const styles = React.useMemo(() => StyleSheet.create({
+    conditionItem: { alignItems: 'center', flexDirection: 'row', gap: 4 },
+    conditionText: { color: theme.colors.textSecondary, fontSize: 12, fontWeight: '500', textTransform: 'capitalize' },
+    conditions: { flexDirection: 'row', gap: 16 },
+    container: {
+      backgroundColor: theme.colors.surface,
+      borderRadius: 16,
+      elevation: 4,
+      margin: 16,
+      padding: 16,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 8,
+    },
+    estimatedTime: { color: theme.colors.primary, fontSize: 14, fontWeight: '700' },
+    header: { marginBottom: 16 },
+    iconContainer: { alignItems: 'center', backgroundColor: theme.colors.primary, borderRadius: 16, height: 32, justifyContent: 'center', marginRight: 8, width: 32 },
+    reason: { color: theme.colors.textSecondary, fontSize: 10, fontStyle: 'italic' },
+    smartTip: { alignItems: 'center', backgroundColor: theme.colors.secondary, borderRadius: 8, flexDirection: 'row', gap: 8, padding: 12 },
+    smartTipText: { color: theme.colors.secondaryForeground || '#06260F', flex: 1, fontSize: 12, fontWeight: '500' },
+    suggestionCard: { backgroundColor: theme.colors.background, borderColor: theme.colors.border, borderRadius: 12, borderWidth: 1, marginRight: 12, padding: 16, width: 200 },
+    suggestionDescription: { color: theme.colors.textSecondary, fontSize: 12, lineHeight: 16, marginBottom: 12 },
+    suggestionFooter: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
+    suggestionHeader: { alignItems: 'center', flexDirection: 'row', marginBottom: 8 },
+    suggestionTitle: { color: theme.colors.text, flex: 1, fontSize: 14, fontWeight: '600' },
+    suggestionsScroll: { marginBottom: 16 },
+    title: { color: theme.colors.text, fontSize: 18, fontWeight: '700', marginBottom: 8 },
+    iconBg: { backgroundColor: theme.colors.primary },
+  }), [theme]);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Smart Route Suggestions</Text>
         <View style={styles.conditions}>
           <View style={styles.conditionItem}>
-            {React.createElement(getWeatherIcon(), { size: 16, color: Colors.primary })}
+            {React.createElement(getWeatherIcon(), { size: 16, color: theme.colors.primary })}
             <Text style={styles.conditionText}>{weather}</Text>
           </View>
           <View style={styles.conditionItem}>
@@ -181,7 +214,7 @@ const SmartRouteSuggestions: React.FC<SmartRouteSuggestionsProps> = ({
           >
             <View style={styles.suggestionHeader}>
               <View style={styles.iconContainer}>
-                <suggestion.icon size={20} color={Colors.primary} />
+                <suggestion.icon size={20} color={theme.colors.primary} />
               </View>
               <Text style={styles.suggestionTitle}>{suggestion.title}</Text>
             </View>
@@ -197,7 +230,7 @@ const SmartRouteSuggestions: React.FC<SmartRouteSuggestionsProps> = ({
       </ScrollView>
 
       <View style={styles.smartTip}>
-        <Zap size={16} color={Colors.secondary} />
+  <Zap size={16} color={theme.colors.secondary} />
         <Text style={styles.smartTipText}>
           Routes adapt based on weather, time, and crowd levels for the best experience!
         </Text>
@@ -206,109 +239,6 @@ const SmartRouteSuggestions: React.FC<SmartRouteSuggestionsProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.white,
-    borderRadius: 16,
-    padding: 16,
-    margin: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  header: {
-    marginBottom: 16,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: Colors.text,
-    marginBottom: 8,
-  },
-  conditions: {
-    flexDirection: 'row',
-    gap: 16,
-  },
-  conditionItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  conditionText: {
-    fontSize: 12,
-    color: Colors.textLight,
-    fontWeight: '500',
-    textTransform: 'capitalize',
-  },
-  suggestionsScroll: {
-    marginBottom: 16,
-  },
-  suggestionCard: {
-    backgroundColor: Colors.background,
-    borderRadius: 12,
-    padding: 16,
-    marginRight: 12,
-    width: 200,
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  suggestionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  iconContainer: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: Colors.primaryLight,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 8,
-  },
-  suggestionTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: Colors.text,
-    flex: 1,
-  },
-  suggestionDescription: {
-    fontSize: 12,
-    color: Colors.textLight,
-    lineHeight: 16,
-    marginBottom: 12,
-  },
-  suggestionFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  estimatedTime: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: Colors.primary,
-  },
-  reason: {
-    fontSize: 10,
-    color: Colors.textLight,
-    fontStyle: 'italic',
-  },
-  smartTip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.secondaryLight,
-    padding: 12,
-    borderRadius: 8,
-    gap: 8,
-  },
-  smartTipText: {
-    flex: 1,
-    fontSize: 12,
-    color: Colors.secondary,
-    fontWeight: '500',
-  },
-});
+// Removed legacy StyleSheet in favor of theme-driven memoized styles
 
 export default SmartRouteSuggestions;

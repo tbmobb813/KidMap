@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView, Pressable, Dimensions, Platform } from "react-native";
-import Colors from "@/constants/colors";
-import { subwayLines } from "@/mocks/transit";
-import SearchBar from "@/components/SearchBar";
 import { Clock, MapPin, AlertCircle, Bell } from "lucide-react-native";
-import LiveArrivalsCard from "@/components/LiveArrivalsCard";
-import { mockLiveArrivals, nearbyStations } from "@/mocks/liveArrivals";
+import React, { useState, useEffect, useMemo } from "react";
+import { StyleSheet, Text, View, ScrollView, Pressable, Dimensions, Platform } from "react-native";
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+import LiveArrivalsCard from "@/components/LiveArrivalsCard";
+import SearchBar from "@/components/SearchBar";
+import { useTheme } from "@/constants/theme";
+import { mockLiveArrivals, nearbyStations } from "@/mocks/liveArrivals";
+import { subwayLines } from "@/mocks/transit";
+
+const { width: screenWidth } = Dimensions.get('window');
 
 type SubwayStatus = {
   id: string;
@@ -16,7 +17,145 @@ type SubwayStatus = {
   message: string;
 };
 
+const createStyles = (theme: ReturnType<typeof useTheme>) => StyleSheet.create({
+  alertContainer: {
+    alignItems: "center",
+    backgroundColor: theme.colors.surfaceAlt,
+    borderRadius: 8,
+    flexDirection: "row",
+    padding: 12,
+  },
+  alertIcon: { marginRight: 8 },
+  alertText: {
+    color: theme.colors.text,
+    flex: 1,
+    fontSize: 14,
+  },
+  container: {
+    backgroundColor: theme.colors.background,
+    flex: 1,
+  },
+  detailsTitle: {
+    color: theme.colors.text,
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 12,
+  },
+  lineCircle: {
+    alignItems: "center",
+    borderRadius: 18,
+    height: 36,
+    justifyContent: "center",
+    marginRight: 16,
+    width: 36,
+  },
+  lineDetailsContainer: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: 12,
+    marginTop: 8,
+    padding: 16,
+  },
+  lineItem: {
+    alignItems: "center",
+    backgroundColor: theme.colors.surface,
+    borderRadius: 12,
+    flexDirection: "row",
+    marginBottom: 12,
+    padding: 16,
+  },
+  lineText: {
+    color: theme.colors.primaryForeground,
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  linesContainer: {
+    gap: 12,
+    marginBottom: 16,
+  },
+  nextTrainsContainer: { marginTop: 8 },
+  nextTrainsTitle: { color: theme.colors.textSecondary, fontSize: 14, marginBottom: 8 },
+  quickActionButton: {
+    alignItems: "center",
+    backgroundColor: theme.colors.surface,
+    borderRadius: 12,
+    flex: Platform.select({
+      web: screenWidth > 768 ? 1 : undefined,
+      default: 1,
+    }),
+    gap: 8,
+    minHeight: 80,
+    padding: 16,
+  },
+  quickActionText: {
+    color: theme.colors.text,
+    fontSize: 12,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  quickActions: {
+    flexDirection: Platform.select({
+      web: screenWidth > 768 ? "row" : "column",
+      default: "row",
+    }),
+    gap: 12,
+    justifyContent: "space-between",
+  },
+  quickActionsContainer: { marginBottom: 16 },
+  scrollContent: { flexGrow: 1, padding: 16, paddingBottom: 32 },
+  searchContainer: { marginBottom: 16 },
+  sectionTitle: { color: theme.colors.text, fontSize: 18, fontWeight: "700", marginBottom: 16 },
+  selectedLine: { borderColor: theme.colors.primary, borderWidth: 2 },
+  selectedStationButton: { backgroundColor: theme.colors.primary, borderColor: theme.colors.primary },
+  selectedStationButtonText: { color: theme.colors.primaryForeground },
+  stationButton: {
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
+    borderRadius: 12,
+    borderWidth: 1,
+    minWidth: 140,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  stationButtonText: { color: theme.colors.text, fontSize: 14, fontWeight: "600", marginBottom: 4 },
+  stationDistance: { color: theme.colors.textSecondary, fontSize: 12 },
+  stationsContainer: { gap: 12, paddingHorizontal: 4 },
+  stationsScroll: { marginBottom: 16 },
+  statusContainer: { alignItems: "center", flex: 1, flexDirection: "row" },
+  statusDot: { borderRadius: 5, height: 10, marginRight: 8, width: 10 },
+  statusHeader: { alignItems: "center", flexDirection: "row", justifyContent: "space-between", marginBottom: 12 },
+  statusSummaryContainer: { backgroundColor: theme.colors.surface, borderRadius: 12, marginBottom: 24, padding: 16 },
+  statusText: { color: theme.colors.text, fontSize: 14 },
+  timeContainer: { alignItems: "center", flexDirection: "row" },
+  timeText: { color: theme.colors.textSecondary, fontSize: 12, marginLeft: 4 },
+  trainDirectionText: { color: theme.colors.textSecondary, fontSize: 12 },
+  trainTime: {
+    alignItems: "center",
+    backgroundColor: theme.colors.surfaceAlt,
+    borderRadius: 8,
+    flex: Platform.select({
+      web: screenWidth > 600 ? 1 : undefined,
+      default: 1,
+    }),
+    minWidth: Platform.select({
+      web: screenWidth > 600 ? 80 : "100%",
+      default: 80,
+    }),
+    padding: 12,
+  },
+  trainTimeText: { color: theme.colors.primary, fontSize: 16, fontWeight: "700", marginBottom: 4 },
+  trainTimesContainer: {
+    flexDirection: Platform.select({
+      web: screenWidth > 600 ? "row" : "column",
+      default: "row",
+    }),
+    gap: 8,
+    justifyContent: "space-between",
+  },
+});
+
 export default function TransitScreen() {
+  const theme = useTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]); // styles already theme-based
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLine, setSelectedLine] = useState<string | null>(null);
   const [selectedStation, setSelectedStation] = useState<string | null>("main-st-station");
@@ -62,10 +201,10 @@ export default function TransitScreen() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "normal": return Colors.success;
-      case "delayed": return Colors.warning;
-      case "alert": return Colors.error;
-      default: return Colors.textLight;
+      case "normal": return theme.colors.success;
+      case "delayed": return theme.colors.warning;
+      case "alert": return theme.colors.error;
+      default: return theme.colors.textSecondary;
     }
   };
 
@@ -127,7 +266,7 @@ export default function TransitScreen() {
         />
       </View>
 
-      <Text style={styles.sectionTitle}>Live Arrivals</Text>
+  <Text style={styles.sectionTitle}>Live Arrivals</Text>
       <ScrollView 
         horizontal 
         showsHorizontalScrollIndicator={false}
@@ -151,15 +290,15 @@ export default function TransitScreen() {
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         <View style={styles.quickActions}>
           <Pressable style={styles.quickActionButton}>
-            <Bell size={20} color={Colors.primary} />
+            <Bell size={20} color={theme.colors.primary} />
             <Text style={styles.quickActionText}>Set Alerts</Text>
           </Pressable>
           <Pressable style={styles.quickActionButton}>
-            <MapPin size={20} color={Colors.primary} />
+            <MapPin size={20} color={theme.colors.primary} />
             <Text style={styles.quickActionText}>Find Station</Text>
           </Pressable>
           <Pressable style={styles.quickActionButton}>
-            <Clock size={20} color={Colors.primary} />
+            <Clock size={20} color={theme.colors.primary} />
             <Text style={styles.quickActionText}>Schedule</Text>
           </Pressable>
         </View>
@@ -169,13 +308,13 @@ export default function TransitScreen() {
         <View style={styles.statusHeader}>
           <Text style={styles.sectionTitle}>Subway Status</Text>
           <View style={styles.timeContainer}>
-            <Clock size={14} color={Colors.textLight} />
+            <Clock size={14} color={theme.colors.textSecondary} />
             <Text style={styles.timeText}>Updated 5 min ago</Text>
           </View>
         </View>
 
         <View style={styles.alertContainer}>
-          <AlertCircle size={20} color={Colors.warning} style={styles.alertIcon} />
+          <AlertCircle size={20} color={theme.colors.warning} style={styles.alertIcon} />
           <Text style={styles.alertText}>
             Some lines are experiencing delays or service changes
           </Text>
@@ -214,218 +353,3 @@ export default function TransitScreen() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    padding: 16,
-    paddingBottom: 32,
-  },
-  searchContainer: {
-    marginBottom: 16,
-  },
-  statusSummaryContainer: {
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 24,
-  },
-  statusHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  timeContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  timeText: {
-    fontSize: 12,
-    color: Colors.textLight,
-    marginLeft: 4,
-  },
-  alertContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#FFF9E6",
-    borderRadius: 8,
-    padding: 12,
-  },
-  alertIcon: {
-    marginRight: 8,
-  },
-  alertText: {
-    flex: 1,
-    fontSize: 14,
-    color: Colors.text,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: Colors.text,
-    marginBottom: 16,
-  },
-  linesContainer: {
-    gap: 12,
-    marginBottom: 16,
-  },
-  lineItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-  },
-  selectedLine: {
-    borderWidth: 2,
-    borderColor: Colors.primary,
-  },
-  lineCircle: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 16,
-  },
-  lineText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "700",
-  },
-  statusContainer: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  statusDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginRight: 8,
-  },
-  statusText: {
-    fontSize: 14,
-    color: Colors.text,
-  },
-  lineDetailsContainer: {
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: 16,
-    marginTop: 8,
-  },
-  detailsTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.text,
-    marginBottom: 12,
-  },
-  nextTrainsContainer: {
-    marginTop: 8,
-  },
-  nextTrainsTitle: {
-    fontSize: 14,
-    color: Colors.textLight,
-    marginBottom: 8,
-  },
-  trainTimesContainer: {
-    flexDirection: Platform.select({
-      web: screenWidth > 600 ? "row" : "column",
-      default: "row",
-    }),
-    justifyContent: "space-between",
-    gap: 8,
-  },
-  trainTime: {
-    alignItems: "center",
-    backgroundColor: "#F0F4FF",
-    borderRadius: 8,
-    padding: 12,
-    minWidth: Platform.select({
-      web: screenWidth > 600 ? 80 : "100%",
-      default: 80,
-    }),
-    flex: Platform.select({
-      web: screenWidth > 600 ? 1 : undefined,
-      default: 1,
-    }),
-  },
-  trainTimeText: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: Colors.primary,
-    marginBottom: 4,
-  },
-  trainDirectionText: {
-    fontSize: 12,
-    color: Colors.textLight,
-  },
-  stationsScroll: {
-    marginBottom: 16,
-  },
-  stationsContainer: {
-    paddingHorizontal: 4,
-    gap: 12,
-  },
-  stationButton: {
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderWidth: 1,
-    borderColor: Colors.border,
-    minWidth: 140,
-  },
-  selectedStationButton: {
-    backgroundColor: Colors.primary,
-    borderColor: Colors.primary,
-  },
-  stationButtonText: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: Colors.text,
-    marginBottom: 4,
-  },
-  selectedStationButtonText: {
-    color: "#FFFFFF",
-  },
-  stationDistance: {
-    fontSize: 12,
-    color: Colors.textLight,
-  },
-  quickActionsContainer: {
-    marginBottom: 16,
-  },
-  quickActions: {
-    flexDirection: Platform.select({
-      web: screenWidth > 768 ? "row" : "column",
-      default: "row",
-    }),
-    justifyContent: "space-between",
-    gap: 12,
-  },
-  quickActionButton: {
-    flex: Platform.select({
-      web: screenWidth > 768 ? 1 : undefined,
-      default: 1,
-    }),
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: 16,
-    alignItems: "center",
-    gap: 8,
-    minHeight: 80,
-  },
-  quickActionText: {
-    fontSize: 12,
-    fontWeight: "600",
-    color: Colors.text,
-    textAlign: "center",
-  },
-});

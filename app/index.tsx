@@ -1,6 +1,7 @@
 import React from 'react';
-import ErrorBoundary from '@/components/ErrorBoundary';
 import { View, Text, StyleSheet, Platform } from 'react-native';
+
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 export default function IndexPage() {
   console.log('Index page is rendering - Platform:', Platform.OS);
@@ -20,23 +21,23 @@ export default function IndexPage() {
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: 'center',
+    backgroundColor: '/*TODO theme*/ theme.colors.placeholder /*#f0f0f0*/',
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
     padding: 20,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2e7d32',
-    marginBottom: 30,
+  text: {
+    color: '/*TODO theme*/ theme.colors.placeholder /*#424242*/',
+    fontSize: 16,
+    marginBottom: 15,
     textAlign: 'center',
   },
-  text: {
-    fontSize: 16,
-    color: '#424242',
-    marginBottom: 15,
+  title: {
+    color: '/*TODO theme*/ theme.colors.placeholder /*#2e7d32*/',
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 30,
     textAlign: 'center',
   },
 });
