@@ -6,6 +6,7 @@
 export type TelemetryEvent =
     | { type: 'screen_view'; screen: string; ts: number }
     | { type: 'accessibility_toggle'; setting: string; value: boolean; ts: number }
+    | { type: 'theme_change'; theme: string; ts: number }
     | { type: 'route_fetch'; mode?: string; durationMs?: number; cacheHit?: boolean; ts: number }
     | { type: 'route_prefetch_start'; mode?: string; ts: number }
     | { type: 'route_prefetch_complete'; mode?: string; durationMs?: number; ts: number }

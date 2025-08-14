@@ -95,24 +95,24 @@ Acceptance: Local `npm test -- --coverage` meets thresholds; config committed.
 
 | ID | Title | Priority | Effort | Theme | Status |
 |----|-------|----------|--------|-------|--------|
-| S3-1 | Dark Mode & High Contrast Tokens | High | M | Accessibility | Planned |
+| S3-1 | Dark Mode & High Contrast Tokens | High | M | Accessibility | Complete |
 | S3-2 | Offline Route Cache Persistence | High | M | Performance & Data | Planned |
 | S3-3 | Voice Navigation Progressive Announcements | Medium | M | Accessibility | Planned |
-| S3-4 | Accessibility Announce API Unification | High | S | Accessibility | In Progress |
+| S3-4 | Accessibility Announce API Unification | High | S | Accessibility | Complete |
 | S3-5 | Invariant / Error Telemetry Bridge | Medium | S | Tooling | Planned |
 | S3-6 | Route Prefetch Heuristic (Predictive) | Medium | M | Performance & Data | Planned |
 | S3-7 | Dependency & License Audit CI Step | Low | S | Tooling | Planned |
 | S3-8 | Performance Budget Guard (Bundle Size) | Medium | S | Performance & Data | Planned |
 | S3-9 | Safety Event Streaming Stub (WebSocket) | Medium | M | Safety | Planned |
-| S3-T1 | Deprecate Legacy announceForAccessibility | Medium | XS | Accessibility | Planned |
+| S3-T1 | Deprecate Legacy announceForAccessibility | Medium | XS | Accessibility | Complete |
 | S3-T2 | Consolidate Test Utilities | Low | XS | Testing | Planned |
 | S3-T3 | Jest Selective Suite Tagging | Low | S | Testing | Planned |
 
 ### Sprint 3 Ticket Details (Summary)
 
-#### S3-1 Dark Mode & High Contrast Tokens
+#### S3-1 Dark Mode & High Contrast Tokens ✅
 
-System theme detection + manual toggle; semantic tokens with WCAG AA contrast; snapshot tests & contrast check script.
+**COMPLETED:** System theme detection with manual toggle controls, WCAG AA/AAA compliant semantic tokens, enhanced ThemeProvider with accessibility settings integration, contrast checking script (`npm run contrast:check`), comprehensive test coverage, and theme persistence hooks. Includes Auto/Light/Dark/High Contrast modes with reactive switching.
 
 #### S3-2 Offline Route Cache Persistence
 
@@ -122,9 +122,9 @@ Persist React Query cache to AsyncStorage with versioning; rehydrate without ref
 
 Announce next direction with distance thresholds; mute toggle; respects screen reader state.
 
-#### S3-4 Accessibility Announce API Unification
+#### S3-4 Accessibility Announce API Unification ✅
 
-Single `announce(message, { politeness })` with web live region; deprecate legacy helper; dedupe & debounce.
+**COMPLETED:** Single `announce(message, { politeness, dedupe, queueable })` with web live region support, queue management for voice navigation, cancellation handles, and legacy wrapper deprecation. Full test coverage included.
 
 #### S3-5 Invariant / Error Telemetry Bridge
 

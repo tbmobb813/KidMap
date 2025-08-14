@@ -31,13 +31,6 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
   const [companionMood, setCompanionMood] = useState<'happy' | 'excited' | 'curious'>('happy');
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
-  useEffect(() => {
-  if (isNavigating && destination) {
-      generateJourneyContent();
-      startCompanionAnimation();
-    }
-  }, [isNavigating, destination]);
-
   const startCompanionAnimation = useCallback(() => {
     Animated.loop(
       Animated.sequence([
@@ -102,6 +95,13 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
       setCurrentMessage(fallbackMessage);
     }
   }, [destination, setCurrentMessage, setCompanionMood]);
+
+  useEffect(() => {
+    if (isNavigating && destination) {
+      generateJourneyContent();
+      startCompanionAnimation();
+    }
+  }, [isNavigating, destination, generateJourneyContent, startCompanionAnimation]);
 
   const generateQuiz = async () => {
     if (!destination) return;

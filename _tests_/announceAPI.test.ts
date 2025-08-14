@@ -1,7 +1,7 @@
 /**
  * Tests for unified announce API (S3-4).
  */
-import { announce, announceForAccessibility } from '../utils/accessibility';
+import { announce, cancelAllAnnouncements } from '../utils/accessibility';
 
 // Mock react-native minimally to force Platform.OS = 'web' so live region path executes.
 jest.mock('react-native', () => ({
@@ -16,6 +16,7 @@ describe('announce API (web live regions)', () => {
         document.getElementById('__a11y_live_assertive')?.remove();
         jest.useFakeTimers();
         jest.spyOn(console, 'warn').mockImplementation(() => { });
+        cancelAllAnnouncements(); // Clear queue
     });
 
     afterEach(() => {
@@ -51,15 +52,37 @@ describe('announce API (web live regions)', () => {
         expect(region!.textContent).toBe('Important');
     });
 
-    it('deprecated announceForAccessibility delegates & warns (assertive)', () => {
-        const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => { });
-        (global as any).__DEV__ = true;
-        announceForAccessibility('Legacy');
-        jest.advanceTimersByTime(15);
+    it('supports queueable announcements with cancellation', async () => {
+        const handle = await announce('First queued message', { queueable: true });
+        expect(handle).toBeDefined();
+        expect(typeof handle?.cancel).toBe('function');
+
+        // Cancel immediately
+        handle?.cancel();
+
+        // Advance time to allow queue processing
+        jest.advanceTimersByTime(100);
+
+        // Should not appear in any region since cancelled
         const polite = document.getElementById('__a11y_live_polite');
         const assertive = document.getElementById('__a11y_live_assertive');
-        expect(polite || assertive).toBeTruthy();
-        expect(warnSpy).toHaveBeenCalled();
-        warnSpy.mockRestore();
+        expect(polite?.textContent || '').toBe('');
+        expect(assertive?.textContent || '').toBe('');
+    });
+
+    it('cancels all announcements in queue', async () => {
+        await announce('First', { queueable: true });
+        await announce('Second', { queueable: true });
+
+        // Cancel immediately before any processing
+        cancelAllAnnouncements();
+
+        // Advance time to ensure any pending processing completes
+        jest.advanceTimersByTime(2500);
+
+        const polite = document.getElementById('__a11y_live_polite');
+        const assertive = document.getElementById('__a11y_live_assertive');
+        expect(polite?.textContent || '').toBe('');
+        expect(assertive?.textContent || '').toBe('');
     });
 });

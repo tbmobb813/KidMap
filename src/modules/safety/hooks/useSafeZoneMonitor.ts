@@ -47,6 +47,15 @@ export const useSafeZoneMonitor = (): {
         }
     };
 
+    // Keep latest values in refs so callbacks invoked from stale instances
+    // still use up-to-date state (important for tests calling old monitor refs).
+    const locationRef = useRef(location);
+    const hasLocationRef = useRef(hasLocation);
+    const safeZonesRef = useRef(safeZones);
+    useEffect(() => { locationRef.current = location; }, [location]);
+    useEffect(() => { hasLocationRef.current = hasLocation; }, [hasLocation]);
+    useEffect(() => { safeZonesRef.current = safeZones; }, [safeZones]);
+
     useEffect(() => {
         if (isMonitoring) {
             intervalRef.current = setInterval(() => {
@@ -58,7 +67,8 @@ export const useSafeZoneMonitor = (): {
     }, [isMonitoring]);
 
     const computeStatus = useCallback((): SafeZoneStatus => {
-        const active = safeZones.filter(z => z.isActive);
+        const currentZones = safeZonesRef.current || [];
+        const active = currentZones.filter(z => z.isActive);
         // Validate active zones defensively (skip invalid)
         const validated: SafeZone[] = [];
         for (const z of active) {
@@ -71,7 +81,9 @@ export const useSafeZoneMonitor = (): {
             });
             if (parse.success) validated.push(z);
         }
-        if (!hasLocation) {
+        const curHasLocation = hasLocationRef.current;
+        const curLocation: any = locationRef.current as any;
+        if (!curHasLocation || curLocation?.error) {
             return {
                 inside: [],
                 outside: validated,
@@ -79,7 +91,8 @@ export const useSafeZoneMonitor = (): {
                 currentLocation: { timestamp: lastUpdateRef.current },
             };
         }
-        const { latitude, longitude } = location;
+
+        const { latitude, longitude } = curLocation;
         const inside: SafeZone[] = [];
         const outside: SafeZone[] = [];
         for (const zone of validated) {
@@ -94,7 +107,7 @@ export const useSafeZoneMonitor = (): {
             totalActive: validated.length,
             currentLocation: { timestamp: lastUpdateRef.current },
         };
-    }, [hasLocation, location, safeZones]);
+    }, []);
 
     const recordEvents = useCallback((nextInside: SafeZone[]) => {
         const prevInside = lastInsideIdsRef.current;
@@ -115,7 +128,7 @@ export const useSafeZoneMonitor = (): {
         // Exits
         for (const id of prevInside) {
             if (!nextSet.has(id)) {
-                const zone = safeZones.find(z => z.id === id);
+                const zone = (safeZonesRef.current || []).find(z => z.id === id);
                 if (zone) {
                     newEvents.push({
                         id: `evt_${Date.now()}_${zone.id}_exit`,
@@ -131,7 +144,7 @@ export const useSafeZoneMonitor = (): {
             setEvents(prev => [...newEvents, ...prev].slice(0, 20)); // keep recent 20
         }
         lastInsideIdsRef.current = nextSet;
-    }, [safeZones]);
+    }, []);
 
     const forceRefresh = useCallback(() => {
         lastUpdateRef.current = Date.now();

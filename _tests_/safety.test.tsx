@@ -14,18 +14,28 @@ jest.mock('@/modules/safety/stores/parentalStore', () => ({
 }));
 
 jest.mock('@/hooks/useLocation', () => {
-  const React = require('react');
-  function useLocationMock() {
-    const [loc, setLoc] = React.useState({ latitude: 0, longitude: 0, error: null });
-    React.useEffect(() => { setLocationState = setLoc; }, []);
-    return {
-      location: loc,
-      hasLocation: !loc.error,
-      loading: false,
-      safeCoordinates: () => (!loc.error ? { latitude: loc.latitude, longitude: loc.longitude } : undefined),
-    };
-  }
-  return { __esModule: true, default: useLocationMock };
+    const React = require('react');
+    // This is a simplified mock that allows direct state updates
+    // for testing different location scenarios.
+    function useLocationMock() {
+        const [loc, setLoc] = React.useState({ latitude: 0, longitude: 0, error: null });
+
+        // The test harness uses this to inject location updates
+        React.useEffect(() => {
+            setLocationState = setLoc;
+        }, []);
+
+        return {
+            location: loc,
+            // Critical logic: hasLocation is false if there's an error string
+            hasLocation: !loc.error,
+            loading: false,
+            // safeCoordinates is a convenience method used elsewhere
+            safeCoordinates: () =>
+                loc.error ? undefined : { latitude: loc.latitude, longitude: loc.longitude },
+        };
+    }
+    return { __esModule: true, default: useLocationMock };
 });
 
 // Now import the hook after mocks so they take effect
@@ -48,6 +58,7 @@ const TestHarness: React.FC<{ onUpdate: (m: ReturnType<typeof useSafeZoneMonitor
 describe('useSafeZoneMonitor', () => {
   beforeEach(() => {
     mockSafeZones = [];
+    setLocationState = null;
     updateLocation(0, 0); // reset
   });
 
@@ -111,10 +122,15 @@ describe('useSafeZoneMonitor', () => {
 
   it('returns outside status when location unavailable', () => {
     mockSafeZones = [{ id: 'z1', name: 'Zone', latitude: 0, longitude: 0, radius: 100, isActive: true, createdAt: Date.now(), notifications: { onEntry: true, onExit: true } }];
+    const monitor = renderMonitor(); // Render first to get setLocationState
+
     // Simulate location error
-    updateLocation(0, 0, 'Permission denied');
-    const monitor = renderMonitor();
-    act(() => { monitor.startMonitoring(); monitor.forceRefresh(); });
+    updateLocation(10, 10, 'Permission denied');
+
+    act(() => {
+      monitor.forceRefresh();
+    });
+
     const status = monitor.getCurrentSafeZoneStatus();
     expect(status).not.toBeNull();
     expect(status!.inside.length).toBe(0);

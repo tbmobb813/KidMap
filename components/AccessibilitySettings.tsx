@@ -1,8 +1,8 @@
-import { Eye, Volume2, Zap, Settings, ArrowLeft } from "lucide-react-native";
+import { Eye, Volume2, Zap, Settings, ArrowLeft, Moon, Sun, Monitor } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, View, Switch, ScrollView, Pressable } from "react-native";
 
-import { useTheme } from '@/constants/theme';
+import { useTheme, useThemeControls } from '@/constants/theme';
 import { useNavigationStore } from "@/stores/navigationStore";
 import { track } from '@/telemetry';
 
@@ -13,6 +13,46 @@ type AccessibilitySettingsProps = {
 const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({ onBack }) => {
   const { accessibilitySettings, updateAccessibilitySettings } = useNavigationStore();
   const theme = useTheme();
+  const { currentScheme } = useThemeControls();
+
+  const ThemePickerItem = ({ 
+    icon, 
+    title, 
+    description, 
+    isSelected,
+    onPress 
+  }: {
+    icon: React.ReactNode;
+    title: string;
+    description: string;
+    isSelected: boolean;
+    onPress: () => void;
+  }) => (
+    <Pressable 
+      style={[
+        styles.themePickerItem, 
+        { borderColor: theme.colors.border },
+        isSelected && { borderColor: theme.colors.primary, backgroundColor: theme.colors.surface }
+      ]} 
+      onPress={onPress}
+      accessibilityRole="radio"
+      accessibilityState={{ selected: isSelected }}
+      accessibilityLabel={`${title} theme. ${description}. ${isSelected ? 'Currently selected' : 'Tap to select'}`}
+    >
+      <View style={styles.themeIcon}>{icon}</View>
+      <View style={styles.themeContent}>
+        <Text style={[styles.themeTitle, { color: theme.colors.text }, accessibilitySettings.largeText && styles.largeText]}>
+          {title}
+        </Text>
+        <Text style={[styles.themeDescription, { color: theme.colors.textSecondary }, accessibilitySettings.largeText && styles.largeDescription]}>
+          {description}
+        </Text>
+      </View>
+      {isSelected && (
+        <View style={[styles.selectedIndicator, { backgroundColor: theme.colors.primary }]} />
+      )}
+    </Pressable>
+  );
 
   const SettingItem = ({ 
     icon, 
@@ -58,6 +98,48 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({ onBack })
       
       <Text style={[styles.sectionTitle, { color: theme.colors.text }, accessibilitySettings.largeText && styles.largeSectionTitle]}>
         Accessibility Settings
+      </Text>
+
+      {/* Theme Selection */}
+      <Text style={[styles.sectionTitle, { color: theme.colors.text }, accessibilitySettings.largeText && styles.largeSectionTitle]}>
+        Appearance
+      </Text>
+      
+      <ThemePickerItem
+        icon={<Monitor size={24} color={theme.colors.primary} />}
+        title="Auto (System)"
+        description="Follow your device's theme setting"
+        isSelected={accessibilitySettings.preferSystemTheme && !accessibilitySettings.highContrast}
+        onPress={() => {
+          updateAccessibilitySettings({ preferSystemTheme: true, highContrast: false });
+          track({ type: 'theme_change', theme: 'auto' });
+        }}
+      />
+      
+      <ThemePickerItem
+        icon={<Sun size={24} color={theme.colors.primary} />}
+        title="Light"
+        description="Light colors for bright environments"
+        isSelected={!accessibilitySettings.preferSystemTheme && !accessibilitySettings.darkMode && !accessibilitySettings.highContrast}
+        onPress={() => {
+          updateAccessibilitySettings({ preferSystemTheme: false, darkMode: false, highContrast: false });
+          track({ type: 'theme_change', theme: 'light' });
+        }}
+      />
+      
+      <ThemePickerItem
+        icon={<Moon size={24} color={theme.colors.primary} />}
+        title="Dark"
+        description="Dark colors for low-light environments"
+        isSelected={!accessibilitySettings.preferSystemTheme && accessibilitySettings.darkMode && !accessibilitySettings.highContrast}
+        onPress={() => {
+          updateAccessibilitySettings({ preferSystemTheme: false, darkMode: true, highContrast: false });
+          track({ type: 'theme_change', theme: 'dark' });
+        }}
+      />
+      
+      <Text style={[styles.sectionTitle, { color: theme.colors.text }, accessibilitySettings.largeText && styles.largeSectionTitle, { marginTop: 24 }]}>
+        Accessibility Features
       </Text>
       
       <SettingItem
@@ -127,6 +209,11 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 16,
   },
+  selectedIndicator: {
+    borderRadius: 10,
+    height: 20,
+    width: 4,
+  },
   settingContent: {
     flex: 1,
   },
@@ -150,6 +237,34 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   settingTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 4,
+  },
+  themeContent: {
+    flex: 1,
+  },
+  themeDescription: {
+    fontSize: 14,
+  },
+  themeIcon: {
+    alignItems: "center",
+    backgroundColor: "transparent",
+    borderRadius: 20,
+    height: 40,
+    justifyContent: "center",
+    marginRight: 16,
+    width: 40,
+  },
+  themePickerItem: {
+    alignItems: "center",
+    borderRadius: 12,
+    borderWidth: 2,
+    flexDirection: "row",
+    marginBottom: 8,
+    padding: 16,
+  },
+  themeTitle: {
     fontSize: 16,
     fontWeight: "600",
     marginBottom: 4,

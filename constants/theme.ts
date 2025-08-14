@@ -21,26 +21,128 @@ function buildTheme(name: ThemeDefinition['name']): ThemeDefinition {
     };
 }
 
-const ThemeContext = createContext<{ theme: ThemeDefinition; setScheme: (name: ThemeDefinition['name']) => void; } | null>(null);
+export interface ThemeContextType {
+    theme: ThemeDefinition;
+    setScheme: (name: ThemeDefinition['name']) => void;
+    toggleDarkMode: () => void;
+    enableHighContrast: (enabled: boolean) => void;
+    currentScheme: ThemeDefinition['name'];
+}
 
-export const ThemeProvider: React.FC<{ initial?: ThemeDefinition['name']; children: React.ReactNode; highContrast?: boolean; }> = ({ initial, children, highContrast }) => {
-    const systemColorScheme = Appearance?.getColorScheme?.() === 'dark' ? 'dark' : 'light';
-    const resolvedInitial: ThemeDefinition['name'] = highContrast ? 'highContrast' : (initial || systemColorScheme);
-    const [scheme, setScheme] = useState<ThemeDefinition['name']>(resolvedInitial);
+const ThemeContext = createContext<ThemeContextType | null>(null);
 
-    // If highContrast flag toggles on, override.
+export interface ThemeProviderProps {
+    children: React.ReactNode;
+    // Integration with accessibility settings
+    accessibilitySettings?: {
+        darkMode?: boolean;
+        highContrast?: boolean;
+        preferSystemTheme?: boolean;
+    };
+    // Manual overrides
+    initial?: ThemeDefinition['name'];
+    highContrast?: boolean;
+}
+
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({
+    children,
+    accessibilitySettings,
+    initial,
+    highContrast
+}) => {
+    // Determine initial theme based on settings hierarchy
+    const getInitialScheme = (): ThemeDefinition['name'] => {
+        // 1. High contrast override (manual or from settings)
+        if (highContrast || accessibilitySettings?.highContrast) {
+            return 'highContrast';
+        }
+
+        // 2. Manual initial override
+        if (initial) {
+            return initial;
+        }
+
+        // 3. Accessibility settings (if not preferSystemTheme)
+        if (accessibilitySettings && !accessibilitySettings.preferSystemTheme) {
+            return accessibilitySettings.darkMode ? 'dark' : 'light';
+        }
+
+        // 4. System preference (default)
+        const systemColorScheme = Appearance?.getColorScheme?.() === 'dark' ? 'dark' : 'light';
+        return systemColorScheme;
+    };
+
+    const [scheme, setScheme] = useState<ThemeDefinition['name']>(getInitialScheme);
+
+    // React to accessibility settings changes
     useEffect(() => {
-        if (highContrast) setScheme('highContrast');
-    }, [highContrast]);
+        if (!accessibilitySettings) return;
 
-    const value = useMemo(() => ({ theme: buildTheme(scheme), setScheme }), [scheme]);
+        if (accessibilitySettings.highContrast) {
+            setScheme('highContrast');
+        } else if (accessibilitySettings.preferSystemTheme) {
+            const systemScheme = Appearance?.getColorScheme?.() === 'dark' ? 'dark' : 'light';
+            setScheme(systemScheme);
+        } else {
+            setScheme(accessibilitySettings.darkMode ? 'dark' : 'light');
+        }
+    }, [accessibilitySettings]);
+
+    // Listen to system theme changes when preferSystemTheme is true
+    useEffect(() => {
+        if (!accessibilitySettings?.preferSystemTheme || accessibilitySettings.highContrast) {
+            return;
+        }
+
+        const subscription = Appearance?.addChangeListener?.(({ colorScheme }) => {
+            setScheme(colorScheme === 'dark' ? 'dark' : 'light');
+        });
+
+        return () => subscription?.remove?.();
+    }, [accessibilitySettings?.preferSystemTheme, accessibilitySettings?.highContrast]);
+
+    // Manual theme control functions
+    const toggleDarkMode = useMemo(() => () => {
+        if (scheme === 'highContrast') return; // Don't toggle in high contrast mode
+        setScheme(current => current === 'dark' ? 'light' : 'dark');
+    }, [scheme]);
+
+    const enableHighContrast = useMemo(() => (enabled: boolean) => {
+        if (enabled) {
+            setScheme('highContrast');
+        } else {
+            // Return to appropriate light/dark mode
+            const systemScheme = Appearance?.getColorScheme?.() === 'dark' ? 'dark' : 'light';
+            setScheme(accessibilitySettings?.darkMode ? 'dark' : systemScheme);
+        }
+    }, [accessibilitySettings?.darkMode]);
+
+    const value: ThemeContextType = useMemo(() => ({
+        theme: buildTheme(scheme),
+        setScheme,
+        toggleDarkMode,
+        enableHighContrast,
+        currentScheme: scheme
+    }), [scheme, toggleDarkMode, enableHighContrast]);
+
     return React.createElement(ThemeContext.Provider, { value }, children);
 };
 
-export function useTheme() {
+export function useTheme(): ThemeDefinition {
     const ctx = useContext(ThemeContext);
     if (!ctx) throw new Error('useTheme must be used within ThemeProvider');
     return ctx.theme;
+}
+
+export function useThemeControls(): Omit<ThemeContextType, 'theme'> {
+    const ctx = useContext(ThemeContext);
+    if (!ctx) throw new Error('useThemeControls must be used within ThemeProvider');
+    return {
+        setScheme: ctx.setScheme,
+        toggleDarkMode: ctx.toggleDarkMode,
+        enableHighContrast: ctx.enableHighContrast,
+        currentScheme: ctx.currentScheme
+    };
 }
 
 export function useSetTheme() {

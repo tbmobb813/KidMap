@@ -13,8 +13,6 @@ export function mark(name: string) {
     if (!isActive()) return;
     const time = performance.now();
     marks.push({ name, time });
-    // eslint-disable-next-line no-console
-    if (process.env.NODE_ENV === 'development') console.log(`[perf] mark: ${name} @ ${time.toFixed(2)}ms`);
 }
 
 export function measure(name: string, startMark: string, endMark: string) {
@@ -24,8 +22,6 @@ export function measure(name: string, startMark: string, endMark: string) {
     if (start != null && end != null && end >= start) {
         const duration = end - start;
         measures.push({ name, duration, start, end });
-        // eslint-disable-next-line no-console
-        if (process.env.NODE_ENV === 'development') console.log(`[perf] measure: ${name} ${duration.toFixed(2)}ms`);
     }
 }
 

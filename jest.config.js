@@ -14,6 +14,7 @@ module.exports = {
         '^@/hooks-internal/(.*)$': '<rootDir>/src/hooks/$1',
         '^@/hooks/(.*)$': '<rootDir>/hooks/$1',
         '^@/utils/(.*)$': '<rootDir>/utils/$1',
+        '^@/telemetry/(.*)$': '<rootDir>/src/telemetry/$1',
         '^@/telemetry$': '<rootDir>/src/telemetry/index.ts',
         '^@/(.*)$': '<rootDir>/$1',
     },

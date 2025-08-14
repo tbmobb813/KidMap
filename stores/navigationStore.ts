@@ -14,6 +14,8 @@ type AccessibilitySettings = {
   highContrast: boolean;
   voiceDescriptions: boolean;
   simplifiedMode: boolean;
+  darkMode: boolean; // Add dark mode toggle
+  preferSystemTheme: boolean; // Whether to follow system theme
 };
 
 type WeatherInfo = {
@@ -81,6 +83,8 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
     highContrast: false,
     voiceDescriptions: false,
     simplifiedMode: false,
+    darkMode: false,
+    preferSystemTheme: true, // Default to following system preference
   },
   photoCheckIns: [],
   weatherInfo: null,

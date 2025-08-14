@@ -23,6 +23,7 @@
   "typecheck": "npm run pretypecheck && tsc --noEmit",
   "lint": "eslint . --max-warnings=0",
   "lint:summary": "node scripts/lint-summary.js",
+  "contrast:check": "node scripts/check-contrast.js",
   "lint:baseline": "node scripts/generate-eslint-baseline.js",
   "lint:ci": "node scripts/lint-ci.js",
   "codemod:colors": "node scripts/codemod-color-literals.js",
