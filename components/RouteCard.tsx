@@ -32,6 +32,7 @@ const RouteCardComponent: React.FC<RouteCardProps> = ({ route, onPress, isSelect
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={`Route option, duration ${durationLabel}`}
+      accessibilityHint="Selects this route option"
       accessibilityState={{ selected: isSelected }}
       hitSlop={8}
       style={({ pressed }) => [

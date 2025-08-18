@@ -121,6 +121,7 @@ const CategoryButtonComponent: React.FC<CategoryButtonProps> = ({
   <Pressable
       accessibilityRole="button"
       accessibilityLabel={`${displayName} category button`}
+      accessibilityHint="Activates this category filter"
       hitSlop={8}
       style={({ pressed }) => [
         styles.container,

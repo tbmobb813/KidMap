@@ -3,7 +3,7 @@ import React from 'react';
 
 import { render } from './testUtils';
 
-import HomeScreen from '@/app/tabs/index';
+import HomeScreen from '@/app/(tabs)/index';
 
 // Mock navigation store with favorites
 jest.mock('@/stores/navigationStore', () => ({

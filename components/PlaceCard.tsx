@@ -39,6 +39,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, onPress }) => {
   <Pressable 
       accessibilityRole="button"
       accessibilityLabel={`Place ${place.name}`}
+      accessibilityHint="Shows details for this place"
       hitSlop={8}
       style={({ pressed }) => [
     styles.container,

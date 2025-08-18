@@ -1,3 +1,4 @@
+/* global module */
 /* eslint-env node */
 // Minimal .eslintrc.cjs for compatibility with ESLint 8.x
 // Allows commit to proceed with basic linting
@@ -53,4 +54,9 @@ module.exports = {
             },
         },
     ],
+    settings: {
+        react: {
+            version: 'detect',
+        },
+    },
 };

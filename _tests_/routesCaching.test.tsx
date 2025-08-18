@@ -1,8 +1,10 @@
+jest.mock('@/services/routeService');
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, waitFor } from '@testing-library/react-native';
 import React from 'react';
 
-import { fetchRoutes } from '@/services/routeService';
+import * as routeService from '@/services/routeService';
 import { useRoutesQuery } from '@/src/hooks/useRoutesQuery';
 
 // Silence act warnings from react-query tick batching (already covered by waitFor)
@@ -15,6 +17,16 @@ beforeAll(() => {
 });
 afterAll(() => {
   console.error = originalError;
+});
+
+const fetchRoutes = routeService.fetchRoutes as jest.Mock;
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  fetchRoutes.mockImplementation(() => {
+    console.log('fetchRoutes called');
+    return Promise.resolve([]);
+  });
 });
 
 const origin = { id: 'o1', name: 'Origin', address: '', category: 'other', coordinates: { latitude: 0, longitude: 0 } } as any;
