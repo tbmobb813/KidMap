@@ -18,7 +18,7 @@ export const SafeZoneStatusCard: React.FC = () => {
     return (
       <View style={styles.card}>
         <View style={styles.header}>
-          <Shield size={24} color="/*TODO theme*/ theme.colors.placeholder /*#9CA3AF*/" />
+          <Shield size={24} color="#9CA3AF" />
           <Text style={styles.title}>Safe Zones</Text>
         </View>
         <Text style={styles.subtitle}>
@@ -43,12 +43,12 @@ export const SafeZoneStatusCard: React.FC = () => {
       <View style={styles.header}>
         <Shield 
           size={24} 
-          color={isMonitoring ? '/*TODO theme*/ theme.colors.placeholder /*#10B981*/' : '/*TODO theme*/ theme.colors.placeholder /*#F59E0B*/'} 
+          color={isMonitoring ? '#10B981' : '#F59E0B'} 
         />
         <Text style={styles.title}>Safe Zone Status</Text>
         <View style={[
           styles.statusBadge,
-          { backgroundColor: isMonitoring ? '/*TODO theme*/ theme.colors.placeholder /*#10B981*/' : '/*TODO theme*/ theme.colors.placeholder /*#F59E0B*/' }
+          { backgroundColor: isMonitoring ? '#10B981' : '#F59E0B' }
         ]}>
           <Text style={styles.statusText}>
             {isMonitoring ? 'Active' : 'Inactive'}
@@ -59,11 +59,11 @@ export const SafeZoneStatusCard: React.FC = () => {
       {status && (
         <View style={styles.content}>
           <View style={styles.locationInfo}>
-            <MapPin size={16} color="/*TODO theme*/ theme.colors.placeholder /*#6B7280*/" />
+            <MapPin size={16} color="#6B7280" />
             <Text style={styles.locationText}>
               Current location tracked
             </Text>
-            <Clock size={16} color="/*TODO theme*/ theme.colors.placeholder /*#6B7280*/" />
+            <Clock size={16} color="#6B7280" />
             <Text style={styles.timeText}>
               {formatTime(status.currentLocation.timestamp)}
             </Text>
@@ -89,7 +89,7 @@ export const SafeZoneStatusCard: React.FC = () => {
               <Text style={styles.sectionTitle}>Currently Inside:</Text>
               {status.inside.map((zone: SafeZone) => (
                 <View key={zone.id} style={styles.zoneItem}>
-                  <View style={[styles.zoneDot, { backgroundColor: '/*TODO theme*/ theme.colors.placeholder /*#10B981*/' }]} />
+                  <View style={[styles.zoneDot, { backgroundColor: '#10B981' }]} />
                   <Text style={styles.zoneName}>{zone.name}</Text>
                 </View>
               ))}
@@ -98,7 +98,7 @@ export const SafeZoneStatusCard: React.FC = () => {
 
           {status.outside.length > 0 && status.inside.length === 0 && (
             <View style={styles.outsideWarning}>
-              <AlertTriangle size={16} color="/*TODO theme*/ theme.colors.placeholder /*#F59E0B*/" />
+              <AlertTriangle size={16} color="#F59E0B" />
               <Text style={styles.warningText}>
                 Not currently in any safe zone
               </Text>
@@ -111,7 +111,7 @@ export const SafeZoneStatusCard: React.FC = () => {
         <TouchableOpacity
           style={[
             styles.controlButton,
-            { backgroundColor: isMonitoring ? '/*TODO theme*/ theme.colors.placeholder /*#EF4444*/' : '/*TODO theme*/ theme.colors.placeholder /*#10B981*/' }
+            { backgroundColor: isMonitoring ? '#EF4444' : '#10B981' }
           ]}
           onPress={isMonitoring ? stopMonitoring : startMonitoring}
         >
@@ -126,13 +126,13 @@ export const SafeZoneStatusCard: React.FC = () => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/',
+  backgroundColor: '#FFFFFF',
     borderRadius: 16,
     elevation: 4,
     marginHorizontal: 20,
     marginVertical: 10,
     padding: 20,
-    shadowColor: '/*TODO theme*/ theme.colors.placeholder /*#000*/',
+  shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
@@ -147,12 +147,12 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   controlButtonText: {
-    color: '/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/',
+  color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
   },
   controls: {
-    borderTopColor: '/*TODO theme*/ theme.colors.placeholder /*#E5E7EB*/',
+  borderTopColor: '#E5E7EB',
     borderTopWidth: 1,
     paddingTop: 16,
   },
@@ -166,28 +166,28 @@ const styles = StyleSheet.create({
   },
   locationInfo: {
     alignItems: 'center',
-    backgroundColor: '/*TODO theme*/ theme.colors.placeholder /*#F9FAFB*/',
+  backgroundColor: '#F9FAFB',
     borderRadius: 8,
     flexDirection: 'row',
     marginBottom: 16,
     padding: 12,
   },
   locationText: {
-    color: '/*TODO theme*/ theme.colors.placeholder /*#374151*/',
+  color: '#374151',
     flex: 1,
     fontSize: 14,
     marginLeft: 8,
   },
   outsideWarning: {
     alignItems: 'center',
-    backgroundColor: '/*TODO theme*/ theme.colors.placeholder /*#FEF3C7*/',
+  backgroundColor: '#FEF3C7',
     borderRadius: 8,
     flexDirection: 'row',
     marginBottom: 16,
     padding: 12,
   },
   sectionTitle: {
-    color: '/*TODO theme*/ theme.colors.placeholder /*#374151*/',
+  color: '#374151',
     fontSize: 14,
     fontWeight: '600',
     marginBottom: 8,
@@ -196,13 +196,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statLabel: {
-    color: '/*TODO theme*/ theme.colors.placeholder /*#6B7280*/',
+  color: '#6B7280',
     fontSize: 12,
     marginTop: 4,
     textAlign: 'center',
   },
   statNumber: {
-    color: '/*TODO theme*/ theme.colors.placeholder /*#1F2937*/',
+  color: '#1F2937',
     fontSize: 24,
     fontWeight: '700',
   },
@@ -212,30 +212,30 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   statusText: {
-    color: '/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/',
+  color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '600',
   },
   subtitle: {
-    color: '/*TODO theme*/ theme.colors.placeholder /*#6B7280*/',
+  color: '#6B7280',
     fontSize: 14,
     marginTop: 8,
     textAlign: 'center',
   },
   timeText: {
-    color: '/*TODO theme*/ theme.colors.placeholder /*#6B7280*/',
+  color: '#6B7280',
     fontSize: 12,
     marginLeft: 4,
   },
   title: {
-    color: '/*TODO theme*/ theme.colors.placeholder /*#1F2937*/',
+  color: '#1F2937',
     flex: 1,
     fontSize: 18,
     fontWeight: '600',
     marginLeft: 12,
   },
   warningText: {
-    color: '/*TODO theme*/ theme.colors.placeholder /*#92400E*/',
+  color: '#92400E',
     fontSize: 14,
     marginLeft: 8,
   },
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   zoneName: {
-    color: '/*TODO theme*/ theme.colors.placeholder /*#374151*/',
+  color: '#374151',
     fontSize: 14,
   },
   zoneStats: {

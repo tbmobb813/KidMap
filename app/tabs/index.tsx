@@ -1,6 +1,6 @@
 import { MapPin, Navigation } from "lucide-react-native";
-import React, { useState, useCallback, useMemo } from "react";
-import { StyleSheet, Text, View, FlatList, Pressable, ListRenderItem } from "react-native";
+import React, { useState, useEffect, useMemo } from "react";
+import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 
 import AIJourneyCompanion from "@/components/AIJourneyCompanion";
 import CategoryButton from "@/components/CategoryButton";
@@ -33,8 +33,6 @@ type SearchSuggestion = {
   place?: Place;
 };
 
-
-
 export default function HomeScreen() {
   const { location, hasLocation } = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
@@ -53,12 +51,12 @@ export default function HomeScreen() {
   } = useNavigationStore();
 
   const { userStats, completeTrip } = useGamificationStore();
-  const { formatters, regionalContent, currentRegion } = useRegionalData();
+  const { regionalContent, currentRegion } = useRegionalData();
   const { getApprovedCategories } = useCategoryStore();
   
   const approvedCategories = getApprovedCategories();
 
-  React.useEffect(() => {
+  useEffect(() => {
     trackScreenView('home');
   }, []);
 
@@ -70,7 +68,7 @@ export default function HomeScreen() {
   };
 
   // Generate search suggestions
-  const suggestions: SearchSuggestion[] = React.useMemo(() => {
+  const suggestions: SearchSuggestion[] = useMemo(() => {
     if (!searchQuery.trim()) return [];
     
     const searchSuggestions: SearchSuggestion[] = [];
@@ -131,12 +129,7 @@ export default function HomeScreen() {
     trackUserAction('pull_to_refresh', { screen: 'home' });
   };
 
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      trackUserAction('search', { query: searchQuery });
   nav.push("/search");
-    }
-  };
 
   const handlePlaceSelect = (place: Place) => {
     setDestination(place);
@@ -202,7 +195,7 @@ export default function HomeScreen() {
         {selectedDestination && (
           <SmartRouteSuggestions
             destination={selectedDestination}
-            currentLocation={location}
+            _currentLocation={location}
             timeOfDay={new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'afternoon' : 'evening'}
             onSelectRoute={(suggestion) => {
               console.log('Selected route:', suggestion);

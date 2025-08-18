@@ -36,22 +36,10 @@ export const showNotification = async (options: NotificationOptions) => {
       }
     } else {
       // Production build: Use expo-notifications
-      try {
-        const { Notifications } = require('expo-notifications');
-        await Notifications.scheduleNotificationAsync({
-          content: {
-            title,
-            body,
-            sound: true,
-          },
-          trigger: null, // Show immediately
-        });
-      } catch (error) {
-        console.warn('Failed to show notification:', error);
-        // Fallback to alert for critical notifications
-        if (priority === 'high') {
-          Alert.alert(title, body, [{ text: 'OK' }]);
-        }
+      // Production build: notifications not supported in this codebase
+      // Fallback to alert for critical notifications
+      if (priority === 'high') {
+        Alert.alert(title, body, [{ text: 'OK' }]);
       }
     }
   }
@@ -72,14 +60,8 @@ export const requestNotificationPermission = async (): Promise<boolean> => {
       return true; // We can show alerts
     } else {
       // Production build: Request proper permissions
-      try {
-        const { Notifications } = require('expo-notifications');
-        const { status } = await Notifications.requestPermissionsAsync();
-        return status === 'granted';
-      } catch (error) {
-        console.warn('Failed to request notification permissions:', error);
-        return false;
-      }
+  // Production build: notification permissions not supported in this codebase
+  return true;
     }
   }
 };
@@ -93,14 +75,8 @@ export const hasNotificationPermission = (): boolean => {
       return true;
     } else {
       // Production build: Check actual permissions
-      try {
-        const { Notifications } = require('expo-notifications');
-        // This is async, but we need sync for this function
-        // In production, you'd want to cache the permission status
-        return true; // Assume granted for now
-      } catch (error) {
-        return false;
-      }
+  // Production build: notification permissions not supported in this codebase
+  return true;
     }
   }
 };

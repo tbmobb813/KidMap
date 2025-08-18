@@ -17,8 +17,8 @@ const ParentDashboard: React.FC<Props> = ({ onExit }) => {
 export default ParentDashboard;
 
 const styles = StyleSheet.create({
-	button: { backgroundColor: '/*TODO theme*/ theme.colors.placeholder /*#4A80F0*/', borderRadius: 8, paddingHorizontal: 16, paddingVertical: 10 },
-	buttonText: { color: '/*TODO theme*/ theme.colors.placeholder /*#fff*/', fontWeight: '600' },
+	button: { backgroundColor: '#4A80F0', borderRadius: 8, paddingHorizontal: 16, paddingVertical: 10 },
+	buttonText: { color: '#fff', fontWeight: '600' },
 	container: { padding: 16 },
 	title: { fontSize: 18, fontWeight: '600', marginBottom: 12 },
 });

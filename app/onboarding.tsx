@@ -1,4 +1,3 @@
-import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -7,10 +6,8 @@ import Colors from "@/constants/colors";
 import { nav } from "@/shared/navigation/nav";
 
 export default function OnboardingScreen() {
-  const router = useRouter();
-
   const handleOnboardingComplete = () => {
-  nav.replaceTabs();
+    nav.replaceTabs();
   };
 
   return (

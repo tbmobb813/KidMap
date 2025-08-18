@@ -1,3 +1,4 @@
+
 import { Cloud, Sun, CloudRain, Users, Clock, Zap, MapPin } from 'lucide-react-native';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native';
@@ -22,15 +23,96 @@ type SmartSuggestion = {
 
 type SmartRouteSuggestionsProps = {
   destination: Place;
-  currentLocation: { latitude: number; longitude: number };
+  _currentLocation: { latitude: number; longitude: number };
   weather?: WeatherCondition;
   timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
   onSelectRoute: (suggestion: SmartSuggestion) => void;
 };
 
+function generateSmartSuggestions(
+  destination: Place,
+  weather: WeatherCondition,
+  timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night',
+  crowdLevel: CrowdLevel
+): SmartSuggestion[] {
+  const baseSuggestions: SmartSuggestion[] = [];
+
+  // Weather-based suggestions
+  if (weather === 'rainy' || weather === 'stormy') {
+    baseSuggestions.push({
+      id: 'covered-route',
+      type: 'covered',
+      title: 'Covered Route',
+      description: 'Stay dry with covered walkways and indoor passages',
+      estimatedTime: '12 min',
+      reason: 'Rainy weather detected',
+      icon: CloudRain,
+      priority: 1
+    });
+  }
+
+  // Time-based suggestions
+  if (timeOfDay === 'morning') {
+    baseSuggestions.push({
+      id: 'scenic-route',
+      type: 'scenic',
+      title: 'Scenic Morning Route',
+      description: 'Beautiful morning views through the park',
+      estimatedTime: '15 min',
+      reason: 'Perfect morning weather',
+      icon: Sun,
+      priority: 2
+    });
+  }
+
+  if (timeOfDay === 'evening' || timeOfDay === 'night') {
+    baseSuggestions.push({
+      id: 'safest-route',
+      type: 'safest',
+      title: 'Well-Lit Safe Route',
+      description: 'Well-lit streets with good visibility',
+      estimatedTime: '10 min',
+      reason: 'Evening safety priority',
+      icon: Zap,
+      priority: 1
+    });
+  }
+
+  // Crowd-based suggestions
+  if (crowdLevel === 'high') {
+    baseSuggestions.push({
+      id: 'quiet-route',
+      type: 'quiet',
+      title: 'Quiet Alternative',
+      description: 'Less crowded side streets',
+      estimatedTime: '11 min',
+      reason: 'Avoiding busy areas',
+      icon: MapPin,
+      priority: 2
+    });
+  }
+
+  // Always include fastest route
+  baseSuggestions.push({
+    id: 'fastest-route',
+    type: 'fastest',
+    title: 'Fastest Route',
+    description: 'Direct path to your destination',
+    estimatedTime: '8 min',
+    reason: 'Shortest travel time',
+    icon: Clock,
+    priority: 3
+  });
+
+  // Sort by priority and take top 3
+  return baseSuggestions
+    .sort((a, b) => a.priority - b.priority)
+    .slice(0, 3);
+}
+
 const SmartRouteSuggestions: React.FC<SmartRouteSuggestionsProps> = ({
   destination,
-  currentLocation,
+  _currentLocation,
   weather = 'sunny',
   timeOfDay,
   onSelectRoute
@@ -39,86 +121,8 @@ const SmartRouteSuggestions: React.FC<SmartRouteSuggestionsProps> = ({
   const [crowdLevel, setCrowdLevel] = useState<CrowdLevel>('medium');
 
   useEffect(() => {
-    generateSmartSuggestions();
+    setSuggestions(generateSmartSuggestions(destination, weather, timeOfDay, crowdLevel));
   }, [destination, weather, timeOfDay, crowdLevel]);
-
-  const generateSmartSuggestions = () => {
-    const baseSuggestions: SmartSuggestion[] = [];
-
-    // Weather-based suggestions
-    if (weather === 'rainy' || weather === 'stormy') {
-      baseSuggestions.push({
-        id: 'covered-route',
-        type: 'covered',
-        title: 'Covered Route',
-        description: 'Stay dry with covered walkways and indoor passages',
-        estimatedTime: '12 min',
-        reason: 'Rainy weather detected',
-        icon: CloudRain,
-        priority: 1
-      });
-    }
-
-    // Time-based suggestions
-    if (timeOfDay === 'morning') {
-      baseSuggestions.push({
-        id: 'scenic-route',
-        type: 'scenic',
-        title: 'Scenic Morning Route',
-        description: 'Beautiful morning views through the park',
-        estimatedTime: '15 min',
-        reason: 'Perfect morning weather',
-        icon: Sun,
-        priority: 2
-      });
-    }
-
-    if (timeOfDay === 'evening' || timeOfDay === 'night') {
-      baseSuggestions.push({
-        id: 'safest-route',
-        type: 'safest',
-        title: 'Well-Lit Safe Route',
-        description: 'Well-lit streets with good visibility',
-        estimatedTime: '10 min',
-        reason: 'Evening safety priority',
-        icon: Zap,
-        priority: 1
-      });
-    }
-
-    // Crowd-based suggestions
-    if (crowdLevel === 'high') {
-      baseSuggestions.push({
-        id: 'quiet-route',
-        type: 'quiet',
-        title: 'Quiet Alternative',
-        description: 'Less crowded side streets',
-        estimatedTime: '11 min',
-        reason: 'Avoiding busy areas',
-        icon: MapPin,
-        priority: 2
-      });
-    }
-
-    // Always include fastest route
-    baseSuggestions.push({
-      id: 'fastest-route',
-      type: 'fastest',
-      title: 'Fastest Route',
-      description: 'Direct path to your destination',
-      estimatedTime: '8 min',
-      reason: 'Shortest travel time',
-      icon: Clock,
-      priority: 3
-    });
-
-    // Sort by priority and take top 3
-    const sortedSuggestions = baseSuggestions
-      .sort((a, b) => a.priority - b.priority)
-      .slice(0, 3);
-
-    setSuggestions(sortedSuggestions);
-  };
 
   const getWeatherIcon = () => {
     switch (weather) {
@@ -131,9 +135,9 @@ const SmartRouteSuggestions: React.FC<SmartRouteSuggestionsProps> = ({
 
   const getCrowdColor = () => {
     switch (crowdLevel) {
-      case 'low': return '/*TODO theme*/ theme.colors.placeholder /*#4CAF50*/';
-      case 'medium': return '/*TODO theme*/ theme.colors.placeholder /*#FF9800*/';
-      case 'high': return '/*TODO theme*/ theme.colors.placeholder /*#F44336*/';
+  case 'low': return '#4CAF50';
+  case 'medium': return '#FF9800';
+  case 'high': return '#F44336';
     }
   };
 

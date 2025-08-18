@@ -2,7 +2,7 @@ import { Eye, Volume2, Zap, Settings, ArrowLeft, Moon, Sun, Monitor } from "luci
 import React from "react";
 import { StyleSheet, Text, View, Switch, ScrollView, Pressable } from "react-native";
 
-import { useTheme, useThemeControls } from '@/constants/theme';
+import { useTheme } from '@/constants/theme';
 import { useNavigationStore } from "@/stores/navigationStore";
 import { track } from '@/telemetry';
 
@@ -13,7 +13,6 @@ type AccessibilitySettingsProps = {
 const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({ onBack }) => {
   const { accessibilitySettings, updateAccessibilitySettings } = useNavigationStore();
   const theme = useTheme();
-  const { currentScheme } = useThemeControls();
 
   const ThemePickerItem = ({ 
     icon, 

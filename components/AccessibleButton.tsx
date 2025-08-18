@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
   },
   primaryText: {
-    color: '/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/',
+  color: '#FFFFFF',
     fontSize: 16,
     fontWeight: "600",
   },
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.secondary,
   },
   secondaryText: {
-    color: '/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/',
+  color: '#FFFFFF',
     fontSize: 16,
     fontWeight: "600",
   },

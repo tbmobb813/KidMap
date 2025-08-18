@@ -89,7 +89,7 @@ export default function RouteDetailScreen() {
           <View style={styles.locationContainer}>
             <View style={styles.locationRow}>
               <View style={[styles.locationPin,{ backgroundColor: theme.colors.primary }]}>
-                <Navigation size={16} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
+                <Navigation size={16} color="#FFFFFF" />
               </View>
               <Text style={styles.locationText} numberOfLines={1}>
                 {origin.name}
@@ -100,7 +100,7 @@ export default function RouteDetailScreen() {
             
             <View style={styles.locationRow}>
               <View style={[styles.locationPin,{ backgroundColor: theme.colors.secondary }]}>
-                <MapPin size={16} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
+                <MapPin size={16} color="#FFFFFF" />
               </View>
               <Text style={styles.locationText} numberOfLines={1}>
                 {destination.name}

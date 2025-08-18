@@ -113,7 +113,7 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
             disabled={stepIndex === 0}
             testID="voice-prev"
           >
-            <ArrowLeft size={20} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
+            <ArrowLeft size={20} color="#FFFFFF" />
             <Text style={styles.buttonText}>Prev</Text>
           </Pressable>
         )}
@@ -131,9 +131,9 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
           testID="voice-toggle"
         >
           {isListening ? (
-            <MicOff size={24} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
+            <MicOff size={24} color="#FFFFFF" />
           ) : (
-            <Mic size={24} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
+            <Mic size={24} color="#FFFFFF" />
           )}
           <Text style={styles.buttonText}>
             {isListening ? "Stop" : "Voice"}
@@ -152,7 +152,7 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
           onPress={handleSpeak}
           testID="voice-repeat"
         >
-          <Volume2 size={24} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
+          <Volume2 size={24} color="#FFFFFF" />
           <Text style={styles.buttonText}>
             {isSpeaking ? "Speaking..." : "Repeat"}
           </Text>
@@ -169,7 +169,7 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
             disabled={stepIndex === steps.length - 1}
             testID="voice-next"
           >
-            <ArrowRight size={20} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
+            <ArrowRight size={20} color="#FFFFFF" />
             <Text style={styles.buttonText}>Next</Text>
           </Pressable>
         )}

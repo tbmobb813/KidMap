@@ -23,8 +23,7 @@ export interface AnnouncementOptions {
 }
 
 // Web live region singleton refs
-let liveRegionPolite: HTMLElement | null = null;
-let liveRegionAssertive: HTMLElement | null = null;
+// ...existing code...
 let lastMessage: string | null = null;
 let lastTimestamp = 0;
 const DEDUPE_WINDOW_MS = 600; // prevent rapid duplicate spam
@@ -59,7 +58,6 @@ function ensureLiveRegion(politeness: Politeness): HTMLElement | null {
     el.style.whiteSpace = 'nowrap';
     document.body.appendChild(el);
   }
-  if (politeness === 'assertive') liveRegionAssertive = el; else liveRegionPolite = el;
   return el;
 }
 

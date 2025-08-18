@@ -1,4 +1,4 @@
-import { fireEvent } from '@testing-library/react-native';
+import { fireEvent, waitFor } from '@testing-library/react-native';
 import React from 'react';
 
 import { render } from './testUtils';
@@ -25,9 +25,13 @@ jest.mock('@/telemetry', () => {
     setTelemetryAdapter: jest.fn(),
     getMemoryEvents: () => [...mockEvents],
     resetMemoryEvents: () => { mockEvents.length = 0; },
-    track: (e: any) => { mockEvents.push({ ...e, ts: Date.now() }); },
+    track: jest.fn((e: any) => { mockEvents.push({ ...e, ts: Date.now() }); }),
   };
 });
+// Mock useToast to avoid real side effects
+jest.mock('@/hooks/useToast', () => ({
+  useToast: () => ({ toast: { message: '', type: '', visible: false }, showToast: jest.fn(), hideToast: jest.fn() })
+}));
 
 jest.mock('@/hooks/useRoutePrefetch', () => ({
   prefetchRouteVariants: jest.fn(),
@@ -81,38 +85,34 @@ describe('Telemetry emissions', () => {
   expect(events.filter((e: any) => e.type === 'route_prefetch_complete').length).toBeGreaterThanOrEqual(2);
   });
 
-  it('emits safety monitor toggle & zone entry events', () => {
-    const startFn = jest.fn();
-    const stopFn = jest.fn();
-    // React 18 StrictMode (if used inside ThemeProvider) may invoke render twice, consuming two mockReturnValueOnce entries
-    // and causing subsequent renders to get undefined. Provide a stable fallback value after the initial state transition.
-    const initialState = {
-      isMonitoring: false,
-      startMonitoring: startFn,
-      stopMonitoring: stopFn,
-      getCurrentSafeZoneStatus: () => ({ inside: [], totalActive: 1 }),
-      events: [],
+  it('emits safety monitor toggle & zone entry events', async () => {
+    // Test wrapper with real React state
+    const TestWrapper: React.FC = () => {
+      const [monitoring, setMonitoring] = React.useState(false);
+      const [eventsArr, setEventsArr] = React.useState<any[]>([]);
+      // Mock implementation using wrapper state
+      (useSafeZoneMonitor as jest.Mock).mockImplementation(() => ({
+        isMonitoring: monitoring,
+        startMonitoring: () => {
+          setMonitoring(true);
+          setEventsArr(arr => [{ id: 'e1', type: 'entry', zoneId: 'z1', zoneName: 'Park' }, ...arr]);
+        },
+        stopMonitoring: () => setMonitoring(false),
+        getCurrentSafeZoneStatus: () => ({
+          inside: monitoring ? [{ id: 'z1', name: 'Park' }] : [],
+          totalActive: 1,
+        }),
+        events: eventsArr,
+      }));
+      return <SafetyPanel />;
     };
-    const monitoringState = {
-      isMonitoring: true,
-      startMonitoring: startFn,
-      stopMonitoring: stopFn,
-      getCurrentSafeZoneStatus: () => ({ inside: [{ id: 'z1', name: 'Park' }], totalActive: 1 }),
-      events: [{ id: 'e1', type: 'entry', zoneId: 'z1', zoneName: 'Park' }],
-    };
-    (useSafeZoneMonitor as jest.Mock)
-      .mockReturnValueOnce(initialState) // first render
-      .mockReturnValueOnce(monitoringState) // second render (post toggle in StrictMode double render)
-      .mockReturnValue(monitoringState); // any subsequent renders
 
-  const { getByLabelText, rerender } = render(<SafetyPanel />);
-  // Press monitor button (Start monitoring safe zones)
+    const { getByLabelText } = render(<TestWrapper />);
   fireEvent.press(getByLabelText('Start monitoring safe zones'));
-    // Rerender to simulate new events available
-    rerender(<SafetyPanel />);
-
-    const events = getMemoryEvents();
-  expect(events.some((e: any) => e.type === 'safety_monitor_toggled' && (e as any).enabled === true)).toBe(true);
-  expect(events.some((e: any) => e.type === 'safe_zone_entry' && (e as any).zoneId === 'z1')).toBe(true);
+    await waitFor(() => {
+      const events = getMemoryEvents();
+      expect(events.some((e: any) => e.type === 'safety_monitor_toggled' && (e as any).enabled === true)).toBe(true);
+      expect(events.some((e: any) => e.type === 'safe_zone_entry' && (e as any).zoneId === 'z1')).toBe(true);
+    });
   });
 });

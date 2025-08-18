@@ -251,7 +251,7 @@ export const [CategoryProvider, useCategoryStoreInternal] = createContextHook(()
 export const useCategoryStore = () => {
   try {
     return useCategoryStoreInternal();
-  } catch (_error) {
+  } catch (error) {
     console.warn('CategoryStore not available, using fallback');
     // Return fallback values
     return {

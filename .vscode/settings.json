@@ -13,5 +13,7 @@
     "terminal.integrated.suggest.enabled": true,
     // Optional: improve readability
     "terminal.integrated.fontFamily": "Cascadia Code, Consolas, 'Courier New', monospace",
-    "terminal.integrated.fontSize": 13
+    "terminal.integrated.fontSize": 13,
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "python-envs.pythonProjects": []
 }

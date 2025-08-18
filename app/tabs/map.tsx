@@ -105,11 +105,11 @@ export default function MapScreen() {
       <View style={styles.locationBar}>
         <View style={styles.locationPins}>
           <View style={[styles.locationPin, styles.originPin]}>
-            <Navigation size={16} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
+            <Navigation size={16} color="#FFFFFF" />
           </View>
             <View style={styles.locationConnector} />
           <View style={[styles.locationPin, styles.destinationPin]}>
-            <MapPin size={16} color="/*TODO theme*/ theme.colors.placeholder /*#FFFFFF*/" />
+            <MapPin size={16} color="#FFFFFF" />
           </View>
         </View>
         <View style={styles.locationTexts}>

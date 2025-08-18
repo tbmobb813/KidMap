@@ -27,7 +27,6 @@ export function auditTouchTarget(metrics: TouchTargetMetrics): boolean {
     const effectiveHeight = (height ?? minHeight ?? 0) + hit.vert;
     const passes = effectiveWidth >= MIN_TOUCH_TARGET && effectiveHeight >= MIN_TOUCH_TARGET;
     if (!passes) {
-        // eslint-disable-next-line no-console
         console.warn(
             `[touchTargetAudit] ${name} below recommended size: ${effectiveWidth}x${effectiveHeight} (<${MIN_TOUCH_TARGET}). Add padding or hitSlop.`
         );
