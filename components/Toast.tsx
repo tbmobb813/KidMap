@@ -88,8 +88,8 @@ type ToastProps = {
                 if (handle) {
                   (AccessibilityInfo as any)?.setAccessibilityFocus?.(handle);
                 }
-              } catch (_) {
-                // ignored
+              } catch (error) {
+                console.error('Failed to set accessibility focus:', error);
               }
             }, 50);
           }

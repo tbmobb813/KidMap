@@ -138,7 +138,7 @@ export const [CategoryProvider, useCategoryStoreInternal] = createContextHook(()
       await AsyncStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(newCategories));
       setCategories(newCategories);
     } catch {
-  console.error('Failed to save categories:');
+    console.error('Failed to save categories:');
     }
   };
 

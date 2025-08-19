@@ -47,5 +47,5 @@ export function useRoutePrefetch() {
         if (!origin || !destination) return;
         // Fire and forget; performance marks capture timing in dev
         prefetchRouteVariants(client, origin, destination, selectedTravelMode, routeOptions).catch(() => { });
-        }, [destination, origin, routeOptions]);
+    }, [client, origin, destination, selectedTravelMode, routeOptions]);
 }
