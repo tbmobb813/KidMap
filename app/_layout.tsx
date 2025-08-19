@@ -18,7 +18,6 @@ const queryClient = new QueryClient({
 
 export default function RootLayout() {
   const hydrate = useNavigationStore(s => s.hydrate);
-  const isHydrated = useNavigationStore(s => s.isHydrated);
   const highContrast = useNavigationStore(s => s.accessibilitySettings.highContrast);
   const [started, setStarted] = useState(false);
 

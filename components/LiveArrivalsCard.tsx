@@ -41,7 +41,7 @@ const LiveArrivalsCard: React.FC<LiveArrivalsCardProps> = ({
         setAlertedArrivals(prev => new Set([...prev, arrival.id]));
       }
     });
-  }, [arrivals]);
+  }, [arrivals, alertedArrivals]);
 
   const getArrivalTimeColor = (minutes: number) => {
     if (minutes === 0) return theme.colors.error;

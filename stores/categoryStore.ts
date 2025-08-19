@@ -122,8 +122,8 @@ export const [CategoryProvider, useCategoryStoreInternal] = createContextHook(()
           const parsedSettings = JSON.parse(storedSettings);
           setSettings(parsedSettings);
         }
-      } catch (error) {
-        console.error('Failed to load category data:', error);
+      } catch {
+        console.error('Failed to load category data:');
       } finally {
         setIsLoading(false);
       }
@@ -137,8 +137,8 @@ export const [CategoryProvider, useCategoryStoreInternal] = createContextHook(()
     try {
       await AsyncStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(newCategories));
       setCategories(newCategories);
-    } catch (error) {
-      console.error('Failed to save categories:', error);
+    } catch {
+  console.error('Failed to save categories:');
     }
   };
 
@@ -147,8 +147,8 @@ export const [CategoryProvider, useCategoryStoreInternal] = createContextHook(()
     try {
       await AsyncStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(newSettings));
       setSettings(newSettings);
-    } catch (error) {
-      console.error('Failed to save settings:', error);
+    } catch {
+      console.error('Failed to save settings:');
     }
   };
 
@@ -251,7 +251,7 @@ export const [CategoryProvider, useCategoryStoreInternal] = createContextHook(()
 export const useCategoryStore = () => {
   try {
     return useCategoryStoreInternal();
-  } catch (error) {
+  } catch {
     console.warn('CategoryStore not available, using fallback');
     // Return fallback values
     return {

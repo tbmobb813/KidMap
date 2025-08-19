@@ -1,4 +1,3 @@
-
 # KidMap
 
 [![CI/CD Pipeline](https://github.com/tbmobb813/KidMap/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tbmobb813/KidMap/actions/workflows/ci.yml)
@@ -81,3 +80,24 @@ This project is an on-going project and you are open to help and contribute! I h
 - Personalized Avatars: Kids can customize their own transit companion character
 - Route Visualization: Animated, colorful route previews showing the journey step-by-step
 - Celebration Animations: Fun animations when reaching destinations or earning achievements
+
+## Tab Navigation
+
+KidMap uses Expo Router’s tab layout for intuitive navigation. The main screens—Home, Map, Transit, Achievements, and Settings—are organized in the `(tabs)` folder, following Expo’s recommended conventions for layout groups.
+
+## Accessibility
+
+All interactive components are designed for accessibility:
+- Buttons and cards use `accessibilityRole`, `accessibilityLabel`, and `accessibilityHint`.
+- Touch targets meet the recommended minimum size (48x48).
+- A development utility audits touch target sizes and accessibility props.
+
+## Testing
+
+KidMap includes behavior-driven tests for:
+- Route caching and query metrics
+- Accessibility labels and touch targets
+- Error boundaries and defensive rendering
+- Performance marks and cache hit/miss tracking
+
+See `ARCHITECTURE.md` for more details on testing strategy and coverage.

@@ -92,6 +92,9 @@ Future additions: queue management & cancellation handles for long-running voice
 - Accessibility labels presence test to guard regressions.
 - React-query cache test added (routes caching) and metrics test ensures no redundant fetches.
 - Performance marks test validates mark/measure lifecycle and no-op behavior boundaries (dev/test only).
+- Tests cover route caching, accessibility, error boundaries, and performance marks.
+- Integration tests for navigation and tab switching are planned.
+- Edge case tests for error handling and null states are being expanded.
 
 ## Error Handling
 
