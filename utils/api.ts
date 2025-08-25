@@ -187,7 +187,148 @@ export const offlineStorage = {
   },
 };
 
-// Network-aware API wrapper
+// Enhanced error handling for API responses
+export const handleApiError = (error: any): { message: string; code?: string; isNetworkError: boolean } => {
+  if (error instanceof Error) {
+    if (error.name === 'AbortError') {
+      return {
+        message: 'Request timed out. Please check your connection and try again.',
+        code: 'TIMEOUT',
+        isNetworkError: true
+      };
+    }
+    
+    if (error.message.includes('Network request failed') || error.message.includes('fetch')) {
+      return {
+        message: 'Unable to connect to server. Please check your internet connection.',
+        code: 'NETWORK_ERROR',
+        isNetworkError: true
+      };
+    }
+    
+    if (error.message.includes('HTTP 401')) {
+      return {
+        message: 'Your session has expired. Please sign in again.',
+        code: 'UNAUTHORIZED',
+        isNetworkError: false
+      };
+    }
+    
+    if (error.message.includes('HTTP 403')) {
+      return {
+        message: 'You do not have permission to access this feature.',
+        code: 'FORBIDDEN',
+        isNetworkError: false
+      };
+    }
+    
+    if (error.message.includes('HTTP 404')) {
+      return {
+        message: 'The requested information could not be found.',
+        code: 'NOT_FOUND',
+        isNetworkError: false
+      };
+    }
+    
+    if (error.message.includes('HTTP 500')) {
+      return {
+        message: 'Server error. Please try again later.',
+        code: 'SERVER_ERROR',
+        isNetworkError: false
+      };
+    }
+    
+    return {
+      message: error.message,
+      isNetworkError: false
+    };
+  }
+  
+  return {
+    message: 'An unexpected error occurred. Please try again.',
+    code: 'UNKNOWN_ERROR',
+    isNetworkError: false
+  };
+};
+
+// Backend health monitoring
+export class BackendHealthMonitor {
+  private static instance: BackendHealthMonitor;
+  private healthStatus: 'healthy' | 'degraded' | 'down' = 'healthy';
+  private lastHealthCheck = 0;
+  private healthCheckInterval = 30000; // 30 seconds
+  private listeners: ((status: 'healthy' | 'degraded' | 'down') => void)[] = [];
+  
+  static getInstance(): BackendHealthMonitor {
+    if (!BackendHealthMonitor.instance) {
+      BackendHealthMonitor.instance = new BackendHealthMonitor();
+    }
+    return BackendHealthMonitor.instance;
+  }
+  
+  async checkHealth(): Promise<'healthy' | 'degraded' | 'down'> {
+    try {
+      const startTime = Date.now();
+      const response = await apiClient.get('/health');
+      const responseTime = Date.now() - startTime;
+      
+      if (response.success) {
+        if (responseTime > 5000) {
+          this.setHealthStatus('degraded');
+        } else {
+          this.setHealthStatus('healthy');
+        }
+      } else {
+        this.setHealthStatus('down');
+      }
+    } catch (error) {
+      console.warn('Health check failed:', error);
+      this.setHealthStatus('down');
+    }
+    
+    this.lastHealthCheck = Date.now();
+    return this.healthStatus;
+  }
+  
+  private setHealthStatus(status: 'healthy' | 'degraded' | 'down') {
+    if (this.healthStatus !== status) {
+      this.healthStatus = status;
+      this.notifyListeners(status);
+    }
+  }
+  
+  private notifyListeners(status: 'healthy' | 'degraded' | 'down') {
+    this.listeners.forEach(listener => {
+      try {
+        listener(status);
+      } catch (error) {
+        console.warn('Health status listener error:', error);
+      }
+    });
+  }
+  
+  addListener(callback: (status: 'healthy' | 'degraded' | 'down') => void): () => void {
+    this.listeners.push(callback);
+    return () => {
+      const index = this.listeners.indexOf(callback);
+      if (index > -1) {
+        this.listeners.splice(index, 1);
+      }
+    };
+  }
+  
+  getHealthStatus(): 'healthy' | 'degraded' | 'down' {
+    return this.healthStatus;
+  }
+  
+  shouldCheckHealth(): boolean {
+    return Date.now() - this.lastHealthCheck > this.healthCheckInterval;
+  }
+}
+
+export const backendHealthMonitor = BackendHealthMonitor.getInstance();
+
+// Network-aware API wrapper with enhanced error handling
 export const createNetworkAwareApi = <T extends any[], R>(
   apiFunction: (...args: T) => Promise<ApiResponse<R>>,
   cacheKey: string,
@@ -195,6 +336,11 @@ export const createNetworkAwareApi = <T extends any[], R>(
 ) => {
   return async (...args: T): Promise<ApiResponse<R>> => {
     try {
+      // Check backend health if needed
+      if (backendHealthMonitor.shouldCheckHealth()) {
+        backendHealthMonitor.checkHealth();
+      }
+      
       // Try network request first
       const response = await apiFunction(...args);
       
@@ -205,18 +351,59 @@ export const createNetworkAwareApi = <T extends any[], R>(
       
       return response;
     } catch (error) {
-      // Fallback to cache on network error
-      console.warn('Network request failed, trying cache:', error);
+      const errorInfo = handleApiError(error);
+      console.warn('Network request failed, trying cache:', errorInfo.message);
       
-      const cached = await offlineStorage.getCachedResponse<ApiResponse<R>>(cacheKey, maxAge);
-      if (cached) {
-        return {
-          ...cached,
-          message: 'Showing cached data (offline)',
-        };
+      // Try cache fallback for network errors
+      if (errorInfo.isNetworkError) {
+        const cached = await offlineStorage.getCachedResponse<ApiResponse<R>>(cacheKey, maxAge);
+        if (cached) {
+          return {
+            ...cached,
+            message: 'Showing cached data (offline)',
+          };
+        }
       }
       
-      throw error;
+      // Return user-friendly error
+      throw new Error(errorInfo.message);
     }
+  };
+};
+
+// Retry mechanism for critical API calls
+export const withRetry = <T extends any[], R>(
+  apiFunction: (...args: T) => Promise<ApiResponse<R>>,
+  maxRetries = 3,
+  baseDelay = 1000
+) => {
+  return async (...args: T): Promise<ApiResponse<R>> => {
+    let lastError: Error;
+    
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        return await apiFunction(...args);
+      } catch (error) {
+        lastError = error as Error;
+        
+        if (attempt === maxRetries) {
+          break;
+        }
+        
+        // Don't retry on auth errors or client errors
+        if (error instanceof Error && 
+            (error.message.includes('HTTP 401') || 
+             error.message.includes('HTTP 403') ||
+             error.message.includes('HTTP 400'))) {
+          break;
+        }
+        
+        // Exponential backoff
+        const delay = baseDelay * Math.pow(2, attempt);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+    
+    throw lastError!;
   };
 };
