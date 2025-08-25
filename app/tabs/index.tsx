@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import Colors from "@/constants/colors";
 import SearchWithSuggestions from "@/components/SearchWithSuggestions";
@@ -40,7 +40,7 @@ export default function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showFunFact, setShowFunFact] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [selectedPlace, setSelectedPlace] = useState<Place | undefined>(undefined);
+  const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const [showPetCompanion, setShowPetCompanion] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
   const [selectedDestination, setSelectedDestination] = useState<Place | undefined>(undefined);
@@ -53,7 +53,7 @@ export default function HomeScreen() {
   } = useNavigationStore();
 
   const { userStats, completeTrip } = useGamificationStore();
-  const { formatters, regionalContent, currentRegion } = useRegionalData();
+  const { regionalContent, currentRegion } = useRegionalData();
   const { getApprovedCategories } = useCategoryStore();
   
   const approvedCategories = getApprovedCategories();
@@ -131,12 +131,7 @@ export default function HomeScreen() {
     trackUserAction('pull_to_refresh', { screen: 'home' });
   };
 
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      trackUserAction('search', { query: searchQuery });
-      router.push("/search");
-    }
-  };
+
 
   const handlePlaceSelect = (place: Place) => {
     setDestination(place);
@@ -219,7 +214,7 @@ export default function HomeScreen() {
           currentPlace={selectedPlace ? {
             id: selectedPlace.id,
             name: selectedPlace.name
-          } : undefined}
+          } : null}
         />
 
         <View style={styles.searchContainer}>
