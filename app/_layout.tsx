@@ -11,11 +11,14 @@ import Colors from "@/constants/colors";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import NetworkStatusBar from "@/components/NetworkStatusBar";
 import DevicePingHandler from "@/components/DevicePingHandler";
+import ApiErrorBoundary from "@/components/ApiErrorBoundary";
+import BackendStatusIndicator from "@/components/BackendStatusIndicator";
 import { trackScreenView } from "@/utils/analytics";
 import { performanceMonitor } from "@/utils/performance";
 import { useRegionStore } from "@/stores/regionStore";
 import { CategoryProvider } from "@/stores/categoryStore";
 import { ParentalProvider } from "@/stores/parentalStore";
+import { AuthProvider, useAuth } from "@/hooks/useAuth";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -87,22 +90,27 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ParentalProvider>
-        <CategoryProvider>
-          <ErrorBoundary>
-            <RootLayoutNav />
-          </ErrorBoundary>
-        </CategoryProvider>
-      </ParentalProvider>
+      <AuthProvider>
+        <ParentalProvider>
+          <CategoryProvider>
+            <ApiErrorBoundary showNetworkStatus={true}>
+              <ErrorBoundary>
+                <RootLayoutNav />
+              </ErrorBoundary>
+            </ApiErrorBoundary>
+          </CategoryProvider>
+        </ParentalProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
 
 function RootLayoutNav() {
   const { isConfigured, isHydrated } = useRegionStore();
+  const { isAuthenticated, isInitialized, isLoading } = useAuth();
 
-  // Show loading screen while hydrating
-  if (!isHydrated) {
+  // Show loading screen while hydrating or initializing auth
+  if (!isHydrated || !isInitialized || isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.background }}>
         <Text style={{ fontSize: 18, color: Colors.text }}>Loading...</Text>
@@ -116,6 +124,7 @@ function RootLayoutNav() {
         style={Platform.OS === 'android' ? 'dark' : 'dark'} 
         backgroundColor={Platform.OS === 'android' ? Colors.background : undefined}
       />
+      <BackendStatusIndicator />
       <NetworkStatusBar />
       <Stack
         screenOptions={{
@@ -129,7 +138,15 @@ function RootLayoutNav() {
           },
         }}
       >
-        {!isConfigured ? (
+        {!isAuthenticated ? (
+          <Stack.Screen 
+            name="auth" 
+            options={{ 
+              headerShown: false,
+              gestureEnabled: false,
+            }} 
+          />
+        ) : !isConfigured ? (
           <Stack.Screen 
             name="onboarding" 
             options={{ 
