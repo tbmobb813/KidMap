@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Switch, ScrollView, Pressable } from "react-native";
 import Colors from "@/constants/colors";
-import { Bell, Shield, MapPin, Clock, HelpCircle, Info, ChevronRight, Eye, Globe, Settings, RefreshCw, Palette, Lock, Camera } from "lucide-react-native";
+import { Bell, Shield, MapPin, Clock, HelpCircle, Info, ChevronRight, Eye, Globe, Settings, RefreshCw, Palette, Lock, Camera, LogOut } from "lucide-react-native";
 import AccessibilitySettings from "@/components/AccessibilitySettings";
 import RegionSwitcher from "@/components/RegionSwitcher";
 import RegionalTransitCard from "@/components/RegionalTransitCard";
@@ -15,6 +15,7 @@ import PinAuthentication from "@/components/PinAuthentication";
 import ParentDashboard from "@/components/ParentDashboard";
 import NotificationStatusCard from "@/components/NotificationStatusCard";
 import SystemHealthMonitor from "@/components/SystemHealthMonitor";
+import { useAuth } from "@/hooks/useAuth";
 
 type SettingItemProps = {
   icon: React.ReactNode;
@@ -45,6 +46,7 @@ export default function SettingsScreen() {
   
   const { currentRegion, userPreferences, updatePreferences } = useRegionStore();
   const { isParentMode, authenticateParentMode, exitParentMode } = useParentalStore();
+  const { user, logout } = useAuth();
 
   const SettingItem: React.FC<SettingItemProps> = ({ icon, title, description, value, onValueChange }) => (
     <View style={styles.settingItem}>
@@ -321,6 +323,23 @@ export default function SettingsScreen() {
           </View>
 
           <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Account</Text>
+            
+            {user && (
+              <View style={styles.userInfo}>
+                <Text style={styles.userInfoText}>Signed in as: {user.name}</Text>
+                <Text style={styles.userInfoEmail}>{user.email}</Text>
+              </View>
+            )}
+            
+            <LinkItem
+              icon={<LogOut size={24} color={Colors.error} />}
+              title="Sign Out"
+              onPress={logout}
+            />
+          </View>
+
+          <View style={styles.section}>
             <Text style={styles.sectionTitle}>Help & Information</Text>
             
             <LinkItem
@@ -493,5 +512,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.primary,
     fontWeight: '600',
+  },
+  userInfo: {
+    backgroundColor: Colors.card,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+  },
+  userInfoText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.text,
+    marginBottom: 4,
+  },
+  userInfoEmail: {
+    fontSize: 14,
+    color: Colors.textSecondary,
   },
 });
