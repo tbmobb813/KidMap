@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, ScrollView, Pressable, Dimensions, Platform } f
 import { useRouter } from "expo-router";
 import Colors from "@/constants/colors";
 import MapPlaceholder from "@/components/MapPlaceholder";
+import InteractiveMap from "@/components/InteractiveMap";
 import RouteCard from "@/components/RouteCard";
 import SafetyPanel from "@/components/SafetyPanel";
 import TravelModeSelector from "@/components/TravelModeSelector";
@@ -69,13 +70,21 @@ export default function MapScreen() {
       bounces={true}
     >
       <View style={styles.mapContainer}>
-        <MapPlaceholder 
-          message={
-            destination 
-              ? `Map showing route to ${destination.name}` 
-              : "Select a destination to see the route"
-          } 
-        />
+        {origin && destination ? (
+          <InteractiveMap
+            origin={origin}
+            destination={destination}
+            route={selectedRoute || undefined}
+          />
+        ) : (
+          <MapPlaceholder 
+            message={
+              destination 
+                ? `Map showing route to ${destination.name}` 
+                : "Select a destination to see the route"
+            } 
+          />
+        )}
       </View>
 
       <SafetyPanel 

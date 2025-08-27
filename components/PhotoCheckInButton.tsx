@@ -1,109 +1,147 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Pressable, Alert, Platform, BackHandler } from "react-native";
+import { StyleSheet, Text, Pressable, Alert, Platform, View, Image } from "react-native";
 import Colors from "@/constants/colors";
-import { Camera, MapPin } from "lucide-react-native";
-import * as ImagePicker from "expo-image-picker";
+import { Camera as CameraIcon, MapPin, Check, X } from "lucide-react-native";
+import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useNavigationStore } from "@/stores/navigationStore";
+import useLocation from "@/hooks/useLocation";
+
 
 type PhotoCheckInButtonProps = {
   placeName: string;
   placeId: string;
+  placeLat?: number;
+  placeLng?: number;
 };
 
-const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({ placeName, placeId }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { addPhotoCheckIn } = useNavigationStore();
+type PreviewState = {
+  uri: string;
+} | null;
 
-  const handlePhotoCheckIn = async () => {
+const PhotoCheckInButton: React.FC<PhotoCheckInButtonProps> = ({ placeName, placeId, placeLat, placeLng }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [preview, setPreview] = useState<PreviewState>(null);
+  const [facing, setFacing] = useState<CameraType>('back');
+  const [permission, requestPermission] = useCameraPermissions();
+  const { addPhotoCheckIn, addLocationVerifiedPhotoCheckIn } = useNavigationStore();
+  const { location } = useLocation();
+
+  const close = () => {
+    setIsOpen(false);
+    setPreview(null);
+  };
+
+  const onSnap = async () => {
+    Alert.alert('Photo', 'Snap is a placeholder in Expo Go. Use screenshot after tapping.', [{ text: 'OK' }]);
+  };
+
+  const onConfirm = async () => {
+    const timestamp = Date.now();
     if (Platform.OS === 'web') {
-      Alert.alert("Photo Check-in", "Camera not available on web. Check-in recorded!");
       addPhotoCheckIn({
         placeId,
         placeName,
-        photoUrl: "https://via.placeholder.com/300x200?text=Check-in+Photo",
-        timestamp: Date.now(),
-        notes: "Checked in successfully!"
+        photoUrl: preview?.uri || 'https://via.placeholder.com/300x200?text=Check-in+Photo',
+        timestamp,
+        notes: 'Web check-in',
       });
+      close();
+      Alert.alert('Check-in Complete!', `You've safely arrived at ${placeName}!`);
       return;
     }
 
-    try {
-      setIsLoading(true);
-      
-      // Android-specific permission handling
-      const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-      if (!permissionResult.granted) {
-        if (Platform.OS === 'android') {
-          Alert.alert(
-            "Camera Permission", 
-            "Camera permission is required for photo check-ins. Please enable camera access in your device settings.",
-            [
-              { text: "Cancel", style: "cancel" },
-              { text: "Settings", onPress: () => {
-                Alert.alert("Enable Camera", "Go to Settings > Apps > KidMap > Permissions > Camera");
-              }}
-            ]
-          );
-        } else {
-          Alert.alert("Permission needed", "Camera permission is required for photo check-ins");
-        }
-        return;
-      }
-
-      // Android-optimized camera options
-      const cameraOptions = Platform.OS === 'android' 
-        ? {
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3] as [number, number],
-            quality: 0.6, // Lower quality for Android to prevent memory issues
-            exif: false, // Disable EXIF data on Android for privacy
-          }
-        : {
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3] as [number, number],
-            quality: 0.7,
-          };
-
-      const result = await ImagePicker.launchCameraAsync(cameraOptions);
-
-      if (!result.canceled && result.assets[0]) {
-        addPhotoCheckIn({
+    if (placeLat !== undefined && placeLng !== undefined && location) {
+      addLocationVerifiedPhotoCheckIn(
+        {
           placeId,
           placeName,
-          photoUrl: result.assets[0].uri,
-          timestamp: Date.now(),
-          notes: "Safe arrival confirmed!"
-        });
-        
-        Alert.alert("Check-in Complete!", `You've safely arrived at ${placeName}!`);
-      }
-    } catch (error) {
-      console.log("Camera error:", error);
-      Alert.alert("Error", "Could not take photo. Please try again.");
-    } finally {
-      setIsLoading(false);
+          photoUrl: preview?.uri || 'placeholder://photo',
+          timestamp,
+          notes: 'Safe arrival confirmed!',
+        },
+        { latitude: location.latitude, longitude: location.longitude },
+        { latitude: placeLat, longitude: placeLng }
+      );
+    } else {
+      addPhotoCheckIn({
+        placeId,
+        placeName,
+        photoUrl: preview?.uri || 'placeholder://photo',
+        timestamp,
+        notes: 'Safe arrival confirmed!',
+      });
     }
+    close();
+    Alert.alert('Check-in Complete!', `You've safely arrived at ${placeName}!`);
+  };
+
+  const onOpenCamera = async () => {
+    if (Platform.OS === 'web') {
+      setPreview({ uri: 'https://via.placeholder.com/600x400?text=Preview' });
+      setIsOpen(true);
+      return;
+    }
+    if (!permission) return;
+    if (!permission.granted) {
+      const granted = await requestPermission();
+      if (!granted?.granted) {
+        Alert.alert('Permission needed', 'Camera permission is required for photo check-ins');
+        return;
+      }
+    }
+    setIsOpen(true);
   };
 
   return (
-    <Pressable 
-      style={[styles.container, isLoading && styles.loading]}
-      onPress={handlePhotoCheckIn}
-      disabled={isLoading}
-    >
-      <Camera size={20} color="#FFFFFF" />
-      <Text style={styles.text}>
-        {isLoading ? "Taking Photo..." : "Photo Check-in"}
-      </Text>
-      <MapPin size={16} color="#FFFFFF" style={styles.locationIcon} />
-    </Pressable>
+    <>
+      <Pressable 
+        testID="photo-checkin-button"
+        style={styles.button}
+        onPress={onOpenCamera}
+      >
+        <CameraIcon size={20} color="#FFFFFF" />
+        <Text style={styles.text}>Photo Check-in</Text>
+        <MapPin size={16} color="#FFFFFF" style={styles.locationIcon} />
+      </Pressable>
+
+      {isOpen && (
+        <View style={styles.modal} testID="photo-checkin-modal">
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>Check-in Photo</Text>
+            <Pressable onPress={close} testID="close-preview">
+              <X size={20} color={Colors.text} />
+            </Pressable>
+          </View>
+
+          {preview ? (
+            <Image source={{ uri: preview.uri }} style={styles.preview} />
+          ) : (
+            <View style={styles.cameraWrap}>
+              <CameraView style={styles.camera} facing={facing}>
+                <View style={styles.cameraControls}>
+                  <Pressable style={styles.snap} onPress={onSnap} testID="snap-button" />
+                </View>
+              </CameraView>
+            </View>
+          )}
+
+          <View style={styles.modalFooter}>
+            <Pressable style={[styles.footerBtn, styles.cancel]} onPress={close}>
+              <Text style={styles.footerText}>Cancel</Text>
+            </Pressable>
+            <Pressable style={[styles.footerBtn, styles.confirm]} onPress={onConfirm} testID="confirm-checkin">
+              <Check size={16} color="#fff" />
+              <Text style={styles.footerText}>Confirm</Text>
+            </Pressable>
+          </View>
+        </View>
+      )}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  button: {
     backgroundColor: Colors.secondary,
     borderRadius: 12,
     padding: 16,
@@ -118,17 +156,39 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  loading: {
-    opacity: 0.7,
-  },
   text: {
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "600",
   },
-  locationIcon: {
-    marginLeft: 4,
+  locationIcon: { marginLeft: 4 },
+  modal: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#000000d0',
+    paddingTop: 48,
   },
+  modalHeader: {
+    paddingHorizontal: 16,
+    paddingBottom: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  modalTitle: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  cameraWrap: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  camera: { width: '92%', height: 360, borderRadius: 16, overflow: 'hidden' },
+  cameraControls: { flex: 1, justifyContent: 'flex-end', alignItems: 'center', paddingBottom: 16 },
+  snap: { width: 64, height: 64, borderRadius: 32, backgroundColor: '#ffffffcc' },
+  preview: { width: '92%', height: 360, borderRadius: 16, alignSelf: 'center' },
+  modalFooter: { flexDirection: 'row', gap: 12, padding: 16, justifyContent: 'flex-end' },
+  footerBtn: { paddingVertical: 12, paddingHorizontal: 16, borderRadius: 12, backgroundColor: '#222' },
+  cancel: { backgroundColor: '#333' },
+  confirm: { backgroundColor: Colors.primary, flexDirection: 'row', alignItems: 'center', gap: 6 },
+  footerText: { color: '#fff', fontSize: 14, fontWeight: '600' },
 });
 
 export default PhotoCheckInButton;

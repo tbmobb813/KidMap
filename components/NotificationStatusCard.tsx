@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Pressable, Platform } from 'react-native';
 import { Bell, AlertTriangle, ExternalLink, CheckCircle } from 'lucide-react-native';
 import Colors from '@/constants/colors';
-import { showDevelopmentBuildRecommendation } from '@/utils/notifications';
+import { showDevelopmentBuildRecommendation, requestNotificationPermission } from '@/utils/notifications';
 
 type NotificationStatusCardProps = {
   testId?: string;
@@ -16,10 +16,11 @@ const NotificationStatusCard: React.FC<NotificationStatusCardProps> = ({ testId 
     if (isWeb) {
       return {
         icon: <Bell size={20} color={Colors.primary} />,
-        title: 'Web Notifications Active',
-        description: 'Browser notifications are working normally',
+        title: 'Web Notifications',
+        description: 'Browser permissions control notification delivery',
         status: 'good' as const,
-        showAction: false,
+        showAction: true,
+        actionText: 'Enable Notifications',
       };
     }
     
@@ -27,25 +28,31 @@ const NotificationStatusCard: React.FC<NotificationStatusCardProps> = ({ testId 
       return {
         icon: <AlertTriangle size={20} color={Colors.warning} />,
         title: 'Limited Notifications',
-        description: 'Running in Expo Go - notifications shown as alerts only',
+        description: 'Running in Expo Go - using alerts and in-app banners',
         status: 'warning' as const,
         showAction: true,
+        actionText: 'Why Limited?',
       };
     }
     
     return {
       icon: <CheckCircle size={20} color={Colors.success} />,
       title: 'Full Notifications Available',
-      description: 'Push notifications are working normally',
+      description: 'Push and scheduled notifications are supported',
       status: 'good' as const,
-      showAction: false,
+      showAction: true,
+      actionText: 'Request Permission',
     };
   };
   
   const statusInfo = getStatusInfo();
   
-  const handleLearnMore = () => {
-    showDevelopmentBuildRecommendation();
+  const handleAction = async () => {
+    if (isExpoGo) {
+      showDevelopmentBuildRecommendation();
+      return;
+    }
+    await requestNotificationPermission();
   };
   
   return (
@@ -61,16 +68,16 @@ const NotificationStatusCard: React.FC<NotificationStatusCardProps> = ({ testId 
       </View>
       
       {statusInfo.showAction && (
-        <Pressable style={styles.actionButton} onPress={handleLearnMore}>
+        <Pressable style={styles.actionButton} onPress={handleAction}>
           <ExternalLink size={16} color={Colors.primary} />
-          <Text style={styles.actionText}>Learn About Development Builds</Text>
+          <Text style={styles.actionText}>{statusInfo.actionText}</Text>
         </Pressable>
       )}
       
       {isExpoGo && (
         <View style={styles.infoBox}>
           <Text style={styles.infoText}>
-            💡 For production apps, use a development build for full notification support
+            💡 Use a development build for full notification support
           </Text>
         </View>
       )}

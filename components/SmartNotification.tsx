@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import Colors from "@/constants/colors";
 import { Clock, X, MapPin } from "lucide-react-native";
@@ -79,7 +79,8 @@ const SmartNotification: React.FC<SmartNotificationProps> = ({
 const styles = StyleSheet.create({
   container: {
     borderRadius: 12,
-    margin: 16,
+    marginHorizontal: 16,
+    marginTop: 8,
     borderLeftWidth: 4,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },

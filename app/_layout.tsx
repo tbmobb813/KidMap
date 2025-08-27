@@ -2,8 +2,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
-import React from "react";
+import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Platform, View, Text } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -19,6 +18,8 @@ import { useRegionStore } from "@/stores/regionStore";
 import { CategoryProvider } from "@/stores/categoryStore";
 import { ParentalProvider } from "@/stores/parentalStore";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import InAppNotificationHost from "@/components/InAppNotificationHost";
+import React from "react";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,7 +43,7 @@ export default function RootLayout() {
   const [loaded, error] = useFonts({
     ...FontAwesome.font,
   });
-  const [appReady, setAppReady] = React.useState(false);
+  const [appReady, setAppReady] = useState(false);
 
   useEffect(() => {
     performanceMonitor.startTimer('app_startup');
@@ -126,6 +127,7 @@ function RootLayoutNav() {
       />
       <BackendStatusIndicator />
       <NetworkStatusBar />
+      <InAppNotificationHost />
       <Stack
         screenOptions={{
           headerBackTitle: "Back",

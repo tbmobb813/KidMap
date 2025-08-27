@@ -159,6 +159,10 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
     extendSession,
     getSessionTimeRemaining,
     
+    // Smart routes profile wiring
+    toggleLikedSuggestion: (id: string, liked: boolean) => authManager.toggleLikedSuggestion(id, liked),
+    saveRoute: (routeId: string, save: boolean) => authManager.saveRoute(routeId, save),
+    
     // Utilities
     isParentUser: authState.user?.role === 'parent',
     isChildUser: authState.user?.role === 'child',
