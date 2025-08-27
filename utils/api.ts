@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const API_BASE_URL = __DEV__ 
@@ -143,6 +143,33 @@ export const userApi = {
   getAchievements: () => apiClient.get('/user/achievements'),
   checkIn: (placeId: string, photo?: string) => 
     apiClient.post('/user/checkin', { placeId, photo }),
+};
+
+export type SmartSuggestionDTO = {
+  id: string;
+  type: 'fastest' | 'safest' | 'scenic' | 'covered' | 'quiet';
+  title: string;
+  description: string;
+  estimatedTime: string;
+  reason: string;
+  priority: number;
+  liked?: boolean;
+};
+
+export const smartRoutesApi = {
+  getSuggestions: (params: {
+    destId?: string;
+    destLat: number;
+    destLng: number;
+    curLat: number;
+    curLng: number;
+    weather?: string;
+    timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
+  }) => apiClient.get<ApiResponse<SmartSuggestionDTO[]>>(
+    `/routes/smart?destId=${encodeURIComponent(params.destId ?? '')}&destLat=${params.destLat}&destLng=${params.destLng}&curLat=${params.curLat}&curLng=${params.curLng}&weather=${encodeURIComponent(params.weather ?? '')}&timeOfDay=${params.timeOfDay}`
+  ),
+  likeSuggestion: (id: string, liked: boolean) =>
+    apiClient.post<ApiResponse<{ id: string; liked: boolean }>>(`/routes/suggestions/${id}/like`, { liked }),
 };
 
 // Offline support

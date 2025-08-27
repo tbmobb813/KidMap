@@ -1,59 +1,93 @@
 import { Platform, Alert } from 'react-native';
 
-type NotificationOptions = {
+export type NotificationOptions = {
   title: string;
   body: string;
   icon?: string;
   priority?: 'high' | 'normal';
+  scheduleAt?: Date;
+};
+
+type InAppBanner = {
+  id: string;
+  title: string;
+  message: string;
+  type: 'reminder' | 'weather' | 'safety' | 'achievement';
+};
+
+const inAppListeners: Array<(banner: InAppBanner) => void> = [];
+export const addInAppBannerListener = (cb: (banner: InAppBanner) => void) => {
+  inAppListeners.push(cb);
+  return () => {
+    const i = inAppListeners.indexOf(cb);
+    if (i > -1) inAppListeners.splice(i, 1);
+  };
+};
+export const showInAppBanner = (banner: InAppBanner) => {
+  inAppListeners.forEach((l) => {
+    try { l(banner); } catch {}
+  });
 };
 
 // Check if we're running in Expo Go (which has notification limitations)
 const isExpoGo = __DEV__ && Platform.OS !== 'web';
 
+export const initializeNotifications = async () => {
+  if (Platform.OS === 'web') return;
+  try {
+    const { Notifications } = require('expo-notifications');
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({ shouldShowAlert: true, shouldPlaySound: true, shouldSetBadge: false }),
+    });
+    if (Platform.OS === 'android') {
+      await Notifications.setNotificationChannelAsync('default', {
+        name: 'Default', importance: Notifications.AndroidImportance.DEFAULT,
+      });
+      await Notifications.setNotificationChannelAsync('high', {
+        name: 'High Priority', importance: Notifications.AndroidImportance.HIGH,
+        sound: 'default', vibrationPattern: [0, 250, 250, 250],
+      });
+    }
+  } catch (e) {
+    console.warn('initializeNotifications failed:', e);
+  }
+};
+
 export const showNotification = async (options: NotificationOptions) => {
-  const { title, body, icon = '/icon.png', priority = 'normal' } = options;
+  const { title, body, icon = '/icon.png', priority = 'normal', scheduleAt } = options;
   
   if (Platform.OS === 'web') {
-    // Web notification
     if ('Notification' in window) {
       if (Notification.permission === 'granted') {
         new Notification(title, { body, icon });
       } else if (Notification.permission === 'default') {
         const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-          new Notification(title, { body, icon });
-        }
+        if (permission === 'granted') new Notification(title, { body, icon });
       }
     }
-  } else {
-    if (isExpoGo) {
-      // Expo Go fallback: Use Alert for important notifications
-      if (priority === 'high') {
-        Alert.alert(title, body, [{ text: 'OK' }]);
-      } else {
-        // For normal priority, just log (to avoid too many alerts)
-        console.log(`📱 Notification: ${title} - ${body}`);
-      }
-    } else {
-      // Production build: Use expo-notifications
-      try {
-        const { Notifications } = require('expo-notifications');
-        await Notifications.scheduleNotificationAsync({
-          content: {
-            title,
-            body,
-            sound: true,
-          },
-          trigger: null, // Show immediately
-        });
-      } catch (error) {
-        console.warn('Failed to show notification:', error);
-        // Fallback to alert for critical notifications
-        if (priority === 'high') {
-          Alert.alert(title, body, [{ text: 'OK' }]);
-        }
-      }
-    }
+    showInAppBanner({ id: Date.now().toString(), title, message: body, type: 'reminder' });
+    return;
+  }
+
+  if (isExpoGo) {
+    if (priority === 'high') Alert.alert(title, body, [{ text: 'OK' }]);
+    else console.log(`📱 Notification: ${title} - ${body}`);
+    showInAppBanner({ id: Date.now().toString(), title, message: body, type: 'reminder' });
+    return;
+  }
+
+  try {
+    const { Notifications } = require('expo-notifications');
+    await initializeNotifications();
+    const trigger = scheduleAt ? new Date(scheduleAt) : null;
+    await Notifications.scheduleNotificationAsync({
+      content: { title, body, sound: true },
+      trigger,
+    });
+  } catch (error) {
+    console.warn('Failed to show notification:', error);
+    if (priority === 'high') Alert.alert(title, body, [{ text: 'OK' }]);
+    showInAppBanner({ id: Date.now().toString(), title, message: body, type: 'reminder' });
   }
 };
 
@@ -64,48 +98,35 @@ export const requestNotificationPermission = async (): Promise<boolean> => {
       return permission === 'granted';
     }
     return false;
-  } else {
-    if (isExpoGo) {
-      // Expo Go: Limited notification support
-      console.log('⚠️ Running in Expo Go - notifications limited to alerts');
-      console.log('💡 For full notification support, use a development build');
-      return true; // We can show alerts
-    } else {
-      // Production build: Request proper permissions
-      try {
-        const { Notifications } = require('expo-notifications');
-        const { status } = await Notifications.requestPermissionsAsync();
-        return status === 'granted';
-      } catch (error) {
-        console.warn('Failed to request notification permissions:', error);
-        return false;
-      }
-    }
+  }
+  if (isExpoGo) {
+    console.log('⚠️ Running in Expo Go - notifications limited to alerts');
+    console.log('💡 For full notification support, use a development build');
+    return true;
+  }
+  try {
+    const { Notifications } = require('expo-notifications');
+    const { status } = await Notifications.requestPermissionsAsync();
+    return status === 'granted';
+  } catch (error) {
+    console.warn('Failed to request notification permissions:', error);
+    return false;
   }
 };
 
 export const hasNotificationPermission = (): boolean => {
   if (Platform.OS === 'web') {
     return 'Notification' in window && Notification.permission === 'granted';
-  } else {
-    if (isExpoGo) {
-      // Expo Go: We can show alerts
-      return true;
-    } else {
-      // Production build: Check actual permissions
-      try {
-        const { Notifications } = require('expo-notifications');
-        // This is async, but we need sync for this function
-        // In production, you'd want to cache the permission status
-        return true; // Assume granted for now
-      } catch (error) {
-        return false;
-      }
-    }
+  }
+  if (isExpoGo) return true;
+  try {
+    // In production you'd cache this
+    return true;
+  } catch {
+    return false;
   }
 };
 
-// Helper function to show development build recommendation
 export const showDevelopmentBuildRecommendation = () => {
   if (isExpoGo) {
     Alert.alert(

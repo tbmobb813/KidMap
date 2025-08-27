@@ -21,6 +21,8 @@ export type AuthUser = {
     locationSharing: boolean;
     emergencyContacts: string[];
   };
+  likedSuggestions?: string[];
+  savedRoutes?: string[];
   createdAt: string;
   lastLoginAt: string;
 };
@@ -345,7 +347,6 @@ class AuthManager {
       if (response.success) {
         this.currentUser = { ...this.currentUser, ...response.data };
         
-        // Update cached profile
         await SafeAsyncStorage.setItem('user_profile', this.currentUser);
         
         this.notifyListeners();
@@ -358,6 +359,26 @@ class AuthManager {
       log.error('Profile update error', err);
       return { success: false, error: err.message || 'Network error' };
     }
+  }
+
+  async toggleLikedSuggestion(id: string, liked: boolean): Promise<{ success: boolean; error?: string }> {
+    if (!this.currentUser) {
+      return { success: false, error: 'Not authenticated' };
+    }
+    const current = this.currentUser.likedSuggestions ?? [];
+    const updated = liked ? Array.from(new Set([...current, id])) : current.filter(x => x !== id);
+    const result = await this.updateProfile({ likedSuggestions: updated });
+    return result;
+  }
+
+  async saveRoute(routeId: string, save: boolean): Promise<{ success: boolean; error?: string }> {
+    if (!this.currentUser) {
+      return { success: false, error: 'Not authenticated' };
+    }
+    const current = this.currentUser.savedRoutes ?? [];
+    const updated = save ? Array.from(new Set([...current, routeId])) : current.filter(x => x !== routeId);
+    const result = await this.updateProfile({ savedRoutes: updated });
+    return result;
   }
 
   async changePassword(currentPassword: string, newPassword: string): Promise<{ success: boolean; error?: string }> {
