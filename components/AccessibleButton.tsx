@@ -16,7 +16,7 @@ type AccessibleButtonProps = {
   variant?: "primary" | "secondary" | "outline";
 };
 
-const AccessibleButton: React.FC<AccessibleButtonProps> = ({
+const AccessibleButton = ({
   title,
   onPress,
   style,
@@ -25,7 +25,7 @@ const AccessibleButton: React.FC<AccessibleButtonProps> = ({
   accessibilityLabel,
   accessibilityHint,
   variant = "primary",
-}) => {
+}: AccessibleButtonProps) => {
   const getButtonStyle = () => {
     switch (variant) {
       case "primary":

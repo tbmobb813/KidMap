@@ -113,7 +113,7 @@ export default function AuthScreen() {
           (result && result.error) || 'Please try again'
         );
       }
-    } catch (err) {
+    } catch {
       Alert.alert('Error', 'Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);

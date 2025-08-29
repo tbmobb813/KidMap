@@ -1,6 +1,8 @@
 import { Bot, Volume2, VolumeX, Sparkles } from 'lucide-react-native';
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { StyleSheet, Text, View, Pressable, Animated } from 'react-native';
+import React from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { Animated } from 'react-native';
 
 import { useTheme } from '@/constants/theme';
 import { track } from '@/telemetry';
@@ -19,11 +21,11 @@ type CompanionMessage = {
   timestamp: Date;
 };
 
-const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
+const AIJourneyCompanion = ({
   currentLocation: _currentLocation,
   destination,
   isNavigating
-}) => {
+}: AIJourneyCompanionProps) => {
   const theme = useTheme();
   const [currentMessage, setCurrentMessage] = useState<CompanionMessage | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -161,7 +163,7 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
         style={styles.companionButton}
         onPress={() => setIsExpanded(!isExpanded)}
       >
-        <Animated.View 
+        <Animated.View
           style={[styles.avatar, { transform: [{ scale: pulseAnim }], backgroundColor: theme.colors.primary }]}
         >
           <Text style={styles.avatarEmoji}>{getMoodEmoji()}</Text>

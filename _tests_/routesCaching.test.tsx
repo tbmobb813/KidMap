@@ -23,8 +23,8 @@ const fetchRoutes = routeService.fetchRoutes as jest.Mock;
 
 beforeEach(() => {
   jest.clearAllMocks();
-  fetchRoutes.mockImplementation(() => {
-    console.log('fetchRoutes called');
+  fetchRoutes.mockImplementation((params) => {
+    console.log('fetchRoutes called', params);
     return Promise.resolve([]);
   });
 });
