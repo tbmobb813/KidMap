@@ -82,7 +82,7 @@ export default function AuthScreen() {
 
       if (result.success) {
         // Navigation will be handled by the auth state change
-        router.replace('/(tabs)');
+        router.replace('./(tabs)');
       } else {
         Alert.alert(
           isLogin ? 'Login Failed' : 'Registration Failed',
@@ -133,11 +133,11 @@ export default function AuthScreen() {
           <View style={styles.form}>
             {!isLogin && (
               <View style={styles.inputContainer}>
-                <User size={20} color={Colors.textSecondary} style={styles.inputIcon} />
+                <User size={20} color={Colors.secondary} style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Full Name"
-                  placeholderTextColor={Colors.textSecondary}
+                  placeholderTextColor={Colors.secondary}
                   value={formData.name}
                   onChangeText={(text) => setFormData(prev => ({ ...prev, name: text }))}
                   autoCapitalize="words"
@@ -147,11 +147,11 @@ export default function AuthScreen() {
             )}
 
             <View style={styles.inputContainer}>
-              <Mail size={20} color={Colors.textSecondary} style={styles.inputIcon} />
+              <Mail size={20} color={Colors.secondary} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
                 placeholder="Email Address"
-                placeholderTextColor={Colors.textSecondary}
+                placeholderTextColor={Colors.secondary}
                 value={formData.email}
                 onChangeText={(text) => setFormData(prev => ({ ...prev, email: text }))}
                 keyboardType="email-address"
@@ -162,11 +162,11 @@ export default function AuthScreen() {
             </View>
 
             <View style={styles.inputContainer}>
-              <Lock size={20} color={Colors.textSecondary} style={styles.inputIcon} />
+              <Lock size={20} color={Colors.secondary} style={styles.inputIcon} />
               <TextInput
                 style={[styles.input, styles.passwordInput]}
                 placeholder="Password"
-                placeholderTextColor={Colors.textSecondary}
+                placeholderTextColor={Colors.secondary}
                 value={formData.password}
                 onChangeText={(text) => setFormData(prev => ({ ...prev, password: text }))}
                 secureTextEntry={!showPassword}
@@ -180,20 +180,20 @@ export default function AuthScreen() {
                 testID="toggle-password-visibility"
               >
                 {showPassword ? (
-                  <EyeOff size={20} color={Colors.textSecondary} />
+                  <EyeOff size={20} color={Colors.secondary} />
                 ) : (
-                  <Eye size={20} color={Colors.textSecondary} />
+                  <Eye size={20} color={Colors.secondary} />
                 )}
               </Pressable>
             </View>
 
             {!isLogin && (
               <View style={styles.inputContainer}>
-                <Lock size={20} color={Colors.textSecondary} style={styles.inputIcon} />
+                <Lock size={20} color={Colors.secondary} style={styles.inputIcon} />
                 <TextInput
                   style={[styles.input, styles.passwordInput]}
                   placeholder="Confirm Password"
-                  placeholderTextColor={Colors.textSecondary}
+                  placeholderTextColor={Colors.secondary}
                   value={formData.confirmPassword}
                   onChangeText={(text) => setFormData(prev => ({ ...prev, confirmPassword: text }))}
                   secureTextEntry={!showConfirmPassword}
@@ -207,9 +207,9 @@ export default function AuthScreen() {
                   testID="toggle-confirm-password-visibility"
                 >
                   {showConfirmPassword ? (
-                    <EyeOff size={20} color={Colors.textSecondary} />
+                    <EyeOff size={20} color={Colors.secondary} />
                   ) : (
-                    <Eye size={20} color={Colors.textSecondary} />
+                    <Eye size={20} color={Colors.secondary} />
                   )}
                 </Pressable>
               </View>
@@ -329,7 +329,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 16,
-    color: Colors.textSecondary,
+    color: Colors.secondary,
     textAlign: 'center',
   },
   form: {
@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.card,
     borderRadius: 12,
     marginBottom: 16,
     paddingHorizontal: 16,
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: Colors.border,
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.card,
     alignItems: 'center',
   },
   roleButtonActive: {
@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
   roleButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: Colors.textSecondary,
+    color: Colors.secondary,
   },
   roleButtonTextActive: {
     color: Colors.primary,
@@ -438,7 +438,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   footerText: {
-    color: Colors.textSecondary,
+    color: Colors.secondary,
     fontSize: 14,
   },
   footerLink: {

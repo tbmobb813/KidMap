@@ -113,8 +113,9 @@ const SmartRouteSuggestions: React.FC<SmartRouteSuggestionsProps> = ({
       const e = handleApiError(err);
       console.log('like error', e.message);
     },
-    onSuccess: async ({ id, liked }) => {
+    onSuccess: async (response) => {
       try {
+        const { id, liked } = response.data;
         await toggleLikedSuggestion(id, liked);
       } catch (e) {
         console.log('Failed to sync like to profile', e);
@@ -143,7 +144,7 @@ const SmartRouteSuggestions: React.FC<SmartRouteSuggestionsProps> = ({
     }
   };
 
-  const mappedSuggestions: SmartSuggestion[] = (suggestionsQuery.data ?? []).map((s) => ({
+  const mappedSuggestions: SmartSuggestion[] = (suggestionsQuery.data?.data ?? []).map((s: SmartSuggestionDTO) => ({
     ...s,
     icon: iconForType(s.type),
   }));

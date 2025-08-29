@@ -59,7 +59,7 @@ class AuthManager {
   private static instance: AuthManager;
   private currentUser: AuthUser | null = null;
   private tokens: AuthTokens | null = null;
-  private refreshTimer: NodeJS.Timeout | null = null;
+  private refreshTimer: ReturnType<typeof setTimeout> | null = null;
   private listeners: ((state: AuthState) => void)[] = [];
 
   private constructor() {
@@ -80,7 +80,7 @@ class AuthManager {
       // Load stored tokens
       const storedTokens = await SafeAsyncStorage.getItem<AuthTokens>(
         'auth_tokens',
-        null,
+        undefined,
         { strategy: 'fallback', fallbackValue: null }
       );
       
@@ -127,7 +127,7 @@ class AuthManager {
       // Try to load cached profile
       const cachedUser = await SafeAsyncStorage.getItem<AuthUser>(
         'user_profile',
-        null,
+        undefined,
         { strategy: 'fallback', fallbackValue: null }
       );
       
@@ -442,7 +442,8 @@ class AuthManager {
         if (this.currentUser) {
           this.currentUser.parentalControls = {
             ...this.currentUser.parentalControls,
-            isEnabled: true
+            isEnabled: true,
+            restrictions: this.currentUser.parentalControls?.restrictions ?? []
           };
           await SafeAsyncStorage.setItem('user_profile', this.currentUser);
           this.notifyListeners();

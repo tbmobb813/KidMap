@@ -140,7 +140,7 @@ export default function HomeScreen() {
     addToRecentSearches(place);
     completeTrip("Current Location", place.name);
     trackUserAction('select_place', { place_name: place.name, place_category: place.category });
-    router.push("/map");
+    router.push("/map" as import("expo-router").ExternalPathString);
   };
 
   const handleSuggestionSelect = (suggestion: SearchSuggestion) => {
@@ -152,7 +152,7 @@ export default function HomeScreen() {
   const handleCategorySelect = (categoryId: PlaceCategory | string) => {
     trackUserAction('select_category', { category: categoryId });
     router.push({
-      pathname: "/search",
+      pathname: "/search" as import("expo-router").ExternalPathString,
       params: { category: categoryId }
     });
   };
@@ -214,7 +214,7 @@ export default function HomeScreen() {
           currentPlace={selectedPlace ? {
             id: selectedPlace.id,
             name: selectedPlace.name
-          } : null}
+          } : undefined}
         />
 
         <View style={styles.searchContainer}>
@@ -264,7 +264,7 @@ export default function HomeScreen() {
             title="No favorites yet"
             description={`Add places you visit often in ${currentRegion.name} to see them here`}
             actionText="Search Places"
-            onAction={() => router.push("/search")}
+            onAction={() => router.push("/search" as import("expo-router").ExternalPathString)}
           />
         )}
 

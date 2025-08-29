@@ -55,11 +55,11 @@ export default function MapScreen() {
 
   const handleRouteSelect = (route: Route) => {
     selectRoute(route);
-    router.push(`/route/${route.id}`);
+    router.push(`/route/${route.id}` as import("expo-router").ExternalPathString);
   };
 
   const handleSearchPress = () => {
-    router.push("/search");
+    router.push("/search" as import("expo-router").ExternalPathString);
   };
 
   return (

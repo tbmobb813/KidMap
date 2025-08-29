@@ -13,6 +13,7 @@ export type CacheEntry<T> = {
     source: 'network' | 'cache';
     lastUpdated: number;
     accessCount: number;
+    compressed?: boolean;
   };
 };
 
@@ -172,7 +173,7 @@ class EnhancedCacheManager {
     try {
       const cacheEntry = await SafeAsyncStorage.getItem<CacheEntry<T>>(
         this.getCacheKey(key),
-        null,
+        undefined,
         { strategy: 'fallback', fallbackValue: null }
       );
 
@@ -248,7 +249,7 @@ class EnhancedCacheManager {
     try {
       const cacheEntry = await SafeAsyncStorage.getItem<CacheEntry<any>>(
         this.getCacheKey(key),
-        null,
+        undefined,
         { strategy: 'fallback', fallbackValue: null }
       );
 

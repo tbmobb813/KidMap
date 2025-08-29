@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Pressable, Platform } from "react-native";
 import Colors from "@/constants/colors";
 import { Mic, Volume2 } from "lucide-react-native";
 import * as Speech from "expo-speech";
-import { Audio, Recording } from "expo-av";
+import { Audio } from "expo-av";
 import { useToast } from "@/hooks/useToast";
 
 type VoiceNavigationProps = {
@@ -23,7 +23,7 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [transcript, setTranscript] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const recordingRef = useRef<Recording | null>(null);
+  const recordingRef = useRef<Audio.Recording | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<BlobPart[]>([]);
@@ -100,18 +100,7 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
       await Audio.requestPermissionsAsync();
       await Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true });
       const recording = new Audio.Recording();
-      await recording.prepareToRecordAsync({
-        android: {
-          extension: ".m4a",
-          outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
-          audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
-        },
-        ios: {
-          extension: ".wav",
-          outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_LINEARPCM,
-          audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
-        },
-      });
+      await recording.prepareToRecordAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
       await recording.startAsync();
       recordingRef.current = recording;
       setIsListening(true);
@@ -156,12 +145,10 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
     } else if (payload.uri) {
       const uri = payload.uri;
       const ext = uri.split(".").pop() ?? "m4a";
-      form.append("audio", {
-        // @ts-expect-error React Native FormData file
-        uri,
-        name: `recording.${ext}`,
-        type: `audio/${ext}`,
-      });
+      // Fetch the file and append as Blob for React Native
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      form.append("audio", blob, `recording.${ext}`);
     }
     let attempts = 0;
     const max = 2;

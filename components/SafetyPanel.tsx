@@ -39,10 +39,7 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
       logValidationResult('SafetyPanel currentLocation', locationValidation);
       
       if (!locationValidation.isValid) {
-        log.warn('SafetyPanel received invalid location', { 
-          location: currentLocation,
-          errors: locationValidation.errors 
-        });
+        log.warn('SafetyPanel received invalid location');
         showToast('Location data may be inaccurate', 'warning');
       }
     }
@@ -116,10 +113,7 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
       // Validate location before sharing
       const locationValidation = validateLocation(currentLocation);
       if (!locationValidation.isValid) {
-        log.error('Invalid location data for sharing', { 
-          location: currentLocation,
-          errors: locationValidation.errors 
-        });
+        log.error('Invalid location data for sharing');
         showToast('Location data is invalid', 'error');
         return;
       }
@@ -213,10 +207,7 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
       // Validate location before proceeding
       const locationValidation = validateLocation(currentLocation);
       if (!locationValidation.isValid) {
-        log.error('Invalid location for photo check-in', { 
-          location: currentLocation,
-          errors: locationValidation.errors 
-        });
+        log.error('Invalid location for photo check-in');
         Alert.alert('Location Error', 'Your location data appears to be invalid. Please try again.');
         return;
       }
@@ -239,7 +230,7 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
 
         const checkInValidation = validatePhotoCheckIn(webCheckIn);
         if (!checkInValidation.isValid) {
-          log.error('Invalid web check-in data', { errors: checkInValidation.errors });
+          log.error('Invalid web check-in data: ' + JSON.stringify(checkInValidation.errors));
           showToast('Check-in data is invalid', 'error');
           return;
         }
@@ -339,7 +330,7 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
           // Validate check-in data before processing
           const checkInValidation = validatePhotoCheckIn(checkInData);
           if (!checkInValidation.isValid) {
-            log.error('Invalid photo check-in data', { errors: checkInValidation.errors });
+            log.error('Invalid photo check-in data');
             showToast('Check-in data is invalid', 'error');
             return;
           }

@@ -1,5 +1,5 @@
 import { Linking } from "react-native";
-import { router } from "expo-router";
+import { ExternalPathString, router } from "expo-router";
 
 export type DeepLinkParams = {
   screen?: string;
@@ -15,23 +15,23 @@ export const handleDeepLink = (url: string) => {
     // Handle different deep link patterns
     if (path.startsWith('/route/')) {
       const routeId = path.split('/')[2];
-      router.push(`/route/${routeId}`);
+      router.push({ pathname: `/route/${routeId}` as ExternalPathString });
     } else if (path === '/search') {
       router.push({
-        pathname: '/search',
+        pathname: '/search' as ExternalPathString,
         params: searchParams,
       });
     } else if (path.startsWith('/place/')) {
       const placeId = path.split('/')[2];
       // Navigate to place details or set as destination
-      router.push('/map');
+      router.push('/map' as ExternalPathString);
     } else {
       // Default to home
-      router.push('/');
+      router.push('/' as ExternalPathString);
     }
   } catch (error) {
     console.error('Error handling deep link:', error);
-    router.push('/');
+    router.push('/' as ExternalPathString);
   }
 };
 

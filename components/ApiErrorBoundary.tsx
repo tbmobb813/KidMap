@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
 import { StyleSheet, Text, View, Pressable, Animated } from 'react-native';
 import Colors from '@/constants/colors';
 import { Bot, Volume2, VolumeX, Sparkles } from 'lucide-react-native';
 import { Place } from '@/types/navigation';
 
-type AIJourneyCompanionProps = {
-  currentLocation: { latitude: number; longitude: number };
+export interface AIJourneyCompanionProps {
+  showNetworkStatus?: boolean;
+  children?: ReactNode;
+  currentLocation?: Place;
   destination?: Place;
-  isNavigating: boolean;
-};
+  isNavigating?: boolean;
+}
 
 type CompanionMessage = {
   id: string;
@@ -20,7 +22,8 @@ type CompanionMessage = {
 const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
   currentLocation,
   destination,
-  isNavigating
+  isNavigating,
+  children
 }) => {
   const [messages, setMessages] = useState<CompanionMessage[]>([]);
   const [currentMessage, setCurrentMessage] = useState<CompanionMessage | null>(null);
@@ -202,6 +205,7 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
           </View>
         </View>
       )}
+      {children}
     </View>
   );
 };

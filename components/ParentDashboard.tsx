@@ -18,7 +18,7 @@ import {
 import { useParentalStore } from '@/stores/parentalStore';
 import { useCategoryStore } from '@/stores/categoryStore';
 import SafeZoneManagement from '@/components/SafeZoneManagement';
-import { SafeZoneStatusCard } from '@/components/SafeZoneStatusCard';
+import SafeZoneStatusCard from '@/components/SafeZoneStatusCard';
 import { SafeZoneActivityLog } from '@/components/SafeZoneActivityLog';
 import DevicePingHistory from '@/components/DevicePingHistory';
 
@@ -251,7 +251,11 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
 
   const renderSafeZones = () => (
     <ScrollView style={styles.safeZonesContent} showsVerticalScrollIndicator={false}>
-      <SafeZoneStatusCard />
+      <SafeZoneStatusCard
+        value=""
+        onChangeText={() => {}}
+        onClear={() => {}}
+      />
       
       <View style={styles.section}>
         <View style={styles.sectionHeader}>

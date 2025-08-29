@@ -527,6 +527,6 @@ const styles = StyleSheet.create({
   },
   userInfoEmail: {
     fontSize: 14,
-    color: Colors.textSecondary,
+    color: Colors.textLight,
   },
 });

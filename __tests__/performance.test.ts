@@ -78,7 +78,7 @@ describe('Performance Tests', () => {
       };
       
       // Core modules should be under 200KB each
-      const coreModules = ['core', 'safety', 'navigation', 'ui'];
+      const coreModules: Array<keyof typeof mockBundleSizes> = ['core', 'safety', 'navigation', 'ui'];
       coreModules.forEach(module => {
         expect(mockBundleSizes[module]).toBeLessThan(200);
       });
