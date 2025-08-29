@@ -18,7 +18,33 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../hooks/useAuth';
 
 import Colors from '@/constants/colors';
-import { isValidEmail, isValidPassword } from '@/utils/auth';
+
+// Password validation function
+function isValidPassword(password: string): { isValid: boolean; errors: string[] } {
+  const errors: string[] = [];
+  if (password.length < 8) {
+    errors.push('Password must be at least 8 characters long.');
+  }
+  if (!/[A-Z]/.test(password)) {
+    errors.push('Password must contain at least one uppercase letter.');
+  }
+  if (!/[a-z]/.test(password)) {
+    errors.push('Password must contain at least one lowercase letter.');
+  }
+  if (!/[0-9]/.test(password)) {
+    errors.push('Password must contain at least one number.');
+  }
+  if (!/[^A-Za-z0-9]/.test(password)) {
+    errors.push('Password must contain at least one special character.');
+  }
+  return { isValid: errors.length === 0, errors };
+}
+
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+// import isValidEmail from '@/utils/auth' if it is a default export, or implement isValidEmail locally if missing
 
 export default function AuthScreen() {
   const [isLogin, setIsLogin] = useState(true);
@@ -80,7 +106,7 @@ export default function AuthScreen() {
 
       if (result && result.success) {
         // Navigation will be handled by the auth state change
-        router.replace('./(tabs)');
+        router.replace('/tabs' as any);
       } else {
         Alert.alert(
           isLogin ? 'Login Failed' : 'Registration Failed',
