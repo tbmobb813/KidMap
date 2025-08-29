@@ -153,7 +153,7 @@ describe('Theme Token Semantic Consistency', () => {
     expect(palettes.light.background).toMatch(/^#[Ff]/); // Light colors start with F or f
 
     // Dark theme should have light text on dark backgrounds  
-    expect(palettes.dark.text).toMatch(/^#[F-f]/); // Light colors start with F
+    expect(palettes.dark.text).toMatch(/^#[Ff]/); // Light colors start with F or f
     expect(palettes.dark.background).toMatch(/^#[0-3]/); // Dark colors start with 0-3
 
     // High contrast should use pure extremes
