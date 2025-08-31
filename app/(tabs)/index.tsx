@@ -214,7 +214,7 @@ export default function HomeScreen() {
           currentPlace={selectedPlace ? {
             id: selectedPlace.id,
             name: selectedPlace.name
-          } : null}
+          } : undefined}
         />
 
         <View style={styles.searchContainer}>
