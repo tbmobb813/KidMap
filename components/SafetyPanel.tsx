@@ -215,7 +215,6 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
       const locationValidation = validateLocation(currentLocation);
       if (!locationValidation.isValid) {
         log.error('Invalid location for photo check-in', { 
-          location: currentLocation,
           errors: locationValidation.errors 
         });
         Alert.alert('Location Error', 'Your location data appears to be invalid. Please try again.');

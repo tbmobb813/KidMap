@@ -3,7 +3,7 @@ import * as Location from 'expo-location';
 import { Platform, Alert } from 'react-native';
 import { useParentalStore } from '@/stores/parentalStore';
 import { SafeZone } from '@/types/parental';
-import { showNotification, requestNotificationPermission } from '@/utils/notifications';
+import { showNotification, requestNotificationPermission } from '@/utils/notification';
 
 type SafeZoneEvent = {
   safeZone: SafeZone;

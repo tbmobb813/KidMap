@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
 import { StyleSheet, Text, View, Pressable, Animated } from 'react-native';
 import Colors from '@/constants/colors';
 import { Bot, Volume2, VolumeX, Sparkles } from 'lucide-react-native';
@@ -292,4 +292,23 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AIJourneyCompanion;
+export { AIJourneyCompanion };
+
+import NetworkStatusBar from './NetworkStatusBar';
+
+export interface ApiErrorBoundaryProps {
+  children: ReactNode;
+  showNetworkStatus?: boolean;
+}
+
+const ApiErrorBoundary: React.FC<ApiErrorBoundaryProps> = ({ children, showNetworkStatus }) => {
+  // ...error boundary logic...
+  return (
+    <>
+      {showNetworkStatus && <NetworkStatusBar />}
+      {children}
+    </>
+  );
+};
+
+export default ApiErrorBoundary;

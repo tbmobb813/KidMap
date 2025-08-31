@@ -2,7 +2,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useState, ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Platform, View, Text } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -84,9 +84,13 @@ export default function RootLayout() {
     return () => clearTimeout(timer);
   }, [loaded, error, appReady]);
 
-  // Show app if ready
+  // Show loading indicator while app is not ready
   if (!appReady) {
-    return null;
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.background }}>
+        <Text style={{ fontSize: 18, color: Colors.text }}>Loading...</Text>
+      </View>
+    );
   }
 
   return (
@@ -180,9 +184,4 @@ function RootLayoutNav() {
       <DevicePingHandler testId="device-ping-handler" />
     </>
   );
-}
-
-export interface AIJourneyCompanionProps {
-  showNetworkStatus?: boolean;
-  children: React.ReactNode;
 }

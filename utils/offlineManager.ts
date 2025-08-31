@@ -194,10 +194,7 @@ class OfflineManager {
           }
         }
       } catch (error) {
-        log.error('Error executing offline action', error as Error, {
-          id: action.id,
-          type: action.type
-        });
+        log.error('Error executing offline action', error as Error, { id: action.id, type: action.type });
         
         action.retryCount++;
         if (action.retryCount < action.maxRetries) {
