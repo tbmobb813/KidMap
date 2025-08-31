@@ -40,7 +40,7 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
       
       if (!locationValidation.isValid) {
         log.warn('SafetyPanel received invalid location', { 
-          location: currentLocation,
+          // location: currentLocation, // Removed to fix type error
           errors: locationValidation.errors 
         });
         showToast('Location data may be inaccurate', 'warning');
@@ -116,10 +116,11 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
       // Validate location before sharing
       const locationValidation = validateLocation(currentLocation);
       if (!locationValidation.isValid) {
-        log.error('Invalid location data for sharing', { 
-          location: currentLocation,
-          errors: locationValidation.errors 
-        });
+        log.error('Invalid location data for sharing', new Error(JSON.stringify({
+          errors: locationValidation.errors,
+          latitude: currentLocation.latitude,
+          longitude: currentLocation.longitude
+        })));
         showToast('Location data is invalid', 'error');
         return;
       }
@@ -239,7 +240,7 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
 
         const checkInValidation = validatePhotoCheckIn(webCheckIn);
         if (!checkInValidation.isValid) {
-          log.error('Invalid web check-in data', { errors: checkInValidation.errors });
+          log.error('Invalid web check-in data: ' + JSON.stringify(checkInValidation.errors));
           showToast('Check-in data is invalid', 'error');
           return;
         }
@@ -339,7 +340,7 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
           // Validate check-in data before processing
           const checkInValidation = validatePhotoCheckIn(checkInData);
           if (!checkInValidation.isValid) {
-            log.error('Invalid photo check-in data', { errors: checkInValidation.errors });
+            log.error('Invalid photo check-in data', new Error(JSON.stringify(checkInValidation.errors)));
             showToast('Check-in data is invalid', 'error');
             return;
           }

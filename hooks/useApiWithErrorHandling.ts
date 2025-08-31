@@ -56,10 +56,7 @@ export function useApiWithErrorHandling<T>(
         }));
 
         if (showToastOnSuccess) {
-          showToast({
-            type: 'success',
-            message: customSuccessMessage || response.message || successMessage
-          });
+          showToast(customSuccessMessage || response.message || successMessage);
         }
 
         log.info('API call successful');
@@ -74,10 +71,7 @@ export function useApiWithErrorHandling<T>(
         }));
 
         if (showToastOnError) {
-          showToast({
-            type: 'error',
-            message: errorMessage
-          });
+          showToast(errorMessage);
         }
 
         log.warn('API call failed', { error: errorMessage });
@@ -94,14 +88,7 @@ export function useApiWithErrorHandling<T>(
       }));
 
       if (showToastOnError) {
-        showToast({
-          type: 'error',
-          message: errorInfo.message,
-          action: errorInfo.isNetworkError && retryable ? {
-            label: 'Retry',
-            onPress: () => execute(apiCall, customSuccessMessage)
-          } : undefined
-        });
+        showToast(errorInfo.message);
       }
 
       log.error('API call error', error as Error, {

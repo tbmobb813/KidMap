@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import SmartNotification from '@/components/SmartNotification';
 import Colors from '@/constants/colors';
-import { addInAppBannerListener } from '@/utils/notifications';
+import { addInAppBannerListener } from '@/utils/notification';
 
 type Banner = {
   id: string;

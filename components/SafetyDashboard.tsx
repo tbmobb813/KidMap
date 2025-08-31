@@ -39,7 +39,8 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
 }) => {
   const { settings, checkInRequests, safeZones } = useParentalStore();
   const { photoCheckIns } = useNavigationStore();
-  const { currentZoneStatus } = useSafeZoneMonitor();
+  const { getCurrentSafeZoneStatus } = useSafeZoneMonitor();
+  const currentZoneStatus = getCurrentSafeZoneStatus();
   const [showQuickActions, setShowQuickActions] = useState(true);
 
   // Calculate safety stats
@@ -91,7 +92,7 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
       onPress={onPress}
     >
       <View style={[styles.statIcon, { backgroundColor: `${color}20` }]}>
-        {React.cloneElement(icon as React.ReactElement, { 
+        {React.cloneElement(icon as React.ReactElement<any>, { 
           size: 20, 
           color 
         })}
@@ -117,7 +118,7 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
     color?: string;
   }) => (
     <Pressable style={[styles.quickActionButton, { backgroundColor: color }]} onPress={onPress}>
-      {React.cloneElement(icon as React.ReactElement, { 
+      {React.cloneElement(icon as React.ReactElement<any>, { 
         size: 20, 
         color: '#FFFFFF' 
       })}
@@ -148,15 +149,15 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
           {currentZoneStatus && (
             <View style={[
               styles.statusCard, 
-              { backgroundColor: currentZoneStatus.isInSafeZone ? '#E8F5E8' : '#FFF3E0' }
+              { backgroundColor: currentZoneStatus.inside.length > 0 ? '#E8F5E8' : '#FFF3E0' }
             ]}>
               <View style={[
                 styles.statusIndicator,
-                { backgroundColor: currentZoneStatus.isInSafeZone ? Colors.success : Colors.warning }
+                { backgroundColor: currentZoneStatus.inside.length > 0 ? Colors.success : Colors.warning }
               ]} />
               <Text style={styles.statusText}>
-                {currentZoneStatus.isInSafeZone 
-                  ? `You're in the ${currentZoneStatus.zoneName} safe zone` 
+                {currentZoneStatus.inside.length > 0
+                  ? `You're in the ${currentZoneStatus.inside[0]?.name ?? 'a'} safe zone`
                   : 'Outside safe zones - stay alert!'
                 }
               </Text>

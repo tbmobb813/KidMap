@@ -2,7 +2,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ReactNode } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Platform, View, Text } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -180,4 +180,9 @@ function RootLayoutNav() {
       <DevicePingHandler testId="device-ping-handler" />
     </>
   );
+}
+
+export interface AIJourneyCompanionProps {
+  showNetworkStatus?: boolean;
+  children: React.ReactNode;
 }
