@@ -12,6 +12,7 @@ import { withRetry, handleCameraError, handleLocationError, DEFAULT_RETRY_CONFIG
 import { log } from "@/utils/logger";
 import ErrorBoundary from "./ErrorBoundary";
 import { useToast } from "@/hooks/useToast";
+import { ValidationError } from '@/shared/types/errors'; // Adjust path as needed
 
 type SafetyPanelProps = {
   currentLocation?: {
@@ -211,15 +212,18 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
         return;
       }
 
-      // Validate location before proceeding
+     // Validate location before proceeding
       const locationValidation = validateLocation(currentLocation);
       if (!locationValidation.isValid) {
-        log.error('Invalid location for photo check-in', { 
-          errors: locationValidation.errors 
-        });
+        const myError: ValidationError = {
+          name: "ValidationError",
+          message: "Location validation failed",
+          errors: locationValidation.errors,
+        };
+        log.error('Invalid location for photo check-in', myError);
         Alert.alert('Location Error', 'Your location data appears to be invalid. Please try again.');
         return;
-      }
+      } 
 
       if (locationValidation.warnings && locationValidation.warnings.length > 0) {
         log.warn('Location warnings for photo check-in', { warnings: locationValidation.warnings });
