@@ -1,9 +1,9 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { Platform } from 'react-native';
 
 const API_BASE_URL = __DEV__
-  ? 'http://localhost:3000/api'
-  : 'https://your-production-api.com/api';
+  ? "http://localhost:3000/api"
+  : "https://your-production-api.com/api";
 
 const API_TIMEOUT = 10000; // 10 seconds
 
@@ -26,9 +26,9 @@ class ApiClient {
 
   private async loadAuthToken() {
     try {
-      this.authToken = await AsyncStorage.getItem('auth_token');
+      this.authToken = await AsyncStorage.getItem("auth_token");
     } catch (error) {
-      console.warn('Failed to load auth token:', error);
+      console.warn("Failed to load auth token:", error);
     }
   }
 
@@ -39,7 +39,7 @@ class ApiClient {
     const url = `${this.baseURL}${endpoint}`;
 
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...(options.headers as Record<string, string>),
     };
 
@@ -69,46 +69,46 @@ class ApiClient {
       clearTimeout(timeoutId);
 
       if (error instanceof Error) {
-        if (error.name === 'AbortError') {
-          throw new Error('Request timeout');
+        if (error.name === "AbortError") {
+          throw new Error("Request timeout");
         }
         throw error;
       }
 
-      throw new Error('Unknown error occurred');
+      throw new Error("Unknown error occurred");
     }
   }
 
   async get<T>(endpoint: string): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { method: 'GET' });
+    return this.request<T>(endpoint, { method: "GET" });
   }
 
   async post<T>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, {
-      method: 'POST',
+      method: "POST",
       body: data ? JSON.stringify(data) : undefined,
     });
   }
 
   async put<T>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, {
-      method: 'PUT',
+      method: "PUT",
       body: data ? JSON.stringify(data) : undefined,
     });
   }
 
   async delete<T>(endpoint: string): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { method: 'DELETE' });
+    return this.request<T>(endpoint, { method: "DELETE" });
   }
 
   setAuthToken(token: string) {
     this.authToken = token;
-    AsyncStorage.setItem('auth_token', token);
+    AsyncStorage.setItem("auth_token", token);
   }
 
   clearAuthToken() {
     this.authToken = null;
-    AsyncStorage.removeItem('auth_token');
+    AsyncStorage.removeItem("auth_token");
   }
 }
 
@@ -117,7 +117,11 @@ export const apiClient = new ApiClient(API_BASE_URL);
 // Specific API functions
 export const transitApi = {
   getRoutes: (from: string, to: string) =>
-    apiClient.get(`/transit/routes?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`),
+    apiClient.get(
+      `/transit/routes?from=${encodeURIComponent(from)}&to=${encodeURIComponent(
+        to
+      )}`
+    ),
 
   getLiveArrivals: (stopId: string) =>
     apiClient.get(`/transit/arrivals/${stopId}`),
@@ -128,37 +132,48 @@ export const transitApi = {
 
 export const placesApi = {
   search: (query: string, location?: { lat: number; lng: number }) =>
-    apiClient.get(`/places/search?q=${encodeURIComponent(query)}${location ? `&lat=${location.lat}&lng=${location.lng}` : ''}`),
+    apiClient.get(
+      `/places/search?q=${encodeURIComponent(query)}${
+        location ? `&lat=${location.lat}&lng=${location.lng}` : ""
+      }`
+    ),
 
-  getDetails: (placeId: string) =>
-    apiClient.get(`/places/${placeId}`),
+  getDetails: (placeId: string) => apiClient.get(`/places/${placeId}`),
 
   getNearby: (lat: number, lng: number, type?: string) =>
-    apiClient.get(`/places/nearby?lat=${lat}&lng=${lng}${type ? `&type=${type}` : ''}`),
+    apiClient.get(
+      `/places/nearby?lat=${lat}&lng=${lng}${type ? `&type=${type}` : ""}`
+    ),
 };
 
 export const userApi = {
-  getProfile: () => apiClient.get('/user/profile'),
-  updateProfile: (data: any) => apiClient.put('/user/profile', data),
-  getAchievements: () => apiClient.get('/user/achievements'),
+  getProfile: () => apiClient.get("/user/profile"),
+  updateProfile: (data: any) => apiClient.put("/user/profile", data),
+  getAchievements: () => apiClient.get("/user/achievements"),
   checkIn: (placeId: string, photo?: string) =>
-    apiClient.post('/user/checkin', { placeId, photo }),
+    apiClient.post("/user/checkin", { placeId, photo }),
 };
 
 // Offline support
 export const offlineStorage = {
   async cacheResponse<T>(key: string, data: T): Promise<void> {
     try {
-      await AsyncStorage.setItem(`cache_${key}`, JSON.stringify({
-        data,
-        timestamp: Date.now(),
-      }));
+      await AsyncStorage.setItem(
+        `cache_${key}`,
+        JSON.stringify({
+          data,
+          timestamp: Date.now(),
+        })
+      );
     } catch (error) {
-      console.warn('Failed to cache response:', error);
+      console.warn("Failed to cache response:", error);
     }
   },
 
-  async getCachedResponse<T>(key: string, maxAge: number = 5 * 60 * 1000): Promise<T | null> {
+  async getCachedResponse<T>(
+    key: string,
+    maxAge: number = 5 * 60 * 1000
+  ): Promise<T | null> {
     try {
       const cached = await AsyncStorage.getItem(`cache_${key}`);
       if (!cached) return null;
@@ -171,7 +186,7 @@ export const offlineStorage = {
 
       return data;
     } catch (error) {
-      console.warn('Failed to get cached response:', error);
+      console.warn("Failed to get cached response:", error);
       return null;
     }
   },
@@ -179,10 +194,10 @@ export const offlineStorage = {
   async clearCache(): Promise<void> {
     try {
       const keys = await AsyncStorage.getAllKeys();
-      const cacheKeys = keys.filter(key => key.startsWith('cache_'));
+      const cacheKeys = keys.filter((key) => key.startsWith("cache_"));
       await AsyncStorage.multiRemove(cacheKeys);
     } catch (error) {
-      console.warn('Failed to clear cache:', error);
+      console.warn("Failed to clear cache:", error);
     }
   },
 };
@@ -206,13 +221,16 @@ export const createNetworkAwareApi = <T extends any[], R>(
       return response;
     } catch (error) {
       // Fallback to cache on network error
-      console.warn('Network request failed, trying cache:', error);
+      console.warn("Network request failed, trying cache:", error);
 
-      const cached = await offlineStorage.getCachedResponse<ApiResponse<R>>(cacheKey, maxAge);
+      const cached = await offlineStorage.getCachedResponse<ApiResponse<R>>(
+        cacheKey,
+        maxAge
+      );
       if (cached) {
         return {
           ...cached,
-          message: 'Showing cached data (offline)',
+          message: "Showing cached data (offline)",
         };
       }
 
@@ -220,3 +238,15 @@ export const createNetworkAwareApi = <T extends any[], R>(
     }
   };
 };
+
+export async function checkBackendHealth(): Promise<"up" | "down"> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/health`);
+    if (response.ok) {
+      return "up";
+    }
+    return "down";
+  } catch (error) {
+    return "down";
+  }
+}

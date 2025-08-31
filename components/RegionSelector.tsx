@@ -1,10 +1,10 @@
-import { MapPin, Check } from "lucide-react-native";
+import { Check, MapPin } from "lucide-react-native";
 import React from "react";
-import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { useTheme } from "@/constants/theme";
 import { RegionConfig } from "@/types/region";
-import { tint } from "@/utils/color";
+import { tint } from "@/utils/color/color";
 
 type RegionSelectorProps = {
   regions: RegionConfig[];

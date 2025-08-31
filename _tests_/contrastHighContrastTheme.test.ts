@@ -1,5 +1,5 @@
 import { palettes } from '@/constants/colors';
-import { contrastRatio } from '@/utils/contrast';
+import { contrastRatio } from '@/utils/color/contrast';
 
 // Smoke test to ensure critical text/background pairs in highContrast palette
 // meet or exceed recommended WCAG ratios (>= 4.5:1 for normal text, >=3:1 for UI large/bold).

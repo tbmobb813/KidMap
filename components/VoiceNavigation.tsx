@@ -1,6 +1,6 @@
-import { Mic, MicOff, Volume2, ArrowLeft, ArrowRight } from "lucide-react-native";
+import { ArrowLeft, ArrowRight, Mic, MicOff, Volume2 } from "lucide-react-native";
 import React, { useEffect, useMemo, useState } from "react";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import Toast from './Toast';
 
@@ -8,7 +8,7 @@ import { useTheme } from "@/constants/theme";
 import { useToast } from '@/hooks/useToast';
 import { useNavigationStore } from '@/stores/navigationStore';
 import { TransitStep } from '@/types/navigation';
-import { announce } from '@/utils/accessibility';
+import { announce } from '@/utils/accessibility/accessibility';
 
 type VoiceNavigationProps = {
   /** Legacy single step string (fallback if steps not provided) */

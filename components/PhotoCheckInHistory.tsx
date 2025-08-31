@@ -1,11 +1,11 @@
-import { CheckCircle, XCircle, MapPin, Clock } from "lucide-react-native";
+import { CheckCircle, Clock, MapPin, XCircle } from "lucide-react-native";
 import React from "react";
-import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { useTheme } from "@/constants/theme";
 import { useNavigationStore } from "@/stores/navigationStore";
-import { tint } from "@/utils/color";
-import { formatDistance, getLocationAccuracyDescription } from "@/utils/locationUtils";
+import { tint } from "@/utils/color/color";
+import { formatDistance, getLocationAccuracyDescription } from "@/utils/location/locationUtils";
 
 const PhotoCheckInHistory: React.FC = () => {
   const { photoCheckIns } = useNavigationStore();

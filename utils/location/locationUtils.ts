@@ -1,3 +1,38 @@
+// Location validation utility
+export function validateLocation(location: {
+  latitude: number;
+  longitude: number;
+}) {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  if (
+    typeof location.latitude !== "number" ||
+    typeof location.longitude !== "number" ||
+    isNaN(location.latitude) ||
+    isNaN(location.longitude)
+  ) {
+    errors.push("Latitude and longitude must be valid numbers");
+  } else {
+    if (location.latitude < -90 || location.latitude > 90) {
+      errors.push("Latitude must be between -90 and 90");
+    }
+    if (location.longitude < -180 || location.longitude > 180) {
+      errors.push("Longitude must be between -180 and 180");
+    }
+    // Warn if location is near zero (possible default/fake value)
+    if (
+      Math.abs(location.latitude) < 0.0001 &&
+      Math.abs(location.longitude) < 0.0001
+    ) {
+      warnings.push("Location appears to be near (0,0)");
+    }
+  }
+  return {
+    isValid: errors.length === 0,
+    errors,
+    warnings,
+  };
+}
 /**
  * Calculate the distance between two coordinates using the Haversine formula
  * @param lat1 Latitude of first point
@@ -42,11 +77,16 @@ export function verifyLocationProximity(
   targetLon: number,
   radiusMeters: number = 100
 ): { isWithinRadius: boolean; distance: number } {
-  const distance = calculateDistance(currentLat, currentLon, targetLat, targetLon);
-  
+  const distance = calculateDistance(
+    currentLat,
+    currentLon,
+    targetLat,
+    targetLon
+  );
+
   return {
     isWithinRadius: distance <= radiusMeters,
-    distance: Math.round(distance)
+    distance: Math.round(distance),
   };
 }
 

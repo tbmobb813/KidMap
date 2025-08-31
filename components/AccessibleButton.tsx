@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { Pressable, Text, StyleSheet, ViewStyle, TextStyle } from "react-native";
+import { Pressable, StyleSheet, Text, TextStyle, ViewStyle } from "react-native";
 
 import { theme } from "@/constants/theme";
-import { getAccessibilityLabel, getAccessibilityHint } from "@/utils/accessibility";
-import { auditTouchTarget } from "@/utils/touchTargetAudit";
+import { getAccessibilityHint, getAccessibilityLabel } from "@/utils/accessibility/accessibility";
+import { auditTouchTarget } from "@/utils/accessibility/touchTargetAudit";
 
 type AccessibleButtonProps = {
   title: string;

@@ -82,7 +82,7 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
         Alert.alert('Success', 'Safe zone created successfully');
       }
       resetForm();
-    } catch (error) {
+    } catch {
       Alert.alert('Error', 'Failed to save safe zone');
     }
   };

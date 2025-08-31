@@ -15,7 +15,7 @@ import { useTheme } from "@/constants/theme";
 import ParentDashboard from "@/modules/safety/components/ParentDashboard";
 import { useParentalStore } from "@/modules/safety/stores/parentalStore";
 import { useRegionStore } from "@/stores/regionStore";
-import { transitDataUpdater } from "@/utils/transitDataUpdater";
+import { transitDataUpdater } from "@/utils/transit/transitDataUpdater";
 
 type SettingItemProps = {
   icon: React.ReactNode;

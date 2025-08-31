@@ -1,10 +1,10 @@
-import { Train, Car, Bike, MapPin } from "lucide-react-native";
+import { Bike, Car, MapPin, Train } from "lucide-react-native";
 import React from "react";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { useTheme } from "@/constants/theme";
 import { TravelMode } from "@/types/navigation";
-import { tint } from "@/utils/color";
+import { tint } from "@/utils/color/color";
 
 type TravelModeSelectorProps = {
   selectedMode: TravelMode;

@@ -2,7 +2,6 @@ import {
   Shield, 
   MapPin, 
   Camera, 
-  Clock, 
   CheckCircle, 
   AlertTriangle, 
   Phone, 
@@ -14,6 +13,8 @@ import {
 } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Pressable, Alert, Image } from 'react-native';
+
+import { theme } from '../constants/theme';
 
 import DevicePingHistory from '@/components/DevicePingHistory';
 import { SafeZoneActivityLog } from '@/components/SafeZoneActivityLog';
@@ -264,7 +265,7 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
         
         {safeZones.length === 0 ? (
           <View style={styles.emptyStateCard}>
-            <Shield size={48} color={Colors.textLight} />
+            <Shield size={48} color={theme.colors.textSecondary} />
             <Text style={styles.emptyStateTitle}>No Safe Zones</Text>
             <Text style={styles.emptyStateSubtitle}>
               Create safe zones to monitor when your child enters or leaves specific areas
@@ -280,7 +281,7 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
         ) : (
           safeZones.map(zone => (
             <View key={zone.id} style={styles.safeZoneCard}>
-              <Shield size={20} color={zone.isActive ? Colors.success : Colors.textLight} />
+              <Shield size={20} color={zone.isActive ? Colors.success : theme.colors.textSecondary} />
               <View style={styles.safeZoneContent}>
                 <Text style={styles.safeZoneTitle}>{zone.name}</Text>
                 <Text style={styles.safeZoneSubtitle}>
@@ -358,16 +359,16 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
           <Text style={styles.headerTitle}>Parent Dashboard</Text>
         </View>
         <Pressable style={styles.exitButton} onPress={onExit}>
-          <LogOut size={20} color={Colors.textLight} />
+          <LogOut size={20} color={theme.colors.textSecondary} />
         </Pressable>
       </View>
 
       <View style={styles.tabs}>
-        <TabButton id="overview" title="Overview" icon={<Eye size={16} color={activeTab === 'overview' ? '#FFFFFF' : Colors.textLight} />} />
-        <TabButton id="checkins" title="Check-ins" icon={<Camera size={16} color={activeTab === 'checkins' ? '#FFFFFF' : Colors.textLight} />} />
-        <TabButton id="safezones" title="Safe Zones" icon={<Shield size={16} color={activeTab === 'safezones' ? '#FFFFFF' : Colors.textLight} />} />
-        <TabButton id="pings" title="Device Pings" icon={<Phone size={16} color={activeTab === 'pings' ? '#FFFFFF' : Colors.textLight} />} />
-        <TabButton id="settings" title="Settings" icon={<Settings size={16} color={activeTab === 'settings' ? '#FFFFFF' : Colors.textLight} />} />
+        <TabButton id="overview" title="Overview" icon={<Eye size={16} color={activeTab === 'overview' ? '#FFFFFF' : theme.colors.textSecondary} />} />
+        <TabButton id="checkins" title="Check-ins" icon={<Camera size={16} color={activeTab === 'checkins' ? '#FFFFFF' : theme.colors.textSecondary} />} />
+        <TabButton id="safezones" title="Safe Zones" icon={<Shield size={16} color={activeTab === 'safezones' ? '#FFFFFF' : theme.colors.textSecondary} />} />
+        <TabButton id="pings" title="Device Pings" icon={<Phone size={16} color={activeTab === 'pings' ? '#FFFFFF' : theme.colors.textSecondary} />} />
+        <TabButton id="settings" title="Settings" icon={<Settings size={16} color={activeTab === 'settings' ? '#FFFFFF' : theme.colors.textSecondary} />} />
       </View>
 
       {activeTab === 'safezones' ? (
@@ -432,7 +433,7 @@ const styles = StyleSheet.create({
   tabText: {
     fontSize: 10,
     fontWeight: '600',
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
   },
   activeTabText: {
     color: '#FFFFFF',
@@ -500,7 +501,7 @@ const styles = StyleSheet.create({
   },
   alertSubtitle: {
     fontSize: 12,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
   },
   approveButton: {
     backgroundColor: Colors.success,
@@ -532,7 +533,7 @@ const styles = StyleSheet.create({
   },
   locationSubtitle: {
     fontSize: 14,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
   },
   checkInCard: {
     flexDirection: 'row',
@@ -554,12 +555,12 @@ const styles = StyleSheet.create({
   },
   checkInTime: {
     fontSize: 14,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
     marginBottom: 2,
   },
   checkInLocation: {
     fontSize: 12,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
   },
   checkInPhoto: {
     width: 50,
@@ -586,7 +587,7 @@ const styles = StyleSheet.create({
   },
   safeZoneSubtitle: {
     fontSize: 14,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
   },
   activityCard: {
     flexDirection: 'row',
@@ -613,7 +614,7 @@ const styles = StyleSheet.create({
   },
   activityTime: {
     fontSize: 12,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
   },
   settingCard: {
     backgroundColor: Colors.card,
@@ -629,12 +630,12 @@ const styles = StyleSheet.create({
   },
   settingSubtitle: {
     fontSize: 14,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
     marginBottom: 4,
   },
   emptyText: {
     fontSize: 14,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     fontStyle: 'italic',
     paddingVertical: 20,
@@ -659,7 +660,7 @@ const styles = StyleSheet.create({
   },
   emptyStateSubtitle: {
     fontSize: 14,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     marginBottom: 24,
     lineHeight: 20,
@@ -680,7 +681,7 @@ const styles = StyleSheet.create({
   },
   safeZoneNotifications: {
     fontSize: 12,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
 });

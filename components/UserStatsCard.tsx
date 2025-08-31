@@ -1,10 +1,10 @@
-import { Trophy, MapPin, Zap, Target } from "lucide-react-native";
+import { MapPin, Target, Trophy, Zap } from "lucide-react-native";
 import React from "react";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { useTheme } from "@/constants/theme";
 import { UserStats } from "@/types/gamification";
-import { tint } from "@/utils/color";
+import { tint } from "@/utils/color/color";
 
 type UserStatsCardProps = {
   stats: UserStats;

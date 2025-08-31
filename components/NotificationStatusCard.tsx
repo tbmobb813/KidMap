@@ -1,11 +1,11 @@
-import { Bell, AlertTriangle, ExternalLink, CheckCircle } from 'lucide-react-native';
+import { AlertTriangle, Bell, CheckCircle, ExternalLink } from 'lucide-react-native';
 import React from 'react';
-import { StyleSheet, Text, View, Pressable, Platform } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { showDevelopmentBuildRecommendation } from '../utils/notification';
+import { showDevelopmentBuildRecommendation } from '../utils/notification/notification';
 
 import { useTheme } from '@/constants/theme';
-import { tint } from '@/utils/color';
+import { tint } from '@/utils/color/color';
 
 
 type NotificationStatusCardProps = {

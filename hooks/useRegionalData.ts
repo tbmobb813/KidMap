@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 import { useRegionStore } from "@/stores/regionStore";
-import { formatCurrency, formatDistance, formatTemperature, getLocalizedTime } from "@/utils/regionUtils";
+import { formatCurrency, formatDistance, formatTemperature, getLocalizedTime } from "@/utils/location/regionUtils";
 
 export function useRegionalData() {
   const { currentRegion, userPreferences } = useRegionStore();

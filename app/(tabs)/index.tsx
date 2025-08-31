@@ -24,7 +24,7 @@ import { useCategoryStore } from "@/stores/categoryStore";
 import { useGamificationStore } from "@/stores/gamificationStore";
 import { useNavigationStore } from "@/stores/navigationStore";
 import { PlaceCategory, Place } from "@/types/navigation";
-import { trackScreenView, trackUserAction } from "@/utils/analytics";
+import { trackScreenView, trackUserAction } from "@/utils/analytics/analytics";
 
 type SearchSuggestion = {
   id: string;

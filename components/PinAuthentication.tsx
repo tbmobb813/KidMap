@@ -1,12 +1,12 @@
-import { Lock, Eye, EyeOff } from 'lucide-react-native';
-import React, { useState, useMemo } from 'react';
-import { StyleSheet, Text, View, Pressable, TextInput } from 'react-native';
+import { Eye, EyeOff, Lock } from 'lucide-react-native';
+import React, { useMemo, useState } from 'react';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import Toast from './Toast';
 
 import { useTheme } from '@/constants/theme';
 import { useToast } from '@/hooks/useToast';
-import { tint } from '@/utils/color';
+import { tint } from '@/utils/color/color';
 
 
 type PinAuthenticationProps = {

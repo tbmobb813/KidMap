@@ -1,6 +1,6 @@
-import { Platform } from 'react-native';
+import { Platform } from "react-native";
 
-import Config from './config';
+import Config from "../config/config";
 
 export enum LogLevel {
   DEBUG = 0,
@@ -22,10 +22,14 @@ class Logger {
   private maxLogs = 1000;
   private minLevel = Config.isDev ? LogLevel.DEBUG : LogLevel.INFO;
 
-  private formatMessage(level: LogLevel, message: string, context?: Record<string, any>): string {
+  private formatMessage(
+    level: LogLevel,
+    message: string,
+    context?: Record<string, any>
+  ): string {
     const timestamp = new Date().toISOString();
     const levelStr = LogLevel[level];
-    const contextStr = context ? ` ${JSON.stringify(context)}` : '';
+    const contextStr = context ? ` ${JSON.stringify(context)}` : "";
     return `[${timestamp}] ${levelStr}: ${message}${contextStr}`;
   }
 
@@ -33,7 +37,12 @@ class Logger {
     return level >= this.minLevel;
   }
 
-  private addLog(level: LogLevel, message: string, context?: Record<string, any>, error?: Error) {
+  private addLog(
+    level: LogLevel,
+    message: string,
+    context?: Record<string, any>,
+    error?: Error
+  ) {
     if (!this.shouldLog(level)) return;
 
     const logEntry: LogEntry = {
@@ -54,7 +63,7 @@ class Logger {
     // Console output in development
     if (Config.isDev) {
       const formattedMessage = this.formatMessage(level, message, context);
-      
+
       switch (level) {
         case LogLevel.DEBUG:
           console.log(formattedMessage);
@@ -81,9 +90,9 @@ class Logger {
     try {
       // In a real app, you'd send to services like Sentry, Bugsnag, etc.
       // For now, we'll just store it locally
-      console.error('Production Error:', logEntry, error);
+      console.error("Production Error:", logEntry, error);
     } catch (e) {
-      console.error('Failed to send crash report:', e);
+      console.error("Failed to send crash report:", e);
     }
   }
 
@@ -119,7 +128,7 @@ class Logger {
   // Get logs for debugging
   getLogs(level?: LogLevel): LogEntry[] {
     if (level !== undefined) {
-      return this.logs.filter(log => log.level >= level);
+      return this.logs.filter((log) => log.level >= level);
     }
     return [...this.logs];
   }
@@ -132,8 +141,8 @@ class Logger {
   // Export logs for support
   exportLogs(): string {
     return this.logs
-      .map(log => this.formatMessage(log.level, log.message, log.context))
-      .join('\n');
+      .map((log) => this.formatMessage(log.level, log.message, log.context))
+      .join("\n");
   }
 }
 
@@ -141,25 +150,28 @@ export const logger = new Logger();
 
 // Convenience functions
 export const log = {
-  debug: (message: string, context?: Record<string, any>) => logger.debug(message, context),
-  info: (message: string, context?: Record<string, any>) => logger.info(message, context),
-  warn: (message: string, context?: Record<string, any>) => logger.warn(message, context),
-  error: (message: string, error?: Error, context?: Record<string, any>) => logger.error(message, error, context),
+  debug: (message: string, context?: Record<string, any>) =>
+    logger.debug(message, context),
+  info: (message: string, context?: Record<string, any>) =>
+    logger.info(message, context),
+  warn: (message: string, context?: Record<string, any>) =>
+    logger.warn(message, context),
+  error: (message: string, error?: Error, context?: Record<string, any>) =>
+    logger.error(message, error, context),
   time: (label: string) => logger.time(label),
   timeEnd: (label: string) => logger.timeEnd(label),
 };
 
 // Global error handler
-if (Platform.OS !== 'web') {
+if (Platform.OS !== "web") {
   const originalHandler = ErrorUtils.getGlobalHandler();
-  
+
   ErrorUtils.setGlobalHandler((error, isFatal) => {
-    logger.error(
-      `Global ${isFatal ? 'Fatal' : 'Non-Fatal'} Error`,
-      error,
-      { isFatal, stack: error.stack }
-    );
-    
+    logger.error(`Global ${isFatal ? "Fatal" : "Non-Fatal"} Error`, error, {
+      isFatal,
+      stack: error.stack,
+    });
+
     // Call original handler
     if (originalHandler) {
       originalHandler(error, isFatal);

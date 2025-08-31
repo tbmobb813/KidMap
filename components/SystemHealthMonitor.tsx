@@ -1,10 +1,10 @@
 import { AlertTriangle, CheckCircle, RefreshCw } from 'lucide-react-native';
-import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, Text, View, Pressable, Platform } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useTheme } from '@/constants/theme';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
-import { tint } from '@/utils/color';
+import { tint } from '@/utils/color/color';
 
 type SystemHealthMonitorProps = {
   testId?: string;

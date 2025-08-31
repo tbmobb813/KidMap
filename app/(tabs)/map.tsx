@@ -1,6 +1,6 @@
-import { Navigation, MapPin, Search } from "lucide-react-native";
-import React, { useEffect, useCallback, useMemo, useRef } from "react";
-import { StyleSheet, Text, View, Pressable, Dimensions, Platform, FlatList, ListRenderItem } from "react-native";
+import { MapPin, Navigation, Search } from "lucide-react-native";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import { Dimensions, FlatList, ListRenderItem, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 
 import FeatureErrorBoundary from "@/components/FeatureErrorBoundary";
 import LoadingSpinner from '@/components/LoadingSpinner';
@@ -15,7 +15,7 @@ import SafetyPanel from "@/modules/safety/components/SafetyPanel";
 import { nav } from "@/shared/navigation/nav";
 import { useNavigationStore } from "@/stores/navigationStore";
 import { Route } from "@/types/navigation";
-import { mark, measure } from "@/utils/performanceMarks";
+import { mark, measure } from "@/utils/performance/performanceMarks";
 
 const { height: screenHeight } = Dimensions.get('window');
 

@@ -1,7 +1,10 @@
 import * as ImagePicker from "expo-image-picker";
-import { Shield, Phone, MessageCircle, MapPin, AlertTriangle, Camera, CheckCircle, XCircle } from "lucide-react-native";
+import { AlertTriangle, Camera, MapPin, MessageCircle, Phone, Shield } from "lucide-react-native";
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Pressable, Alert, Linking, Platform } from "react-native";
+import { Alert, Linking, Platform, Pressable, StyleSheet, Text, View } from "react-native";
+
+import { DEFAULT_RETRY_CONFIG, handleCameraError, handleLocationError, withRetry } from "../utils/error/errorHandling";
+import { log } from "../utils/error/logger";
 
 import ErrorBoundary from "./ErrorBoundary";
 
@@ -10,10 +13,9 @@ import { useToast } from "@/hooks/useToast";
 import { useGamificationStore } from "@/stores/gamificationStore";
 import { useNavigationStore } from "@/stores/navigationStore";
 import { useParentalStore } from "@/stores/parentalStore";
-import { withRetry, handleCameraError, handleLocationError, DEFAULT_RETRY_CONFIG } from "@/utils/errorHandling";
-import { formatDistance, getLocationAccuracyDescription } from "@/utils/locationUtils";
-import { log } from "@/utils/logger";
-import { validateLocation, validatePhotoCheckIn, logValidationResult } from "@/utils/validation";
+import { formatDistance, getLocationAccuracyDescription, validateLocation } from "@/utils/location/locationUtils";
+import { validatePhotoCheckIn } from "@/utils/photoCheckInValidation";
+import { logValidationResult } from "@/utils/validation/validation";
 
 
 type SafetyPanelProps = {
@@ -24,6 +26,8 @@ type SafetyPanelProps = {
   currentPlace?: {
     id: string;
     name: string;
+    latitude?: number;
+    longitude?: number;
   };
 };
 
@@ -39,7 +43,7 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
   React.useEffect(() => {
     if (currentLocation) {
       const locationValidation = validateLocation(currentLocation);
-      logValidationResult('SafetyPanel currentLocation', locationValidation);
+      logValidationResult('SafetyPanel currentLocation', locationValidation, log);
       
       if (!locationValidation.isValid) {
         log.warn('SafetyPanel received invalid location', { 
@@ -119,10 +123,7 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
       // Validate location before sharing
       const locationValidation = validateLocation(currentLocation);
       if (!locationValidation.isValid) {
-        log.error('Invalid location data for sharing', { 
-          location: currentLocation,
-          errors: locationValidation.errors 
-        });
+        log.error('Invalid location data for sharing');
         showToast('Location data is invalid', 'error');
         return;
       }
@@ -216,10 +217,7 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
       // Validate location before proceeding
       const locationValidation = validateLocation(currentLocation);
       if (!locationValidation.isValid) {
-        log.error('Invalid location for photo check-in', { 
-          location: currentLocation,
-          errors: locationValidation.errors 
-        });
+        log.error('Invalid location for photo check-in');
         Alert.alert('Location Error', 'Your location data appears to be invalid. Please try again.');
         return;
       }
@@ -230,42 +228,53 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
       }
 
       if (Platform.OS === 'web') {
-        // Web fallback with validation
-        const webCheckIn = {
-          placeId: currentPlace.id,
-          placeName: currentPlace.name,
-          photoUrl: "https://via.placeholder.com/300x200?text=Check-in+Photo",
-          timestamp: Date.now(),
-          notes: "I made it here safely!",
-          location: currentLocation
+        // Web fallback: prompt user to upload a photo
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = async (e: any) => {
+          const file = e.target.files[0];
+          if (!file) {
+            showToast('No photo selected', 'warning');
+            return;
+          }
+          const photoUrl = URL.createObjectURL(file);
+          const webCheckIn = {
+            placeId: currentPlace.id,
+            placeName: currentPlace.name,
+            photoUrl,
+            timestamp: Date.now(),
+            notes: "I made it here safely!",
+            location: currentLocation
+          };
+          const checkInValidation = validatePhotoCheckIn(webCheckIn);
+          if (!checkInValidation.isValid) {
+            log.error('Invalid web check-in data');
+            showToast('Check-in data is invalid', 'error');
+            return;
+          }
+          // Use actual place coordinates if available
+          const placeCoordinates = currentPlace?.latitude && currentPlace?.longitude
+            ? { latitude: currentPlace.latitude, longitude: currentPlace.longitude }
+            : { latitude: currentLocation.latitude, longitude: currentLocation.longitude };
+          try {
+            await withRetry(
+              () => Promise.resolve(addLocationVerifiedPhotoCheckIn(
+                webCheckIn,
+                currentLocation,
+                placeCoordinates
+              )),
+              DEFAULT_RETRY_CONFIG.storage,
+              'Web photo check-in'
+            );
+            showToast('Check-in recorded successfully!', 'success');
+            log.info('Web photo check-in completed', { placeId: currentPlace.id });
+          } catch (error) {
+            log.error('Web photo check-in failed', error as Error);
+            showToast('Failed to record check-in', 'error');
+          }
         };
-
-        const checkInValidation = validatePhotoCheckIn(webCheckIn);
-        if (!checkInValidation.isValid) {
-          log.error('Invalid web check-in data', { errors: checkInValidation.errors });
-          showToast('Check-in data is invalid', 'error');
-          return;
-        }
-
-        const placeCoordinates = { latitude: 40.7128, longitude: -74.0060 }; // Default NYC coordinates
-        
-        try {
-          await withRetry(
-            () => Promise.resolve(addLocationVerifiedPhotoCheckIn(
-              webCheckIn,
-              currentLocation,
-              placeCoordinates
-            )),
-            DEFAULT_RETRY_CONFIG.storage,
-            'Web photo check-in'
-          );
-          
-          showToast('Check-in recorded successfully!', 'success');
-          log.info('Web photo check-in completed', { placeId: currentPlace.id });
-        } catch (error) {
-          log.error('Web photo check-in failed', error as Error);
-          showToast('Failed to record check-in', 'error');
-        }
+        input.click();
         return;
       }
 
@@ -342,14 +351,15 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
           // Validate check-in data before processing
           const checkInValidation = validatePhotoCheckIn(checkInData);
           if (!checkInValidation.isValid) {
-            log.error('Invalid photo check-in data', { errors: checkInValidation.errors });
+            log.error('Invalid photo check-in data');
             showToast('Check-in data is invalid', 'error');
             return;
           }
 
-          // For demo purposes, we'll use mock coordinates for the place
-          // In a real app, this would come from the place data
-          const placeCoordinates = { latitude: 40.7128, longitude: -74.0060 }; // Default NYC coordinates
+          // Use actual place coordinates if available
+          const placeCoordinates = currentPlace?.latitude && currentPlace?.longitude
+            ? { latitude: currentPlace.latitude, longitude: currentPlace.longitude }
+            : { latitude: currentLocation.latitude, longitude: currentLocation.longitude };
           
           let verification;
           try {

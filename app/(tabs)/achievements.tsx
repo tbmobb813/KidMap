@@ -1,12 +1,12 @@
-import { Trophy, Star, Target, Calendar } from "lucide-react-native";
+import { Calendar, Star, Target, Trophy } from "lucide-react-native";
 import React, { useState } from "react";
-import { StyleSheet, Text, View, ScrollView, Pressable, Dimensions, Platform } from "react-native";
+import { Dimensions, Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import AchievementBadge from "@/components/AchievementBadge";
 import UserStatsCard from "@/components/UserStatsCard";
 import { useTheme } from "@/constants/theme";
 import { useGamificationStore } from "@/stores/gamificationStore";
-import { tint } from "@/utils/color";
+import { tint } from "@/utils/color/color";
 
 const { width: screenWidth } = Dimensions.get('window');
 

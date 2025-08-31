@@ -1,10 +1,10 @@
-import { Heart, Star, MapPin, Zap } from 'lucide-react-native';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Pressable, Animated } from 'react-native';
+import { Heart, MapPin, Star, Zap } from 'lucide-react-native';
+import React, { useEffect, useState } from 'react';
+import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useTheme } from '@/constants/theme';
 import { useGamificationStore } from '@/stores/gamificationStore';
-import { tint } from '@/utils/color';
+import { tint } from '@/utils/color/color';
 
 type PetType = 'dragon' | 'unicorn' | 'robot' | 'phoenix';
 

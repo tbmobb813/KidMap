@@ -1,15 +1,41 @@
-import { 
-  Home, GraduationCap, BookOpen, Trees, ShoppingBag, Pizza, Users, Heart, MapPin,
-  Car, Bike, Bus, Train, Plane, Hospital, Church, Building, Gamepad2, Music,
-  Camera, Gift, Coffee, Apple, Dumbbell, Palette, Star, Sun, Moon, Cloud,
-  Umbrella, Flower
+import {
+    Apple,
+    Bike,
+    BookOpen,
+    Building,
+    Bus,
+    Camera,
+    Car,
+    Church,
+    Cloud,
+    Coffee,
+    Dumbbell,
+    Flower,
+    Gamepad2,
+    Gift,
+    GraduationCap,
+    Heart,
+    Home,
+    Hospital,
+    MapPin,
+    Moon,
+    Music,
+    Palette,
+    Pizza,
+    Plane,
+    ShoppingBag,
+    Star, Sun,
+    Train,
+    Trees,
+    Umbrella,
+    Users
 } from "lucide-react-native";
 import React, { useEffect } from "react";
-import { StyleSheet, Text, Pressable, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { useTheme } from '@/constants/theme';
-import { PlaceCategory, CustomCategory } from "@/types/navigation";
-import { auditTouchTarget } from "@/utils/touchTargetAudit";
+import { CustomCategory, PlaceCategory } from "@/types/navigation";
+import { auditTouchTarget } from "@/utils/accessibility/touchTargetAudit";
 
 type CategoryButtonProps = {
   category?: PlaceCategory;
