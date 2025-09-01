@@ -219,9 +219,9 @@ export const createNetworkAwareApi = <T extends any[], R>(
       }
 
       return response;
-    } catch (error) {
+    } catch {
       // Fallback to cache on network error
-      console.warn("Network request failed, trying cache:", error);
+      console.warn("Network request failed, trying cache");
 
       const cached = await offlineStorage.getCachedResponse<ApiResponse<R>>(
         cacheKey,
@@ -234,7 +234,7 @@ export const createNetworkAwareApi = <T extends any[], R>(
         };
       }
 
-      throw error;
+      throw new Error("Network error and no cache available");
     }
   };
 };

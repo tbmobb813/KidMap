@@ -81,104 +81,111 @@ export const useSafeZoneMonitor = () => {
   }, [currentLocation, safeZones]);
 
   // Send notification for safe zone events
-  const sendSafeZoneNotification = useCallback(async (event: SafeZoneEvent) => {
-    if (!settings.safeZoneAlerts) return;
+  const sendSafeZoneNotification = useCallback(
+    async (event: SafeZoneEvent) => {
+      if (!settings.safeZoneAlerts) return;
 
-    const { safeZone, type } = event;
-    const shouldNotify =
-      type === "entry"
-        ? safeZone.notifications.onEntry
-        : safeZone.notifications.onExit;
+      const { safeZone, type } = event;
+      const shouldNotify =
+        type === "entry"
+          ? safeZone.notifications.onEntry
+          : safeZone.notifications.onExit;
 
-    if (!shouldNotify) return;
+      if (!shouldNotify) return;
 
-    // Prevent spam notifications (minimum 5 minutes between same zone notifications)
-    const lastTime =
-      lastNotificationTime.current[`${safeZone.id}_${type}`] || 0;
-    const now = Date.now();
-    if (now - lastTime < 5 * 60 * 1000) return;
+      // Prevent spam notifications (minimum 5 minutes between same zone notifications)
+      const lastTime =
+        lastNotificationTime.current[`${safeZone.id}_${type}`] || 0;
+      const now = Date.now();
+      if (now - lastTime < 5 * 60 * 1000) return;
 
-    lastNotificationTime.current[`${safeZone.id}_${type}`] = now;
+      lastNotificationTime.current[`${safeZone.id}_${type}`] = now;
 
-    const title = type === "entry" ? "🟢 Safe Zone Entry" : "🔴 Safe Zone Exit";
-    const body =
-      type === "entry"
-        ? `Child has entered ${safeZone.name}`
-        : `Child has left ${safeZone.name}`;
+      const title =
+        type === "entry" ? "🟢 Safe Zone Entry" : "🔴 Safe Zone Exit";
+      const body =
+        type === "entry"
+          ? `Child has entered ${safeZone.name}`
+          : `Child has left ${safeZone.name}`;
 
-    await showNotification({ title, body, priority: "high" });
+      await showNotification({ title, body, priority: "high" });
 
-    // Add to dashboard activity
-    const updatedDashboard = {
-      ...dashboardData,
-      safeZoneActivity: [
-        {
-          id: `activity_${Date.now()}_${Math.random()
-            .toString(36)
-            .substr(2, 9)}`,
-          safeZoneId: safeZone.id,
-          safeZoneName: safeZone.name,
-          type,
-          timestamp: now,
-        },
-        ...dashboardData.safeZoneActivity,
-      ].slice(0, 50), // Keep last 50 activities
-    };
+      // Add to dashboard activity
+      const updatedDashboard = {
+        ...dashboardData,
+        safeZoneActivity: [
+          {
+            id: `activity_${Date.now()}_${Math.random()
+              .toString(36)
+              .substr(2, 9)}`,
+            safeZoneId: safeZone.id,
+            safeZoneName: safeZone.name,
+            type,
+            timestamp: now,
+          },
+          ...dashboardData.safeZoneActivity,
+        ].slice(0, 50), // Keep last 50 activities
+      };
 
-    await saveDashboardData(updatedDashboard);
-  }, [settings.safeZoneAlerts, dashboardData, saveDashboardData]);
+      await saveDashboardData(updatedDashboard);
+    },
+    [settings.safeZoneAlerts, dashboardData, saveDashboardData]
+  );
 
   // Check safe zone status for current location
-  const checkSafeZones = useCallback(async (location: LocationState) => {
-    const newStates: Record<string, boolean> = {};
-    const events: SafeZoneEvent[] = [];
+  const checkSafeZones = useCallback(
+    async (location: LocationState) => {
+      const newStates: Record<string, boolean> = {};
+      const events: SafeZoneEvent[] = [];
 
-    safeZones.forEach((zone) => {
-      if (!zone.isActive) return;
+      safeZones.forEach((zone) => {
+        if (!zone.isActive) return;
 
-      const distance = calculateDistance(
-        location.latitude,
-        location.longitude,
-        zone.latitude,
-        zone.longitude
-      );
+        const distance = calculateDistance(
+          location.latitude,
+          location.longitude,
+          zone.latitude,
+          zone.longitude
+        );
 
-      const isInside = distance <= zone.radius;
-      const wasInside = safeZoneStates[zone.id] || false;
+        const isInside = distance <= zone.radius;
+        const wasInside = safeZoneStates[zone.id] || false;
 
-      newStates[zone.id] = isInside;
+        newStates[zone.id] = isInside;
 
-      // Detect entry/exit events
-      if (isInside && !wasInside) {
-        events.push({
-          safeZone: zone,
-          type: "entry",
-          timestamp: location.timestamp,
-          location: {
-            latitude: location.latitude,
-            longitude: location.longitude,
-          },
-        });
-      } else if (!isInside && wasInside) {
-        events.push({
-          safeZone: zone,
-          type: "exit",
-          timestamp: location.timestamp,
-          location: {
-            latitude: location.latitude,
-            longitude: location.longitude,
-          },
-        });
+        // Detect entry/exit events
+        if (isInside && !wasInside) {
+          events.push({
+            safeZone: zone,
+            type: "entry",
+            timestamp: location.timestamp,
+            location: {
+              latitude: location.latitude,
+              longitude: location.longitude,
+            },
+          });
+        } else if (!isInside && wasInside) {
+          events.push({
+            safeZone: zone,
+            type: "exit",
+            timestamp: location.timestamp,
+            location: {
+              latitude: location.latitude,
+              longitude: location.longitude,
+            },
+          });
+        }
+      });
+
+      setSafeZoneStates(newStates);
+
+      // Send notifications for events
+      for (const event of events) {
+        await sendSafeZoneNotification(event);
       }
-    });
-
-    setSafeZoneStates(newStates);
-
-    // Send notifications for events
-    for (const event of events) {
-      await sendSafeZoneNotification(event);
-    }
-  }, [safeZones, safeZoneStates, sendSafeZoneNotification]);
+    },
+    [safeZones, safeZoneStates, sendSafeZoneNotification]
+  );
 
   // Start monitoring
   // import { useCallback } from 'react'; // Moved to top
@@ -290,11 +297,7 @@ export const useSafeZoneMonitor = () => {
       console.error("Failed to start safe zone monitoring:", error);
       Alert.alert("Error", "Failed to start safe zone monitoring");
     }
-  }, [
-    isMonitoring,
-    checkSafeZones,
-    setCurrentLocation,
-  ]);
+  }, [isMonitoring, checkSafeZones, locationSubscription, setCurrentLocation]);
 
   // Stop monitoring
   const stopMonitoring = () => {

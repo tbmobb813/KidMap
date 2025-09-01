@@ -6,6 +6,14 @@ import Colors from '@/constants/colors';
 import { useParentalStore } from '@/stores/parentalStore';
 import { SafeZone } from '@/types/parental';
 
+// Define a theme object for colors used in the component
+const theme = {
+  colors: {
+    surface: Colors.surface || '#FFFFFF',
+    textSecondary: Colors.textSecondary || '#888888',
+  },
+};
+
 type SafeZoneManagementProps = {
   onBack: () => void;
 };
@@ -150,7 +158,7 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
                 value={formData.name}
                 onChangeText={(text) => setFormData(prev => ({ ...prev, name: text }))}
                 placeholder="e.g., Home, School, Grandma's House"
-                placeholderTextColor={Colors.textLight}
+                placeholderTextColor={theme.colors.textSecondary}
               />
             </View>
 
@@ -162,7 +170,7 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
                   value={formData.latitude}
                   onChangeText={(text) => setFormData(prev => ({ ...prev, latitude: text }))}
                   placeholder="Latitude"
-                  placeholderTextColor={Colors.textLight}
+                  placeholderTextColor={theme.colors.textSecondary}
                   keyboardType="numeric"
                 />
                 <TextInput
@@ -170,7 +178,7 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
                   value={formData.longitude}
                   onChangeText={(text) => setFormData(prev => ({ ...prev, longitude: text }))}
                   placeholder="Longitude"
-                  placeholderTextColor={Colors.textLight}
+                  placeholderTextColor={theme.colors.textSecondary}
                   keyboardType="numeric"
                 />
               </View>
@@ -187,7 +195,7 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
                 value={formData.radius}
                 onChangeText={(text) => setFormData(prev => ({ ...prev, radius: text }))}
                 placeholder="100"
-                placeholderTextColor={Colors.textLight}
+                placeholderTextColor={theme.colors.textSecondary}
                 keyboardType="numeric"
               />
               <Text style={styles.helperText}>
@@ -212,7 +220,7 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
                 {formData.notifications.onEntry ? (
                   <ToggleRight size={24} color={Colors.primary} />
                 ) : (
-                  <ToggleLeft size={24} color={Colors.textLight} />
+                  <ToggleLeft size={24} color={theme.colors.textSecondary} />
                 )}
               </Pressable>
 
@@ -230,7 +238,7 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
                 {formData.notifications.onExit ? (
                   <ToggleRight size={24} color={Colors.primary} />
                 ) : (
-                  <ToggleLeft size={24} color={Colors.textLight} />
+                  <ToggleLeft size={24} color={theme.colors.textSecondary} />
                 )}
               </Pressable>
             </View>
@@ -267,7 +275,7 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {safeZones.length === 0 ? (
           <View style={styles.emptyState}>
-            <Shield size={48} color={Colors.textLight} />
+            <Shield size={48} color={theme.colors.textSecondary} />
             <Text style={styles.emptyTitle}>No Safe Zones</Text>
             <Text style={styles.emptySubtitle}>
               Create safe zones to get notified when your child enters or leaves specific areas
@@ -300,7 +308,7 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
                   {zone.isActive ? (
                     <ToggleRight size={32} color={Colors.success} />
                   ) : (
-                    <ToggleLeft size={32} color={Colors.textLight} />
+                    <ToggleLeft size={32} color={theme.colors.textSecondary} />
                   )}
                 </Pressable>
               </View>
@@ -340,7 +348,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 16,
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: Colors.border,
   },
@@ -376,7 +384,7 @@ const styles = StyleSheet.create({
   },
   emptySubtitle: {
     fontSize: 16,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: 24,
@@ -397,7 +405,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   zoneCard: {
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -420,12 +428,12 @@ const styles = StyleSheet.create({
   },
   zoneDetails: {
     fontSize: 14,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
     marginBottom: 2,
   },
   zoneNotifications: {
     fontSize: 12,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
   },
   toggleButton: {
     padding: 4,
@@ -467,7 +475,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   input: {
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
@@ -501,14 +509,14 @@ const styles = StyleSheet.create({
   },
   helperText: {
     fontSize: 12,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
     marginTop: 4,
   },
   toggleRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 8,
     padding: 12,
     marginBottom: 8,
@@ -535,7 +543,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   cancelButton: {
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
