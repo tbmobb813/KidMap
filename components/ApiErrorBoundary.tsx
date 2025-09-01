@@ -3,6 +3,7 @@ import React, { useState, useEffect, ReactNode, useCallback, useMemo } from "rea
 import { StyleSheet, Text, View, Pressable, Animated } from "react-native";
 
 import Colors from "../constants/colors";
+
 import { Place } from "@/types/navigation";
 
 export interface AIJourneyCompanionProps {
