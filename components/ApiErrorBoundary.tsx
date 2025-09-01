@@ -26,8 +26,7 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
   isNavigating,
   children,
 }) => {
-  // Messages state to store companion messages
-  const [messages, setMessages] = useState<CompanionMessage[]>([]);
+  // Removed unused messages state
   const [currentMessage, setCurrentMessage] = useState<CompanionMessage | null>(
     null
   );
@@ -42,7 +41,7 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
 
   // Removed duplicate generateJourneyContent declaration
 
-  const startCompanionAnimation = () => {
+  const startCompanionAnimation = React.useCallback(() => {
     Animated.loop(
       Animated.sequence([
         Animated.timing(pulseAnim, {
@@ -57,9 +56,9 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
         }),
       ])
     ).start();
-  };
+  }, [pulseAnim]);
 
-  const generateJourneyContent = async () => {
+  const generateJourneyContent = React.useCallback(async () => {
     if (!destination) return;
 
     try {
@@ -91,7 +90,6 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
         timestamp: new Date(),
       };
 
-      setMessages((prev) => [...prev, newMessage]);
       setCurrentMessage(newMessage);
       setCompanionMood("excited");
     } catch (error) {
@@ -105,7 +103,7 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
       };
       setCurrentMessage(fallbackMessage);
     }
-  };
+  }, [destination]);
 
   useEffect(() => {
     if (isNavigating && destination) {
@@ -152,7 +150,6 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
         timestamp: new Date(),
       };
 
-      setMessages((prev) => [...prev, quizMessage]);
       setCurrentMessage(quizMessage);
       setCompanionMood("curious");
     } catch (error) {
