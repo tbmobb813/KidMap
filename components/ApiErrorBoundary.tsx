@@ -26,7 +26,6 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
   isNavigating,
   children,
 }) => {
-  const [, setMessages] = useState<CompanionMessage[]>([]);
   const [currentMessage, setCurrentMessage] = useState<CompanionMessage | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
@@ -82,7 +81,6 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
         timestamp: new Date(),
       };
 
-      setMessages((prev) => [...prev, newMessage]);
       setCurrentMessage(newMessage);
       setCompanionMood("excited");
     } catch (error) {
@@ -138,7 +136,6 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
         timestamp: new Date(),
       };
 
-      setMessages((prev) => [...prev, quizMessage]);
       setCurrentMessage(quizMessage);
       setCompanionMood("curious");
     } catch (error) {
