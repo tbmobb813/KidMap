@@ -1,21 +1,37 @@
-import { CheckCircle, MapPin, MessageCircle, Phone, X } from 'lucide-react-native';
-import React, { useEffect, useState } from 'react';
-import { Alert, Platform, Pressable, StyleSheet, Text, Vibration, View } from 'react-native';
+import {
+  CheckCircle,
+  MapPin,
+  MessageCircle,
+  Phone,
+  X,
+} from "lucide-react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  Alert,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  Vibration,
+  View,
+} from "react-native";
 
-import Colors from '@/constants/colors';
-import useLocation from '@/hooks/useLocation';
-import { useParentalStore } from '@/stores/parentalStore';
-import { DevicePingRequest } from '@/types/parental';
+import Colors from "@/constants/colors";
+import useLocation from "@/hooks/useLocation";
+import { useParentalStore } from "@/stores/parentalStore";
+import { DevicePingRequest } from "@/types/parental";
 
 type DevicePingHandlerProps = {
   testId?: string;
 };
 
 const DevicePingHandler: React.FC<DevicePingHandlerProps> = ({ testId }) => {
-  const { devicePings, acknowledgePing, updateLastKnownLocation } = useParentalStore();
+  const { devicePings, acknowledgePing, updateLastKnownLocation } =
+    useParentalStore();
   const { location } = useLocation();
   const [activePing, setActivePing] = useState<DevicePingRequest | null>(null);
   const [isRinging, setIsRinging] = useState(false);
+  // Removed unused theme variable
 
   const handleAcknowledgePing = React.useCallback(
     async (pingId: string, shareLocation: boolean = true) => {
@@ -23,124 +39,142 @@ const DevicePingHandler: React.FC<DevicePingHandlerProps> = ({ testId }) => {
         // Stop ringing
         if (isRinging) {
           setIsRinging(false);
-          if (Platform.OS !== 'web') {
+          if (Platform.OS !== "web") {
             Vibration.cancel();
           }
         }
 
         // Acknowledge the ping with location if requested
-        const locationData = shareLocation && !location.error ? {
-          latitude: location.latitude,
-          longitude: location.longitude,
-        } : undefined;
+        const locationData =
+          shareLocation && !location.error
+            ? {
+                latitude: location.latitude,
+                longitude: location.longitude,
+              }
+            : undefined;
 
         await acknowledgePing(pingId, locationData);
-        
+
         // Update last known location if sharing
         if (locationData) {
           updateLastKnownLocation({
             latitude: locationData.latitude,
             longitude: locationData.longitude,
             timestamp: Date.now(),
-            placeName: 'Current Location',
+            placeName: "Current Location",
           });
         }
 
         setActivePing(null);
-        
+
         Alert.alert(
-          '✅ Response Sent',
-          shareLocation ? 'Your location has been shared with your parent' : 'Response sent to your parent'
+          "✅ Response Sent",
+          shareLocation
+            ? "Your location has been shared with your parent"
+            : "Response sent to your parent"
         );
       } catch (error) {
-        console.error('Failed to acknowledge ping:', error);
-        Alert.alert('Error', 'Failed to respond to ping. Please try again.');
+        console.error("Failed to acknowledge ping:", error);
+        Alert.alert("Error", "Failed to respond to ping. Please try again.");
       }
     },
     [isRinging, location, acknowledgePing, updateLastKnownLocation]
   );
 
-  const handleRingPing = React.useCallback((ping: DevicePingRequest) => {
-    setIsRinging(true);
+  const handleRingPing = React.useCallback(
+    (ping: DevicePingRequest) => {
+      setIsRinging(true);
 
-    // Vibrate the device
-    if (Platform.OS !== 'web') {
-      const pattern = [0, 1000, 500, 1000, 500, 1000];
-      Vibration.vibrate(pattern, true);
-    }
+      // Vibrate the device
+      if (Platform.OS !== "web") {
+        const pattern = [0, 1000, 500, 1000, 500, 1000];
+        Vibration.vibrate(pattern, true);
+      }
 
-    // Show alert
-    Alert.alert(
-      '📱 Device Ping',
-      ping.message || 'Your parent is trying to locate your device',
-      [
-        {
-          text: 'Acknowledge',
-          onPress: () => handleAcknowledgePing(ping.id),
-        },
-      ],
-      { cancelable: false }
-    );
-  }, [handleAcknowledgePing]);
+      // Show alert
+      Alert.alert(
+        "📱 Device Ping",
+        ping.message || "Your parent is trying to locate your device",
+        [
+          {
+            text: "Acknowledge",
+            onPress: () => handleAcknowledgePing(ping.id),
+          },
+        ],
+        { cancelable: false }
+      );
+    },
+    [handleAcknowledgePing]
+  );
 
-  const handleLocationPing = (ping: DevicePingRequest) => {
-    Alert.alert(
-      '📍 Location Request',
-      ping.message || 'Your parent has requested your current location',
-      [
-        {
-          text: 'Share Location',
-          onPress: () => handleAcknowledgePing(ping.id, true),
-        },
-        {
-          text: 'Decline',
-          style: 'cancel',
-          onPress: () => handleAcknowledgePing(ping.id, false),
-        },
-      ]
-    );
-  };
+  const handleLocationPing = useCallback(
+    (ping: DevicePingRequest) => {
+      Alert.alert(
+        "📍 Location Request",
+        ping.message || "Your parent has requested your current location",
+        [
+          {
+            text: "Share Location",
+            onPress: () => handleAcknowledgePing(ping.id, true),
+          },
+          {
+            text: "Decline",
+            style: "cancel",
+            onPress: () => handleAcknowledgePing(ping.id, false),
+          },
+        ]
+      );
+    },
+    [handleAcknowledgePing]
+  );
 
-  const handleMessagePing = React.useCallback((ping: DevicePingRequest) => {
-    Alert.alert(
-      '💬 Message from Parent',
-      ping.message || 'You have a message from your parent',
-      [
-        {
-          text: 'OK',
-          onPress: () => handleAcknowledgePing(ping.id),
-        },
-      ]
-    );
-  }, [handleAcknowledgePing]);
+  const handleMessagePing = React.useCallback(
+    (ping: DevicePingRequest) => {
+      Alert.alert(
+        "💬 Message from Parent",
+        ping.message || "You have a message from your parent",
+        [
+          {
+            text: "OK",
+            onPress: () => handleAcknowledgePing(ping.id),
+          },
+        ]
+      );
+    },
+    [handleAcknowledgePing]
+  );
 
-  const handlePingReceived = React.useCallback((ping: DevicePingRequest) => {
-    console.log('Device ping received:', ping.type, ping.message);
-    
-    switch (ping.type) {
-      case 'ring':
-        handleRingPing(ping);
-        break;
-      case 'location':
-        handleLocationPing(ping);
-        break;
-      case 'message':
-        handleMessagePing(ping);
-        break;
-    }
-  }, [handleRingPing, handleLocationPing, handleMessagePing]);
+  const handlePingReceived = React.useCallback(
+    (ping: DevicePingRequest) => {
+      console.log("Device ping received:", ping.type, ping.message);
+
+      switch (ping.type) {
+        case "ring":
+          handleRingPing(ping);
+          break;
+        case "location":
+          handleLocationPing(ping);
+          break;
+        case "message":
+          handleMessagePing(ping);
+          break;
+      }
+    },
+    [handleRingPing, handleLocationPing, handleMessagePing]
+  );
 
   // Check for pending pings
   useEffect(() => {
-    const pendingPings = devicePings.filter(ping => ping.status === 'pending');
+    const pendingPings = devicePings.filter(
+      (ping) => ping.status === "pending"
+    );
     const latestPing = pendingPings[pendingPings.length - 1];
-    
+
     if (latestPing && latestPing.id !== activePing?.id) {
       setActivePing(latestPing);
       handlePingReceived(latestPing);
     }
   }, [devicePings, activePing, handlePingReceived]);
-
 
   const handleDismissPing = () => {
     if (activePing) {
@@ -155,11 +189,11 @@ const DevicePingHandler: React.FC<DevicePingHandlerProps> = ({ testId }) => {
 
   const getPingIcon = () => {
     switch (activePing.type) {
-      case 'ring':
+      case "ring":
         return <Phone size={24} color={Colors.primary} />;
-      case 'location':
+      case "location":
         return <MapPin size={24} color={Colors.primary} />;
-      case 'message':
+      case "message":
         return <MessageCircle size={24} color={Colors.primary} />;
       default:
         return <Phone size={24} color={Colors.primary} />;
@@ -168,37 +202,37 @@ const DevicePingHandler: React.FC<DevicePingHandlerProps> = ({ testId }) => {
 
   const getPingTitle = () => {
     switch (activePing.type) {
-      case 'ring':
-        return 'Device Ping';
-      case 'location':
-        return 'Location Request';
-      case 'message':
-        return 'Message from Parent';
+      case "ring":
+        return "Device Ping";
+      case "location":
+        return "Location Request";
+      case "message":
+        return "Message from Parent";
       default:
-        return 'Parent Request';
+        return "Parent Request";
     }
   };
+
+  // Removed unused pingCallback
 
   return (
     <View style={styles.overlay} testID={testId}>
       <View style={[styles.pingCard, isRinging && styles.ringingCard]}>
         <View style={styles.pingHeader}>
-          <View style={styles.pingIconContainer}>
-            {getPingIcon()}
-          </View>
+          <View style={styles.pingIconContainer}>{getPingIcon()}</View>
           <Pressable style={styles.dismissButton} onPress={handleDismissPing}>
             <X size={20} color={Colors.textSecondary} />
           </Pressable>
         </View>
-        
+
         <Text style={styles.pingTitle}>{getPingTitle()}</Text>
-        
+
         {activePing.message && (
           <Text style={styles.pingMessage}>{activePing.message}</Text>
         )}
-        
+
         <View style={styles.pingActions}>
-          {activePing.type === 'location' ? (
+          {activePing.type === "location" ? (
             <>
               <Pressable
                 style={[styles.actionButton, styles.declineButton]}
@@ -206,7 +240,7 @@ const DevicePingHandler: React.FC<DevicePingHandlerProps> = ({ testId }) => {
               >
                 <Text style={styles.declineButtonText}>Decline</Text>
               </Pressable>
-              
+
               <Pressable
                 style={[styles.actionButton, styles.shareButton]}
                 onPress={() => handleAcknowledgePing(activePing.id, true)}
@@ -225,7 +259,7 @@ const DevicePingHandler: React.FC<DevicePingHandlerProps> = ({ testId }) => {
             </Pressable>
           )}
         </View>
-        
+
         <Text style={styles.pingTime}>
           Received {new Date(activePing.requestedAt).toLocaleTimeString()}
         </Text>
@@ -236,24 +270,24 @@ const DevicePingHandler: React.FC<DevicePingHandlerProps> = ({ testId }) => {
 
 const styles = StyleSheet.create({
   overlay: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
     zIndex: 1000,
   },
   pingCard: {
-    backgroundColor: Colors.card,
+    backgroundColor: "#F5F5F5", // replaced Colors.card with a neutral surface color
     borderRadius: 16,
     padding: 24,
     margin: 20,
     maxWidth: 320,
-    width: '100%',
-    shadowColor: '#000',
+    width: "100%",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 4,
@@ -267,9 +301,9 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary,
   },
   pingHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 16,
   },
   pingIconContainer: {
@@ -277,40 +311,40 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 24,
     backgroundColor: Platform.select({
-      android: '#E0E0E0',
-      ios: '#F0F0F0',
-      default: '#F5F5F5',
+      android: "#E0E0E0",
+      ios: "#F0F0F0",
+      default: "#F5F5F5",
     }),
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   dismissButton: {
     padding: 8,
   },
   pingTitle: {
     fontSize: 20,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.text,
     marginBottom: 8,
-    textAlign: 'center',
+    textAlign: "center",
   },
   pingMessage: {
     fontSize: 16,
-  color: Colors.textSecondary,
-    textAlign: 'center',
+    color: Colors.textSecondary,
+    textAlign: "center",
     marginBottom: 20,
     lineHeight: 22,
   },
   pingActions: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 12,
     marginBottom: 16,
   },
   actionButton: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
@@ -320,30 +354,30 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
   },
   acknowledgeButtonText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   shareButton: {
     backgroundColor: Colors.success,
   },
   shareButtonText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   declineButton: {
-  backgroundColor: Colors.textSecondary,
+    backgroundColor: Colors.textSecondary,
   },
   declineButtonText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   pingTime: {
     fontSize: 12,
-  color: Colors.textSecondary,
-    textAlign: 'center',
+    color: Colors.textSecondary,
+    textAlign: "center",
   },
 });
 

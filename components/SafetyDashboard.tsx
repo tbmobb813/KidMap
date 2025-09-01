@@ -36,7 +36,6 @@ type SafetyDashboardProps = {
 };
 
 const SafetyDashboard: React.FC<SafetyDashboardProps> = ({ 
-  currentLocation, 
   currentPlace,
   onNavigateToSettings 
 }) => {
@@ -105,7 +104,7 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
         <Text style={styles.statTitle}>{title}</Text>
         <Text style={styles.statSubtitle}>{subtitle}</Text>
       </View>
-      {onPress && <ArrowRight size={16} color={Colors.textLight} />}
+      {onPress && <ArrowRight size={16} color={theme.colors.textSecondary} />}
     </Pressable>
   );
 
@@ -138,7 +137,7 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
         </View>
         {onNavigateToSettings && (
           <Pressable style={styles.settingsButton} onPress={onNavigateToSettings}>
-            <Settings size={20} color={Colors.textLight} />
+            <Settings size={20} color={theme.colors.textSecondary} />
           </Pressable>
         )}
       </View>
@@ -285,7 +284,7 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
             ))
           ) : (
             <View style={styles.emptyActivity}>
-              <Camera size={32} color={Colors.textLight} />
+              <Camera size={32} color={theme.colors.textSecondary} />
               <Text style={styles.emptyActivityText}>No recent check-ins</Text>
               <Text style={styles.emptyActivitySubtext}>
                 Take a photo when you arrive somewhere to let your family know you&apos;re safe
@@ -322,7 +321,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 16,
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: Colors.border,
   },
@@ -408,7 +407,7 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',
@@ -442,12 +441,12 @@ const styles = StyleSheet.create({
   },
   statSubtitle: {
     fontSize: 10,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
   },
   activityItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 12,
     padding: 16,
     marginBottom: 8,
@@ -463,13 +462,13 @@ const styles = StyleSheet.create({
   },
   activityTime: {
     fontSize: 12,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
     marginTop: 2,
   },
   emptyActivity: {
     alignItems: 'center',
     padding: 32,
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 12,
   },
   emptyActivityText: {
@@ -480,7 +479,7 @@ const styles = StyleSheet.create({
   },
   emptyActivitySubtext: {
     fontSize: 14,
-    color: Colors.textLight,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     marginTop: 8,
     lineHeight: 20,

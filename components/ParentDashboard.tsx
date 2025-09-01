@@ -396,7 +396,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 16,
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: Colors.border,
   },
@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
   },
   tabs: {
     flexDirection: 'row',
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: Colors.border,
   },
@@ -517,7 +517,7 @@ const styles = StyleSheet.create({
   locationCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 12,
     padding: 16,
     gap: 12,
@@ -538,7 +538,7 @@ const styles = StyleSheet.create({
   checkInCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 12,
     padding: 16,
     marginBottom: 8,
@@ -570,7 +570,7 @@ const styles = StyleSheet.create({
   safeZoneCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 12,
     padding: 16,
     marginBottom: 8,
@@ -592,7 +592,7 @@ const styles = StyleSheet.create({
   activityCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 12,
     padding: 16,
     marginBottom: 8,
@@ -617,7 +617,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
   },
   settingCard: {
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -645,7 +645,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   emptyStateCard: {
-    backgroundColor: Colors.card,
+    backgroundColor: theme.colors.surface,
     borderRadius: 16,
     padding: 32,
     alignItems: 'center',

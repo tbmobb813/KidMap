@@ -1,10 +1,24 @@
-import { CheckCircle, Clock, MapPin, MessageCircle, Phone, X } from 'lucide-react-native';
-import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  CheckCircle,
+  Clock,
+  MapPin,
+  MessageCircle,
+  Phone,
+  X,
+} from "lucide-react-native";
+import React from "react";
+import {
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableNativeFeedback,
+  View,
+} from "react-native";
 
-import Colors from '@/constants/colors';
-import { useParentalStore } from '@/stores/parentalStore';
-import { DevicePingRequest } from '@/types/parental';
+import Colors from "@/constants/colors";
+import { useParentalStore } from "@/stores/parentalStore";
+import { DevicePingRequest } from "@/types/parental";
 
 type DevicePingHistoryProps = {
   testId?: string;
@@ -14,7 +28,10 @@ const DevicePingHistory: React.FC<DevicePingHistoryProps> = ({ testId }) => {
   const { devicePings } = useParentalStore();
 
   const formatTime = (timestamp: number) => {
-    return new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return new Date(timestamp).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   const formatDate = (timestamp: number) => {
@@ -24,68 +41,70 @@ const DevicePingHistory: React.FC<DevicePingHistoryProps> = ({ testId }) => {
     yesterday.setDate(yesterday.getDate() - 1);
 
     if (date.toDateString() === today.toDateString()) {
-      return 'Today';
+      return "Today";
     } else if (date.toDateString() === yesterday.toDateString()) {
-      return 'Yesterday';
+      return "Yesterday";
     } else {
       return date.toLocaleDateString();
     }
   };
 
-  const getPingIcon = (type: DevicePingRequest['type']) => {
+  const getPingIcon = (type: DevicePingRequest["type"]) => {
     switch (type) {
-      case 'ring':
+      case "ring":
         return <Phone size={20} color={Colors.primary} />;
-      case 'location':
+      case "location":
         return <MapPin size={20} color={Colors.primary} />;
-      case 'message':
+      case "message":
         return <MessageCircle size={20} color={Colors.primary} />;
       default:
         return <Phone size={20} color={Colors.primary} />;
     }
   };
 
-  const getStatusIcon = (status: DevicePingRequest['status']) => {
+  const getStatusIcon = (status: DevicePingRequest["status"]) => {
     switch (status) {
-      case 'acknowledged':
+      case "acknowledged":
         return <CheckCircle size={16} color={Colors.success} />;
-      case 'failed':
+      case "failed":
         return <X size={16} color={Colors.error} />;
-      case 'pending':
+      case "pending":
         return <Clock size={16} color={Colors.warning} />;
       default:
         return <Clock size={16} color={Colors.textSecondary} />;
     }
   };
 
-  const getStatusText = (status: DevicePingRequest['status']) => {
+  const getStatusText = (status: DevicePingRequest["status"]) => {
     switch (status) {
-      case 'acknowledged':
-        return 'Acknowledged';
-      case 'failed':
-        return 'Failed';
-      case 'pending':
-        return 'Pending';
+      case "acknowledged":
+        return "Acknowledged";
+      case "failed":
+        return "Failed";
+      case "pending":
+        return "Pending";
       default:
-        return 'Unknown';
+        return "Unknown";
     }
   };
 
-  const getPingTypeText = (type: DevicePingRequest['type']) => {
+  const getPingTypeText = (type: DevicePingRequest["type"]) => {
     switch (type) {
-      case 'ring':
-        return 'Device Ring';
-      case 'location':
-        return 'Location Request';
-      case 'message':
-        return 'Message';
+      case "ring":
+        return "Device Ring";
+      case "location":
+        return "Location Request";
+      case "message":
+        return "Message";
       default:
-        return 'Ping';
+        return "Ping";
     }
   };
 
   // Sort pings by most recent first
-  const sortedPings = [...devicePings].sort((a, b) => b.requestedAt - a.requestedAt);
+  const sortedPings = [...devicePings].sort(
+    (a, b) => b.requestedAt - a.requestedAt
+  );
 
   if (sortedPings.length === 0) {
     return (
@@ -93,63 +112,84 @@ const DevicePingHistory: React.FC<DevicePingHistoryProps> = ({ testId }) => {
         <Phone size={48} color={Colors.textSecondary} />
         <Text style={styles.emptyTitle}>No Device Pings</Text>
         <Text style={styles.emptySubtitle}>
-          Device ping history will appear here when you send location requests or ring the device
+          Device ping history will appear here when you send location requests
+          or ring the device
         </Text>
       </View>
     );
   }
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false} testID={testId}>
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+      testID={testId}
+    >
       <Text style={styles.title}>Device Ping History</Text>
-      
+
       {sortedPings.map((ping) => (
-        <View key={ping.id} style={styles.pingCard}>
-          <View style={styles.pingHeader}>
-            <View style={styles.pingIconContainer}>
-              {getPingIcon(ping.type)}
+        <TouchableNativeFeedback
+          key={ping.id}
+          background={Platform.select({
+            android: TouchableNativeFeedback.Ripple("#ccc", false),
+            ios: undefined,
+            default: undefined,
+          })}
+        >
+          <View style={styles.pingCard}>
+            <View style={styles.pingHeader}>
+              <View style={styles.pingIconContainer}>
+                {getPingIcon(ping.type)}
+              </View>
+              <View style={styles.pingInfo}>
+                <Text style={styles.pingType}>
+                  {getPingTypeText(ping.type)}
+                </Text>
+                <Text style={styles.pingDate}>
+                  {formatDate(ping.requestedAt)} at{" "}
+                  {formatTime(ping.requestedAt)}
+                </Text>
+              </View>
+              <View style={styles.statusContainer}>
+                {getStatusIcon(ping.status)}
+                <Text
+                  style={[
+                    styles.statusText,
+                    ping.status === "acknowledged" && styles.successText,
+                    ping.status === "failed" && styles.errorText,
+                    ping.status === "pending" && styles.warningText,
+                  ]}
+                >
+                  {getStatusText(ping.status)}
+                </Text>
+              </View>
             </View>
-            <View style={styles.pingInfo}>
-              <Text style={styles.pingType}>{getPingTypeText(ping.type)}</Text>
-              <Text style={styles.pingDate}>
-                {formatDate(ping.requestedAt)} at {formatTime(ping.requestedAt)}
-              </Text>
-            </View>
-            <View style={styles.statusContainer}>
-              {getStatusIcon(ping.status)}
-              <Text style={[
-                styles.statusText,
-                ping.status === 'acknowledged' && styles.successText,
-                ping.status === 'failed' && styles.errorText,
-                ping.status === 'pending' && styles.warningText,
-              ]}>
-                {getStatusText(ping.status)}
-              </Text>
-            </View>
+
+            {ping.message && (
+              <Text style={styles.pingMessage}>{ping.message}</Text>
+            )}
+
+            {ping.response && (
+              <View style={styles.responseContainer}>
+                <Text style={styles.responseTitle}>Response:</Text>
+                <Text style={styles.responseTime}>
+                  Acknowledged at {formatTime(ping.response.timestamp)}
+                </Text>
+
+                {ping.response.location && (
+                  <View style={styles.locationContainer}>
+                    <MapPin size={14} color={Colors.success} />
+                    <Text style={styles.locationText}>
+                      Location shared:{" "}
+                      {ping.response.location.latitude.toFixed(4)},{" "}
+                      {ping.response.location.longitude.toFixed(4)}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            )}
           </View>
-
-          {ping.message && (
-            <Text style={styles.pingMessage}>{ping.message}</Text>
-          )}
-
-          {ping.response && (
-            <View style={styles.responseContainer}>
-              <Text style={styles.responseTitle}>Response:</Text>
-              <Text style={styles.responseTime}>
-                Acknowledged at {formatTime(ping.response.timestamp)}
-              </Text>
-              
-              {ping.response.location && (
-                <View style={styles.locationContainer}>
-                  <MapPin size={14} color={Colors.success} />
-                  <Text style={styles.locationText}>
-                    Location shared: {ping.response.location.latitude.toFixed(4)}, {ping.response.location.longitude.toFixed(4)}
-                  </Text>
-                </View>
-              )}
-            </View>
-          )}
-        </View>
+        </TouchableNativeFeedback>
       ))}
     </ScrollView>
   );
@@ -163,19 +203,19 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.text,
     marginBottom: 16,
   },
   emptyContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: 32,
   },
   emptyTitle: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.text,
     marginTop: 16,
     marginBottom: 8,
@@ -183,7 +223,7 @@ const styles = StyleSheet.create({
   emptySubtitle: {
     fontSize: 14,
     color: Colors.textSecondary,
-    textAlign: 'center',
+    textAlign: "center",
     lineHeight: 20,
   },
   pingCard: {
@@ -191,7 +231,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 1,
@@ -201,17 +241,21 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   pingHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 8,
   },
   pingIconContainer: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: Colors.androidRipple,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: Platform.select({
+      android: "#E0E0E0",
+      ios: "#F0F0F0",
+      default: "#F5F5F5",
+    }),
+    alignItems: "center",
+    justifyContent: "center",
     marginRight: 12,
   },
   pingInfo: {
@@ -219,7 +263,7 @@ const styles = StyleSheet.create({
   },
   pingType: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.text,
     marginBottom: 2,
   },
@@ -228,13 +272,13 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
   },
   statusContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 4,
   },
   statusText: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.textSecondary,
   },
   successText: {
@@ -250,7 +294,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.textSecondary,
     marginBottom: 8,
-    fontStyle: 'italic',
+    fontStyle: "italic",
   },
   responseContainer: {
     backgroundColor: Colors.background,
@@ -260,7 +304,7 @@ const styles = StyleSheet.create({
   },
   responseTitle: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.text,
     marginBottom: 4,
   },
@@ -270,8 +314,8 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   locationContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 4,
     marginTop: 4,
   },

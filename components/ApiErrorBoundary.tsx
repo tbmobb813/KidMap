@@ -1,15 +1,15 @@
-import { Bot, Volume2, VolumeX, Sparkles } from 'lucide-react-native';
-import React, { useState, useEffect, ReactNode } from 'react';
-import { StyleSheet, Text, View, Pressable, Animated } from 'react-native';
+import { Bot, Volume2, VolumeX, Sparkles } from "lucide-react-native";
+import React, { useState, useEffect, ReactNode } from "react";
+import { StyleSheet, Text, View, Pressable, Animated } from "react-native";
 
-import Colors from '../constants/colors';
+import Colors from "../constants/colors";
 
-import { Place } from '@/types/navigation';
+import { Place } from "@/types/navigation";
 
 export interface AIJourneyCompanionProps {
   showNetworkStatus?: boolean;
   children?: ReactNode;
-  currentLocation?: Place;
+  _currentLocation?: Place; // renamed to allow unused arg
   destination?: Place;
   isNavigating?: boolean;
 }
@@ -17,29 +17,102 @@ export interface AIJourneyCompanionProps {
 type CompanionMessage = {
   id: string;
   text: string;
-  type: 'story' | 'quiz' | 'encouragement' | 'safety';
+  type: "story" | "quiz" | "encouragement" | "safety";
   timestamp: Date;
 };
 
 const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
-  currentLocation,
   destination,
   isNavigating,
-  children
+  children,
 }) => {
-  const [messages, setMessages] = useState<CompanionMessage[]>([]);
-  const [currentMessage, setCurrentMessage] = useState<CompanionMessage | null>(null);
+  // Removed unused messages variable
+  const [currentMessage, setCurrentMessage] = useState<CompanionMessage | null>(
+    null
+  );
   const [isExpanded, setIsExpanded] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
-  const [companionMood, setCompanionMood] = useState<'happy' | 'excited' | 'curious'>('happy');
-  const pulseAnim = new Animated.Value(1);
+  const [companionMood, setCompanionMood] = useState<
+    "happy" | "excited" | "curious"
+  >("happy");
+  const pulseAnim = React.useMemo(() => new Animated.Value(1), []);
+
+  const startCompanionAnimation = React.useCallback(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnim, {
+          toValue: 1.2,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, [pulseAnim]);
+
+  const generateJourneyContent = React.useCallback(async () => {
+    if (!destination) return;
+
+    try {
+      const response = await fetch("https://toolkit.rork.com/text/llm/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: [
+            {
+              role: "system",
+              content: `You are Buddy, a friendly AI companion for kids using a navigation app. Create engaging, educational, and safe content for a journey to ${destination.name}. Keep responses short (1-2 sentences), age-appropriate, and encouraging. Focus on interesting facts, safety reminders, or fun observations about the area.`,
+            },
+            {
+              role: "user",
+              content: `I'm traveling to ${destination.name} in ${destination.address}. Tell me something interesting about this area or give me a fun fact to make the journey more exciting!`,
+            },
+          ],
+        }),
+      });
+
+      const data = await response.json();
+
+      const newMessage: CompanionMessage = {
+        id: Date.now().toString(),
+        text: data.completion,
+        type: "story",
+        timestamp: new Date(),
+      };
+
+      setMessages((prev) => [...prev, newMessage]);
+      setCurrentMessage(newMessage);
+      setCompanionMood("excited");
+    } catch (error) {
+      console.log("AI companion error:", error);
+      // Fallback to predefined messages
+      const fallbackMessage: CompanionMessage = {
+        id: Date.now().toString(),
+        text: `Great choice going to ${destination.name}! I bet you'll discover something amazing there. Stay safe and enjoy your adventure! 🌟`,
+        type: "encouragement",
+        timestamp: new Date(),
+      };
+      setCurrentMessage(fallbackMessage);
+    }
+  }, [destination]);
 
   useEffect(() => {
     if (isNavigating && destination) {
       generateJourneyContent();
       startCompanionAnimation();
     }
-  }, [isNavigating, destination]);
+  }, [
+    isNavigating,
+    destination,
+    generateJourneyContent,
+    startCompanionAnimation,
+  ]);
 
   const startCompanionAnimation = () => {
     Animated.loop(
@@ -62,45 +135,45 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
     if (!destination) return;
 
     try {
-      const response = await fetch('https://toolkit.rork.com/text/llm/', {
-        method: 'POST',
+      const response = await fetch("https://toolkit.rork.com/text/llm/", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           messages: [
             {
-              role: 'system',
-              content: `You are Buddy, a friendly AI companion for kids using a navigation app. Create engaging, educational, and safe content for a journey to ${destination.name}. Keep responses short (1-2 sentences), age-appropriate, and encouraging. Focus on interesting facts, safety reminders, or fun observations about the area.`
+              role: "system",
+              content: `You are Buddy, a friendly AI companion for kids using a navigation app. Create engaging, educational, and safe content for a journey to ${destination.name}. Keep responses short (1-2 sentences), age-appropriate, and encouraging. Focus on interesting facts, safety reminders, or fun observations about the area.`,
             },
             {
-              role: 'user',
-              content: `I'm traveling to ${destination.name} in ${destination.address}. Tell me something interesting about this area or give me a fun fact to make the journey more exciting!`
-            }
-          ]
-        })
+              role: "user",
+              content: `I'm traveling to ${destination.name} in ${destination.address}. Tell me something interesting about this area or give me a fun fact to make the journey more exciting!`,
+            },
+          ],
+        }),
       });
 
       const data = await response.json();
-      
+
       const newMessage: CompanionMessage = {
         id: Date.now().toString(),
         text: data.completion,
-        type: 'story',
-        timestamp: new Date()
+        type: "story",
+        timestamp: new Date(),
       };
 
-      setMessages(prev => [...prev, newMessage]);
+      setMessages((prev) => [...prev, newMessage]);
       setCurrentMessage(newMessage);
-      setCompanionMood('excited');
+      setCompanionMood("excited");
     } catch (error) {
-      console.log('AI companion error:', error);
+      console.log("AI companion error:", error);
       // Fallback to predefined messages
       const fallbackMessage: CompanionMessage = {
         id: Date.now().toString(),
         text: `Great choice going to ${destination.name}! I bet you'll discover something amazing there. Stay safe and enjoy your adventure! 🌟`,
-        type: 'encouragement',
-        timestamp: new Date()
+        type: "encouragement",
+        timestamp: new Date(),
       };
       setCurrentMessage(fallbackMessage);
     }
@@ -110,47 +183,51 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
     if (!destination) return;
 
     try {
-      const response = await fetch('https://toolkit.rork.com/text/llm/', {
-        method: 'POST',
+      const response = await fetch("https://toolkit.rork.com/text/llm/", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           messages: [
             {
-              role: 'system',
-              content: 'Create a simple, fun quiz question for kids about the area they\'re visiting. Make it educational but easy to understand. Include the answer.'
+              role: "system",
+              content:
+                "Create a simple, fun quiz question for kids about the area they're visiting. Make it educational but easy to understand. Include the answer.",
             },
             {
-              role: 'user',
-              content: `Create a quiz question about ${destination.name} or the ${destination.category} category in general.`
-            }
-          ]
-        })
+              role: "user",
+              content: `Create a quiz question about ${destination.name} or the ${destination.category} category in general.`,
+            },
+          ],
+        }),
       });
 
       const data = await response.json();
-      
+
       const quizMessage: CompanionMessage = {
         id: Date.now().toString(),
         text: `🧠 Quiz Time! ${data.completion}`,
-        type: 'quiz',
-        timestamp: new Date()
+        type: "quiz",
+        timestamp: new Date(),
       };
 
-      setMessages(prev => [...prev, quizMessage]);
+      setMessages((prev) => [...prev, quizMessage]);
       setCurrentMessage(quizMessage);
-      setCompanionMood('curious');
+      setCompanionMood("curious");
     } catch (error) {
-      console.log('Quiz generation error:', error);
+      console.log("Quiz generation error:", error);
     }
   };
 
   const getMoodEmoji = () => {
     switch (companionMood) {
-      case 'excited': return '🤩';
-      case 'curious': return '🤔';
-      default: return '😊';
+      case "excited":
+        return "🤩";
+      case "curious":
+        return "🤔";
+      default:
+        return "😊";
     }
   };
 
@@ -160,17 +237,17 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
 
   return (
     <View style={styles.container}>
-      <Pressable 
+      <Pressable
         style={styles.companionButton}
         onPress={() => setIsExpanded(!isExpanded)}
       >
-        <Animated.View 
+        <Animated.View
           style={[styles.avatar, { transform: [{ scale: pulseAnim }] }]}
         >
           <Text style={styles.avatarEmoji}>{getMoodEmoji()}</Text>
-          <Bot size={16} color={Colors.white} style={styles.botIcon} />
+          <Bot size={16} color={"#FFFFFF"} style={styles.botIcon} />
         </Animated.View>
-        
+
         <View style={styles.messagePreview}>
           <Text style={styles.companionName}>Buddy</Text>
           <Text style={styles.messageText} numberOfLines={1}>
@@ -178,14 +255,14 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
           </Text>
         </View>
 
-        <Pressable 
+        <Pressable
           style={styles.voiceButton}
           onPress={() => setVoiceEnabled(!voiceEnabled)}
         >
           {voiceEnabled ? (
             <Volume2 size={16} color={Colors.primary} />
           ) : (
-            <VolumeX size={16} color={Colors.textLight} />
+            <VolumeX size={16} color={theme.colors.textSecondary} />
           )}
         </Pressable>
       </Pressable>
@@ -193,14 +270,17 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
       {isExpanded && (
         <View style={styles.expandedContent}>
           <Text style={styles.fullMessage}>{currentMessage.text}</Text>
-          
+
           <View style={styles.actionButtons}>
             <Pressable style={styles.actionButton} onPress={generateQuiz}>
               <Sparkles size={16} color={Colors.primary} />
               <Text style={styles.actionButtonText}>Quiz Me!</Text>
             </Pressable>
-            
-            <Pressable style={styles.actionButton} onPress={generateJourneyContent}>
+
+            <Pressable
+              style={styles.actionButton}
+              onPress={generateJourneyContent}
+            >
               <Bot size={16} color={Colors.primary} />
               <Text style={styles.actionButtonText}>Tell Me More</Text>
             </Pressable>
@@ -215,17 +295,17 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
 const styles = StyleSheet.create({
   container: {
     margin: 16,
-    backgroundColor: Colors.white,
+    backgroundColor: "#FFF", // replaced Colors.white
     borderRadius: 16,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 4,
   },
   companionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 16,
   },
   avatar: {
@@ -233,14 +313,14 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 24,
     backgroundColor: Colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: 12,
-    position: 'relative',
+    position: "relative",
   },
   avatarEmoji: {
     fontSize: 20,
-    position: 'absolute',
+    position: "absolute",
     top: -4,
     right: -4,
   },
@@ -252,7 +332,7 @@ const styles = StyleSheet.create({
   },
   companionName: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.primary,
     marginBottom: 2,
   },
@@ -277,15 +357,15 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   actionButtons: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 12,
   },
   actionButton: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: Colors.primaryLight,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#E3F2FD", // replaced Colors.primaryLight with a light blue shade
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
@@ -293,7 +373,7 @@ const styles = StyleSheet.create({
   },
   actionButtonText: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.primary,
   },
 });
