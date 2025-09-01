@@ -16,7 +16,7 @@ module.exports = {
         '^@/utils/(.*)$': '<rootDir>/utils/$1',
         '^@/telemetry/(.*)$': '<rootDir>/src/telemetry/$1',
         '^@/telemetry$': '<rootDir>/src/telemetry/index.ts',
-        '^@/(.*)$': '<rootDir>/$1',
+        '^@/(.*)$': '<rootDir>/$1'
     },
     setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
     testMatch: [

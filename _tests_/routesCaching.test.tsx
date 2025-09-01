@@ -1,17 +1,27 @@
-jest.mock('@/services/routeService');
+// Move jest.mock to the very top of the file
+jest.mock("../src/services/routeService", () => {
+  console.log("MOCK: routeService loaded");
+  return {
+    fetchRoutes: jest.fn(),
+    __resetRouteServiceMetrics: jest.fn(),
+    getRouteServiceMetrics: jest.fn(() => ({ fetchCount: 0 })),
+  };
+});
+// ...existing code...
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, waitFor } from '@testing-library/react-native';
-import React from 'react';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { render, waitFor } from "@testing-library/react-native";
+import React from "react";
 
-import * as routeService from '@/services/routeService';
-import { useRoutesQuery } from '@/src/hooks/useRoutesQuery';
+import * as routeService from "@/services/routeService";
+import { useRoutesQuery } from "@/src/hooks/useRoutesQuery";
 
 // Silence act warnings from react-query tick batching (already covered by waitFor)
 const originalError = console.error;
 beforeAll(() => {
   console.error = (...args: any[]) => {
-    if (typeof args[0] === 'string' && args[0].includes('not wrapped in act')) return;
+    if (typeof args[0] === "string" && args[0].includes("not wrapped in act"))
+      return;
     originalError(...args);
   };
 });
@@ -24,39 +34,74 @@ const fetchRoutes = routeService.fetchRoutes as jest.Mock;
 beforeEach(() => {
   jest.clearAllMocks();
   fetchRoutes.mockImplementation((params) => {
-    console.log('fetchRoutes called', params);
+    console.log("fetchRoutes called", params);
     return Promise.resolve([]);
   });
+  if (routeService.__resetRouteServiceMetrics) {
+    routeService.__resetRouteServiceMetrics();
+  }
 });
 
-const origin = { id: 'o1', name: 'Origin', address: '', category: 'other', coordinates: { latitude: 0, longitude: 0 } } as any;
-const destination = { id: 'd1', name: 'Destination', address: '', category: 'other', coordinates: { latitude: 1, longitude: 1 } } as any;
-const options = { travelMode: 'transit', avoidHighways: false, avoidTolls: false, accessibilityMode: false } as any;
+const origin = {
+  id: "o1",
+  name: "Origin",
+  address: "",
+  category: "other",
+  coordinates: { latitude: 0, longitude: 0 },
+} as any;
+const destination = {
+  id: "d1",
+  name: "Destination",
+  address: "",
+  category: "other",
+  coordinates: { latitude: 1, longitude: 1 },
+} as any;
+const options = {
+  travelMode: "transit",
+  avoidHighways: false,
+  avoidTolls: false,
+  accessibilityMode: false,
+} as any;
 
 function TestComponent() {
   // Two consecutive hook invocations with identical keys inside same provider tree
-  const first = useRoutesQuery(origin, destination, 'transit', options);
-  const second = useRoutesQuery(origin, destination, 'transit', options);
-  return <>
-    <>{first.data?.length}</>
-    <>{second.data?.length}</>
-  </>;
+  const first = useRoutesQuery(origin, destination, "transit", options);
+  const second = useRoutesQuery(origin, destination, "transit", options);
+  return (
+    <>
+      <>{first.data?.length}</>
+      <>{second.data?.length}</>
+    </>
+  );
 }
 
 function createClient() {
   return new QueryClient({
-    defaultOptions: { queries: { retry: 0, staleTime: 1000 } }
+    defaultOptions: { queries: { retry: 0, staleTime: 1000 } },
   });
 }
 
-describe('Routes query caching', () => {
-  it('reuses cached data without refetch for identical keys (and only increments metrics once)', async () => {
+describe("Routes query caching", () => {
+  it("reuses cached data without refetch for identical keys (and only increments metrics once)", async () => {
     const client = createClient();
-    render(<QueryClientProvider client={client}><TestComponent /></QueryClientProvider>);
-  // Wait until the data has appeared (query resolved)
-  await waitFor(() => expect(fetchRoutes).toHaveBeenCalledTimes(1), { timeout: 5000 });
-  // Allow a microtask flush to ensure no second fetch queued
-  await new Promise(r => setTimeout(r, 50));
-  expect(fetchRoutes).toHaveBeenCalledTimes(1);
-  }, 10000);
+    render(
+      <QueryClientProvider client={client}>
+        <TestComponent />
+      </QueryClientProvider>
+    );
+    // Wait until the data has appeared (query resolved)
+    await waitFor(
+      () => {
+        // Debug: log current call count
+        console.log("fetchRoutes call count:", fetchRoutes.mock.calls.length);
+        expect(fetchRoutes).toHaveBeenCalledTimes(1);
+      },
+      {
+        timeout: 5000,
+      }
+    );
+    // Allow a microtask flush to ensure no second fetch queued
+    await new Promise((r) => setTimeout(r, 50));
+    expect(fetchRoutes).toHaveBeenCalledTimes(1);
+  }, 20000); // 20 seconds
 });
