@@ -9,19 +9,25 @@ import {
   Phone,
   Settings,
   Shield,
-  Users
-} from 'lucide-react-native';
-import React, { useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+  Users,
+} from "lucide-react-native";
+import React, { useState } from "react";
+import {
+  Alert,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
-import PhotoCheckInButton from './PhotoCheckInButton';
-import { SafeZoneIndicator } from './SafeZoneIndicator';
+import PhotoCheckInButton from "./PhotoCheckInButton";
+import { SafeZoneIndicator } from "./SafeZoneIndicator";
 
-import Colors from '@/constants/colors';
-import { useSafeZoneMonitor } from '@/hooks/useSafeZoneMonitor';
-import { useNavigationStore } from '@/stores/navigationStore';
-import { useParentalStore } from '@/stores/parentalStore';
-
+import Colors from "@/constants/colors";
+import { useSafeZoneMonitor } from "@/hooks/useSafeZoneMonitor";
+import { useNavigationStore } from "@/stores/navigationStore";
+import { useParentalStore } from "@/stores/parentalStore";
 
 type SafetyDashboardProps = {
   currentLocation?: {
@@ -35,52 +41,56 @@ type SafetyDashboardProps = {
   onNavigateToSettings?: () => void;
 };
 
-const SafetyDashboard: React.FC<SafetyDashboardProps> = ({ 
+const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
   currentPlace,
-  onNavigateToSettings 
+  onNavigateToSettings,
 }) => {
   const { settings, checkInRequests, safeZones } = useParentalStore();
-  const { photoCheckIns } = useNavigationStore();
+  const {
+    photoCheckIns,
+  }: { photoCheckIns: { placeName: string; timestamp: number }[] } =
+    useNavigationStore();
   const { getCurrentSafeZoneStatus } = useSafeZoneMonitor();
   const currentZoneStatus = getCurrentSafeZoneStatus();
   const [showQuickActions, setShowQuickActions] = useState(true);
 
   // Calculate safety stats
   const recentCheckIns = photoCheckIns.slice(0, 3);
-  const activeSafeZones = safeZones.filter(zone => zone.isActive).length;
-  const pendingCheckInRequests = checkInRequests.filter(req => req.status === 'pending').length;
+  const activeSafeZones = safeZones.filter((zone) => zone.isActive).length;
+  const pendingCheckInRequests = checkInRequests.filter(
+    (req) => req.status === "pending"
+  ).length;
   const emergencyContacts = settings.emergencyContacts.length;
 
   const handleEmergencyCall = () => {
-    Alert.alert(
-      "Emergency Help",
-      "Choose how you'd like to get help:",
-      [
-        { text: "Cancel", style: "cancel" },
-        { text: "Call 911", style: "destructive", onPress: () => console.log("Emergency call") },
-        { text: "Call Parent", onPress: () => console.log("Parent call") }
-      ]
-    );
+    Alert.alert("Emergency Help", "Choose how you'd like to get help:", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Call 911",
+        style: "destructive",
+        onPress: () => console.log("Emergency call"),
+      },
+      { text: "Call Parent", onPress: () => console.log("Parent call") },
+    ]);
   };
 
   const handleQuickCheckIn = () => {
-    Alert.alert(
-      "Quick Check-in",
-      "Let your family know you're okay?",
-      [
-        { text: "Not now", style: "cancel" },
-        { text: "I&apos;m OK!", onPress: () => console.log("Quick check-in sent") }
-      ]
-    );
+    Alert.alert("Quick Check-in", "Let your family know you're okay?", [
+      { text: "Not now", style: "cancel" },
+      {
+        text: "I&apos;m OK!",
+        onPress: () => console.log("Quick check-in sent"),
+      },
+    ]);
   };
 
-  const SafetyStatCard = ({ 
-    icon, 
-    title, 
-    value, 
-    subtitle, 
+  const SafetyStatCard = ({
+    icon,
+    title,
+    value,
+    subtitle,
     color = Colors.primary,
-    onPress 
+    onPress,
   }: {
     icon: React.ReactElement<{ size?: number; color?: string }>;
     title: string;
@@ -89,14 +99,14 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
     color?: string;
     onPress?: () => void;
   }) => (
-    <Pressable 
-      style={[styles.statCard, onPress && styles.pressableCard]} 
+    <Pressable
+      style={[styles.statCard, onPress && styles.pressableCard]}
       onPress={onPress}
     >
       <View style={[styles.statIcon, { backgroundColor: `${color}20` }]}>
-        {React.cloneElement(icon, { 
-          size: 20, 
-          color 
+        {React.cloneElement(icon, {
+          size: 20,
+          color,
         })}
       </View>
       <View style={styles.statContent}>
@@ -104,25 +114,28 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
         <Text style={styles.statTitle}>{title}</Text>
         <Text style={styles.statSubtitle}>{subtitle}</Text>
       </View>
-      {onPress && <ArrowRight size={16} color={theme.colors.textSecondary} />}
+      {onPress && <ArrowRight size={16} color={Colors.textSecondary} />}
     </Pressable>
   );
 
-  const QuickActionButton = ({ 
-    icon, 
-    title, 
-    onPress, 
-    color = Colors.primary 
+  const QuickActionButton = ({
+    icon,
+    title,
+    onPress,
+    color = Colors.primary,
   }: {
     icon: React.ReactElement<{ size?: number; color?: string }>;
     title: string;
     onPress: () => void;
     color?: string;
   }) => (
-    <Pressable style={[styles.quickActionButton, { backgroundColor: color }]} onPress={onPress}>
-      {React.cloneElement(icon, { 
-        size: 20, 
-        color: '#FFFFFF' 
+    <Pressable
+      style={[styles.quickActionButton, { backgroundColor: color }]}
+      onPress={onPress}
+    >
+      {React.cloneElement(icon, {
+        size: 20,
+        color: "#FFFFFF",
       })}
       <Text style={styles.quickActionText}>{title}</Text>
     </Pressable>
@@ -136,8 +149,11 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
           <Text style={styles.headerTitle}>Safety Dashboard</Text>
         </View>
         {onNavigateToSettings && (
-          <Pressable style={styles.settingsButton} onPress={onNavigateToSettings}>
-            <Settings size={20} color={theme.colors.textSecondary} />
+          <Pressable
+            style={styles.settingsButton}
+            onPress={onNavigateToSettings}
+          >
+            <Settings size={20} color={Colors.textSecondary} />
           </Pressable>
         )}
       </View>
@@ -147,21 +163,32 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Current Status</Text>
           <SafeZoneIndicator />
-          
+
           {currentZoneStatus && (
-            <View style={[
-              styles.statusCard, 
-              { backgroundColor: currentZoneStatus.inside.length > 0 ? '#E8F5E8' : '#FFF3E0' }
-            ]}>
-              <View style={[
-              styles.statusIndicator,
-              { backgroundColor: currentZoneStatus.inside.length > 0 ? Colors.success : Colors.warning }
-              ]} />
+            <View
+              style={[
+                styles.statusCard,
+                {
+                  backgroundColor:
+                    currentZoneStatus.inside.length > 0 ? "#E8F5E8" : "#FFF3E0",
+                },
+              ]}
+            >
+              <View
+                style={[
+                  styles.statusIndicator,
+                  {
+                    backgroundColor:
+                      currentZoneStatus.inside.length > 0
+                        ? Colors.success
+                        : Colors.warning,
+                  },
+                ]}
+              />
               <Text style={styles.statusText}>
-              {currentZoneStatus.inside.length > 0
-                ? `You're in the ${currentZoneStatus.inside[0].name} safe zone`
-                : 'Outside safe zones - stay alert!'
-              }
+                {currentZoneStatus.inside.length > 0
+                  ? `You're in the ${currentZoneStatus.inside[0].name} safe zone`
+                  : "Outside safe zones - stay alert!"}
               </Text>
             </View>
           )}
@@ -176,7 +203,7 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
                 <Text style={styles.hideButton}>Hide</Text>
               </Pressable>
             </View>
-            
+
             <View style={styles.quickActionsGrid}>
               <QuickActionButton
                 icon={<Phone />}
@@ -184,21 +211,21 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
                 onPress={handleEmergencyCall}
                 color="#FF3B30"
               />
-              
+
               <QuickActionButton
                 icon={<MessageCircle />}
-                title="I&apos;m OK!"
+                title="I'm OK!"
                 onPress={handleQuickCheckIn}
                 color={Colors.success}
               />
-              
+
               <QuickActionButton
                 icon={<MapPin />}
                 title="Share Location"
                 onPress={() => console.log("Share location")}
                 color={Colors.primary}
               />
-              
+
               <QuickActionButton
                 icon={<Camera />}
                 title="Photo Check-in"
@@ -212,8 +239,10 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
         {/* Photo Check-in */}
         {currentPlace && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Check-in at Current Location</Text>
-            <PhotoCheckInButton 
+            <Text style={styles.sectionTitle}>
+              Check-in at Current Location
+            </Text>
+            <PhotoCheckInButton
               placeName={currentPlace.name}
               placeId={currentPlace.id}
             />
@@ -223,7 +252,7 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
         {/* Safety Stats */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Safety Overview</Text>
-          
+
           <View style={styles.statsGrid}>
             <SafetyStatCard
               icon={<Shield />}
@@ -232,7 +261,7 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
               subtitle="Active zones"
               onPress={() => console.log("Navigate to safe zones")}
             />
-            
+
             <SafetyStatCard
               icon={<Camera />}
               title="Check-ins"
@@ -249,9 +278,11 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
               title="Requests"
               value={pendingCheckInRequests}
               subtitle="Pending"
-              color={pendingCheckInRequests > 0 ? Colors.warning : Colors.success}
+              color={
+                pendingCheckInRequests > 0 ? Colors.warning : Colors.success
+              }
             />
-            
+
             <SafetyStatCard
               icon={<Users />}
               title="Contacts"
@@ -266,28 +297,36 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
         {/* Recent Activity */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Recent Activity</Text>
-          
+
           {recentCheckIns.length > 0 ? (
-            recentCheckIns.map((checkIn, index) => (
-              <View key={index} style={styles.activityItem}>
-                <CheckCircle size={16} color={Colors.success} />
-                <View style={styles.activityContent}>
-                  <Text style={styles.activityTitle}>Checked in at {checkIn.placeName}</Text>
-                  <Text style={styles.activityTime}>
-                    {new Date(checkIn.timestamp).toLocaleTimeString([], { 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
-                    })}
-                  </Text>
+            recentCheckIns.map(
+              (
+                checkIn: { placeName: string; timestamp: number },
+                index: number
+              ) => (
+                <View key={index} style={styles.activityItem}>
+                  <CheckCircle size={16} color={Colors.success} />
+                  <View style={styles.activityContent}>
+                    <Text style={styles.activityTitle}>
+                      Checked in at {checkIn.placeName}
+                    </Text>
+                    <Text style={styles.activityTime}>
+                      {new Date(checkIn.timestamp).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            ))
+              )
+            )
           ) : (
             <View style={styles.emptyActivity}>
-              <Camera size={32} color={theme.colors.textSecondary} />
+              <Camera size={32} color={Colors.textSecondary} />
               <Text style={styles.emptyActivityText}>No recent check-ins</Text>
               <Text style={styles.emptyActivitySubtext}>
-                Take a photo when you arrive somewhere to let your family know you&apos;re safe
+                Take a photo when you arrive somewhere to let your family know
+                you&apos;re safe
               </Text>
             </View>
           )}
@@ -301,7 +340,8 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
             <View style={styles.tipContent}>
               <Text style={styles.tipTitle}>Stay Safe Out There!</Text>
               <Text style={styles.tipText}>
-                Always let someone know where you&apos;re going and check in when you arrive safely.
+                Always let someone know where you&apos;re going and check in
+                when you arrive safely.
               </Text>
             </View>
           </View>
@@ -317,22 +357,22 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     padding: 16,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: Colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: Colors.border,
   },
   headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
   },
   headerTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.text,
   },
   settingsButton: {
@@ -346,25 +386,25 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 16,
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.text,
     marginBottom: 16,
   },
   hideButton: {
     fontSize: 14,
     color: Colors.primary,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   statusCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -377,41 +417,41 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.text,
   },
   quickActionsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: 12,
   },
   quickActionButton: {
-    width: '48%',
+    width: "48%",
     borderRadius: 12,
     padding: 16,
-    alignItems: 'center',
+    alignItems: "center",
     gap: 8,
     minHeight: 80,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   quickActionText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 12,
-    fontWeight: '600',
-    textAlign: 'center',
+    fontWeight: "600",
+    textAlign: "center",
   },
   statsGrid: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 12,
     marginBottom: 12,
   },
   statCard: {
     flex: 1,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: Colors.surface,
     borderRadius: 12,
     padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 12,
   },
   pressableCard: {
@@ -422,31 +462,31 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   statContent: {
     flex: 1,
   },
   statValue: {
     fontSize: 20,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.text,
   },
   statTitle: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.text,
     marginTop: 2,
   },
   statSubtitle: {
     fontSize: 10,
-    color: theme.colors.textSecondary,
+    color: Colors.textSecondary,
   },
   activityItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: theme.colors.surface,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.surface,
     borderRadius: 12,
     padding: 16,
     marginBottom: 8,
@@ -457,37 +497,37 @@ const styles = StyleSheet.create({
   },
   activityTitle: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.text,
   },
   activityTime: {
     fontSize: 12,
-    color: theme.colors.textSecondary,
+    color: Colors.textSecondary,
     marginTop: 2,
   },
   emptyActivity: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 32,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: Colors.surface,
     borderRadius: 12,
   },
   emptyActivityText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.text,
     marginTop: 12,
   },
   emptyActivitySubtext: {
     fontSize: 14,
-    color: theme.colors.textSecondary,
-    textAlign: 'center',
+    color: Colors.textSecondary,
+    textAlign: "center",
     marginTop: 8,
     lineHeight: 20,
   },
   tipCard: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    backgroundColor: '#FFF9E6',
+    flexDirection: "row",
+    alignItems: "flex-start",
+    backgroundColor: "#FFF9E6",
     borderRadius: 12,
     padding: 16,
     gap: 12,
@@ -497,7 +537,7 @@ const styles = StyleSheet.create({
   },
   tipTitle: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.text,
     marginBottom: 4,
   },

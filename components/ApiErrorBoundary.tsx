@@ -26,7 +26,8 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
   isNavigating,
   children,
 }) => {
-  // Removed unused messages variable
+  // Messages state to store companion messages
+  const [messages, setMessages] = useState<CompanionMessage[]>([]);
   const [currentMessage, setCurrentMessage] = useState<CompanionMessage | null>(
     null
   );
@@ -37,82 +38,9 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
   >("happy");
   const pulseAnim = React.useMemo(() => new Animated.Value(1), []);
 
-  const startCompanionAnimation = React.useCallback(() => {
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 1.2,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    ).start();
-  }, [pulseAnim]);
+  // Removed duplicate startCompanionAnimation declaration
 
-  const generateJourneyContent = React.useCallback(async () => {
-    if (!destination) return;
-
-    try {
-      const response = await fetch("https://toolkit.rork.com/text/llm/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          messages: [
-            {
-              role: "system",
-              content: `You are Buddy, a friendly AI companion for kids using a navigation app. Create engaging, educational, and safe content for a journey to ${destination.name}. Keep responses short (1-2 sentences), age-appropriate, and encouraging. Focus on interesting facts, safety reminders, or fun observations about the area.`,
-            },
-            {
-              role: "user",
-              content: `I'm traveling to ${destination.name} in ${destination.address}. Tell me something interesting about this area or give me a fun fact to make the journey more exciting!`,
-            },
-          ],
-        }),
-      });
-
-      const data = await response.json();
-
-      const newMessage: CompanionMessage = {
-        id: Date.now().toString(),
-        text: data.completion,
-        type: "story",
-        timestamp: new Date(),
-      };
-
-      setMessages((prev) => [...prev, newMessage]);
-      setCurrentMessage(newMessage);
-      setCompanionMood("excited");
-    } catch (error) {
-      console.log("AI companion error:", error);
-      // Fallback to predefined messages
-      const fallbackMessage: CompanionMessage = {
-        id: Date.now().toString(),
-        text: `Great choice going to ${destination.name}! I bet you'll discover something amazing there. Stay safe and enjoy your adventure! 🌟`,
-        type: "encouragement",
-        timestamp: new Date(),
-      };
-      setCurrentMessage(fallbackMessage);
-    }
-  }, [destination]);
-
-  useEffect(() => {
-    if (isNavigating && destination) {
-      generateJourneyContent();
-      startCompanionAnimation();
-    }
-  }, [
-    isNavigating,
-    destination,
-    generateJourneyContent,
-    startCompanionAnimation,
-  ]);
+  // Removed duplicate generateJourneyContent declaration
 
   const startCompanionAnimation = () => {
     Animated.loop(
@@ -178,6 +106,18 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
       setCurrentMessage(fallbackMessage);
     }
   };
+
+  useEffect(() => {
+    if (isNavigating && destination) {
+      generateJourneyContent();
+      startCompanionAnimation();
+    }
+  }, [
+    isNavigating,
+    destination,
+    generateJourneyContent,
+    startCompanionAnimation,
+  ]);
 
   const generateQuiz = async () => {
     if (!destination) return;
@@ -262,7 +202,7 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
           {voiceEnabled ? (
             <Volume2 size={16} color={Colors.primary} />
           ) : (
-            <VolumeX size={16} color={theme.colors.textSecondary} />
+            <VolumeX size={16} color={Colors.textSecondary ?? "#888"} />
           )}
         </Pressable>
       </Pressable>

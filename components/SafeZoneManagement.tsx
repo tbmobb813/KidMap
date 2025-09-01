@@ -6,6 +6,14 @@ import Colors from '@/constants/colors';
 import { useParentalStore } from '@/stores/parentalStore';
 import { SafeZone } from '@/types/parental';
 
+// Define a theme object for colors used in the component
+const theme = {
+  colors: {
+    surface: Colors.surface || '#FFFFFF',
+    textSecondary: Colors.textSecondary || '#888888',
+  },
+};
+
 type SafeZoneManagementProps = {
   onBack: () => void;
 };
