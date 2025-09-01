@@ -1,5 +1,5 @@
 import { Bot, Volume2, VolumeX, Sparkles } from 'lucide-react-native';
-import React, { useState, useEffect, ReactNode } from 'react';
+import React, { useState, useEffect, ReactNode, useCallback, useMemo } from 'react';
 import { StyleSheet, Text, View, Pressable, Animated } from 'react-native';
 
 import Colors from '../constants/colors';
@@ -22,26 +22,19 @@ type CompanionMessage = {
 };
 
 const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
-  currentLocation,
+  currentLocation: _currentLocation,
   destination,
   isNavigating,
   children
 }) => {
-  const [messages, setMessages] = useState<CompanionMessage[]>([]);
+  const [, setMessages] = useState<CompanionMessage[]>([]);
   const [currentMessage, setCurrentMessage] = useState<CompanionMessage | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [companionMood, setCompanionMood] = useState<'happy' | 'excited' | 'curious'>('happy');
-  const pulseAnim = new Animated.Value(1);
+  const pulseAnim = useMemo(() => new Animated.Value(1), []);
 
-  useEffect(() => {
-    if (isNavigating && destination) {
-      generateJourneyContent();
-      startCompanionAnimation();
-    }
-  }, [isNavigating, destination]);
-
-  const startCompanionAnimation = () => {
+  const startCompanionAnimation = useCallback(() => {
     Animated.loop(
       Animated.sequence([
         Animated.timing(pulseAnim, {
@@ -56,9 +49,9 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
         }),
       ])
     ).start();
-  };
+  }, [pulseAnim]);
 
-  const generateJourneyContent = async () => {
+  const generateJourneyContent = useCallback(async () => {
     if (!destination) return;
 
     try {
@@ -104,7 +97,14 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
       };
       setCurrentMessage(fallbackMessage);
     }
-  };
+  }, [destination]);
+
+  useEffect(() => {
+    if (isNavigating && destination) {
+      generateJourneyContent();
+      startCompanionAnimation();
+    }
+  }, [isNavigating, destination, generateJourneyContent, startCompanionAnimation]);
 
   const generateQuiz = async () => {
     if (!destination) return;

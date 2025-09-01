@@ -1,8 +1,6 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 
 import { apiClient } from './api/api';
-import { Config } from './config/config';
 import { SafeAsyncStorage } from './error/errorHandling';
 import { log } from './error/logger';
 
@@ -532,7 +530,7 @@ class AuthManager {
       // For now, just store the preference
       await SafeAsyncStorage.setItem('biometric_enabled', true);
       return { success: true };
-    } catch (error) {
+    } catch {
       return { success: false, error: 'Failed to enable biometric auth' };
     }
   }

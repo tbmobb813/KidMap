@@ -1,5 +1,5 @@
 import { CheckCircle, MapPin, MessageCircle, Phone, X } from 'lucide-react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Platform, Pressable, StyleSheet, Text, Vibration, View } from 'react-native';
 
 import Colors from '@/constants/colors';
@@ -83,7 +83,7 @@ const DevicePingHandler: React.FC<DevicePingHandlerProps> = ({ testId }) => {
     );
   }, [handleAcknowledgePing]);
 
-  const handleLocationPing = (ping: DevicePingRequest) => {
+  const handleLocationPing = useCallback((ping: DevicePingRequest) => {
     Alert.alert(
       '📍 Location Request',
       ping.message || 'Your parent has requested your current location',
@@ -99,7 +99,7 @@ const DevicePingHandler: React.FC<DevicePingHandlerProps> = ({ testId }) => {
         },
       ]
     );
-  };
+  }, [handleAcknowledgePing]);
 
   const handleMessagePing = React.useCallback((ping: DevicePingRequest) => {
     Alert.alert(

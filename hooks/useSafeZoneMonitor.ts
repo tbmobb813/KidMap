@@ -81,7 +81,7 @@ export const useSafeZoneMonitor = () => {
   }, [currentLocation, safeZones]);
 
   // Send notification for safe zone events
-  const sendSafeZoneNotification = async (event: SafeZoneEvent) => {
+  const sendSafeZoneNotification = useCallback(async (event: SafeZoneEvent) => {
     if (!settings.safeZoneAlerts) return;
 
     const { safeZone, type } = event;
@@ -126,10 +126,10 @@ export const useSafeZoneMonitor = () => {
     };
 
     await saveDashboardData(updatedDashboard);
-  };
+  }, [settings.safeZoneAlerts, dashboardData, saveDashboardData]);
 
   // Check safe zone status for current location
-  const checkSafeZones = async (location: LocationState) => {
+  const checkSafeZones = useCallback(async (location: LocationState) => {
     const newStates: Record<string, boolean> = {};
     const events: SafeZoneEvent[] = [];
 
@@ -178,7 +178,7 @@ export const useSafeZoneMonitor = () => {
     for (const event of events) {
       await sendSafeZoneNotification(event);
     }
-  };
+  }, [safeZones, safeZoneStates, sendSafeZoneNotification]);
 
   // Start monitoring
   // import { useCallback } from 'react'; // Moved to top
@@ -292,12 +292,8 @@ export const useSafeZoneMonitor = () => {
     }
   }, [
     isMonitoring,
-    safeZones,
-    settings.safeZoneAlerts,
     checkSafeZones,
-    locationSubscription,
     setCurrentLocation,
-    requestNotificationPermission,
   ]);
 
   // Stop monitoring

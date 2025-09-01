@@ -246,7 +246,7 @@ export async function checkBackendHealth(): Promise<"up" | "down"> {
       return "up";
     }
     return "down";
-  } catch (error) {
+  } catch {
     return "down";
   }
 }
