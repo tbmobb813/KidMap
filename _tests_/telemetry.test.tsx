@@ -1,91 +1,122 @@
-import { fireEvent, waitFor } from '@testing-library/react-native';
-import React from 'react';
+import { fireEvent, waitFor } from "@testing-library/react-native";
+import React from "react";
 
-import { render } from './testUtils';
+import { render } from "./testUtils";
 
-import AccessibilitySettings from '@/components/AccessibilitySettings';
-import { prefetchRouteVariants } from '@/hooks/useRoutePrefetch';
-import SafetyPanel from '@/modules/safety/components/SafetyPanel';
-import { useSafeZoneMonitor } from '@/modules/safety/hooks/useSafeZoneMonitor';
-import { useNavigationStore } from '@/stores/navigationStore';
-import { getMemoryEvents } from '@/telemetry';
+import AccessibilitySettings from "@/components/AccessibilitySettings";
+import { prefetchRouteVariants } from "@/hooks/useRoutePrefetch";
+import SafetyPanel from "@/modules/safety/components/SafetyPanel";
+import { useSafeZoneMonitor } from "@/modules/safety/hooks/useSafeZoneMonitor";
+import { useNavigationStore } from "@/stores/navigationStore";
+import { getMemoryEvents } from "@/telemetry";
 
 // Mocks
-jest.mock('@react-native-async-storage/async-storage', () => require('@react-native-async-storage/async-storage/jest/async-storage-mock'));
+jest.mock("@react-native-async-storage/async-storage", () =>
+  require("@react-native-async-storage/async-storage/jest/async-storage-mock")
+);
 
 // Mock telemetry module to track events properly
 const mockEvents: any[] = [];
-jest.mock('@/telemetry', () => {
+jest.mock("@/telemetry", () => {
   return {
     MemoryAdapter: class MockMemoryAdapter {
       events = mockEvents;
-      record = (e: any) => { this.events.push(e); };
+      record = (e: any) => {
+        this.events.push(e);
+      };
       flush = () => {};
     },
     setTelemetryAdapter: jest.fn(),
     getMemoryEvents: () => [...mockEvents],
-    resetMemoryEvents: () => { mockEvents.length = 0; },
-    track: jest.fn((e: any) => { mockEvents.push({ ...e, ts: Date.now() }); }),
+    resetMemoryEvents: () => {
+      mockEvents.length = 0;
+    },
+    track: jest.fn((e: any) => {
+      mockEvents.push({ ...e, ts: Date.now() });
+    }),
   };
 });
 // Mock useToast to avoid real side effects
-jest.mock('@/hooks/useToast', () => ({
-  useToast: () => ({ toast: { message: '', type: '', visible: false }, showToast: jest.fn(), hideToast: jest.fn() })
+jest.mock("@/hooks/useToast", () => ({
+  useToast: () => ({
+    toast: { message: "", type: "", visible: false },
+    showToast: jest.fn(),
+    hideToast: jest.fn(),
+  }),
 }));
 
-jest.mock('@/hooks/useRoutePrefetch', () => ({
+jest.mock("@/hooks/useRoutePrefetch", () => ({
   prefetchRouteVariants: jest.fn(),
 }));
 
-jest.mock('@/modules/safety/hooks/useSafeZoneMonitor', () => ({
+jest.mock("@/modules/safety/hooks/useSafeZoneMonitor", () => ({
   useSafeZoneMonitor: jest.fn(),
 }));
 
 // Mock parental store context to avoid AsyncStorage + complex provider tree
-jest.mock('@/modules/safety/stores/parentalStore', () => ({
-  useParentalStore: () => ({ settings: { safeZoneAlerts: true }, safeZones: [], addSafeZone: jest.fn() }),
+jest.mock("@/modules/safety/stores/parentalStore", () => ({
+  useParentalStore: () => ({
+    settings: { safeZoneAlerts: true },
+    safeZones: [],
+    addSafeZone: jest.fn(),
+  }),
   ParentalProvider: ({ children }: any) => children,
 }));
 
-describe('Telemetry emissions', () => {
+describe("Telemetry emissions", () => {
   beforeEach(() => {
     mockEvents.length = 0; // Clear events before each test
   });
 
-  it('emits accessibility_toggle events for setting changes', () => {
+  it("emits accessibility_toggle events for setting changes", () => {
     // Seed zustand store baseline
     // Direct zustand mutation for test seeding (internal helper)
     (useNavigationStore as any).setState({
-      accessibilitySettings: { largeText: false, highContrast: false, voiceDescriptions: false, simplifiedMode: false }
+      accessibilitySettings: {
+        largeText: false,
+        highContrast: false,
+        voiceDescriptions: false,
+        simplifiedMode: false,
+      },
     });
 
-  const { getByLabelText } = render(<AccessibilitySettings />);
-  // Toggle first two switches via their accessibility labels
-  fireEvent(getByLabelText(/Toggle Large Text/i), 'valueChange', true);
-  fireEvent(getByLabelText(/Toggle High Contrast/i), 'valueChange', true);
+    const { getByLabelText } = render(<AccessibilitySettings />);
+    // Toggle first two switches via their accessibility labels
+    fireEvent(getByLabelText(/Toggle Large Text/i), "valueChange", true);
+    fireEvent(getByLabelText(/Toggle High Contrast/i), "valueChange", true);
 
-  const events = getMemoryEvents().filter((e: any) => e.type === 'accessibility_toggle');
-  const settings = events.map((e: any) => (e as any).setting);
-    expect(settings).toEqual(expect.arrayContaining(['largeText', 'highContrast']));
+    const events = getMemoryEvents().filter(
+      (e: any) => e.type === "accessibility_toggle"
+    );
+    const settings = events.map((e: any) => (e as any).setting);
+    expect(settings).toEqual(
+      expect.arrayContaining(["largeText", "highContrast"])
+    );
   });
 
-  it('emits route_prefetch_start/complete for each prefetched mode', async () => {
+  it("emits route_prefetch_start/complete for each prefetched mode", async () => {
     const mockPrefetch = prefetchRouteVariants as jest.Mock;
     mockPrefetch.mockImplementation(async () => {
-      ['walking','biking'].forEach((m,i) => {
+      ["walking", "biking"].forEach((m, i) => {
         // Simulate what hook instrumentation would do
-        const { track } = require('@/telemetry');
-        track({ type: 'route_prefetch_start', mode: m });
-        track({ type: 'route_prefetch_complete', mode: m, durationMs: 5 + i });
+        const { track } = require("@/telemetry");
+        track({ type: "route_prefetch_start", mode: m });
+        track({ type: "route_prefetch_complete", mode: m, durationMs: 5 + i });
       });
     });
-    await mockPrefetch({}, { id: 'o1' }, { id: 'd1' }, 'transit', { travelMode: 'transit' });
+    await mockPrefetch({}, { id: "o1" }, { id: "d1" }, "transit", {
+      travelMode: "transit",
+    });
     const events = getMemoryEvents();
-  expect(events.filter((e: any) => e.type === 'route_prefetch_start').length).toBeGreaterThanOrEqual(2);
-  expect(events.filter((e: any) => e.type === 'route_prefetch_complete').length).toBeGreaterThanOrEqual(2);
+    expect(
+      events.filter((e: any) => e.type === "route_prefetch_start").length
+    ).toBeGreaterThanOrEqual(2);
+    expect(
+      events.filter((e: any) => e.type === "route_prefetch_complete").length
+    ).toBeGreaterThanOrEqual(2);
   });
 
-  it('emits safety monitor toggle & zone entry events', async () => {
+  it("emits safety monitor toggle & zone entry events", async () => {
     // Test wrapper with real React state
     const TestWrapper: React.FC = () => {
       const [monitoring, setMonitoring] = React.useState(false);
@@ -95,11 +126,14 @@ describe('Telemetry emissions', () => {
         isMonitoring: monitoring,
         startMonitoring: () => {
           setMonitoring(true);
-          setEventsArr(arr => [{ id: 'e1', type: 'entry', zoneId: 'z1', zoneName: 'Park' }, ...arr]);
+          setEventsArr((arr) => [
+            { id: "e1", type: "entry", zoneId: "z1", zoneName: "Park" },
+            ...arr,
+          ]);
         },
         stopMonitoring: () => setMonitoring(false),
         getCurrentSafeZoneStatus: () => ({
-          inside: monitoring ? [{ id: 'z1', name: 'Park' }] : [],
+          inside: monitoring ? [{ id: "z1", name: "Park" }] : [],
           totalActive: 1,
         }),
         events: eventsArr,
@@ -108,11 +142,20 @@ describe('Telemetry emissions', () => {
     };
 
     const { getByLabelText } = render(<TestWrapper />);
-  fireEvent.press(getByLabelText('Start monitoring safe zones'));
+    fireEvent.press(getByLabelText("Start monitoring safe zones"));
     await waitFor(() => {
       const events = getMemoryEvents();
-      expect(events.some((e: any) => e.type === 'safety_monitor_toggled' && (e as any).enabled === true)).toBe(true);
-      expect(events.some((e: any) => e.type === 'safe_zone_entry' && (e as any).zoneId === 'z1')).toBe(true);
+      expect(
+        events.some(
+          (e: any) =>
+            e.type === "safety_monitor_toggled" && (e as any).enabled === true
+        )
+      ).toBe(true);
+      expect(
+        events.some(
+          (e: any) => e.type === "safe_zone_entry" && (e as any).zoneId === "z1"
+        )
+      ).toBe(true);
     });
   });
 });

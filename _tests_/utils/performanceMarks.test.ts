@@ -3,7 +3,7 @@ import {
   getMarks,
   mark,
   measure,
-} from "../utils/performance/performanceMarks";
+} from "../../utils/performance/performanceMarks";
 
 describe("performanceMarks utility", () => {
   afterEach(() => {

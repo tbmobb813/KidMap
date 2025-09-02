@@ -41,7 +41,7 @@ module.exports = {
     },
     // Allow transpiling of RN/Expo and specific ESM deps; rely on jest-expo's babel config
     transformIgnorePatterns: [
-        'node_modules/(?!(react-native|@react-native|@react-navigation|@react-native-async-storage|expo(nent)?|expo-modules-core|@expo|@unimodules|@nkzw/create-context-hook)/)'
+        'node_modules/(?!(react-native|@react-native|@react-navigation|@react-native-async-storage|expo(nent)?|expo-modules-core|expo-location|expo-image-picker|expo-image|lucide-react-native|@expo|@unimodules|@nkzw/create-context-hook)/)'
     ],
     verbose: true,
 };

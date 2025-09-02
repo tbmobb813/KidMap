@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">47.05% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>8/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">18.18% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>2/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">47.05% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>8/17</span>
             </div>
         
             
@@ -175,10 +175,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -186,9 +186,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -198,6 +196,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -206,12 +217,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -220,12 +225,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -275,41 +275,41 @@ type PlaceCardProps = {
   onPress: (place: Place) =&gt; void;
 };
 &nbsp;
-const PlaceCard: React.FC&lt;PlaceCardProps&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> place, onPress }) =&gt; {</span>
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const getIcon = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    switch (place.category) {</span>
-      case "home":
+const PlaceCard: React.FC&lt;PlaceCardProps&gt; = ({ place, onPress }) =&gt; {
+  const theme = useTheme();
+  const getIcon = () =&gt; {
+    switch (place.category) {
+<span class="branch-0 cbranch-no" title="branch not covered" >      case "home":</span>
 <span class="cstat-no" title="statement not covered" >        return &lt;Home size={24} color={theme.colors.primary} /&gt;;</span>
-      case "school":
+<span class="branch-1 cbranch-no" title="branch not covered" >      case "school":</span>
 <span class="cstat-no" title="statement not covered" >        return &lt;School size={24} color={theme.colors.primary} /&gt;;</span>
-      case "library":
+<span class="branch-2 cbranch-no" title="branch not covered" >      case "library":</span>
 <span class="cstat-no" title="statement not covered" >        return &lt;BookOpen size={24} color={theme.colors.primary} /&gt;;</span>
       case "park":
-<span class="cstat-no" title="statement not covered" >        return &lt;Trees size={24} color={theme.colors.primary} /&gt;;</span>
-      case "store":
+        return &lt;Trees size={24} color={theme.colors.primary} /&gt;;
+<span class="branch-4 cbranch-no" title="branch not covered" >      case "store":</span>
 <span class="cstat-no" title="statement not covered" >        return &lt;Store size={24} color={theme.colors.primary} /&gt;;</span>
-      case "restaurant":
+<span class="branch-5 cbranch-no" title="branch not covered" >      case "restaurant":</span>
 <span class="cstat-no" title="statement not covered" >        return &lt;Utensils size={24} color={theme.colors.primary} /&gt;;</span>
-      case "friend":
+<span class="branch-6 cbranch-no" title="branch not covered" >      case "friend":</span>
 <span class="cstat-no" title="statement not covered" >        return &lt;Users size={24} color={theme.colors.primary} /&gt;;</span>
-      case "family":
+<span class="branch-7 cbranch-no" title="branch not covered" >      case "family":</span>
 <span class="cstat-no" title="statement not covered" >        return &lt;Heart size={24} color={theme.colors.primary} /&gt;;</span>
-      default:
+<span class="branch-8 cbranch-no" title="branch not covered" >      default:</span>
 <span class="cstat-no" title="statement not covered" >        return &lt;MapPin size={24} color={theme.colors.primary} /&gt;;</span>
     }
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
   &lt;Pressable 
       accessibilityRole="button"
       accessibilityLabel={`Place ${place.name}`}
       accessibilityHint="Shows details for this place"
       hitSlop={8}
-      style={<span class="fstat-no" title="function not covered" >({</span> pressed }) =&gt; <span class="cstat-no" title="statement not covered" >[</span>
+      style={({ pressed }) =&gt; [
     styles.container,
     { backgroundColor: theme.colors.surface, shadowColor: theme.colors.text },
-    pressed &amp;&amp; [{ backgroundColor: theme.colors.surfaceAlt }, styles.pressed]
+    pressed &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >[{ backgroundColor: theme.colors.surfaceAlt }, styles.pressed]</span>
       ]}
       onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onPress(place)}</span>
       testID={`place-card-${place.id}`}
@@ -325,7 +325,7 @@ const PlaceCard: React.FC&lt;PlaceCardProps&gt; = <span class="cstat-no" title="
   );
 };
 &nbsp;
-const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.create({</span>
+const styles = StyleSheet.create({
   address: {
     fontSize: 14,
   },
@@ -370,7 +370,7 @@ export default PlaceCard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-29T20:50:18.009Z
+                at 2025-09-02T01:51:28.084Z
             </div>
         <script src="../prettify.js"></script>
         <script>

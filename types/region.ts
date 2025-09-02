@@ -14,24 +14,20 @@ export type RegionConfig = {
   country: string;
   timezone: string;
   currency: string;
+  population: number;
+  area: number;
   language: string;
+  capital: string;
+  region: string;
+  subregion: string;
+  code: string;
+  description: string;
   coordinates: {
     latitude: number;
     longitude: number;
   };
   transitSystems: TransitSystem[];
   emergencyNumber: string;
-  safetyTips: string[];
-  funFacts: string[];
-  popularPlaces: {
-    name: string;
-    category: string;
-    description: string;
-  }[];
-  weatherApiKey?: string;
-  transitApiEndpoint?: string;
-  mapStyle?: "standard" | "satellite" | "hybrid";
-  lastUpdated?: string;
 };
 
 export type UserRegionPreferences = {

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">81.81% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>9/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">56.25% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>9/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">81.81% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>9/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -188,27 +188,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -251,7 +251,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -300,37 +300,37 @@ type AchievementBadgeProps = {
   size?: "small" | "medium" | "large";
 };
 &nbsp;
-const AchievementBadge: React.FC&lt;AchievementBadgeProps&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
+const AchievementBadge: React.FC&lt;AchievementBadgeProps&gt; = ({
   achievement,
   onPress,
-  size = <span class="branch-0 cbranch-no" title="branch not covered" >"medium"</span>
+  size = "medium"
 }) =&gt; {
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const getDimensions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    switch (size) {</span>
-      case "small": <span class="cstat-no" title="statement not covered" >return { width: 60, height: 60, fontSize: 20, textSize: 10 };</span>
-      case "medium": <span class="cstat-no" title="statement not covered" >return { width: 80, height: 80, fontSize: 28, textSize: 12 };</span>
-      case "large": <span class="cstat-no" title="statement not covered" >return { width: 100, height: 100, fontSize: 36, textSize: 14 };</span>
+  const theme = useTheme();
+  const getDimensions = () =&gt; {
+    switch (size) {
+<span class="branch-0 cbranch-no" title="branch not covered" >      case "small": <span class="cstat-no" title="statement not covered" >return { width: 60, height: 60, fontSize: 20, textSize: 10 };</span></span>
+      case "medium": return { width: 80, height: 80, fontSize: 28, textSize: 12 };
+<span class="branch-2 cbranch-no" title="branch not covered" >      case "large": <span class="cstat-no" title="statement not covered" >return { width: 100, height: 100, fontSize: 36, textSize: 14 };</span></span>
     }
   };
 &nbsp;
-  const dimensions = <span class="cstat-no" title="statement not covered" >getDimensions();</span>
+  const dimensions = getDimensions();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;Pressable
       accessibilityRole="button"
       accessibilityLabel={`${achievement.title} badge`}
-      style={<span class="fstat-no" title="function not covered" >({</span> pressed }) =&gt; <span class="cstat-no" title="statement not covered" >[</span>
+      style={({ pressed }) =&gt; [
         styles.container,
         {
           width: dimensions.width,
           height: dimensions.height,
-          backgroundColor: achievement.unlocked ? theme.colors.secondary : theme.colors.border,
+          backgroundColor: achievement.unlocked ? theme.colors.secondary : <span class="branch-1 cbranch-no" title="branch not covered" >theme.colors.border,</span>
           shadowColor: theme.colors.text,
-          borderWidth: achievement.unlocked ? 0 : 1,
+          borderWidth: achievement.unlocked ? 0 : <span class="branch-1 cbranch-no" title="branch not covered" >1,</span>
           borderColor: theme.colors.border
         },
-        pressed &amp;&amp; styles.pressed
+        pressed &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.pressed</span>
       ]}
       onPress={onPress}
       disabled={!achievement.unlocked}
@@ -342,14 +342,14 @@ const AchievementBadge: React.FC&lt;AchievementBadgeProps&gt; = <span class="cst
           &lt;Star size={16} color={theme.colors.warning} style={styles.star} /&gt;
         &lt;/&gt;
       ) : (
-        &lt;Lock size={24} color={theme.colors.textSecondary} /&gt;
+<span class="branch-1 cbranch-no" title="branch not covered" >        &lt;Lock size={24} color={theme.colors.textSecondary} /&gt;</span>
       )}
 &nbsp;
       &lt;Text
         style={[
           styles.title,
           { fontSize: dimensions.textSize, color: theme.colors.text },
-          !achievement.unlocked &amp;&amp; { color: theme.colors.textSecondary }
+          !achievement.unlocked &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >{ color: theme.colors.textSecondary }</span>
         ]}
         numberOfLines={2}
       &gt;
@@ -363,7 +363,7 @@ const AchievementBadge: React.FC&lt;AchievementBadgeProps&gt; = <span class="cst
   );
 };
 &nbsp;
-const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.create({</span>
+const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     borderRadius: 16,
@@ -406,7 +406,7 @@ export default AchievementBadge;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-29T20:50:18.009Z
+                at 2025-09-02T01:51:28.084Z
             </div>
         <script src="../prettify.js"></script>
         <script>

@@ -1,7 +1,7 @@
 import { fireEvent } from "@testing-library/react-native";
 import React from "react";
 
-import { render } from "./testUtils";
+import { render } from "../testUtils";
 
 import VoiceNavigation from "@/components/VoiceNavigation";
 import { TransitStep } from "@/types/navigation";

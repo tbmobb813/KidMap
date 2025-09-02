@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>6/10</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">42.85% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>3/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>4/8</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -101,18 +101,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -120,7 +118,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -130,19 +130,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMemo } from "react";
 &nbsp;
 import { useRegionStore } from "@/stores/regionStore";
-import { formatCurrency, formatDistance, formatTemperature, getLocalizedTime } from "@/utils/regionUtils";
+import { formatCurrency, formatDistance, formatTemperature, getLocalizedTime } from "@/utils/location/regionUtils";
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >useRegionalData(</span>) {
-  const { currentRegion, userPreferences } = <span class="cstat-no" title="statement not covered" >useRegionStore();</span>
+export function useRegionalData() {
+  const { currentRegion, userPreferences } = useRegionStore();
 &nbsp;
-  const formatters = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+  const formatters = useMemo(() =&gt; ({
     currency: <span class="fstat-no" title="function not covered" >(a</span>mount: number) =&gt; <span class="cstat-no" title="statement not covered" >formatCurrency(amount, currentRegion.currency),</span>
     distance: <span class="fstat-no" title="function not covered" >(m</span>eters: number) =&gt; <span class="cstat-no" title="statement not covered" >formatDistance(meters, userPreferences.preferredUnits),</span>
     temperature: <span class="fstat-no" title="function not covered" >(c</span>elsius: number) =&gt; <span class="cstat-no" title="statement not covered" >formatTemperature(celsius, userPreferences.preferredUnits),</span>
     time: <span class="fstat-no" title="function not covered" >(d</span>ate: Date) =&gt; <span class="cstat-no" title="statement not covered" >getLocalizedTime(date, currentRegion.timezone),</span>
   }), [currentRegion, userPreferences]);
 &nbsp;
-  const regionalContent = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+  const regionalContent = useMemo(() =&gt; ({
     transitSystems: currentRegion.transitSystems,
     emergencyNumber: currentRegion.emergencyNumber,
     safetyTips: currentRegion.safetyTips,
@@ -152,7 +152,7 @@ export function <span class="fstat-no" title="function not covered" >useRegional
     timezone: currentRegion.timezone,
   }), [currentRegion]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return {</span>
+  return {
     currentRegion,
     userPreferences,
     formatters,
@@ -166,7 +166,7 @@ export function <span class="fstat-no" title="function not covered" >useRegional
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-29T20:50:18.009Z
+                at 2025-09-02T01:51:28.084Z
             </div>
         <script src="../prettify.js"></script>
         <script>

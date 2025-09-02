@@ -1,7 +1,7 @@
 import { fireEvent } from '@testing-library/react-native';
 import React from 'react';
 
-import { render, mockRoute } from './testUtils';
+import { render, mockRoute } from '../testUtils';
 
 import RouteCard from '@/components/RouteCard';
 import { Route } from '@/types/navigation';
