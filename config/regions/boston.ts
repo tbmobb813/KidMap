@@ -9,7 +9,7 @@ export const bostonConfig: RegionConfig = {
   language: "en",
   coordinates: {
     latitude: 42.3601,
-    longitude: -71.0589
+    longitude: -71.0589,
   },
   transitSystems: [
     {
@@ -17,20 +17,20 @@ export const bostonConfig: RegionConfig = {
       name: "MBTA Subway (The T)",
       type: "subway",
       color: "#003DA5",
-      routes: ["Red", "Blue", "Green", "Orange"]
+      routes: ["Red", "Blue", "Green", "Orange"],
     },
     {
       id: "mbta-bus",
       name: "MBTA Bus",
       type: "bus",
-      color: "#FFC72C"
+      color: "#FFC72C",
     },
     {
       id: "mbta-commuter",
       name: "Commuter Rail",
       type: "train",
-      color: "#80276C"
-    }
+      color: "#80276C",
+    },
   ],
   emergencyNumber: "911",
   safetyTips: [
@@ -38,32 +38,55 @@ export const bostonConfig: RegionConfig = {
     "Keep your CharlieCard or CharlieTicket safe",
     "Be careful of the gap between the train and platform",
     "Let passengers exit before boarding",
-    "Hold handrails on stairs and escalators"
+    "Hold handrails on stairs and escalators",
   ],
   funFacts: [
     "Boston's subway system is the oldest in the United States!",
     "The Green Line trolleys run both underground and above ground.",
     "Boston Common is America's oldest public park.",
     "The Freedom Trail is a 2.5-mile path through historic Boston.",
-    "Boston Tea Party happened in Boston Harbor in 1773!"
+    "Boston Tea Party happened in Boston Harbor in 1773!",
   ],
   popularPlaces: [
     {
       name: "Boston Common",
       category: "park",
-      description: "America's oldest public park with swan boats and playgrounds"
+      description:
+        "America's oldest public park with swan boats and playgrounds",
     },
     {
       name: "Fenway Park",
       category: "landmark",
-      description: "Historic baseball stadium, home of the Red Sox"
+      description: "Historic baseball stadium, home of the Red Sox",
     },
     {
       name: "Museum of Science",
       category: "attraction",
-      description: "Interactive science museum with planetarium and IMAX"
-    }
+      description: "Interactive science museum with planetarium and IMAX",
+    },
   ],
   transitApiEndpoint: "https://api-v3.mbta.com/",
-  mapStyle: "standard"
+  population: 675647,
+  area: 232,
+  capital: "Boston",
+  region: "Massachusetts",
+  mayor: "Michelle Wu",
+  founded: 1630,
+  code: "BOS",
+  description:
+    "Boston is the capital of Massachusetts, known for its history and education.",
+  /**
+   * Supported map styles:
+   * - "standard"
+   * - "satellite"
+   * - "hybrid"
+   * - "terrain"
+   * - "light"
+   * - "dark"
+   * - "custom"
+   * - "streets"
+   * - "outdoors"
+   * - "satellite-streets"
+   */
+  mapStyle: "standard",
 };

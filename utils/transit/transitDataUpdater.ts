@@ -59,7 +59,7 @@ export class TransitDataUpdater {
         ...region,
         transitSystems: this.processTransitSystems(transitData, region),
         // Add timestamp for last update
-        lastUpdated: new Date().toISOString(),
+        // lastUpdated: new Date().toISOString(),
       };
 
       updateRegionTransitData(regionId, updatedRegion);

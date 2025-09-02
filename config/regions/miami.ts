@@ -9,7 +9,7 @@ export const miamiConfig: RegionConfig = {
   language: "en",
   coordinates: {
     latitude: 25.7617,
-    longitude: -80.1918
+    longitude: -80.1918,
   },
   transitSystems: [
     {
@@ -17,21 +17,21 @@ export const miamiConfig: RegionConfig = {
       name: "Metrorail",
       type: "subway",
       color: "#0066CC",
-      routes: ["Orange", "Green"]
+      routes: ["Orange", "Green"],
     },
     {
       id: "metrobus",
       name: "Metrobus",
       type: "bus",
-      color: "#E31837"
+      color: "#E31837",
     },
     {
       id: "metromover",
       name: "Metromover",
       type: "tram",
       color: "#34A853",
-      routes: ["Downtown", "Omni", "Brickell"]
-    }
+      routes: ["Downtown", "Omni", "Brickell"],
+    },
   ],
   emergencyNumber: "911",
   safetyTips: [
@@ -39,32 +39,54 @@ export const miamiConfig: RegionConfig = {
     "Keep your EASY Card in a safe place",
     "Stay hydrated in the hot Miami weather",
     "Let passengers exit before boarding",
-    "Be careful around water areas and docks"
+    "Be careful around water areas and docks",
   ],
   funFacts: [
     "Miami's Metromover is completely free to ride!",
     "The city has the largest cruise port in the world.",
     "Miami Beach's Art Deco District has over 800 historic buildings.",
     "The Everglades National Park is just outside the city!",
-    "Miami is the only major US city founded by a woman!"
+    "Miami is the only major US city founded by a woman!",
   ],
   popularPlaces: [
     {
       name: "Miami Beach",
       category: "landmark",
-      description: "Famous beach with white sand and Art Deco architecture"
+      description: "Famous beach with white sand and Art Deco architecture",
     },
     {
       name: "Jungle Island",
       category: "attraction",
-      description: "Interactive zoological park with exotic animals and shows"
+      description: "Interactive zoological park with exotic animals and shows",
     },
     {
       name: "Bayfront Park",
       category: "park",
-      description: "Waterfront park with playgrounds and bay views"
-    }
+      description: "Waterfront park with playgrounds and bay views",
+    },
   ],
   transitApiEndpoint: "https://api.miamidade.gov/",
-  mapStyle: "standard"
+  population: 449514,
+  area: 143,
+  capital: "Tallahassee",
+  region: "Florida",
+  mayor: "Francis Suarez",
+  founded: 1896,
+  code: "MIA",
+  description:
+    "Miami is a coastal city in Florida, famous for its beaches and nightlife.",
+  /**
+   * Supported map styles:
+   * - "standard"
+   * - "satellite"
+   * - "hybrid"
+   * - "terrain"
+   * - "light"
+   * - "dark"
+   * - "custom"
+   * - "streets"
+   * - "outdoors"
+   * - "satellite-streets"
+   */
+  mapStyle: "standard",
 };

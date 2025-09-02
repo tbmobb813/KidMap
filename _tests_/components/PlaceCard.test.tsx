@@ -3,17 +3,17 @@ import React from "react";
 
 import PlaceCard from "../../components/PlaceCard";
 import { ThemeProvider } from "../../constants/theme";
-// Define PlaceCategory type inline since it's not exported from PlaceCard
-type PlaceCategory = "park" | "museum" | "restaurant" | "other";
+import { Place } from "../../types/navigation";
 
 describe("PlaceCard", () => {
-  const mockPlace = {
+  const mockPlace: Place = {
     id: "1",
     name: "Test Place",
-    address: "123 Test St", // Added address property
-    category: "park" as PlaceCategory, // Use a valid PlaceCategory value here
+    address: "123 Test St",
+    category: "park",
     coordinates: { latitude: 0, longitude: 0 },
   };
+
   const mockOnPress = jest.fn();
 
   it("renders correctly", () => {

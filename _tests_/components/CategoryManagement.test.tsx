@@ -8,7 +8,7 @@ import CategoryManagement from "../../components/CategoryManagement";
 describe("CategoryManagement", () => {
   it("renders without crashing", () => {
     render(
-      <ThemeProvider initial="light">
+      <ThemeProvider theme={{ mode: "light" }}>
         <CategoryManagement onBack={() => {}} userMode="parent" />
       </ThemeProvider>
     );

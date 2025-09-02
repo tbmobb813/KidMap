@@ -98,7 +98,7 @@ export default function HomeScreen() {
     });
     
     // Add regional popular places
-    regionalContent.popularPlaces.forEach((place, index) => {
+    regionalContent.popularPlaces.forEach((place: any, index: number) => {
       if (place.name.toLowerCase().includes(searchQuery.toLowerCase())) {
         searchSuggestions.push({
           id: `popular-${index}`,

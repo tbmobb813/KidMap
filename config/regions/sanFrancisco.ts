@@ -9,35 +9,35 @@ export const sanFranciscoConfig: RegionConfig = {
   language: "en",
   coordinates: {
     latitude: 37.7749,
-    longitude: -122.4194
+    longitude: -122.4194,
   },
   transitSystems: [
     {
       id: "muni",
       name: "Muni",
       type: "bus",
-      color: "#E31837"
+      color: "#E31837",
     },
     {
       id: "muni-metro",
       name: "Muni Metro",
       type: "subway",
       color: "#00A651",
-      routes: ["J", "K", "L", "M", "N", "T"]
+      routes: ["J", "K", "L", "M", "N", "T"],
     },
     {
       id: "cable-car",
       name: "Cable Car",
       type: "tram",
       color: "#8B4513",
-      routes: ["Powell-Hyde", "Powell-Mason", "California"]
+      routes: ["Powell-Hyde", "Powell-Mason", "California"],
     },
     {
       id: "bart",
       name: "BART",
       type: "train",
-      color: "#0099CC"
-    }
+      color: "#0099CC",
+    },
   ],
   emergencyNumber: "911",
   safetyTips: [
@@ -45,32 +45,54 @@ export const sanFranciscoConfig: RegionConfig = {
     "Keep your Clipper card in a safe place",
     "Hold on tight when riding cable cars - they can be bumpy!",
     "Be careful on steep hills and stairs",
-    "Stay seated while the vehicle is moving"
+    "Stay seated while the vehicle is moving",
   ],
   funFacts: [
     "San Francisco's cable cars are the only moving National Historic Landmark!",
     "The Golden Gate Bridge is painted in a color called 'International Orange'.",
     "Lombard Street is known as the 'crookedest street in the world'!",
     "San Francisco has more than 50 hills throughout the city.",
-    "Alcatraz Island was once a famous prison but now it's a museum!"
+    "Alcatraz Island was once a famous prison but now it's a museum!",
   ],
   popularPlaces: [
     {
       name: "Golden Gate Park",
       category: "park",
-      description: "Large park with gardens, museums, and playgrounds"
+      description: "Large park with gardens, museums, and playgrounds",
     },
     {
       name: "Fisherman's Wharf",
       category: "landmark",
-      description: "Waterfront area with shops, restaurants, and sea lions"
+      description: "Waterfront area with shops, restaurants, and sea lions",
     },
     {
       name: "Crissy Field",
       category: "park",
-      description: "Waterfront park with Golden Gate Bridge views"
-    }
+      description: "Waterfront park with Golden Gate Bridge views",
+    },
   ],
   transitApiEndpoint: "https://api.511.org/",
-  mapStyle: "standard"
+  population: 815201,
+  area: 121,
+  capital: "Sacramento",
+  region: "California",
+  mayor: "London Breed",
+  founded: 1776,
+  code: "SF",
+  description:
+    "San Francisco is a cultural and financial center in California, famous for its hills and bridges.",
+  /**
+   * Supported map styles:
+   * - "standard"
+   * - "satellite"
+   * - "hybrid"
+   * - "terrain"
+   * - "light"
+   * - "dark"
+   * - "custom"
+   * - "streets"
+   * - "outdoors"
+   * - "satellite-streets"
+   */
+  mapStyle: "standard",
 };

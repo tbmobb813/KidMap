@@ -19,7 +19,8 @@ export type RegionConfig = {
   language: string;
   capital: string;
   region: string;
-  subregion: string;
+  mayor: string;
+  founded: number;
   code: string;
   description: string;
   coordinates: {
@@ -28,6 +29,39 @@ export type RegionConfig = {
   };
   transitSystems: TransitSystem[];
   emergencyNumber: string;
+  safetyTips: string[];
+  funFacts: string[];
+  popularPlaces: {
+    name: string;
+    category: string;
+    description: string;
+  }[];
+  mapStyleUrl?: string;
+  transitApiEndpoint?: string;
+  /**
+   * Supported map styles:
+   * - "standard"
+   * - "satellite"
+   * - "hybrid"
+   * - "terrain"
+   * - "light"
+   * - "dark"
+   * - "custom"
+   * - "streets"
+   * - "outdoors"
+   * - "satellite-streets"
+   */
+  mapStyle?:
+    | "standard"
+    | "satellite"
+    | "hybrid"
+    | "terrain"
+    | "light"
+    | "dark"
+    | "custom"
+    | "streets"
+    | "outdoors"
+    | "satellite-streets";
 };
 
 export type UserRegionPreferences = {

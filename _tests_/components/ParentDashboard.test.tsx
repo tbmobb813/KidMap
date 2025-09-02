@@ -8,7 +8,7 @@ import ParentDashboard from "../../components/ParentDashboard";
 describe("ParentDashboard", () => {
   it("renders without crashing", () => {
     render(
-      <ThemeProvider initial="light">
+      <ThemeProvider theme={{}}>
         <ParentDashboard onExit={() => {}} />
       </ThemeProvider>
     );

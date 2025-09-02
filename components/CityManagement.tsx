@@ -241,7 +241,7 @@ function AddEditRegionForm({ region, onSave, onCancel }: AddEditRegionFormProps)
     coordinates: region?.coordinates || { latitude: 0, longitude: 0 },
     emergencyNumber: region?.emergencyNumber || "911",
     transitApiEndpoint: region?.transitApiEndpoint || "",
-    mapStyle: region?.mapStyle || "standard",
+    mapStyle: region?.mapStyle || "light",
     transitSystems: region?.transitSystems || [],
     safetyTips: region?.safetyTips || [],
     funFacts: region?.funFacts || [],

@@ -9,7 +9,16 @@ describe("DirectionStep", () => {
   it("renders without crashing", () => {
     render(
       <ThemeProvider theme={{ colors: {}, spacing: {} }}>
-        <DirectionStep step={{ instruction: "Turn left", distance: "100m" }} isLast={false} />
+        <DirectionStep
+          step={{
+            id: "1",
+            type: "walk",
+            from: "A",
+            to: "B",
+            duration: 5
+          }}
+          isLast={false}
+        />
       </ThemeProvider>
     );
   });

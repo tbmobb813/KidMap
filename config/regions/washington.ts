@@ -9,7 +9,7 @@ export const washingtonConfig: RegionConfig = {
   language: "en",
   coordinates: {
     latitude: 38.9072,
-    longitude: -77.0369
+    longitude: -77.0369,
   },
   transitSystems: [
     {
@@ -17,20 +17,20 @@ export const washingtonConfig: RegionConfig = {
       name: "Metro",
       type: "subway",
       color: "#0066CC",
-      routes: ["Red", "Blue", "Orange", "Silver", "Green", "Yellow"]
+      routes: ["Red", "Blue", "Orange", "Silver", "Green", "Yellow"],
     },
     {
       id: "wmata-bus",
       name: "Metrobus",
       type: "bus",
-      color: "#E31837"
+      color: "#E31837",
     },
     {
       id: "dc-circulator",
       name: "DC Circulator",
       type: "bus",
-      color: "#34A853"
-    }
+      color: "#34A853",
+    },
   ],
   emergencyNumber: "911",
   safetyTips: [
@@ -38,32 +38,54 @@ export const washingtonConfig: RegionConfig = {
     "Keep your SmarTrip card in a safe place",
     "Stand right, walk left on Metro escalators",
     "Let passengers exit before boarding",
-    "Keep bags and backpacks in front of you"
+    "Keep bags and backpacks in front of you",
   ],
   funFacts: [
     "The Washington Metro has the second-busiest rail system in the US!",
     "Metro stations are known for their distinctive concrete arch design.",
     "The Smithsonian has 19 museums and the National Zoo!",
     "The Washington Monument is 555 feet tall.",
-    "The Library of Congress is the largest library in the world!"
+    "The Library of Congress is the largest library in the world!",
   ],
   popularPlaces: [
     {
       name: "National Mall",
       category: "landmark",
-      description: "Historic area with monuments and Smithsonian museums"
+      description: "Historic area with monuments and Smithsonian museums",
     },
     {
       name: "Smithsonian National Zoo",
       category: "attraction",
-      description: "Free zoo famous for its giant pandas and other animals"
+      description: "Free zoo famous for its giant pandas and other animals",
     },
     {
       name: "Rock Creek Park",
       category: "park",
-      description: "Large urban park with trails and nature center"
-    }
+      description: "Large urban park with trails and nature center",
+    },
   ],
   transitApiEndpoint: "https://api.wmata.com/",
-  mapStyle: "standard"
+  population: 670050,
+  area: 177,
+  capital: "Washington, D.C.",
+  region: "District of Columbia",
+  mayor: "Muriel Bowser",
+  founded: 1790,
+  code: "DC",
+  description:
+    "Washington, D.C. is the capital of the United States, known for its monuments and museums.",
+  /**
+   * Supported map styles:
+   * - "standard"
+   * - "satellite"
+   * - "hybrid"
+   * - "terrain"
+   * - "light"
+   * - "dark"
+   * - "custom"
+   * - "streets"
+   * - "outdoors"
+   * - "satellite-streets"
+   */
+  mapStyle: "standard",
 };

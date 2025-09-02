@@ -9,7 +9,7 @@ export const newYorkConfig: RegionConfig = {
   language: "en",
   coordinates: {
     latitude: 40.7128,
-    longitude: -74.0060
+    longitude: -74.006,
   },
   transitSystems: [
     {
@@ -17,20 +17,43 @@ export const newYorkConfig: RegionConfig = {
       name: "MTA Subway",
       type: "subway",
       color: "#0039A6",
-      routes: ["A", "B", "C", "D", "E", "F", "G", "J", "L", "M", "N", "Q", "R", "W", "Z", "1", "2", "3", "4", "5", "6", "7"]
+      routes: [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "J",
+        "L",
+        "M",
+        "N",
+        "Q",
+        "R",
+        "W",
+        "Z",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+      ],
     },
     {
       id: "mta-bus",
       name: "MTA Bus",
       type: "bus",
-      color: "#4285F4"
+      color: "#4285F4",
     },
     {
       id: "lirr",
       name: "Long Island Rail Road",
       type: "train",
-      color: "#34A853"
-    }
+      color: "#34A853",
+    },
   ],
   emergencyNumber: "911",
   safetyTips: [
@@ -38,32 +61,57 @@ export const newYorkConfig: RegionConfig = {
     "Keep your MetroCard or OMNY card in a safe place",
     "Stand clear of the closing doors",
     "Let passengers exit before boarding",
-    "Hold the handrail on escalators"
+    "Hold the handrail on escalators",
   ],
   funFacts: [
     "The NYC subway system has 472 stations - more than any other transit system!",
     "The subway runs 24/7, making it one of the few systems that never closes.",
     "Some subway tunnels are over 100 years old.",
     "The longest subway ride you can take is 2 hours and 45 minutes!",
-    "Central Park has over 25,000 trees from 150 different species!"
+    "Central Park has over 25,000 trees from 150 different species!",
   ],
   popularPlaces: [
     {
       name: "Central Park",
       category: "park",
-      description: "A large public park in Manhattan with playgrounds, lakes, and walking paths"
+      description:
+        "A large public park in Manhattan with playgrounds, lakes, and walking paths",
     },
     {
       name: "Brooklyn Bridge",
       category: "landmark",
-      description: "Historic bridge connecting Manhattan and Brooklyn with great views"
+      description:
+        "Historic bridge connecting Manhattan and Brooklyn with great views",
     },
     {
       name: "Times Square",
       category: "landmark",
-      description: "Busy commercial intersection known for its bright lights and theaters"
-    }
+      description:
+        "Busy commercial intersection known for its bright lights and theaters",
+    },
   ],
   transitApiEndpoint: "https://api.mta.info/",
-  mapStyle: "standard"
+  population: 8467513,
+  area: 783.8,
+  capital: "Albany",
+  region: "New York",
+  mayor: "Eric Adams",
+  founded: 1624,
+  code: "NYC",
+  description:
+    "New York City is the largest city in the US, known for its skyline and diversity.",
+  /**
+   * Supported map styles:
+   * - "standard"
+   * - "satellite"
+   * - "hybrid"
+   * - "terrain"
+   * - "light"
+   * - "dark"
+   * - "custom"
+   * - "streets"
+   * - "outdoors"
+   * - "satellite-streets"
+   */
+  mapStyle: "standard",
 };

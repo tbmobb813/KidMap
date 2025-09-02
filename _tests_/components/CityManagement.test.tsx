@@ -8,7 +8,7 @@ import CityManagement from "../../components/CityManagement";
 describe("CityManagement", () => {
   it("renders without crashing", () => {
     render(
-      <ThemeProvider initial="light">
+      <ThemeProvider theme={{ mode: "light" }}>
         <CityManagement onBack={() => {}} />
       </ThemeProvider>
     );
