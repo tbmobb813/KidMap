@@ -158,10 +158,4 @@ export type Theme = ThemeDefinition;
  */
 export const theme = buildTheme('light');
 
-/**
- * Returns the current theme from context.
- * Use this in legacy code to get the dynamic theme.
- */
-export function getTheme(): ThemeDefinition {
-    return useTheme();
-}
+// Removed getTheme because React hooks cannot be called outside of components or custom hooks.

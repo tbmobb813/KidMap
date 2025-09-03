@@ -368,20 +368,7 @@
 <a name='L303'></a><a href='#L303'>303</a>
 <a name='L304'></a><a href='#L304'>304</a>
 <a name='L305'></a><a href='#L305'>305</a>
-<a name='L306'></a><a href='#L306'>306</a>
-<a name='L307'></a><a href='#L307'>307</a>
-<a name='L308'></a><a href='#L308'>308</a>
-<a name='L309'></a><a href='#L309'>309</a>
-<a name='L310'></a><a href='#L310'>310</a>
-<a name='L311'></a><a href='#L311'>311</a>
-<a name='L312'></a><a href='#L312'>312</a>
-<a name='L313'></a><a href='#L313'>313</a>
-<a name='L314'></a><a href='#L314'>314</a>
-<a name='L315'></a><a href='#L315'>315</a>
-<a name='L316'></a><a href='#L316'>316</a>
-<a name='L317'></a><a href='#L317'>317</a>
-<a name='L318'></a><a href='#L318'>318</a>
-<a name='L319'></a><a href='#L319'>319</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L306'></a><a href='#L306'>306</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -411,18 +398,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -492,11 +471,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -700,7 +674,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Bot, Volume2, VolumeX, Sparkles } from "lucide-react-native";
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect, ReactNode, useCallback, useMemo } from "react";
 import { StyleSheet, Text, View, Pressable, Animated } from "react-native";
 &nbsp;
 import Colors from "../constants/colors";
@@ -710,7 +684,7 @@ import { Place } from "@/types/navigation";
 export interface AIJourneyCompanionProps {
   showNetworkStatus?: boolean;
   children?: ReactNode;
-  _currentLocation?: Place; // renamed to allow unused arg
+  currentLocation?: Place; // prefixed with underscore to indicate unused parameter
   destination?: Place;
   isNavigating?: boolean;
 }
@@ -723,26 +697,18 @@ type CompanionMessage = {
 };
 &nbsp;
 const AIJourneyCompanion: React.FC&lt;AIJourneyCompanionProps&gt; = ({
+  currentLocation: _currentLocation,
   destination,
   isNavigating,
   children,
 }) =&gt; {
-  // Removed unused messages state
-  const [currentMessage, setCurrentMessage] = useState&lt;CompanionMessage | null&gt;(
-    null
-  );
+  const [currentMessage, setCurrentMessage] = useState&lt;CompanionMessage | null&gt;(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
-  const [companionMood, setCompanionMood] = useState&lt;
-    "happy" | "excited" | "curious"
-  &gt;("happy");
-  const pulseAnim = React.useMemo(() =&gt; new Animated.Value(1), []);
+  const [companionMood, setCompanionMood] = useState&lt;"happy" | "excited" | "curious"&gt;("happy");
+  const pulseAnim = useMemo(() =&gt; new Animated.Value(1), []);
 &nbsp;
-  // Removed duplicate startCompanionAnimation declaration
-&nbsp;
-  // Removed duplicate generateJourneyContent declaration
-&nbsp;
-  const startCompanionAnimation = React.useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+  const startCompanionAnimation = useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >    Animated.loop(</span>
       Animated.sequence([
         Animated.timing(pulseAnim, {
@@ -759,7 +725,7 @@ const AIJourneyCompanion: React.FC&lt;AIJourneyCompanionProps&gt; = ({
     ).start();
   }, [pulseAnim]);
 &nbsp;
-  const generateJourneyContent = React.useCallback(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {
+  const generateJourneyContent = useCallback(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {
 <span class="cstat-no" title="statement not covered" >    if (!destination) <span class="cstat-no" title="statement not covered" >return;</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    try {</span>
@@ -811,12 +777,7 @@ const AIJourneyCompanion: React.FC&lt;AIJourneyCompanionProps&gt; = ({
 <span class="cstat-no" title="statement not covered" >      generateJourneyContent();</span>
 <span class="cstat-no" title="statement not covered" >      startCompanionAnimation();</span>
     }
-  }, [
-    isNavigating,
-    destination,
-    generateJourneyContent,
-    startCompanionAnimation,
-  ]);
+  }, [isNavigating, destination, generateJourneyContent, startCompanionAnimation]);
 &nbsp;
   const generateQuiz = <span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {
 <span class="cstat-no" title="statement not covered" >    if (!destination) <span class="cstat-no" title="statement not covered" >return;</span></span>
@@ -1024,7 +985,7 @@ export default AIJourneyCompanion;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-03T07:49:59.497Z
+                at 2025-09-03T18:57:20.879Z
             </div>
         <script src="../prettify.js"></script>
         <script>

@@ -189,6 +189,7 @@ class OfflineManager {
             log.error(
               `Offline action exceeded max retries (id: ${action.id}, type: ${action.type}, retryCount: ${action.retryCount})`
             );
+            // Do not push to failedActions, effectively removing it from the queue
           }
         }
       } catch (error) {
