@@ -31,7 +31,6 @@ const DevicePingHandler: React.FC<DevicePingHandlerProps> = ({ testId }) => {
   const { location } = useLocation();
   const [activePing, setActivePing] = useState<DevicePingRequest | null>(null);
   const [isRinging, setIsRinging] = useState(false);
-  // Removed unused theme variable
 
   const handleAcknowledgePing = React.useCallback(
     async (pingId: string, shareLocation: boolean = true) => {
@@ -212,8 +211,6 @@ const DevicePingHandler: React.FC<DevicePingHandlerProps> = ({ testId }) => {
         return "Parent Request";
     }
   };
-
-  // Removed unused pingCallback
 
   return (
     <View style={styles.overlay} testID={testId}>

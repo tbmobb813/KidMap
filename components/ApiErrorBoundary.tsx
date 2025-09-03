@@ -1,5 +1,5 @@
 import { Bot, Volume2, VolumeX, Sparkles } from "lucide-react-native";
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect, ReactNode, useCallback, useMemo } from "react";
 import { StyleSheet, Text, View, Pressable, Animated } from "react-native";
 
 import Colors from "../constants/colors";
@@ -9,7 +9,7 @@ import { Place } from "@/types/navigation";
 export interface AIJourneyCompanionProps {
   showNetworkStatus?: boolean;
   children?: ReactNode;
-  _currentLocation?: Place; // renamed to allow unused arg
+  currentLocation?: Place; // prefixed with underscore to indicate unused parameter
   destination?: Place;
   isNavigating?: boolean;
 }
@@ -22,26 +22,18 @@ type CompanionMessage = {
 };
 
 const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
+  currentLocation: _currentLocation,
   destination,
   isNavigating,
   children,
 }) => {
-  // Removed unused messages state
-  const [currentMessage, setCurrentMessage] = useState<CompanionMessage | null>(
-    null
-  );
+  const [currentMessage, setCurrentMessage] = useState<CompanionMessage | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
-  const [companionMood, setCompanionMood] = useState<
-    "happy" | "excited" | "curious"
-  >("happy");
-  const pulseAnim = React.useMemo(() => new Animated.Value(1), []);
+  const [companionMood, setCompanionMood] = useState<"happy" | "excited" | "curious">("happy");
+  const pulseAnim = useMemo(() => new Animated.Value(1), []);
 
-  // Removed duplicate startCompanionAnimation declaration
-
-  // Removed duplicate generateJourneyContent declaration
-
-  const startCompanionAnimation = React.useCallback(() => {
+  const startCompanionAnimation = useCallback(() => {
     Animated.loop(
       Animated.sequence([
         Animated.timing(pulseAnim, {
@@ -58,7 +50,7 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
     ).start();
   }, [pulseAnim]);
 
-  const generateJourneyContent = React.useCallback(async () => {
+  const generateJourneyContent = useCallback(async () => {
     if (!destination) return;
 
     try {
@@ -110,12 +102,7 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
       generateJourneyContent();
       startCompanionAnimation();
     }
-  }, [
-    isNavigating,
-    destination,
-    generateJourneyContent,
-    startCompanionAnimation,
-  ]);
+  }, [isNavigating, destination, generateJourneyContent, startCompanionAnimation]);
 
   const generateQuiz = async () => {
     if (!destination) return;

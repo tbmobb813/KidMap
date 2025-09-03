@@ -42,6 +42,7 @@ type SafetyDashboardProps = {
 };
 
 const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
+  currentLocation: _currentLocation,
   currentPlace,
   onNavigateToSettings,
 }) => {
