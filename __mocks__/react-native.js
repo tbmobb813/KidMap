@@ -60,6 +60,42 @@ const createMockAnimation = () => ({
   reset: jest.fn(),
 });
 
+// Define Alert mock first to avoid circular reference issues
+const Alert = {
+  alert: jest.fn((buttons, _options) => {
+    void _options;
+    if (buttons && buttons.length > 0) {
+      // Simulate pressing the first button
+      const firstButton = buttons[0];
+      if (firstButton.onPress) {
+        firstButton.onPress();
+      }
+    }
+  }),
+  // Helper to handle callbackOrButtons logic for prompt
+  _handlePromptCallback: (callbackOrButtons, defaultValue) => {
+    // If callbackOrButtons is a function, call it with the default value
+    if (typeof callbackOrButtons === 'function') {
+      callbackOrButtons(defaultValue || '');
+    }
+    // If it's an array, call the onPress of the first button with the default value
+    else if (Array.isArray(callbackOrButtons) && callbackOrButtons.length > 0) {
+      const firstButton = callbackOrButtons[0];
+      if (firstButton.onPress) {
+        firstButton.onPress(defaultValue || '');
+      }
+    }
+  },
+  prompt: jest.fn((_title, _message, callbackOrButtons, _type, defaultValue, _keyboardType) => {
+    void _title;
+    void _message;
+    void _type;
+    void _keyboardType;
+    // Delegate to helper for clarity
+    Alert._handlePromptCallback(callbackOrButtons, defaultValue);
+  }),
+};
+
 module.exports = {
   // Basic components
   View: MockComponent,
@@ -177,28 +213,7 @@ module.exports = {
   },
   
   // Native APIs
-  Alert: {
-    alert: jest.fn((title, message, buttons, _options) => {
-      if (buttons && buttons.length > 0) {
-        // Simulate pressing the first button
-        const firstButton = buttons[0];
-        if (firstButton.onPress) {
-          firstButton.onPress();
-        }
-      }
-    }),
-    prompt: jest.fn((title, message, callbackOrButtons, type, defaultValue, _keyboardType) => {
-      if (typeof callbackOrButtons === 'function') {
-        callbackOrButtons(defaultValue || '');
-      } else if (Array.isArray(callbackOrButtons) && callbackOrButtons.length > 0) {
-        const firstButton = callbackOrButtons[0];
-        if (firstButton.onPress) {
-          firstButton.onPress(defaultValue || '');
-        }
-      }
-    }),
-  },
-  
+  Alert: Alert,  
   Vibration: {
     vibrate: jest.fn(),
     cancel: jest.fn(),

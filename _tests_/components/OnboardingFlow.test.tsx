@@ -308,7 +308,7 @@ describe('OnboardingFlow', () => {
     });
 
     it('displays safety feature icons', () => {
-      const { getAllByTestId } = render(<OnboardingFlow {...defaultProps} />);
+      const { getAllByTestId, getByText } = render(<OnboardingFlow {...defaultProps} />);
       fireEvent.press(getByText('Get Started'));
       
       // Each safety feature should have an icon
