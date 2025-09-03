@@ -173,10 +173,7 @@ const activeScheme: keyof typeof palettes = 'light';
 const base = palettes[activeScheme];
 
 const legacy: LegacyKeys & Palette = new Proxy(base as any, {
-  get(target, prop: string) {
-    if (prop === 'card') return target.surface;
-    if (prop === 'textLight') return target.textSecondary;
-    if (prop === 'white') return '#FFFFFF';
+    if (prop === 'white') return target.primaryForeground;
     if (prop === 'primaryLight') {
       // naive lighten: blend with white
       const c = target.primary.replace('#', '');
