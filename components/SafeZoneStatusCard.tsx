@@ -2,6 +2,8 @@ import { Shield, MapPin, Clock, AlertTriangle } from 'lucide-react-native';
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
+import { useSafeZoneMonitor } from '@/hooks/useSafeZoneMonitor';
+import { useParentalStore } from '@/stores/parentalStore';
 import type { SafeZone } from '@/types/parental';
 
 export const SafeZoneStatusCard: React.FC = () => {
