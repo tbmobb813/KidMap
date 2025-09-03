@@ -88,6 +88,22 @@ var addSorting = (function() {
         return cols;
     }
     // attaches a data attribute to every tr element with an object
+    // escapes HTML characters in a string
+    function escapeHtml(str) {
+        if (typeof str !== 'string') { return str; }
+        return str.replace(/[&<>"'`=\/]/g, function (s) {
+            return ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+               "'": '&#39;',
+               '`': '&#96;',
+               '=': '&#61;',
+               '/': '&#47;'
+            })[s] || s;
+        });
+    }
     // of data values keyed by column name
     function loadRowData(tableRow) {
         var tableCols = tableRow.querySelectorAll('td'),
@@ -102,6 +118,8 @@ var addSorting = (function() {
             val = colNode.getAttribute('data-value');
             if (col.type === 'number') {
                 val = Number(val);
+            } else {
+                val = escapeHtml(val);
             }
             data[col.key] = val;
         }
