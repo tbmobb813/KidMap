@@ -9,7 +9,7 @@ import { Place } from "@/types/navigation";
 export interface AIJourneyCompanionProps {
   showNetworkStatus?: boolean;
   children?: ReactNode;
-  currentLocation?: Place; // renamed to allow unused arg
+  currentLocation?: Place; // prefixed with underscore to indicate unused parameter
   destination?: Place;
   isNavigating?: boolean;
 }
