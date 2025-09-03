@@ -152,4 +152,16 @@ export function useSetTheme() {
 }
 
 export type Theme = ThemeDefinition;
-export const theme = buildTheme('light'); // legacy export for any code still importing
+/**
+ * @deprecated The legacy `theme` export always returns the light theme and is not dynamic.
+ * Use `getTheme()` or the `useTheme()` hook instead for dynamic theming.
+ */
+export const theme = buildTheme('light');
+
+/**
+ * Returns the current theme from context.
+ * Use this in legacy code to get the dynamic theme.
+ */
+export function getTheme(): ThemeDefinition {
+    return useTheme();
+}
