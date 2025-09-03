@@ -2,10 +2,7 @@ import { Shield, MapPin, Clock, AlertTriangle } from 'lucide-react-native';
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-// Ensure consistent alias import for jest.mock interception
-import { useSafeZoneMonitor } from '@/modules/safety/hooks/useSafeZoneMonitor';
-import { useParentalStore } from '@/modules/safety/stores/parentalStore';
-import type { SafeZone } from '@/modules/safety/types/parental';
+import type { SafeZone } from '@/types/parental';
 
 export const SafeZoneStatusCard: React.FC = () => {
   const { isMonitoring, getCurrentSafeZoneStatus, startMonitoring, stopMonitoring } = useSafeZoneMonitor();
