@@ -79,9 +79,19 @@ const mockAnimatedValue = {
   reset: jest.fn()
 };
 
-const mockAnimatedLoop = jest.fn();
-const mockAnimatedSequence = jest.fn();
-const mockAnimatedTiming = jest.fn(() => ({ start: jest.fn() }));
+// Create a mock animation object that has a start method
+const mockAnimation = { 
+  start: jest.fn((callback?: (result: { finished: boolean }) => void) => {
+    // Immediately call the callback to simulate animation completion
+    if (callback) {
+      setTimeout(() => callback({ finished: true }), 0);
+    }
+  })
+};
+
+const mockAnimatedLoop = jest.fn(() => mockAnimation);
+const mockAnimatedSequence = jest.fn(() => mockAnimation);
+const mockAnimatedTiming = jest.fn(() => mockAnimation);
 
 beforeAll(() => {
   (Animated as any).Value = jest.fn(() => mockAnimatedValue);
@@ -98,12 +108,15 @@ describe('AIJourneyCompanion', () => {
     mockAnimatedSequence.mockClear();
     mockAnimatedTiming.mockClear();
     mockAnimatedValue.setValue.mockClear();
+    mockAnimation.start.mockClear();
+    mockTrack.mockClear();
     jest.clearAllTimers();
     jest.useFakeTimers();
   });
 
   afterEach(() => {
     jest.useRealTimers();
+    jest.clearAllMocks();
   });
 
   describe('Basic Rendering (Original)', () => {
@@ -269,7 +282,7 @@ describe('AIJourneyCompanion', () => {
         json: () => Promise.resolve({ completion: 'Story content' })
       } as Response);
 
-      const { getByText, rerender } = render(
+      const { getByText } = render(
         <AIJourneyCompanion {...defaultProps} isNavigating={true} />
       );
 
@@ -963,12 +976,12 @@ describe('AIJourneyCompanion', () => {
         json: () => Promise.resolve({ completion: 'Performance test' })
       } as Response);
 
-      const { rerender } = render(
+      render(
         <AIJourneyCompanion {...defaultProps} isNavigating={true} />
       );
 
-      // Re-render with same props shouldn't cause unnecessary re-initialization
-      rerender(<AIJourneyCompanion {...defaultProps} isNavigating={true} />);
+  // Re-render with same props shouldn't cause unnecessary re-initialization
+  render(<AIJourneyCompanion {...defaultProps} isNavigating={true} />);
 
       await waitFor(() => {
         expect(mockAnimatedLoop).toHaveBeenCalled();
@@ -980,12 +993,12 @@ describe('AIJourneyCompanion', () => {
         json: () => Promise.resolve({ completion: 'Callback test' })
       } as Response);
 
-      const { rerender } = render(
+      render(
         <AIJourneyCompanion {...defaultProps} isNavigating={true} />
       );
 
       const newProps = { ...defaultProps, currentLocation: { latitude: 40.7130, longitude: -74.0062 } };
-      rerender(<AIJourneyCompanion {...newProps} isNavigating={true} />);
+  render(<AIJourneyCompanion {...newProps} isNavigating={true} />);
 
       // Should handle prop changes efficiently
       await waitFor(() => {
@@ -1043,7 +1056,7 @@ describe('AIJourneyCompanion', () => {
         json: () => Promise.resolve({ completion: 'Location test' })
       } as Response);
 
-      const { rerender } = render(
+      render(
         <AIJourneyCompanion {...defaultProps} isNavigating={true} />
       );
 
@@ -1051,7 +1064,7 @@ describe('AIJourneyCompanion', () => {
 
       // Update location
       const newLocation = { latitude: 40.7140, longitude: -74.0070 };
-      rerender(
+      render(
         <AIJourneyCompanion 
           {...defaultProps}
           currentLocation={newLocation}
