@@ -1,0 +1,325 @@
+/**
+ * TESTING TEMPLATE FOR REACT NATIVE COMPONENTS
+ * 
+ * This template provides a standardized structure for testing React Native components
+ * with comprehensive patterns established from successful ParentDashboard and CategoryManagement tests.
+ * 
+ * USAGE:
+ * 1. Copy this template
+ * 2. Replace COMPONENT_NAME with your actual component name
+ * 3. Update imports and props according to your component
+ * 4. Customize test scenarios based on component functionality
+ * 5. Update mocks based on component dependencies
+ */
+
+import { jest } from '@jest/globals';
+import { fireEvent, render, waitFor } from '@testing-library/react-native';
+
+// Import the component to test
+// import COMPONENT_NAME from '../components/COMPONENT_NAME';
+
+// Import test utilities
+import { createTestWrapper } from '../testUtils';
+
+// ===== MOCK SECTION =====
+// Mock hooks and dependencies
+jest.mock('@/hooks/useYourHook', () => ({
+  useYourHook: jest.fn(),
+}));
+
+jest.mock('@/stores/yourStore', () => ({
+  useYourStore: jest.fn(),
+}));
+
+jest.mock('@/hooks/useToast', () => ({
+  useToast: jest.fn(),
+}));
+
+// Mock external libraries (if needed)
+jest.mock('lucide-react-native', () => ({
+  YourIcon: ({ size, color, ...props }: any) => 
+    require('react-native').Text({ 
+      testID: 'your-icon',
+      children: `Icon(${size},${color})`,
+      ...props 
+    }),
+}));
+
+// ===== TEST SETUP =====
+describe('COMPONENT_NAME', () => {
+  // Mock functions
+  const mockOnAction = jest.fn();
+  const mockOnDismiss = jest.fn();
+  const mockStoreAction = jest.fn();
+  
+  // Mock hook implementations
+  const mockUseYourHook = jest.fn();
+  const mockUseYourStore = jest.fn();
+  const mockUseToast = jest.fn();
+
+  // Default props for the component
+  const defaultProps = {
+    title: 'Test Title',
+    onAction: mockOnAction,
+    onDismiss: mockOnDismiss,
+    // Add other required props here
+  };
+
+  beforeEach(() => {
+    // Reset all mocks before each test
+    jest.clearAllMocks();
+    
+    // Setup default mock implementations
+    mockUseYourHook.mockReturnValue({
+      data: null,
+      loading: false,
+      error: null,
+      refetch: jest.fn(),
+    });
+
+    mockUseYourStore.mockReturnValue({
+      items: [],
+      addItem: mockStoreAction,
+      removeItem: mockStoreAction,
+    });
+
+    mockUseToast.mockReturnValue({
+      show: jest.fn(),
+      hide: jest.fn(),
+    });
+
+    // Apply mocks
+    require('@/hooks/useYourHook').useYourHook.mockImplementation(mockUseYourHook);
+    require('@/stores/yourStore').useYourStore.mockImplementation(mockUseYourStore);
+    require('@/hooks/useToast').useToast.mockImplementation(mockUseToast);
+  });
+
+  // ===== BASIC RENDERING TESTS =====
+  describe('Basic Rendering', () => {
+    it('renders without crashing', () => {
+      const { getByText } = render(
+        <COMPONENT_NAME {...defaultProps} />,
+        { wrapper: createTestWrapper() }
+      );
+      
+      expect(getByText('Test Title')).toBeTruthy();
+    });
+
+    it('displays required elements correctly', () => {
+      const { getByText, getByTestId } = render(
+        <COMPONENT_NAME {...defaultProps} />,
+        { wrapper: createTestWrapper() }
+      );
+      
+      // Test basic elements
+      expect(getByText('Test Title')).toBeTruthy();
+      expect(getByTestId('your-icon')).toBeTruthy();
+    });
+  });
+
+  // ===== INTERACTION TESTS =====
+  describe('User Interactions', () => {
+    it('handles action button press', async () => {
+      const { getByText } = render(
+        <COMPONENT_NAME {...defaultProps} actionText="Action" />,
+        { wrapper: createTestWrapper() }
+      );
+      
+      const actionButton = getByText('Action');
+      fireEvent.press(actionButton);
+      
+      expect(mockOnAction).toHaveBeenCalledTimes(1);
+    });
+
+    it('handles dismiss button press', async () => {
+      const { getByTestId } = render(
+        <COMPONENT_NAME {...defaultProps} />,
+        { wrapper: createTestWrapper() }
+      );
+      
+      const dismissButton = getByTestId('dismiss-button'); // Adjust testID as needed
+      fireEvent.press(dismissButton);
+      
+      expect(mockOnDismiss).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  // ===== CONDITIONAL RENDERING TESTS =====
+  describe('Conditional Rendering', () => {
+    it('shows optional elements when provided', () => {
+      const { getByText } = render(
+        <COMPONENT_NAME {...defaultProps} actionText="Optional Action" />,
+        { wrapper: createTestWrapper() }
+      );
+      
+      expect(getByText('Optional Action')).toBeTruthy();
+    });
+
+    it('hides optional elements when not provided', () => {
+      const { queryByText } = render(
+        <COMPONENT_NAME {...defaultProps} />,
+        { wrapper: createTestWrapper() }
+      );
+      
+      expect(queryByText('Optional Action')).toBeNull();
+    });
+  });
+
+  // ===== STATE AND PROP VARIATION TESTS =====
+  describe('Props and State Variations', () => {
+    it('handles different prop types/values', () => {
+      const props = {
+        ...defaultProps,
+        type: 'warning' as const,
+        message: 'Warning message',
+      };
+      
+      const { getByText } = render(
+        <COMPONENT_NAME {...props} />,
+        { wrapper: createTestWrapper() }
+      );
+      
+      expect(getByText('Warning message')).toBeTruthy();
+    });
+
+    it('adapts to different data states', () => {
+      mockUseYourHook.mockReturnValue({
+        data: { id: 1, name: 'Test Item' },
+        loading: false,
+        error: null,
+      });
+
+      const { getByText } = render(
+        <COMPONENT_NAME {...defaultProps} />,
+        { wrapper: createTestWrapper() }
+      );
+      
+      expect(getByText('Test Item')).toBeTruthy();
+    });
+  });
+
+  // ===== LOADING AND ERROR STATES =====
+  describe('Loading and Error States', () => {
+    it('shows loading state correctly', () => {
+      mockUseYourHook.mockReturnValue({
+        data: null,
+        loading: true,
+        error: null,
+      });
+
+      const { getByTestId } = render(
+        <COMPONENT_NAME {...defaultProps} />,
+        { wrapper: createTestWrapper() }
+      );
+      
+      // Adjust based on your loading indicator
+      expect(getByTestId('loading-spinner')).toBeTruthy();
+    });
+
+    it('shows error state correctly', () => {
+      mockUseYourHook.mockReturnValue({
+        data: null,
+        loading: false,
+        error: new Error('Test error'),
+      });
+
+      const { getByText } = render(
+        <COMPONENT_NAME {...defaultProps} />,
+        { wrapper: createTestWrapper() }
+      );
+      
+      expect(getByText(/error/i)).toBeTruthy();
+    });
+  });
+
+  // ===== ACCESSIBILITY TESTS =====
+  describe('Accessibility', () => {
+    it('has proper accessibility labels', () => {
+      const { getByLabelText } = render(
+        <COMPONENT_NAME {...defaultProps} />,
+        { wrapper: createTestWrapper() }
+      );
+      
+      // Test accessibility labels
+      expect(getByLabelText(/dismiss/i)).toBeTruthy();
+    });
+
+    it('supports screen readers', () => {
+      const { getByA11yRole } = render(
+        <COMPONENT_NAME {...defaultProps} />,
+        { wrapper: createTestWrapper() }
+      );
+      
+      expect(getByA11yRole('button')).toBeTruthy();
+    });
+  });
+
+  // ===== THEME SUPPORT TESTS =====
+  describe('Theme Support', () => {
+    it('applies light theme correctly', () => {
+      const { getByText } = render(
+        <COMPONENT_NAME {...defaultProps} />,
+        { wrapper: createTestWrapper({ theme: 'light' }) }
+      );
+      
+      const titleElement = getByText('Test Title');
+      expect(titleElement).toBeTruthy();
+      // Add theme-specific style assertions if needed
+    });
+
+    it('applies dark theme correctly', () => {
+      const { getByText } = render(
+        <COMPONENT_NAME {...defaultProps} />,
+        { wrapper: createTestWrapper({ theme: 'dark' }) }
+      );
+      
+      const titleElement = getByText('Test Title');
+      expect(titleElement).toBeTruthy();
+      // Add theme-specific style assertions if needed
+    });
+  });
+
+  // ===== INTEGRATION TESTS =====
+  describe('Integration Behavior', () => {
+    it('handles complex user workflows', async () => {
+      const { getByText, getByTestId } = render(
+        <COMPONENT_NAME {...defaultProps} actionText="Complete Flow" />,
+        { wrapper: createTestWrapper() }
+      );
+      
+      // Simulate multi-step interaction
+      const actionButton = getByText('Complete Flow');
+      fireEvent.press(actionButton);
+      
+      await waitFor(() => {
+        expect(mockOnAction).toHaveBeenCalled();
+      });
+      
+      // Additional workflow steps...
+    });
+
+    it('maintains state consistency', async () => {
+      mockUseYourStore.mockReturnValue({
+        items: [{ id: 1, name: 'Initial Item' }],
+        addItem: mockStoreAction,
+      });
+
+      const { rerender, getByText } = render(
+        <COMPONENT_NAME {...defaultProps} />,
+        { wrapper: createTestWrapper() }
+      );
+      
+      expect(getByText('Initial Item')).toBeTruthy();
+      
+      // Update store state
+      mockUseYourStore.mockReturnValue({
+        items: [{ id: 1, name: 'Initial Item' }, { id: 2, name: 'New Item' }],
+        addItem: mockStoreAction,
+      });
+
+      rerender(<COMPONENT_NAME {...defaultProps} />);
+      
+      expect(getByText('New Item')).toBeTruthy();
+    });
+  });
+});

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">32% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>8/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">11.11% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>2/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>1/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>8/20</span>
             </div>
         
             
@@ -150,28 +150,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -190,7 +190,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -230,16 +230,16 @@ import { View, Text, StyleSheet } from 'react-native';
 import { useSafeZoneMonitor } from '@/hooks/useSafeZoneMonitor';
 import { useParentalStore } from '@/stores/parentalStore';
 &nbsp;
-export const SafeZoneIndicator: React.FC = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const { isMonitoring, getCurrentSafeZoneStatus } = <span class="cstat-no" title="statement not covered" >useSafeZoneMonitor();</span>
-  const { settings, safeZones } = <span class="cstat-no" title="statement not covered" >useParentalStore();</span>
+export const SafeZoneIndicator: React.FC = () =&gt; {
+  const { isMonitoring, getCurrentSafeZoneStatus } = useSafeZoneMonitor();
+  const { settings, safeZones } = useParentalStore();
   
-  const status = <span class="cstat-no" title="statement not covered" >getCurrentSafeZoneStatus();</span>
-  const activeSafeZones = <span class="cstat-no" title="statement not covered" >safeZones.filter(<span class="fstat-no" title="function not covered" >zo</span>ne =&gt; <span class="cstat-no" title="statement not covered" >zone.isActive)</span>;</span>
+  const status = getCurrentSafeZoneStatus();
+  const activeSafeZones = safeZones.filter(<span class="fstat-no" title="function not covered" >zo</span>ne =&gt; <span class="cstat-no" title="statement not covered" >zone.isActive)</span>;
 &nbsp;
   // Don't show if safe zone alerts are disabled or no safe zones exist
-<span class="cstat-no" title="statement not covered" >  if (!settings.safeZoneAlerts || activeSafeZones.length === 0) {</span>
-<span class="cstat-no" title="statement not covered" >    return null;</span>
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (!settings.safeZoneAlerts || <span class="branch-1 cbranch-no" title="branch not covered" >activeSafeZones.length === 0)</span> {
+    return null;
   }
 &nbsp;
   const getStatusColor = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -270,7 +270,7 @@ export const SafeZoneIndicator: React.FC = <span class="cstat-no" title="stateme
   );
 };
 &nbsp;
-const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.create({</span>
+const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
@@ -310,7 +310,7 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-02T01:51:28.084Z
+                at 2025-09-03T07:49:59.497Z
             </div>
         <script src="../prettify.js"></script>
         <script>

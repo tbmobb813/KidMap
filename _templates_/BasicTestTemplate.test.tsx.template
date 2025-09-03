@@ -1,0 +1,156 @@
+/**
+ * BASIC TESTING TEMPLATE FOR REACT NATIVE COMPONENTS
+ * 
+ * This template provides essential test coverage for components that need quick validation
+ * before production without extensive testing overhead. Based on the comprehensive template
+ * but streamlined for faster development cycles.
+ * 
+ * COVERAGE FOCUS:
+ * - Basic rendering and crash prevention
+ * - Essential user interactions
+ * - Critical prop variations
+ * - Basic accessibility compliance
+ * - Essential error handling
+ * 
+ * USAGE:
+ * 1. Copy this template
+ * 2. Replace COMPONENT_NAME with your actual component name
+ * 3. Update imports and props according to your component
+ * 4. Customize the 5-7 most critical test scenarios
+ * 5. Update mocks for essential dependencies only
+ */
+
+import { jest } from '@jest/globals';
+import { fireEvent, render } from '@testing-library/react-native';
+
+// Import the component to test
+// import COMPONENT_NAME from '../components/COMPONENT_NAME';
+
+// Import test utilities
+import { createTestWrapper } from '../testUtils';
+
+// ===== ESSENTIAL MOCKS ONLY =====
+// Mock only critical dependencies
+jest.mock('@/hooks/useToast', () => ({
+  useToast: jest.fn(),
+}));
+
+// Mock critical external libraries (if needed)
+jest.mock('lucide-react-native', () => ({
+  YourIcon: ({ size, color, ...props }: any) => 
+    require('react-native').Text({ 
+      testID: 'your-icon',
+      children: `Icon(${size},${color})`,
+      ...props 
+    }),
+}));
+
+// ===== BASIC TEST SETUP =====
+describe('COMPONENT_NAME - Basic Tests', () => {
+  // Essential mock functions
+  const mockOnAction = jest.fn();
+  const mockUseToast = jest.fn();
+
+  // Minimal required props
+  const defaultProps = {
+    title: 'Test Title',
+    onAction: mockOnAction,
+    // Add other required props here
+  };
+
+  beforeEach(() => {
+    // Reset mocks
+    jest.clearAllMocks();
+    
+    // Setup essential mock implementations
+    mockUseToast.mockReturnValue({
+      show: jest.fn(),
+      hide: jest.fn(),
+    });
+
+    require('@/hooks/useToast').useToast.mockImplementation(mockUseToast);
+  });
+
+  // ===== ESSENTIAL TESTS ONLY =====
+  
+  it('renders without crashing', () => {
+    const { getByText } = render(
+      <COMPONENT_NAME {...defaultProps} />,
+      { wrapper: createTestWrapper() }
+    );
+    
+    expect(getByText('Test Title')).toBeTruthy();
+  });
+
+  it('displays critical elements', () => {
+    const { getByText, getByTestId } = render(
+      <COMPONENT_NAME {...defaultProps} />,
+      { wrapper: createTestWrapper() }
+    );
+    
+    // Test only the most important elements
+    expect(getByText('Test Title')).toBeTruthy();
+    expect(getByTestId('your-icon')).toBeTruthy();
+  });
+
+  it('handles primary user interaction', () => {
+    const { getByText } = render(
+      <COMPONENT_NAME {...defaultProps} actionText="Action" />,
+      { wrapper: createTestWrapper() }
+    );
+    
+    const actionButton = getByText('Action');
+    fireEvent.press(actionButton);
+    
+    expect(mockOnAction).toHaveBeenCalledTimes(1);
+  });
+
+  it('handles different prop variations', () => {
+    const props = {
+      ...defaultProps,
+      type: 'warning' as const,
+      message: 'Warning message',
+    };
+    
+    const { getByText } = render(
+      <COMPONENT_NAME {...props} />,
+      { wrapper: createTestWrapper() }
+    );
+    
+    expect(getByText('Warning message')).toBeTruthy();
+  });
+
+  it('shows/hides conditional elements correctly', () => {
+    // Test with optional element
+    const { getByText, rerender, queryByText } = render(
+      <COMPONENT_NAME {...defaultProps} actionText="Optional Action" />,
+      { wrapper: createTestWrapper() }
+    );
+    
+    expect(getByText('Optional Action')).toBeTruthy();
+    
+    // Test without optional element
+    rerender(<COMPONENT_NAME {...defaultProps} />);
+    expect(queryByText('Optional Action')).toBeNull();
+  });
+
+  it('is accessible to screen readers', () => {
+    const { getByLabelText } = render(
+      <COMPONENT_NAME {...defaultProps} />,
+      { wrapper: createTestWrapper() }
+    );
+    
+    // Test basic accessibility - adjust based on component
+    expect(getByLabelText(/dismiss/i)).toBeTruthy();
+  });
+
+  it('handles error states gracefully', () => {
+    const { getByText } = render(
+      <COMPONENT_NAME {...defaultProps} error="Test error" />,
+      { wrapper: createTestWrapper() }
+    );
+    
+    // Should not crash and should show error
+    expect(getByText(/error/i)).toBeTruthy();
+  });
+});

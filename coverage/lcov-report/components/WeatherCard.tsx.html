@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">14.28% </span>
+                <span class="strong">61.9% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/21</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>13/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">20% </span>
-                <span class="quiet">Functions</span>
-                <span class='fraction'>1/5</span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>2/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.78% </span>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>5/5</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">57.89% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/19</span>
+                <span class='fraction'>11/19</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -164,35 +164,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -254,34 +254,34 @@ type WeatherCardProps = {
 &nbsp;
 const WeatherCard: React.FC&lt;WeatherCardProps&gt; = ({ weather }) =&gt; {
   const theme = useTheme();
-  const styles = <span class="cstat-no" title="statement not covered" >React.useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >createStyles(theme),</span> [theme]);</span>
+  const styles = React.useMemo(() =&gt; createStyles(theme), [theme]);
   
-  const getWeatherIcon = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    switch (weather.condition.toLowerCase()) {</span>
+  const getWeatherIcon = () =&gt; {
+    switch (weather.condition.toLowerCase()) {
       case "sunny":
-<span class="cstat-no" title="statement not covered" >        return &lt;Sun size={24} color="#FFD700" /&gt;;</span>
-      case "cloudy":
+        return &lt;Sun size={24} color="#FFD700" /&gt;;
+<span class="branch-1 cbranch-no" title="branch not covered" >      case "cloudy":</span>
 <span class="cstat-no" title="statement not covered" >        return &lt;Cloud size={24} color="#87CEEB" /&gt;;</span>
-      case "rainy":
+<span class="branch-2 cbranch-no" title="branch not covered" >      case "rainy":</span>
 <span class="cstat-no" title="statement not covered" >        return &lt;CloudRain size={24} color="#4682B4" /&gt;;</span>
-      case "snowy":
+<span class="branch-3 cbranch-no" title="branch not covered" >      case "snowy":</span>
 <span class="cstat-no" title="statement not covered" >        return &lt;Snowflake size={24} color="#B0E0E6" /&gt;;</span>
-      default:
+<span class="branch-4 cbranch-no" title="branch not covered" >      default:</span>
 <span class="cstat-no" title="statement not covered" >        return &lt;Wind size={24} color={theme.colors.textSecondary} /&gt;;</span>
     }
   };
 &nbsp;
-  const getBackgroundColor = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    switch (weather.condition.toLowerCase()) {</span>
-      case "sunny": <span class="cstat-no" title="statement not covered" >return "#FFF8DC";</span>
-      case "cloudy": <span class="cstat-no" title="statement not covered" >return "#F0F8FF";</span>
-      case "rainy": <span class="cstat-no" title="statement not covered" >return "#E6F3FF";</span>
-      case "snowy": <span class="cstat-no" title="statement not covered" >return "#F0F8FF";</span>
-      default: <span class="cstat-no" title="statement not covered" >return theme.colors.surface;</span>
+  const getBackgroundColor = () =&gt; {
+    switch (weather.condition.toLowerCase()) {
+      case "sunny": return "#FFF8DC";
+<span class="branch-1 cbranch-no" title="branch not covered" >      case "cloudy": <span class="cstat-no" title="statement not covered" >return "#F0F8FF";</span></span>
+<span class="branch-2 cbranch-no" title="branch not covered" >      case "rainy": <span class="cstat-no" title="statement not covered" >return "#E6F3FF";</span></span>
+<span class="branch-3 cbranch-no" title="branch not covered" >      case "snowy": <span class="cstat-no" title="statement not covered" >return "#F0F8FF";</span></span>
+<span class="branch-4 cbranch-no" title="branch not covered" >      default: <span class="cstat-no" title="statement not covered" >return theme.colors.surface;</span></span>
     }
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;View style={[styles.container, { backgroundColor: getBackgroundColor() }]}&gt;
       &lt;View style={styles.weatherInfo}&gt;
         {getWeatherIcon()}
@@ -296,7 +296,7 @@ const WeatherCard: React.FC&lt;WeatherCardProps&gt; = ({ weather }) =&gt; {
   );
 };
 &nbsp;
-const createStyles = <span class="fstat-no" title="function not covered" >(t</span>heme: ReturnType&lt;typeof useTheme&gt;) =&gt; <span class="cstat-no" title="statement not covered" >StyleSheet.create({</span>
+const createStyles = (theme: ReturnType&lt;typeof useTheme&gt;) =&gt; StyleSheet.create({
   condition: {
     color: theme.colors.textSecondary,
     fontSize: 14,
@@ -337,7 +337,7 @@ export default WeatherCard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-02T01:51:28.084Z
+                at 2025-09-03T07:49:59.497Z
             </div>
         <script src="../prettify.js"></script>
         <script>

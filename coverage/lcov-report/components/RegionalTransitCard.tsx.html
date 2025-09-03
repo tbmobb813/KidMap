@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84.21% </span>
+                <span class="strong">57.89% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>16/19</span>
+                <span class='fraction'>11/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.5% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>5/8</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>3/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.35% </span>
+                <span class="strong">52.94% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/17</span>
+                <span class='fraction'>9/17</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -206,12 +206,8 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -219,24 +215,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -246,7 +232,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -333,24 +333,24 @@ const RegionalTransitCard: React.FC = () =&gt; {
   const { currentRegion, getCurrentTransitSystems } = useRegionStore();
   const transitSystems = getCurrentTransitSystems();
 &nbsp;
-  const getTransitIcon = (type: string) =&gt; {
-    switch (type) {
+  const getTransitIcon = <span class="fstat-no" title="function not covered" >(t</span>ype: string) =&gt; {
+<span class="cstat-no" title="statement not covered" >    switch (type) {</span>
       case "subway":
       case "train":
-  return &lt;Train size={20} color={theme.colors.primaryForeground} /&gt;;
+<span class="cstat-no" title="statement not covered" >  return &lt;Train size={20} color={theme.colors.primaryForeground} /&gt;;</span>
       case "bus":
-  return &lt;Bus size={20} color={theme.colors.primaryForeground} /&gt;;
-<span class="branch-3 cbranch-no" title="branch not covered" >      case "tram":</span>
+<span class="cstat-no" title="statement not covered" >  return &lt;Bus size={20} color={theme.colors.primaryForeground} /&gt;;</span>
+      case "tram":
 <span class="cstat-no" title="statement not covered" >  return &lt;Navigation size={20} color={theme.colors.primaryForeground} /&gt;;</span>
-<span class="branch-4 cbranch-no" title="branch not covered" >      case "ferry":</span>
+      case "ferry":
 <span class="cstat-no" title="statement not covered" >  return &lt;Ship size={20} color={theme.colors.primaryForeground} /&gt;;</span>
-<span class="branch-5 cbranch-no" title="branch not covered" >      default:</span>
+      default:
 <span class="cstat-no" title="statement not covered" >  return &lt;Train size={20} color={theme.colors.primaryForeground} /&gt;;</span>
     }
   };
 &nbsp;
-  const renderTransitSystem = ({ item }: { item: typeof transitSystems[0] }) =&gt; (
-    &lt;View style={styles.transitItem}&gt;
+  const renderTransitSystem = <span class="fstat-no" title="function not covered" >({</span> item }: { item: typeof transitSystems[0] }) =&gt; (
+<span class="cstat-no" title="statement not covered" >    &lt;View style={styles.transitItem}&gt;</span>
       &lt;View style={[styles.transitIcon, { backgroundColor: item.color }]}&gt;
         {getTransitIcon(item.type)}
       &lt;/View&gt;
@@ -374,7 +374,7 @@ const RegionalTransitCard: React.FC = () =&gt; {
       &lt;FlatList
         data={transitSystems}
         renderItem={renderTransitSystem}
-        keyExtractor={(item) =&gt; item.id}
+        keyExtractor={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.id}</span>
         scrollEnabled={false}
         contentContainerStyle={styles.transitList}
       /&gt;
@@ -454,7 +454,7 @@ export default RegionalTransitCard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-02T01:51:28.084Z
+                at 2025-09-03T07:49:59.497Z
             </div>
         <script src="../prettify.js"></script>
         <script>

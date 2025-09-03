@@ -1,9 +1,8 @@
+
 import { render } from "@testing-library/react-native";
-import React from "react";
-import { ThemeProvider } from "styled-components/native";
 
 import WeatherCard from "../../components/WeatherCard";
-
+import { ThemeProvider } from "../../constants/theme";
 
 describe("WeatherCard", () => {
   it("renders without crashing", () => {
@@ -14,20 +13,8 @@ describe("WeatherCard", () => {
       windSpeed: 10,
       recommendation: "Wear sunglasses",
     };
-    const theme = {
-      colors: {
-        primary: "#007bff",
-        background: "#fff",
-        text: "#222",
-      },
-      spacing: {
-        small: 8,
-        medium: 16,
-        large: 24,
-      },
-    };
     render(
-      <ThemeProvider theme={theme}>
+      <ThemeProvider initial="light">
         <WeatherCard weather={mockWeather} />
       </ThemeProvider>
     );

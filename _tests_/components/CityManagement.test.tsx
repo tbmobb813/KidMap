@@ -1,14 +1,13 @@
+
 import { render } from "@testing-library/react-native";
-import React from "react";
-import { ThemeProvider } from "styled-components/native";
 
 import CityManagement from "../../components/CityManagement";
-
+import { ThemeProvider } from "../../constants/theme";
 
 describe("CityManagement", () => {
   it("renders without crashing", () => {
     render(
-      <ThemeProvider theme={{ mode: "light" }}>
+      <ThemeProvider initial="light">
         <CityManagement onBack={() => {}} />
       </ThemeProvider>
     );

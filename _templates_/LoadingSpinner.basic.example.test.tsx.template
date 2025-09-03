@@ -1,0 +1,130 @@
+/**
+ * BASIC TEMPLATE EXAMPLE: LoadingSpinner Component Test
+ * 
+ * This demonstrates how to use the Basic Template for a simple component
+ * that doesn't require extensive testing coverage.
+ */
+
+import { jest } from '@jest/globals';
+import { render } from '@testing-library/react-native';
+
+import LoadingSpinner from '../../components/LoadingSpinner';
+import { createTestWrapper } from '../testUtils';
+
+// ===== ESSENTIAL MOCKS ONLY =====
+// Mock only critical dependencies - LoadingSpinner is simple, so minimal mocks needed
+jest.mock('react-native/Libraries/Components/ActivityIndicator/ActivityIndicator', () => {
+  const React = require('react');
+  return React.forwardRef((props: any) => 
+    React.createElement('div', { 
+      ...props,
+      testID: 'activity-indicator',
+      'data-animating': props.animating 
+    })
+  );
+});
+
+// ===== BASIC TEST SETUP =====
+describe('LoadingSpinner - Basic Tests', () => {
+  // Minimal required props
+  const defaultProps = {
+    size: 'large' as const,
+    color: '#007AFF',
+  };
+
+  beforeEach(() => {
+    // Reset mocks
+    jest.clearAllMocks();
+  });
+
+  // ===== ESSENTIAL TESTS ONLY =====
+  
+  it('renders without crashing', () => {
+    const { getByTestId } = render(
+      <LoadingSpinner {...defaultProps} />,
+      { wrapper: createTestWrapper() }
+    );
+    
+    expect(getByTestId('activity-indicator')).toBeTruthy();
+  });
+
+  it('displays critical elements', () => {
+    const { getByTestId } = render(
+      <LoadingSpinner {...defaultProps} />,
+      { wrapper: createTestWrapper() }
+    );
+    
+    // Test the most important element - the spinner itself
+    const spinner = getByTestId('activity-indicator');
+    expect(spinner).toBeTruthy();
+    expect(spinner.props['data-animating']).toBe(true);
+  });
+
+  it('handles primary user interaction', () => {
+    // LoadingSpinner doesn't have user interactions, so test different animating states
+    const { getByTestId, rerender } = render(
+      <LoadingSpinner {...defaultProps} animating={true} />,
+      { wrapper: createTestWrapper() }
+    );
+    
+    let spinner = getByTestId('activity-indicator');
+    expect(spinner.props['data-animating']).toBe(true);
+    
+    rerender(<LoadingSpinner {...defaultProps} animating={false} />);
+    spinner = getByTestId('activity-indicator');
+    expect(spinner.props['data-animating']).toBe(false);
+  });
+
+  it('handles different prop variations', () => {
+    const props = {
+      ...defaultProps,
+      size: 'small' as const,
+      color: '#FF3B30',
+    };
+    
+    const { getByTestId } = render(
+      <LoadingSpinner {...props} />,
+      { wrapper: createTestWrapper() }
+    );
+    
+    const spinner = getByTestId('activity-indicator');
+    expect(spinner).toBeTruthy();
+    expect(spinner.props.size).toBe('small');
+    expect(spinner.props.color).toBe('#FF3B30');
+  });
+
+  it('shows/hides conditional elements correctly', () => {
+    // Test with optional text
+    const { getByText, rerender, queryByText } = render(
+      <LoadingSpinner {...defaultProps} text="Loading..." />,
+      { wrapper: createTestWrapper() }
+    );
+    
+    expect(getByText('Loading...')).toBeTruthy();
+    
+    // Test without optional text
+    rerender(<LoadingSpinner {...defaultProps} />);
+    expect(queryByText('Loading...')).toBeNull();
+  });
+
+  it('is accessible to screen readers', () => {
+    const { getByLabelText } = render(
+      <LoadingSpinner {...defaultProps} accessibilityLabel="Loading content" />,
+      { wrapper: createTestWrapper() }
+    );
+    
+    // Should be accessible with proper label
+    expect(getByLabelText('Loading content')).toBeTruthy();
+  });
+
+  it('handles error states gracefully', () => {
+    // LoadingSpinner should handle undefined/null props gracefully
+    const { getByTestId } = render(
+      <LoadingSpinner size={undefined as any} color={undefined as any} />,
+      { wrapper: createTestWrapper() }
+    );
+    
+    // Should not crash and should still render
+    expect(getByTestId('activity-indicator')).toBeTruthy();
+  });
+});

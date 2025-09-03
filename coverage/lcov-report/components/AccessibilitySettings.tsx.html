@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">56.52% </span>
+                <span class="strong">34.78% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/23</span>
+                <span class='fraction'>8/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.33% </span>
+                <span class="strong">63.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>28/30</span>
+                <span class='fraction'>19/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>5/10</span>
+                <span class='fraction'>2/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">57.89% </span>
+                <span class="strong">42.1% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>11/19</span>
+                <span class='fraction'>8/19</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -365,7 +365,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -404,7 +404,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -484,7 +484,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -492,7 +492,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -651,10 +651,10 @@ const AccessibilitySettings: React.FC&lt;AccessibilitySettingsProps&gt; = ({ onB
     &gt;
       &lt;View style={styles.themeIcon}&gt;{icon}&lt;/View&gt;
       &lt;View style={styles.themeContent}&gt;
-        &lt;Text style={[styles.themeTitle, { color: theme.colors.text }, accessibilitySettings.largeText &amp;&amp; styles.largeText]}&gt;
+        &lt;Text style={[styles.themeTitle, { color: theme.colors.text }, accessibilitySettings.largeText &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.largeText]</span>}&gt;
           {title}
         &lt;/Text&gt;
-        &lt;Text style={[styles.themeDescription, { color: theme.colors.textSecondary }, accessibilitySettings.largeText &amp;&amp; styles.largeDescription]}&gt;
+        &lt;Text style={[styles.themeDescription, { color: theme.colors.textSecondary }, accessibilitySettings.largeText &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.largeDescription]</span>}&gt;
           {description}
         &lt;/Text&gt;
       &lt;/View&gt;
@@ -664,7 +664,7 @@ const AccessibilitySettings: React.FC&lt;AccessibilitySettingsProps&gt; = ({ onB
     &lt;/Pressable&gt;
   );
 &nbsp;
-  const SettingItem = ({ 
+  const SettingItem = <span class="fstat-no" title="function not covered" >({ </span>
     icon, 
     title, 
     description, 
@@ -677,7 +677,7 @@ const AccessibilitySettings: React.FC&lt;AccessibilitySettingsProps&gt; = ({ onB
     value: boolean;
     onValueChange: (value: boolean) =&gt; void;
   }) =&gt; (
-    &lt;View style={styles.settingItem}&gt;
+<span class="cstat-no" title="statement not covered" >    &lt;View style={styles.settingItem}&gt;</span>
       &lt;View style={styles.settingIcon}&gt;{icon}&lt;/View&gt;
       &lt;View style={styles.settingContent}&gt;
         &lt;Text style={[styles.settingTitle, accessibilitySettings.largeText &amp;&amp; styles.largeText]}&gt;
@@ -706,12 +706,12 @@ const AccessibilitySettings: React.FC&lt;AccessibilitySettingsProps&gt; = ({ onB
         &lt;/Pressable&gt;
       )}
       
-      &lt;Text style={[styles.sectionTitle, { color: theme.colors.text }, accessibilitySettings.largeText &amp;&amp; styles.largeSectionTitle]}&gt;
+      &lt;Text style={[styles.sectionTitle, { color: theme.colors.text }, accessibilitySettings.largeText &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.largeSectionTitle]</span>}&gt;
         Accessibility Settings
       &lt;/Text&gt;
 &nbsp;
       {/* Theme Selection */}
-      &lt;Text style={[styles.sectionTitle, { color: theme.colors.text }, accessibilitySettings.largeText &amp;&amp; styles.largeSectionTitle]}&gt;
+      &lt;Text style={[styles.sectionTitle, { color: theme.colors.text }, accessibilitySettings.largeText &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.largeSectionTitle]</span>}&gt;
         Appearance
       &lt;/Text&gt;
       
@@ -748,7 +748,7 @@ const AccessibilitySettings: React.FC&lt;AccessibilitySettingsProps&gt; = ({ onB
         }}
       /&gt;
       
-      &lt;Text style={[styles.sectionTitle, { color: theme.colors.text }, accessibilitySettings.largeText &amp;&amp; styles.largeSectionTitle, { marginTop: 24 }]}&gt;
+      &lt;Text style={[styles.sectionTitle, { color: theme.colors.text }, accessibilitySettings.largeText &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.largeSectionTitle,</span> { marginTop: 24 }]}&gt;
         Accessibility Features
       &lt;/Text&gt;
       
@@ -757,7 +757,7 @@ const AccessibilitySettings: React.FC&lt;AccessibilitySettingsProps&gt; = ({ onB
         title="Large Text"
         description="Make text bigger and easier to read"
         value={accessibilitySettings.largeText}
-        onValueChange={(value) =&gt; { updateAccessibilitySettings({ largeText: value }); track({ type: 'accessibility_toggle', setting: 'largeText', value }); }}
+        onValueChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; { <span class="cstat-no" title="statement not covered" >updateAccessibilitySettings({ largeText: value }); <span class="cstat-no" title="statement not covered" ></span>track({ type: 'accessibility_toggle', setting: 'largeText', value }); </span>}}
       /&gt;
       
       &lt;SettingItem
@@ -765,7 +765,7 @@ const AccessibilitySettings: React.FC&lt;AccessibilitySettingsProps&gt; = ({ onB
         title="High Contrast"
         description="Use colors that are easier to see"
         value={accessibilitySettings.highContrast}
-        onValueChange={(value) =&gt; { updateAccessibilitySettings({ highContrast: value }); track({ type: 'accessibility_toggle', setting: 'highContrast', value }); }}
+        onValueChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; { <span class="cstat-no" title="statement not covered" >updateAccessibilitySettings({ highContrast: value }); <span class="cstat-no" title="statement not covered" ></span>track({ type: 'accessibility_toggle', setting: 'highContrast', value }); </span>}}
       /&gt;
       
       &lt;SettingItem
@@ -889,7 +889,7 @@ export default AccessibilitySettings;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-02T01:51:28.084Z
+                at 2025-09-03T07:49:59.497Z
             </div>
         <script src="../prettify.js"></script>
         <script>

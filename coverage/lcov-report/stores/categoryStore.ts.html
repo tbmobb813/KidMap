@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">6.31% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/95</span>
+                <span class='fraction'>0/95</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.22% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/83</span>
+                <span class='fraction'>0/83</span>
             </div>
         
             
@@ -361,7 +361,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -444,21 +444,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -604,9 +604,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -628,7 +628,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -652,7 +652,7 @@ import { useState, useEffect } from 'react';
 import { CategoryCreateSchema, CategoryUpdateSchema } from '@/core/validation';
 import { CustomCategory, CategoryManagementSettings, PlaceCategory } from '@/types/navigation';
 &nbsp;
-const DEFAULT_CATEGORIES: CustomCategory[] = [
+const DEFAULT_CATEGORIES: CustomCategory[] = <span class="cstat-no" title="statement not covered" >[</span>
   {
     id: 'home',
     name: 'Home',
@@ -735,18 +735,18 @@ const DEFAULT_CATEGORIES: CustomCategory[] = [
   },
 ];
 &nbsp;
-const DEFAULT_SETTINGS: CategoryManagementSettings = {
+const DEFAULT_SETTINGS: CategoryManagementSettings = <span class="cstat-no" title="statement not covered" >{</span>
   allowChildToCreateCategories: true,
   requireParentApproval: true,
   maxCustomCategories: 20,
 };
 &nbsp;
-const STORAGE_KEYS = {
+const STORAGE_KEYS = <span class="cstat-no" title="statement not covered" >{</span>
   CATEGORIES: 'kidmap_custom_categories',
   SETTINGS: 'kidmap_category_settings',
 };
 &nbsp;
-export const [CategoryProvider, useCategoryStoreInternal] = createContextHook(<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+export const [CategoryProvider, useCategoryStoreInternal] = <span class="cstat-no" title="statement not covered" >createContextHook(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const [categories, setCategories] = <span class="cstat-no" title="statement not covered" >useState&lt;CustomCategory[]&gt;(DEFAULT_CATEGORIES);</span>
   const [settings, setSettings] = <span class="cstat-no" title="statement not covered" >useState&lt;CategoryManagementSettings&gt;(DEFAULT_SETTINGS);</span>
   const [isLoading, setIsLoading] = <span class="cstat-no" title="statement not covered" >useState(true);</span>
@@ -895,7 +895,7 @@ export const [CategoryProvider, useCategoryStoreInternal] = createContextHook(<s
 });
 &nbsp;
 // Safe wrapper that provides fallback values
-export const useCategoryStore = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+export const useCategoryStore = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  try {</span>
 <span class="cstat-no" title="statement not covered" >    return useCategoryStoreInternal();</span>
   } catch {
@@ -919,7 +919,7 @@ export const useCategoryStore = <span class="fstat-no" title="function not cover
   }
 };
 &nbsp;
-export const useCategoryManagement = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+export const useCategoryManagement = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const store = <span class="cstat-no" title="statement not covered" >useCategoryStore();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return {</span>
@@ -943,7 +943,7 @@ export const useCategoryManagement = <span class="fstat-no" title="function not 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-02T01:51:28.084Z
+                at 2025-09-03T07:49:59.497Z
             </div>
         <script src="../prettify.js"></script>
         <script>

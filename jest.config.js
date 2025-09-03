@@ -6,7 +6,9 @@ module.exports = {
     preset: 'jest-expo',
     testEnvironment: 'jsdom',
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
+    modulePathIgnorePatterns: ['.*\\.flow$'],
     moduleNameMapper: {
+        '^react-native$': '<rootDir>/__mocks__/react-native.js',
         '^@/modules/(.*)$': '<rootDir>/src/modules/$1',
         '^@/core/(.*)$': '<rootDir>/src/core/$1',
         '^@/shared/(.*)$': '<rootDir>/src/shared/$1',
@@ -33,15 +35,19 @@ module.exports = {
     coverageReporters: ['text', 'lcov'],
     coverageThreshold: {
         global: {
-            lines: 0.8 * 100, // 80%
-            statements: 0.8 * 100,
-            branches: 0.7 * 100,
-            functions: 0.75 * 100,
+            lines: 80,
+            statements: 80,
+            branches: 70,
+            functions: 75,
         }
     },
-    // Allow transpiling of RN/Expo and specific ESM deps; rely on jest-expo's babel config
+    transform: {
+        '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+    },
     transformIgnorePatterns: [
-        'node_modules/(?!(react-native|@react-native|@react-navigation|@react-native-async-storage|expo(nent)?|expo-modules-core|expo-location|expo-image-picker|expo-image|lucide-react-native|@expo|@unimodules|@nkzw/create-context-hook)/)'
+        'node_modules/(?!(react-native|@react-native|@react-navigation|@react-native-async-storage|expo(nent)?|expo-modules-core|expo-location|expo-image-picker|expo-image|lucide-react-native|@expo|@unimodules|@nkzw/create-context-hook)/)',
+        'node_modules/react-native/.*\\.flow$'
     ],
+    extensionsToTreatAsEsm: ['.ts', '.tsx'],
     verbose: true,
 };

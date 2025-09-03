@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>1/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">30% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -253,18 +253,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -318,7 +316,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -428,16 +428,16 @@ type UserStatsCardProps = {
 &nbsp;
 const UserStatsCard: React.FC&lt;UserStatsCardProps&gt; = ({ stats, onPetClick }) =&gt; {
   const theme = useTheme();
-  const styles = <span class="cstat-no" title="statement not covered" >React.useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >createStyles(theme),</span> [theme]);</span>
+  const styles = React.useMemo(() =&gt; createStyles(theme), [theme]);
   
-  const getProgressToNextLevel = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const pointsForCurrentLevel = <span class="cstat-no" title="statement not covered" >(stats.level - 1) * 200;</span>
-    const pointsForNextLevel = <span class="cstat-no" title="statement not covered" >stats.level * 200;</span>
-    const progress = <span class="cstat-no" title="statement not covered" >(stats.totalPoints - pointsForCurrentLevel) / (pointsForNextLevel - pointsForCurrentLevel);</span>
-<span class="cstat-no" title="statement not covered" >    return Math.max(0, Math.min(1, progress));</span>
+  const getProgressToNextLevel = () =&gt; {
+    const pointsForCurrentLevel = (stats.level - 1) * 200;
+    const pointsForNextLevel = stats.level * 200;
+    const progress = (stats.totalPoints - pointsForCurrentLevel) / (pointsForNextLevel - pointsForCurrentLevel);
+    return Math.max(0, Math.min(1, progress));
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;View style={styles.container}&gt;
       &lt;View style={styles.header}&gt;
         &lt;View style={styles.levelContainer}&gt;
@@ -448,7 +448,7 @@ const UserStatsCard: React.FC&lt;UserStatsCardProps&gt; = ({ stats, onPetClick }
         &lt;View style={styles.headerRight}&gt;
           &lt;Text style={styles.pointsText}&gt;{stats.totalPoints} points&lt;/Text&gt;
           {onPetClick &amp;&amp; (
-            &lt;Pressable style={styles.petButton} onPress={onPetClick}&gt;
+<span class="branch-1 cbranch-no" title="branch not covered" >            &lt;Pressable style={styles.petButton} onPress={onPetClick}&gt;</span>
               &lt;Text style={styles.petEmoji}&gt;🐲&lt;/Text&gt;
               &lt;Text style={styles.petText}&gt;Pet&lt;/Text&gt;
             &lt;/Pressable&gt;
@@ -493,7 +493,7 @@ const UserStatsCard: React.FC&lt;UserStatsCardProps&gt; = ({ stats, onPetClick }
   );
 };
 &nbsp;
-const createStyles = <span class="fstat-no" title="function not covered" >(t</span>heme: ReturnType&lt;typeof useTheme&gt;) =&gt; <span class="cstat-no" title="statement not covered" >StyleSheet.create({</span>
+const createStyles = (theme: ReturnType&lt;typeof useTheme&gt;) =&gt; StyleSheet.create({
   container: {
     backgroundColor: theme.colors.surface,
     borderRadius: 16,
@@ -595,7 +595,7 @@ export default UserStatsCard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-02T01:51:28.084Z
+                at 2025-09-03T07:49:59.497Z
             </div>
         <script src="../prettify.js"></script>
         <script>

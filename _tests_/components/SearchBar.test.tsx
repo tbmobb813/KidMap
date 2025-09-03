@@ -1,14 +1,13 @@
+
 import { render } from "@testing-library/react-native";
-import React from "react";
-import { ThemeProvider } from "styled-components/native";
 
 import SearchBar from "../../components/SearchBar";
-
+import { ThemeProvider } from "../../constants/theme";
 
 describe("SearchBar", () => {
   it("renders without crashing", () => {
     render(
-      <ThemeProvider theme={{ colors: {}, spacing: {} }}>
+      <ThemeProvider initial="light">
         <SearchBar
           value=""
           onChangeText={() => {}}

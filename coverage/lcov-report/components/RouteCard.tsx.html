@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.33% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/15</span>
+                <span class='fraction'>12/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60.86% </span>
+                <span class="strong">47.82% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>14/23</span>
+                <span class='fraction'>11/23</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">40% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>2/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">80% </span>
-                <span class="quiet">Functions</span>
-                <span class='fraction'>4/5</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">93.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/15</span>
+                <span class='fraction'>12/15</span>
             </div>
         
             
@@ -217,8 +217,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -226,27 +226,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -263,7 +261,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -376,13 +376,13 @@ const RouteCardComponent: React.FC&lt;RouteCardProps&gt; = ({ route, onPress, is
       accessibilityHint="Selects this route option"
       accessibilityState={{ selected: isSelected }}
       hitSlop={8}
-      style={({ pressed }) =&gt; [
+      style={<span class="fstat-no" title="function not covered" >({</span> pressed }) =&gt; <span class="cstat-no" title="statement not covered" >[</span>
         styles.container,
-        { backgroundColor: theme.colors.surface, shadowColor: theme.colors.text, borderColor: isSelected ? <span class="branch-0 cbranch-no" title="branch not covered" >theme.colors.primary </span>: 'transparent' },
-        isSelected &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >styles.selected,</span>
-        pressed &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >[{ backgroundColor: theme.colors.surfaceAlt }, styles.pressed],</span>
+        { backgroundColor: theme.colors.surface, shadowColor: theme.colors.text, borderColor: isSelected ? theme.colors.primary : 'transparent' },
+        isSelected &amp;&amp; styles.selected,
+        pressed &amp;&amp; [{ backgroundColor: theme.colors.surfaceAlt }, styles.pressed],
       ]}
-      onPress={() =&gt; onPress(route)}
+      onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onPress(route)}</span>
       disabled={!route}
       testID={`route-card-${route.id}`}
     &gt;
@@ -484,7 +484,7 @@ export default RouteCard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-02T01:51:28.084Z
+                at 2025-09-03T07:49:59.497Z
             </div>
         <script src="../prettify.js"></script>
         <script>
