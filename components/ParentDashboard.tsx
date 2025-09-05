@@ -1,19 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Pressable, Alert, Image } from 'react-native';
 import Colors from '@/constants/colors';
-import { 
-  Shield, 
-  MapPin, 
-  Camera, 
-  CheckCircle, 
-  AlertTriangle, 
-  Phone, 
-  Settings,
-  Plus,
-  Eye,
-  LogOut,
-  MessageCircle
-} from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 import { useParentalStore } from '@/stores/parentalStore';
 import { useCategoryStore } from '@/stores/categoryStore';
 import SafeZoneManagement from '@/components/SafeZoneManagement';
@@ -34,7 +22,7 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
     sendDevicePing,
     requestCheckIn,
   } = useParentalStore();
-  
+
   const { getPendingCategories, approveCategory } = useCategoryStore();
   const [activeTab, setActiveTab] = useState<'overview' | 'checkins' | 'safezones' | 'pings' | 'settings'>('overview');
   const [showSafeZoneManagement, setShowSafeZoneManagement] = useState(false);
@@ -48,8 +36,8 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
       'Send a check-in request to your child?',
       [
         { text: 'Cancel', style: 'cancel' },
-        { 
-          text: 'Send Request', 
+        {
+          text: 'Send Request',
           onPress: () => {
             requestCheckIn('Please check in and let me know you are safe', false);
             Alert.alert('Request Sent', 'Your child will receive a check-in request');
@@ -117,69 +105,58 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         <View style={styles.quickActionsGrid}>
           <Pressable style={styles.quickActionButton} onPress={handleRequestCheckIn}>
-            <CheckCircle size={24} color="#FFFFFF" />
+            <Feather name="check-circle" size={24} color="#FFFFFF" />
             <Text style={styles.quickActionText}>Request Check-in</Text>
           </Pressable>
-          
           <Pressable style={styles.quickActionButton} onPress={() => handleDevicePing('location')}>
-            <MapPin size={24} color="#FFFFFF" />
+            <Feather name="map-pin" size={24} color="#FFFFFF" />
             <Text style={styles.quickActionText}>Get Location</Text>
           </Pressable>
-          
           <Pressable style={styles.quickActionButton} onPress={() => handleDevicePing('ring')}>
-            <Phone size={24} color="#FFFFFF" />
+            <Feather name="phone" size={24} color="#FFFFFF" />
             <Text style={styles.quickActionText}>Ring Device</Text>
           </Pressable>
-          
-          <Pressable style={styles.quickActionButton} onPress={() => handleSendMessage()}>
-            <MessageCircle size={24} color="#FFFFFF" />
+          <Pressable style={styles.quickActionButton} onPress={handleSendMessage}>
+            <Feather name="message-circle" size={24} color="#FFFFFF" />
             <Text style={styles.quickActionText}>Send Message</Text>
           </Pressable>
         </View>
+        {/* Pending Check-ins */}
+        {pendingCheckIns.map(request => (
+          <View key={request.id} style={styles.alertCard}>
+            <Feather name="alert-triangle" size={20} color={Colors.warning} />
+            <View style={styles.alertContent}>
+              <Text style={styles.alertTitle}>Pending Check-in Request</Text>
+              <Text style={styles.alertSubtitle}>
+                Sent {formatTime(request.requestedAt)} - {request.message}
+              </Text>
+            </View>
+          </View>
+        ))}
+        {/* Pending Categories */}
+        {pendingCategories.map(category => (
+          <View key={category.id} style={styles.alertCard}>
+            <View style={styles.alertContent}>
+              <Text style={styles.alertTitle}>Category Approval Needed</Text>
+              <Text style={styles.alertSubtitle}>
+                Child wants to add &quot;{category.name}&quot; category
+              </Text>
+            </View>
+            <Pressable
+              style={styles.approveButton}
+              onPress={() => handleApproveCategory(category.id)}
+            >
+              <Text style={styles.approveButtonText}>Approve</Text>
+            </Pressable>
+          </View>
+        ))}
       </View>
-
-      {/* Alerts */}
-      {(pendingCheckIns.length > 0 || pendingCategories.length > 0) && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Alerts</Text>
-          
-          {pendingCheckIns.map(request => (
-            <View key={request.id} style={styles.alertCard}>
-              <AlertTriangle size={20} color={Colors.warning} />
-              <View style={styles.alertContent}>
-                <Text style={styles.alertTitle}>Pending Check-in Request</Text>
-                <Text style={styles.alertSubtitle}>
-                  Sent {formatTime(request.requestedAt)} - {request.message}
-                </Text>
-              </View>
-            </View>
-          ))}
-
-          {pendingCategories.map(category => (
-            <View key={category.id} style={styles.alertCard}>
-              <View style={styles.alertContent}>
-                <Text style={styles.alertTitle}>Category Approval Needed</Text>
-                <Text style={styles.alertSubtitle}>
-                  Child wants to add &quot;{category.name}&quot; category
-                </Text>
-              </View>
-              <Pressable
-                style={styles.approveButton}
-                onPress={() => handleApproveCategory(category.id)}
-              >
-                <Text style={styles.approveButtonText}>Approve</Text>
-              </Pressable>
-            </View>
-          ))}
-        </View>
-      )}
-
       {/* Last Known Location */}
       {dashboardData.lastKnownLocation && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Last Known Location</Text>
           <View style={styles.locationCard}>
-            <MapPin size={20} color={Colors.primary} />
+            <Feather name="map-pin" size={20} color={Colors.primary} />
             <View style={styles.locationContent}>
               <Text style={styles.locationTitle}>
                 {dashboardData.lastKnownLocation.placeName || 'Unknown Location'}
@@ -191,7 +168,6 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
           </View>
         </View>
       )}
-
       {/* Recent Check-ins */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Recent Check-ins</Text>
@@ -200,7 +176,7 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
         ) : (
           dashboardData.recentCheckIns.slice(0, 3).map(checkIn => (
             <View key={checkIn.id} style={styles.checkInCard}>
-              <Camera size={20} color={Colors.primary} />
+              <Feather name="camera" size={20} color={Colors.primary} />
               <View style={styles.checkInContent}>
                 <Text style={styles.checkInTitle}>{checkIn.placeName}</Text>
                 <Text style={styles.checkInTime}>
@@ -208,7 +184,7 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
                 </Text>
               </View>
               {checkIn.photoUrl && (
-                <Image source={{ uri: checkIn.photoUrl }} style={styles.checkInPhoto} />
+                <Feather name="camera" size={20} color={Colors.primary} />
               )}
             </View>
           ))
@@ -226,7 +202,7 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
         ) : (
           dashboardData.recentCheckIns.map(checkIn => (
             <View key={checkIn.id} style={styles.checkInCard}>
-              <Camera size={20} color={Colors.primary} />
+              <Feather name="camera" size={20} color={Colors.primary} />
               <View style={styles.checkInContent}>
                 <Text style={styles.checkInTitle}>{checkIn.placeName}</Text>
                 <Text style={styles.checkInTime}>
@@ -250,39 +226,33 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
 
   const renderSafeZones = () => (
     <ScrollView style={styles.safeZonesContent} showsVerticalScrollIndicator={false}>
-      <SafeZoneStatusCard value={''} onChangeText={function (text: string): void {
-        throw new Error('Function not implemented.');
-      } } onClear={function (): void {
-        throw new Error('Function not implemented.');
-      } } />
-      
+      <SafeZoneStatusCard value={''} onChangeText={() => {}} onClear={() => {}} />
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Manage Safe Zones</Text>
           <Pressable style={styles.addButton} onPress={() => setShowSafeZoneManagement(true)}>
-            <Plus size={20} color={Colors.primary} />
+            <Feather name="plus" size={20} color={Colors.primary} />
           </Pressable>
         </View>
-        
         {safeZones.length === 0 ? (
           <View style={styles.emptyStateCard}>
-            <Shield size={48} color={Colors.textLight} />
+            <Feather name="shield" size={48} color={Colors.textLight} />
             <Text style={styles.emptyStateTitle}>No Safe Zones</Text>
             <Text style={styles.emptyStateSubtitle}>
               Create safe zones to monitor when your child enters or leaves specific areas
             </Text>
-            <Pressable 
-              style={styles.createButton} 
+            <Pressable
+              style={styles.createButton}
               onPress={() => setShowSafeZoneManagement(true)}
             >
-              <Plus size={16} color="#FFFFFF" />
+              <Feather name="plus" size={16} color="#FFFFFF" />
               <Text style={styles.createButtonText}>Create Safe Zone</Text>
             </Pressable>
           </View>
         ) : (
           safeZones.map(zone => (
             <View key={zone.id} style={styles.safeZoneCard}>
-              <Shield size={20} color={zone.isActive ? Colors.success : Colors.textLight} />
+              <Feather name="shield" size={20} color={zone.isActive ? Colors.success : Colors.textLight} />
               <View style={styles.safeZoneContent}>
                 <Text style={styles.safeZoneTitle}>{zone.name}</Text>
                 <Text style={styles.safeZoneSubtitle}>
@@ -290,7 +260,6 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
                 </Text>
                 <Text style={styles.safeZoneNotifications}>
                   Alerts: {zone.notifications.onEntry ? 'Entry' : ''}
-                  {zone.notifications.onEntry && zone.notifications.onExit ? ' & ' : ''}
                   {zone.notifications.onExit ? 'Exit' : ''}
                   {!zone.notifications.onEntry && !zone.notifications.onExit ? 'None' : ''}
                 </Text>
@@ -299,7 +268,6 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
           ))
         )}
       </View>
-
       <SafeZoneActivityLog />
     </ScrollView>
   );
@@ -312,7 +280,6 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
     <View style={styles.tabContent}>
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Parental Settings</Text>
-        
         <View style={styles.settingCard}>
           <Text style={styles.settingTitle}>Category Management</Text>
           <Text style={styles.settingSubtitle}>
@@ -322,7 +289,6 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
             Requires approval: {settings.requireApprovalForCategories ? 'Yes' : 'No'}
           </Text>
         </View>
-
         <View style={styles.settingCard}>
           <Text style={styles.settingTitle}>Safety Settings</Text>
           <Text style={styles.settingSubtitle}>
@@ -332,7 +298,6 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
             Check-in reminders: {settings.checkInReminders ? 'Enabled' : 'Disabled'}
           </Text>
         </View>
-
         <View style={styles.settingCard}>
           <Text style={styles.settingTitle}>Emergency Contacts</Text>
           {settings.emergencyContacts.map(contact => (
@@ -346,44 +311,36 @@ const ParentDashboard: React.FC<ParentDashboardProps> = ({ onExit }) => {
     </View>
   );
 
-  if (showSafeZoneManagement) {
-    return (
-      <SafeZoneManagement onBack={() => setShowSafeZoneManagement(false)} />
-    );
-  }
-
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Shield size={24} color={Colors.primary} />
-          <Text style={styles.headerTitle}>Parent Dashboard</Text>
+    showSafeZoneManagement ? (
+      <SafeZoneManagement onBack={() => setShowSafeZoneManagement(false)} />
+    ) : (
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <View style={styles.headerLeft}>
+            <Feather name="shield" size={24} color={Colors.primary} />
+            <Text style={styles.headerTitle}>Parent Dashboard</Text>
+          </View>
+          <Pressable style={styles.exitButton} onPress={onExit}>
+            <Feather name="log-out" size={20} color={Colors.textLight} />
+          </Pressable>
         </View>
-        <Pressable style={styles.exitButton} onPress={onExit}>
-          <LogOut size={20} color={Colors.textLight} />
-        </Pressable>
-      </View>
-
-      <View style={styles.tabs}>
-        <TabButton id="overview" title="Overview" icon={<Eye size={16} color={activeTab === 'overview' ? '#FFFFFF' : Colors.textLight} />} />
-        <TabButton id="checkins" title="Check-ins" icon={<Camera size={16} color={activeTab === 'checkins' ? '#FFFFFF' : Colors.textLight} />} />
-        <TabButton id="safezones" title="Safe Zones" icon={<Shield size={16} color={activeTab === 'safezones' ? '#FFFFFF' : Colors.textLight} />} />
-        <TabButton id="pings" title="Device Pings" icon={<Phone size={16} color={activeTab === 'pings' ? '#FFFFFF' : Colors.textLight} />} />
-        <TabButton id="settings" title="Settings" icon={<Settings size={16} color={activeTab === 'settings' ? '#FFFFFF' : Colors.textLight} />} />
-      </View>
-
-      {activeTab === 'safezones' ? (
-        renderSafeZones()
-      ) : activeTab === 'pings' ? (
-        renderPings()
-      ) : (
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <View style={styles.tabs}>
+          <TabButton id="overview" title="Overview" icon={<Feather name="eye" size={16} color={activeTab === 'overview' ? '#FFFFFF' : Colors.textLight} />} />
+          <TabButton id="checkins" title="Check-ins" icon={<Feather name="camera" size={16} color={activeTab === 'checkins' ? '#FFFFFF' : Colors.textLight} />} />
+          <TabButton id="safezones" title="Safe Zones" icon={<Feather name="shield" size={16} color={activeTab === 'safezones' ? '#FFFFFF' : Colors.textLight} />} />
+          <TabButton id="pings" title="Device Pings" icon={<Feather name="phone" size={16} color={activeTab === 'pings' ? '#FFFFFF' : Colors.textLight} />} />
+          <TabButton id="settings" title="Settings" icon={<Feather name="settings" size={16} color={activeTab === 'settings' ? '#FFFFFF' : Colors.textLight} />} />
+        </View>
+        <ScrollView style={styles.content}>
           {activeTab === 'overview' && renderOverview()}
           {activeTab === 'checkins' && renderCheckIns()}
+          {activeTab === 'safezones' && renderSafeZones()}
+          {activeTab === 'pings' && renderPings()}
           {activeTab === 'settings' && renderSettings()}
         </ScrollView>
-      )}
-    </View>
+      </View>
+    )
   );
 };
 

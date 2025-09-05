@@ -16,7 +16,7 @@ import { router } from 'expo-router';
 import { useAuth } from '@/hooks/useAuth';
 import { isValidEmail, isValidPassword } from '@/utils/auth';
 import Colors from '@/constants/colors';
-import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 
 export default function AuthScreen() {
   const [isLogin, setIsLogin] = useState(true);
@@ -89,7 +89,7 @@ export default function AuthScreen() {
           result.error || 'Please try again'
         );
       }
-    } catch (_err) {
+    } catch {
       Alert.alert('Error', 'Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
@@ -133,7 +133,7 @@ export default function AuthScreen() {
           <View style={styles.form}>
             {!isLogin && (
               <View style={styles.inputContainer}>
-                <User size={20} color={Colors.secondary} style={styles.inputIcon} />
+                <Feather name="user" size={20} color={Colors.secondary} style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Full Name"
@@ -147,7 +147,7 @@ export default function AuthScreen() {
             )}
 
             <View style={styles.inputContainer}>
-              <Mail size={20} color={Colors.secondary} style={styles.inputIcon} />
+              <Feather name="mail" size={20} color={Colors.secondary} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
                 placeholder="Email Address"
@@ -162,7 +162,7 @@ export default function AuthScreen() {
             </View>
 
             <View style={styles.inputContainer}>
-              <Lock size={20} color={Colors.secondary} style={styles.inputIcon} />
+              <Feather name="lock" size={20} color={Colors.secondary} style={styles.inputIcon} />
               <TextInput
                 style={[styles.input, styles.passwordInput]}
                 placeholder="Password"
@@ -180,16 +180,16 @@ export default function AuthScreen() {
                 testID="toggle-password-visibility"
               >
                 {showPassword ? (
-                  <EyeOff size={20} color={Colors.secondary} />
+                  <Feather name="eye-off" size={20} color={Colors.secondary} />
                 ) : (
-                  <Eye size={20} color={Colors.secondary} />
+                  <Feather name="eye" size={20} color={Colors.secondary} />
                 )}
               </Pressable>
             </View>
 
             {!isLogin && (
               <View style={styles.inputContainer}>
-                <Lock size={20} color={Colors.secondary} style={styles.inputIcon} />
+                <Feather name="lock" size={20} color={Colors.secondary} style={styles.inputIcon} />
                 <TextInput
                   style={[styles.input, styles.passwordInput]}
                   placeholder="Confirm Password"
@@ -207,10 +207,10 @@ export default function AuthScreen() {
                   testID="toggle-confirm-password-visibility"
                 >
                   {showConfirmPassword ? (
-                    <EyeOff size={20} color={Colors.secondary} />
-                  ) : (
-                    <Eye size={20} color={Colors.secondary} />
-                  )}
+                      <Feather name="eye-off" size={20} color={Colors.secondary} />
+                    ) : (
+                      <Feather name="eye" size={20} color={Colors.secondary} />
+                    )}
                 </Pressable>
               </View>
             )}

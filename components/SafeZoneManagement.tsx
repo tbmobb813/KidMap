@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Pressable, Alert, TextInput } from 'react-native';
 import Colors from '@/constants/colors';
-import { Shield, Plus, MapPin, Edit, Trash2, ArrowLeft, ToggleLeft, ToggleRight } from 'lucide-react-native';
+import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { useParentalStore } from '@/stores/parentalStore';
 import { SafeZone } from '@/types/parental';
 
@@ -81,7 +81,7 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
         Alert.alert('Success', 'Safe zone created successfully');
       }
       resetForm();
-    } catch (error) {
+    } catch  {
       Alert.alert('Error', 'Failed to save safe zone');
     }
   };
@@ -133,7 +133,7 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Pressable style={styles.backButton} onPress={resetForm}>
-            <ArrowLeft size={24} color={Colors.primary} />
+            <Feather name="arrow-left" size={24} color={Colors.primary} />
           </Pressable>
           <Text style={styles.headerTitle}>
             {editingZone ? 'Edit Safe Zone' : 'Add Safe Zone'}
@@ -174,7 +174,7 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
                 />
               </View>
               <Pressable style={styles.locationButton} onPress={getCurrentLocation}>
-                <MapPin size={16} color={Colors.primary} />
+                <Feather name="map-pin" size={16} color={Colors.primary} />
                 <Text style={styles.locationButtonText}>Use Current Location</Text>
               </Pressable>
             </View>
@@ -209,9 +209,9 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
               >
                 <Text style={styles.toggleLabel}>Notify on entry</Text>
                 {formData.notifications.onEntry ? (
-                  <ToggleRight size={24} color={Colors.primary} />
+                  <MaterialCommunityIcons name="toggle-switch" size={24} color={Colors.primary} />
                 ) : (
-                  <ToggleLeft size={24} color={Colors.textLight} />
+                  <MaterialCommunityIcons name="toggle-switch-off" size={24} color={Colors.textLight} />
                 )}
               </Pressable>
 
@@ -227,9 +227,9 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
               >
                 <Text style={styles.toggleLabel}>Notify on exit</Text>
                 {formData.notifications.onExit ? (
-                  <ToggleRight size={24} color={Colors.primary} />
+                  <MaterialCommunityIcons name="toggle-switch" size={24} color={Colors.primary} />
                 ) : (
-                  <ToggleLeft size={24} color={Colors.textLight} />
+                  <MaterialCommunityIcons name="toggle-switch-off" size={24} color={Colors.textLight} />
                 )}
               </Pressable>
             </View>
@@ -255,24 +255,24 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Pressable style={styles.backButton} onPress={onBack}>
-          <ArrowLeft size={24} color={Colors.primary} />
+          <Feather name="arrow-left" size={24} color={Colors.primary} />
         </Pressable>
         <Text style={styles.headerTitle}>Safe Zones</Text>
         <Pressable style={styles.addButton} onPress={() => setShowAddForm(true)}>
-          <Plus size={24} color={Colors.primary} />
+          <Feather name="plus" size={24} color={Colors.primary} />
         </Pressable>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {safeZones.length === 0 ? (
           <View style={styles.emptyState}>
-            <Shield size={48} color={Colors.textLight} />
+            <MaterialCommunityIcons name="shield" size={48} color={Colors.textLight} />
             <Text style={styles.emptyTitle}>No Safe Zones</Text>
             <Text style={styles.emptySubtitle}>
               Create safe zones to get notified when your child enters or leaves specific areas
             </Text>
             <Pressable style={styles.emptyButton} onPress={() => setShowAddForm(true)}>
-              <Plus size={20} color="#FFFFFF" />
+              <Feather name="plus" size={20} color="#FFFFFF" />
               <Text style={styles.emptyButtonText}>Add First Safe Zone</Text>
             </Pressable>
           </View>
@@ -297,9 +297,9 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
                   onPress={() => handleToggleActive(zone)}
                 >
                   {zone.isActive ? (
-                    <ToggleRight size={32} color={Colors.success} />
+                    <MaterialCommunityIcons name="toggle-switch" size={32} color={Colors.success} />
                   ) : (
-                    <ToggleLeft size={32} color={Colors.textLight} />
+                    <MaterialCommunityIcons name="toggle-switch-off" size={32} color={Colors.textLight} />
                   )}
                 </Pressable>
               </View>
@@ -309,7 +309,7 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
                   style={styles.actionButton}
                   onPress={() => handleEdit(zone)}
                 >
-                  <Edit size={16} color={Colors.primary} />
+                  <Feather name="edit" size={16} color={Colors.primary} />
                   <Text style={styles.actionButtonText}>Edit</Text>
                 </Pressable>
 
@@ -317,7 +317,7 @@ const SafeZoneManagement: React.FC<SafeZoneManagementProps> = ({ onBack }) => {
                   style={[styles.actionButton, styles.deleteButton]}
                   onPress={() => handleDelete(zone)}
                 >
-                  <Trash2 size={16} color={Colors.error} />
+                  <Feather name="trash-2" size={16} color={Colors.error} />
                   <Text style={[styles.actionButtonText, styles.deleteButtonText]}>Delete</Text>
                 </Pressable>
               </View>

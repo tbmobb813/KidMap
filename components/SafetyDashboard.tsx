@@ -1,23 +1,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Pressable, Alert } from 'react-native';
 import Colors from '@/constants/colors';
-import { 
-  Shield, 
-  Camera, 
-  MapPin, 
-  Phone, 
-  MessageCircle, 
-  Clock, 
-  CheckCircle,
-  AlertTriangle,
-  Users,
-  Settings,
-  ArrowRight
-} from 'lucide-react-native';
+import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { useParentalStore } from '@/stores/parentalStore';
 import { useNavigationStore } from '@/stores/navigationStore';
 import { useSafeZoneMonitor } from '@/hooks/useSafeZoneMonitor';
-import PhotoCheckInButton from './PhotoCheckInButton';
 import { SafeZoneIndicator } from './SafeZoneIndicator';
 
 type SafetyDashboardProps = {
@@ -67,7 +54,7 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
       "Let your family know you're okay?",
       [
         { text: "Not now", style: "cancel" },
-        { text: "I&apos;m OK!", onPress: () => console.log("Quick check-in sent") }
+        { text: "I'm OK!", onPress: () => console.log("Quick check-in sent") }
       ]
     );
   };
@@ -102,27 +89,27 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
         <Text style={styles.statTitle}>{title}</Text>
         <Text style={styles.statSubtitle}>{subtitle}</Text>
       </View>
-      {onPress && <ArrowRight size={16} color={Colors.textLight} />}
     </Pressable>
   );
 
-  const QuickActionButton = ({ 
-    icon, 
-    title, 
-    onPress, 
-    color = Colors.primary 
+  const QuickActionButton = ({
+    icon,
+    title,
+    onPress,
+    color = Colors.primary,
   }: {
     icon: React.ReactNode;
     title: string;
-    onPress: () => void;
+    onPress?: () => void;
     color?: string;
   }) => (
     <Pressable style={[styles.quickActionButton, { backgroundColor: color }]} onPress={onPress}>
-      {React.cloneElement(icon as React.ReactElement<any>, { 
-        size: 20, 
-        color: '#FFFFFF' 
+      {React.cloneElement(icon as React.ReactElement<any>, {
+        size: 20,
+        color: '#FFFFFF',
       })}
       <Text style={styles.quickActionText}>{title}</Text>
+      {onPress && <Feather name="arrow-right" size={16} color={Colors.textLight} />}
     </Pressable>
   );
 
@@ -130,14 +117,11 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Shield size={24} color={Colors.primary} />
           <Text style={styles.headerTitle}>Safety Dashboard</Text>
         </View>
-        {onNavigateToSettings && (
-          <Pressable style={styles.settingsButton} onPress={onNavigateToSettings}>
-            <Settings size={20} color={Colors.textLight} />
-          </Pressable>
-        )}
+        <Pressable style={styles.settingsButton} onPress={onNavigateToSettings}>
+          <Feather name="settings" size={20} color={Colors.textLight} />
+        </Pressable>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -145,16 +129,19 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Current Status</Text>
           <SafeZoneIndicator />
-          
+          <MaterialCommunityIcons name="shield" size={24} color={Colors.primary} />
           {currentZoneStatus && (
             <View style={[
-              styles.statusCard, 
-              { backgroundColor: currentZoneStatus.inside.length > 0 ? '#E8F5E8' : '#FFF3E0' }
-            ]}>
-              <View style={[
-                styles.statusIndicator,
-                { backgroundColor: currentZoneStatus.inside.length > 0 ? Colors.success : Colors.warning }
-              ]} />
+                styles.statusCard, 
+                { backgroundColor: currentZoneStatus.inside.length > 0 ? '#E8F5E8' : '#FFF3E0' }
+              ]}
+            >
+              <View
+                style={[
+                  styles.statusIndicator,
+                  { backgroundColor: currentZoneStatus.inside.length > 0 ? Colors.success : Colors.warning }
+                ]}
+              />
               <Text style={styles.statusText}>
                 {currentZoneStatus.inside.length > 0
                   ? `You're in the ${currentZoneStatus.inside[0]?.name ?? 'a'} safe zone`
@@ -174,31 +161,27 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
                 <Text style={styles.hideButton}>Hide</Text>
               </Pressable>
             </View>
-            
             <View style={styles.quickActionsGrid}>
               <QuickActionButton
-                icon={<Phone />}
+                icon={<Feather name="phone" />}
                 title="Emergency"
                 onPress={handleEmergencyCall}
                 color="#FF3B30"
               />
-              
               <QuickActionButton
-                icon={<MessageCircle />}
-                title="I&apos;m OK!"
+                icon={<Feather name="message-circle" />}
+                title="I'm OK!"
                 onPress={handleQuickCheckIn}
                 color={Colors.success}
               />
-              
               <QuickActionButton
-                icon={<MapPin />}
+                icon={<Feather name="map-pin" />}
                 title="Share Location"
                 onPress={() => console.log("Share location")}
                 color={Colors.primary}
               />
-              
               <QuickActionButton
-                icon={<Camera />}
+                icon={<Feather name="camera" />}
                 title="Photo Check-in"
                 onPress={() => console.log("Photo check-in")}
                 color={Colors.secondary}
@@ -207,51 +190,35 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
           </View>
         )}
 
-        {/* Photo Check-in */}
-        {currentPlace && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Check-in at Current Location</Text>
-            <PhotoCheckInButton 
-              placeName={currentPlace.name}
-              placeId={currentPlace.id}
-            />
-          </View>
-        )}
-
         {/* Safety Stats */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Safety Overview</Text>
-          
           <View style={styles.statsGrid}>
             <SafetyStatCard
-              icon={<Shield />}
+              icon={<MaterialCommunityIcons name="shield" />}
               title="Safe Zones"
               value={activeSafeZones}
               subtitle="Active zones"
               onPress={() => console.log("Navigate to safe zones")}
             />
-            
             <SafetyStatCard
-              icon={<Camera />}
+              icon={<Feather name="camera" />}
               title="Check-ins"
               value={recentCheckIns.length}
               subtitle="Recent"
               color={Colors.secondary}
               onPress={() => console.log("Navigate to check-in history")}
             />
-          </View>
-
-          <View style={styles.statsGrid}>
             <SafetyStatCard
-              icon={<Clock />}
+              icon={<Feather name="clock" color={pendingCheckInRequests > 0 ? Colors.warning : Colors.success} />}
               title="Requests"
               value={pendingCheckInRequests}
               subtitle="Pending"
               color={pendingCheckInRequests > 0 ? Colors.warning : Colors.success}
+              onPress={() => console.log("Navigate to requests")}
             />
-            
             <SafetyStatCard
-              icon={<Users />}
+              icon={<Feather name="users" color="#9C27B0" />}
               title="Contacts"
               value={emergencyContacts}
               subtitle="Emergency"
@@ -261,45 +228,15 @@ const SafetyDashboard: React.FC<SafetyDashboardProps> = ({
           </View>
         </View>
 
-        {/* Recent Activity */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Recent Activity</Text>
-          
-          {recentCheckIns.length > 0 ? (
-            recentCheckIns.map((checkIn, index) => (
-              <View key={index} style={styles.activityItem}>
-                <CheckCircle size={16} color={Colors.success} />
-                <View style={styles.activityContent}>
-                  <Text style={styles.activityTitle}>Checked in at {checkIn.placeName}</Text>
-                  <Text style={styles.activityTime}>
-                    {new Date(checkIn.timestamp).toLocaleTimeString([], { 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
-                    })}
-                  </Text>
-                </View>
-              </View>
-            ))
-          ) : (
-            <View style={styles.emptyActivity}>
-              <Camera size={32} color={Colors.textLight} />
-              <Text style={styles.emptyActivityText}>No recent check-ins</Text>
-              <Text style={styles.emptyActivitySubtext}>
-                Take a photo when you arrive somewhere to let your family know you&apos;re safe
-              </Text>
-            </View>
-          )}
-        </View>
-
-        {/* Safety Tips */}
+        {/* Safety Reminder */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Safety Reminder</Text>
           <View style={styles.tipCard}>
-            <AlertTriangle size={20} color={Colors.warning} />
+            <Feather name="alert-triangle" size={20} color={Colors.warning} />
             <View style={styles.tipContent}>
-              <Text style={styles.tipTitle}>Stay Safe Out There!</Text>
+              <Feather name="camera" size={32} color={Colors.textLight} />
               <Text style={styles.tipText}>
-                Always let someone know where you&apos;re going and check in when you arrive safely.
+                Always let someone know where you're going and check in when you arrive safely.
               </Text>
             </View>
           </View>
@@ -341,28 +278,24 @@ const styles = StyleSheet.create({
   },
   section: {
     padding: 16,
-    marginBottom: 8,
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: 8,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
     color: Colors.text,
-    marginBottom: 16,
   },
   hideButton: {
-    fontSize: 14,
-    color: Colors.primary,
+    color: Colors.textLight,
+    fontSize: 12,
     fontWeight: '600',
   },
   statusCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -441,47 +374,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: Colors.textLight,
   },
-  activityItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 8,
-    gap: 12,
-  },
-  activityContent: {
-    flex: 1,
-  },
-  activityTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: Colors.text,
-  },
-  activityTime: {
-    fontSize: 12,
-    color: Colors.textLight,
-    marginTop: 2,
-  },
-  emptyActivity: {
-    alignItems: 'center',
-    padding: 32,
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-  },
-  emptyActivityText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: Colors.text,
-    marginTop: 12,
-  },
-  emptyActivitySubtext: {
-    fontSize: 14,
-    color: Colors.textLight,
-    textAlign: 'center',
-    marginTop: 8,
-    lineHeight: 20,
-  },
   tipCard: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -492,12 +384,6 @@ const styles = StyleSheet.create({
   },
   tipContent: {
     flex: 1,
-  },
-  tipTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: Colors.text,
-    marginBottom: 4,
   },
   tipText: {
     fontSize: 12,

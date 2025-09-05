@@ -529,7 +529,7 @@ class AuthManager {
       // For now, just store the preference
       await SafeAsyncStorage.setItem('biometric_enabled', true);
       return { success: true };
-    } catch (_error) {
+    } catch {
       return { success: false, error: 'Failed to enable biometric auth' };
     }
   }

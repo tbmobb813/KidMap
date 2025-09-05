@@ -22,7 +22,7 @@ export const handleDeepLink = (url: string) => {
         params: searchParams,
       });
     } else if (path.startsWith('/place/')) {
-      const placeId = path.split('/')[2];
+      const _placeId = path.split('/')[2];
       // Navigate to place details or set as destination
       router.push('/map');
     } else {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Pressable, Alert, TextInput } from 'react-native';
 import Colors from '@/constants/colors';
-import { Lock, Eye, EyeOff } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 
 type PinAuthenticationProps = {
   onAuthenticated: () => void;
@@ -52,7 +52,7 @@ const PinAuthentication: React.FC<PinAuthenticationProps> = ({
       // For now, we'll simulate authentication
       await new Promise(resolve => setTimeout(resolve, 500));
       onAuthenticated();
-    } catch (error) {
+    } catch  {
       Alert.alert('Authentication Failed', 'Invalid PIN. Please try again.');
       setPin('');
       setConfirmPin('');
@@ -90,7 +90,7 @@ const PinAuthentication: React.FC<PinAuthenticationProps> = ({
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.iconContainer}>
-          <Lock size={32} color={Colors.primary} />
+          <Feather name="lock" size={32} color={Colors.primary} />
         </View>
         <Text style={styles.title}>{currentTitle}</Text>
         <Text style={styles.subtitle}>{currentSubtitle}</Text>
@@ -113,9 +113,9 @@ const PinAuthentication: React.FC<PinAuthenticationProps> = ({
             onPress={() => setShowPin(!showPin)}
           >
             {showPin ? (
-              <EyeOff size={20} color={Colors.textLight} />
+              <Feather name="eye-off" size={20} color={Colors.textLight} />
             ) : (
-              <Eye size={20} color={Colors.textLight} />
+              <Feather name="eye" size={20} color={Colors.textLight} />
             )}
           </Pressable>
         </View>

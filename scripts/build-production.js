@@ -11,7 +11,7 @@ console.log('🧹 Cleaning previous builds...');
 try {
   execSync('rm -rf .expo dist web-build', { stdio: 'inherit' });
   console.log('✅ Cleaned previous builds\n');
-} catch (_error) {
+} catch  {
   console.warn('⚠️ Warning: Could not clean previous builds\n');
 }
 
@@ -20,7 +20,7 @@ console.log('📦 Installing dependencies...');
 try {
   execSync('npm install --legacy-peer-deps', { stdio: 'inherit' });
   console.log('✅ Dependencies installed\n');
-} catch (error) {
+} catch  {
   console.error('❌ Failed to install dependencies');
   process.exit(1);
 }
@@ -30,7 +30,7 @@ console.log('🔍 Running TypeScript check...');
 try {
   execSync('npx tsc --noEmit', { stdio: 'inherit' });
   console.log('✅ TypeScript check passed\n');
-} catch (error) {
+} catch  {
   console.error('❌ TypeScript check failed');
   process.exit(1);
 }
@@ -40,7 +40,7 @@ console.log('🔧 Running linter...');
 try {
   execSync('npx eslint . --ext .ts,.tsx --max-warnings 0', { stdio: 'inherit' });
   console.log('✅ Linting passed\n');
-} catch (error) {
+} catch  {
   console.warn('⚠️ Warning: Linting issues found, but continuing...\n');
 }
 
@@ -49,7 +49,7 @@ console.log('🌐 Building for web...');
 try {
   execSync('npx expo export --platform web', { stdio: 'inherit' });
   console.log('✅ Web build completed\n');
-} catch (error) {
+} catch  {
   console.error('❌ Web build failed');
   process.exit(1);
 }

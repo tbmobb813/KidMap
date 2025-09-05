@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import { StyleSheet, Text, View, Pressable, Animated } from 'react-native';
 import Colors from '@/constants/colors';
-import { Bot, Volume2, VolumeX, Sparkles } from 'lucide-react-native';
+import { MaterialCommunityIcons, Feather, FontAwesome6 } from '@expo/vector-icons';
 import { Place } from '@/types/navigation';
 
 type AIJourneyCompanionProps = {
@@ -18,11 +18,11 @@ type CompanionMessage = {
 };
 
 const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
-  currentLocation,
+  _currentLocation,
   destination,
   isNavigating
 }) => {
-  const [messages, setMessages] = useState<CompanionMessage[]>([]);
+  const [_messages, setMessages] = useState<CompanionMessage[]>([]);
   const [currentMessage, setCurrentMessage] = useState<CompanionMessage | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
@@ -163,7 +163,7 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
           style={[styles.avatar, { transform: [{ scale: pulseAnim }] }]}
         >
           <Text style={styles.avatarEmoji}>{getMoodEmoji()}</Text>
-          <Bot size={16} color={Colors.white} style={styles.botIcon} />
+          <MaterialCommunityIcons name="robot" size={16} color={Colors.white} style={styles.botIcon} />
         </Animated.View>
         
         <View style={styles.messagePreview}>
@@ -178,9 +178,9 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
           onPress={() => setVoiceEnabled(!voiceEnabled)}
         >
           {voiceEnabled ? (
-            <Volume2 size={16} color={Colors.primary} />
+            <Feather name="volume-2" size={16} color={Colors.primary} />
           ) : (
-            <VolumeX size={16} color={Colors.textLight} />
+            <Feather name="volume-x" size={16} color={Colors.textLight} />
           )}
         </Pressable>
       </Pressable>
@@ -191,12 +191,12 @@ const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
           
           <View style={styles.actionButtons}>
             <Pressable style={styles.actionButton} onPress={generateQuiz}>
-              <Sparkles size={16} color={Colors.primary} />
+              <FontAwesome6 name="sparkles" size={16} color={Colors.primary} />
               <Text style={styles.actionButtonText}>Quiz Me!</Text>
             </Pressable>
             
             <Pressable style={styles.actionButton} onPress={generateJourneyContent}>
-              <Bot size={16} color={Colors.primary} />
+              <MaterialCommunityIcons name="robot" size={16} color={Colors.primary} />
               <Text style={styles.actionButtonText}>Tell Me More</Text>
             </Pressable>
           </View>

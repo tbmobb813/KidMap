@@ -1,4 +1,4 @@
-import { Route, TransitStep } from "@/types/navigation";
+import { Route } from "@/types/navigation";
 
 export const sampleRoutes: Route[] = [
   {

@@ -107,7 +107,7 @@ export const useNavigationStore = create<NavigationState>((set, get) => ({
   setSearchQuery: (query) => set({ searchQuery: query }),
   
   findRoutes: () => {
-    const { origin, destination, selectedTravelMode, routeOptions } = get();
+    const { origin, destination, selectedTravelMode } = get();
     
     if (!origin || !destination) {
       set({ availableRoutes: [], selectedRoute: null });

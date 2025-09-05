@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, ScrollView, Pressable, TextInput, Alert } from "react-native";
 import Colors from "@/constants/colors";
-import { Search, Plus, MapPin, Trash2, Edit3, Globe, Clock, Phone } from "lucide-react-native";
+import { Feather } from "@expo/vector-icons";
 import { useRegionStore } from "@/stores/regionStore";
 import { RegionConfig } from "@/types/region";
 
@@ -52,7 +52,7 @@ export default function CityManagement({ onBack }: CityManagementProps) {
     );
   };
 
-  const handleUpdateTransitData = (regionId: string) => {
+  const handleUpdateTransitData = (_regionId: string) => {
     Alert.alert(
       "Update Transit Data",
       "This would typically connect to the region's transit API to fetch the latest schedules and route information.",
@@ -80,7 +80,7 @@ export default function CityManagement({ onBack }: CityManagementProps) {
       >
         <View style={styles.regionInfo}>
           <View style={styles.regionTitleRow}>
-            <MapPin size={20} color={Colors.primary} />
+            <Feather name="map-pin" size={20} color={Colors.primary} />
             <Text style={styles.regionName}>{region.name}</Text>
             {region.id === currentRegion.id && (
               <View style={styles.currentBadge}>
@@ -90,15 +90,15 @@ export default function CityManagement({ onBack }: CityManagementProps) {
           </View>
           <View style={styles.regionDetails}>
             <View style={styles.detailItem}>
-              <Globe size={14} color={Colors.textLight} />
+              <Feather name="globe" size={14} color={Colors.textLight} />
               <Text style={styles.detailText}>{region.country}</Text>
             </View>
             <View style={styles.detailItem}>
-              <Clock size={14} color={Colors.textLight} />
+              <Feather name="clock" size={14} color={Colors.textLight} />
               <Text style={styles.detailText}>{region.timezone}</Text>
             </View>
             <View style={styles.detailItem}>
-              <Phone size={14} color={Colors.textLight} />
+              <Feather name="phone" size={14} color={Colors.textLight} />
               <Text style={styles.detailText}>{region.emergencyNumber}</Text>
             </View>
           </View>
@@ -119,13 +119,13 @@ export default function CityManagement({ onBack }: CityManagementProps) {
           style={styles.actionButton}
           onPress={() => setEditingRegion(region)}
         >
-          <Edit3 size={16} color={Colors.primary} />
+          <Feather name="edit-3" size={16} color={Colors.primary} />
         </Pressable>
         <Pressable
           style={[styles.actionButton, styles.deleteButton]}
           onPress={() => handleDeleteRegion(region.id)}
         >
-          <Trash2 size={16} color="#FF4444" />
+          <Feather name="trash-2" size={16} color="#FF4444" />
         </Pressable>
       </View>
     </View>
@@ -163,13 +163,13 @@ export default function CityManagement({ onBack }: CityManagementProps) {
           style={styles.addButton}
           onPress={() => setShowAddForm(true)}
         >
-          <Plus size={20} color="#FFFFFF" />
+          <Feather name="plus" size={20} color="#FFFFFF" />
           <Text style={styles.addButtonText}>Add City</Text>
         </Pressable>
       </View>
 
       <View style={styles.searchContainer}>
-        <Search size={20} color={Colors.textLight} />
+        <Feather name="search" size={20} color={Colors.textLight} />
         <TextInput
           style={styles.searchInput}
           placeholder="Search cities..."

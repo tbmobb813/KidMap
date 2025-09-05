@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView, Pressable, TextInput, Modal, Alert 
 import Colors from '@/constants/colors';
 import { CustomCategory } from '@/types/navigation';
 import { useCategoryManagement } from '@/stores/categoryStore';
-import { ArrowLeft, Plus, Edit3, Trash2, Check, X } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 import CategoryButton from './CategoryButton';
 
 type CategoryManagementProps = {
@@ -13,7 +13,6 @@ type CategoryManagementProps = {
 
 const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMode }) => {
   const {
-    categories,
     settings,
     getApprovedCategories,
     getPendingCategories,
@@ -71,7 +70,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
       } else {
         Alert.alert('Success', 'Category created successfully!');
       }
-    } catch (_error) {
+    } catch {
       Alert.alert('Error', 'Failed to create category. Please try again.');
     }
   };
@@ -94,7 +93,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
       setSelectedIcon('MapPin');
       setSelectedColor('#007AFF');
       Alert.alert('Success', 'Category updated successfully!');
-    } catch (_error) {
+    } catch {
       Alert.alert('Error', 'Failed to update category. Please try again.');
     }
   };
@@ -117,7 +116,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
             try {
               await deleteCategory(category.id);
               Alert.alert('Success', 'Category deleted successfully!');
-            } catch (_error) {
+            } catch {
               Alert.alert('Error', 'Failed to delete category. Please try again.');
             }
           },
@@ -130,7 +129,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
     try {
       await approveCategory(categoryId);
       Alert.alert('Success', 'Category approved!');
-    } catch (_error) {
+    } catch {
       Alert.alert('Error', 'Failed to approve category. Please try again.');
     }
   };
@@ -160,7 +159,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
       <View style={styles.modalContainer}>
         <View style={styles.modalHeader}>
           <Pressable onPress={() => setShowCreateModal(false)} style={styles.modalButton}>
-            <X size={24} color={Colors.text} />
+            <Feather name="x" size={24} color={Colors.text} />
           </Pressable>
           <Text style={styles.modalTitle}>
             {editingCategory ? 'Edit Category' : 'Create Category'}
@@ -169,7 +168,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
             onPress={editingCategory ? handleEditCategory : handleCreateCategory}
             style={styles.modalButton}
           >
-            <Check size={24} color={Colors.primary} />
+            <Feather name="check" size={24} color={Colors.primary} />
           </Pressable>
         </View>
 
@@ -259,12 +258,12 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
     <View style={styles.container}>
       <View style={styles.header}>
         <Pressable onPress={onBack} style={styles.backButton}>
-          <ArrowLeft size={24} color={Colors.text} />
+          <Feather name="arrow-left" size={24} color={Colors.text} />
         </Pressable>
         <Text style={styles.title}>Manage Categories</Text>
         {canCreateCategory(userMode) && (
           <Pressable onPress={openCreateModal} style={styles.addButton}>
-            <Plus size={24} color={Colors.primary} />
+            <Feather name="plus" size={24} color={Colors.primary} />
           </Pressable>
         )}
       </View>
@@ -294,13 +293,13 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
                     onPress={() => handleApproveCategory(category.id)}
                     style={[styles.actionButton, styles.approveButton]}
                   >
-                    <Check size={20} color="#FFF" />
+                    <Feather name="check" size={20} color="#FFF" />
                   </Pressable>
                   <Pressable
                     onPress={() => handleDeleteCategory(category)}
                     style={[styles.actionButton, styles.deleteButton]}
                   >
-                    <X size={20} color="#FFF" />
+                    <Feather name="x" size={20} color="#FFF" />
                   </Pressable>
                 </View>
               </View>
@@ -335,13 +334,13 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
                     onPress={() => openEditModal(category)}
                     style={[styles.actionButton, styles.editButton]}
                   >
-                    <Edit3 size={20} color="#FFF" />
+                    <Feather name="edit-3" size={20} color="#FFF" />
                   </Pressable>
                   <Pressable
                     onPress={() => handleDeleteCategory(category)}
                     style={[styles.actionButton, styles.deleteButton]}
                   >
-                    <Trash2 size={20} color="#FFF" />
+                    <Feather name="trash-2" size={20} color="#FFF" />
                   </Pressable>
                 </View>
               )}

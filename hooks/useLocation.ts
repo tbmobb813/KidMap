@@ -33,7 +33,7 @@ export default function useLocation() {
                 });
                 setLoading(false);
               },
-              (error) => {
+              (_error) => {
                 setLocation(prev => ({
                   ...prev,
                   error: "Could not get your location"

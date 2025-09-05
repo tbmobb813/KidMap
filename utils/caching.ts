@@ -309,7 +309,7 @@ class EnhancedCacheManager {
               newestEntry = Math.max(newestEntry, cacheEntry.timestamp);
             }
           }
-        } catch (_error) {
+        } catch {
           // Skip invalid entries
         }
       }
@@ -355,7 +355,7 @@ class EnhancedCacheManager {
               cleanedCount++;
             }
           }
-        } catch (_error) {
+        } catch {
           // Remove invalid entries
           await AsyncStorage.removeItem(key);
           cleanedCount++;
@@ -445,7 +445,7 @@ class EnhancedCacheManager {
               invalidatedCount++;
             }
           }
-        } catch (_error) {
+        } catch  {
           // Remove invalid entries
           await AsyncStorage.removeItem(key);
           invalidatedCount++;

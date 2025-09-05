@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Pressable, Platform } from 'react-native';
-import { AlertTriangle, CheckCircle, RefreshCw } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 import Colors from '@/constants/colors';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 
@@ -71,7 +71,7 @@ const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({ testId }) => 
           lastChecked: now,
         });
       }
-    } catch (error) {
+    } catch  {
       checks.push({
         id: 'storage',
         name: 'Local Storage',
@@ -107,7 +107,7 @@ const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({ testId }) => 
           lastChecked: now,
         });
       }
-    } catch (error) {
+    } catch  {
       checks.push({
         id: 'location',
         name: 'Location Services',
@@ -156,11 +156,11 @@ const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({ testId }) => 
   const getStatusIcon = (status: 'healthy' | 'warning' | 'error') => {
     switch (status) {
       case 'healthy':
-        return <CheckCircle size={16} color={Colors.success} />;
+        return <Feather name="check-circle" size={16} color={Colors.success} />;
       case 'warning':
-        return <AlertTriangle size={16} color={Colors.warning} />;
+        return <Feather name="alert-triangle" size={16} color={Colors.warning} />;
       case 'error':
-        return <AlertTriangle size={16} color={Colors.error} />;
+        return <Feather name="alert-triangle" size={16} color={Colors.error} />;
     }
   };
 
@@ -194,7 +194,8 @@ const SystemHealthMonitor: React.FC<SystemHealthMonitorProps> = ({ testId }) => 
           onPress={runHealthChecks}
           disabled={isRunningChecks}
         >
-          <RefreshCw 
+          <Feather 
+            name="refresh-cw"
             size={16} 
             color={isRunningChecks ? Colors.textLight : Colors.primary} 
             style={isRunningChecks ? styles.spinning : undefined}

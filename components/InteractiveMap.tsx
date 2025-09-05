@@ -4,7 +4,7 @@ import { WebView } from 'react-native-webview';
 import Colors from '@/constants/colors';
 import { Place, Route } from '@/types/navigation';
 import MapPlaceholder from './MapPlaceholder';
-import { Crosshair } from 'lucide-react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 type LatLng = { latitude: number; longitude: number };
 
@@ -26,7 +26,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
   testId,
 }) => {
   const webViewRef = useRef<WebView>(null);
-  const [isMapReady, setMapReady] = useState<boolean>(false);
+  const [_, setMapReady] = useState<boolean>(false);
 
   const routeCoords = useMemo<LatLng[] | undefined>(() => {
     if (route?.geometry?.coordinates && route.geometry.coordinates.length > 0) {
@@ -175,7 +175,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
         showsVerticalScrollIndicator={false}
       />
       <Pressable accessibilityRole="button" testID="recenter-button" style={styles.recenterBtn} onPress={sendRecenter}>
-        <Crosshair color={Colors.text} size={18} />
+        <MaterialCommunityIcons name="crosshairs-gps" color={Colors.text} size={18} />
         <Text style={styles.recenterLabel}>Recenter</Text>
       </Pressable>
     </View>

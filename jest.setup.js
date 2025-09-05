@@ -46,7 +46,6 @@ jest.mock('expo-camera', () => ({
 }));
 
 // Silence console logs in tests
-const originalConsole = global.console;
 global.console = {
   ...console,
   log: jest.fn(),

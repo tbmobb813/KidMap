@@ -108,7 +108,7 @@ export const useGamificationStore = create<GamificationState>()(
         };
       }),
 
-      completeTrip: (from, to) => set((state) => {
+      completeTrip: (_from, _to) => set((state) => {
         const newStats = {
           ...state.userStats,
           totalTrips: state.userStats.totalTrips + 1,
