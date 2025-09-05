@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Pressable, Platform } from 'react-native';
-import { AlertTriangle, CheckCircle, RefreshCw, Wifi, WifiOff } from 'lucide-react-native';
+import { AlertTriangle, CheckCircle, RefreshCw } from 'lucide-react-native';
 import Colors from '@/constants/colors';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 

@@ -196,7 +196,9 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
         mediaStreamRef.current?.getTracks().forEach((t) => t.stop());
         try {
           mediaRecorderRef.current?.stop?.();
-        } catch {}
+        } catch {
+          // Ignore cleanup errors
+        }
       }
     };
   }, []);
