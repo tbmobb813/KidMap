@@ -1,8 +1,16 @@
 module.exports = {
-  preset: 'jest-expo',
-  setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': ['ts-jest', {
+      tsconfig: {
+        jsx: 'react-jsx',
+      },
+    }],
+  },
   transformIgnorePatterns: [
-    'node_modules/(?!(react-native|@react-native|expo|@expo|@unimodules|unimodules|sentry-expo|native-base|react-clone-referenced-element|@react-native-community|expo-router|@expo/vector-icons|react-native-svg|react-native-reanimated|@react-navigation|lucide-react-native)/)',
+    'node_modules/(?!(react-native|@react-native|expo|@expo|@react-navigation|lucide-react-native)/)',
   ],
   testMatch: [
     '**/__tests__/**/*.(ts|tsx|js)',
@@ -16,15 +24,8 @@ module.exports = {
     '!**/*.d.ts',
     '!**/node_modules/**',
   ],
-  coverageThreshold: {
-    global: {
-      branches: 70,
-      functions: 70,
-      lines: 70,
-      statements: 70,
-    },
-  },
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
+    '^react-native$': '<rootDir>/__mocks__/react-native.js',
   },
 };

@@ -1,3 +1,12 @@
+// Mock AsyncStorage before importing the module
+const mockAsyncStorage = {
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  removeItem: jest.fn(),
+};
+
+jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
+
 import { SafeAsyncStorage, withRetry, DEFAULT_RETRY_CONFIG } from '@/utils/errorHandling';
 
 describe('Error Handling Utils', () => {
@@ -54,15 +63,8 @@ describe('Error Handling Utils', () => {
   });
 
   describe('SafeAsyncStorage', () => {
-    const mockAsyncStorage = {
-      getItem: jest.fn(),
-      setItem: jest.fn(),
-      removeItem: jest.fn(),
-    };
-
     beforeEach(() => {
-      // Mock AsyncStorage
-      jest.doMock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
+      jest.clearAllMocks();
     });
 
     it('should get item successfully', async () => {
