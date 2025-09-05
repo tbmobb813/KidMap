@@ -38,7 +38,8 @@
             }
           }
         }
-      }
+      },
+      "buildNumber": "20250905.1810"
     },
     "android": {
       "adaptiveIcon": {
@@ -58,7 +59,8 @@
         "android.permission.RECEIVE_BOOT_COMPLETED",
         "android.permission.SCHEDULE_EXACT_ALARM",
         "RECORD_AUDIO"
-      ]
+      ],
+      "versionCode": 202509051810
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

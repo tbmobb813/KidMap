@@ -7,21 +7,15 @@ import {
   sanitizeInput,
   validateDistance,
 } from '../utils/validation';
-import {
-  SafeAsyncStorage,
-  withRetry,
-  handleLocationError,
-  handleCameraError,
-} from '../utils/errorHandling';
 
-// Mock AsyncStorage for testing
+// Mock AsyncStorage directly in the test
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(),
   setItem: jest.fn(),
   removeItem: jest.fn(),
 }));
 
-// Mock logger
+// Mock logger directly in the test
 jest.mock('../utils/logger', () => ({
   log: {
     debug: jest.fn(),
@@ -30,6 +24,14 @@ jest.mock('../utils/logger', () => ({
     error: jest.fn(),
   },
 }));
+
+// Import after mocking
+import {
+  SafeAsyncStorage,
+  withRetry,
+  handleLocationError,
+  handleCameraError,
+} from '../utils/errorHandling';
 
 describe('Validation Utils', () => {
   describe('validateLocation', () => {
