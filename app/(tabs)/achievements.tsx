@@ -6,7 +6,7 @@ import UserStatsCard from "@/components/UserStatsCard";
 import { useGamificationStore } from "@/stores/gamificationStore";
 import { Trophy, Star, Target, Calendar } from "lucide-react-native";
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
 
 export default function AchievementsScreen() {
   const { achievements, userStats, tripJournal } = useGamificationStore();

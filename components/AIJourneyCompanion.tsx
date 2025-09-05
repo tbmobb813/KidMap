@@ -18,11 +18,11 @@ type CompanionMessage = {
 };
 
 const AIJourneyCompanion: React.FC<AIJourneyCompanionProps> = ({
-  currentLocation,
+  currentLocation: _currentLocation,
   destination,
   isNavigating
 }) => {
-  const [messages, setMessages] = useState<CompanionMessage[]>([]);
+  const [_messages, setMessages] = useState<CompanionMessage[]>([]);
   const [currentMessage, setCurrentMessage] = useState<CompanionMessage | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);

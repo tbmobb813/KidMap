@@ -45,7 +45,7 @@ export default function SettingsScreen() {
   const [showParentDashboard, setShowParentDashboard] = React.useState(false);
   
   const { currentRegion, userPreferences, updatePreferences } = useRegionStore();
-  const { isParentMode, authenticateParentMode, exitParentMode } = useParentalStore();
+  const { isParentMode, exitParentMode } = useParentalStore();
   const { user, logout } = useAuth();
 
   const SettingItem: React.FC<SettingItemProps> = ({ icon, title, description, value, onValueChange }) => (

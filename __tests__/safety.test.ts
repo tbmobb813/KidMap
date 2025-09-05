@@ -27,7 +27,6 @@ jest.mock('../utils/logger', () => ({
 
 // Import after mocking
 import {
-  SafeAsyncStorage,
   withRetry,
   handleLocationError,
   handleCameraError,

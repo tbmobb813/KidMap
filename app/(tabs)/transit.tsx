@@ -7,7 +7,7 @@ import { Clock, MapPin, AlertCircle, Bell } from "lucide-react-native";
 import LiveArrivalsCard from "@/components/LiveArrivalsCard";
 import { mockLiveArrivals, nearbyStations } from "@/mocks/liveArrivals";
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
 
 type SubwayStatus = {
   id: string;
