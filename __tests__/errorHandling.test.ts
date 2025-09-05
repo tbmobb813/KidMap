@@ -1,4 +1,4 @@
-import { global } from '@jest/globals';
+// 'global' is available by default in Jest/Node environments; no import needed.
 
 // Add this declaration so TypeScript knows about global.__mockAsyncStorage
 declare global {
@@ -10,6 +10,8 @@ declare global {
   };
 }
 
+// Removed invalid import of Global from 'node:globals'
+
 jest.mock('@react-native-async-storage/async-storage', () => {
   // Define the mock inside the factory to avoid hoisting issues
   const mockAsyncStorage = {
@@ -18,7 +20,7 @@ jest.mock('@react-native-async-storage/async-storage', () => {
     removeItem: jest.fn(),
   };
   // Attach to global so tests can access and reset it
-  global.__mockAsyncStorage = mockAsyncStorage;
+  (globalThis as typeof globalThis & { __mockAsyncStorage?: any }).__mockAsyncStorage = mockAsyncStorage;
   return {
     __esModule: true,
     getItem: mockAsyncStorage.getItem,
@@ -52,7 +54,7 @@ declare global {
 }
 
 // Helper to access the mock in tests
-const mockAsyncStorage: MockAsyncStorage = global.__mockAsyncStorage;
+const mockAsyncStorage: MockAsyncStorage = globalThis.__mockAsyncStorage;
 describe('Error Handling Utils', () => {
   beforeEach(() => {
     jest.clearAllMocks();
