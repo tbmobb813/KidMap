@@ -71,7 +71,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
       } else {
         Alert.alert('Success', 'Category created successfully!');
       }
-    } catch (error) {
+    } catch (_error) {
       Alert.alert('Error', 'Failed to create category. Please try again.');
     }
   };
@@ -94,7 +94,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
       setSelectedIcon('MapPin');
       setSelectedColor('#007AFF');
       Alert.alert('Success', 'Category updated successfully!');
-    } catch (error) {
+    } catch (_error) {
       Alert.alert('Error', 'Failed to update category. Please try again.');
     }
   };
@@ -117,7 +117,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
             try {
               await deleteCategory(category.id);
               Alert.alert('Success', 'Category deleted successfully!');
-            } catch (error) {
+            } catch (_error) {
               Alert.alert('Error', 'Failed to delete category. Please try again.');
             }
           },
@@ -130,7 +130,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
     try {
       await approveCategory(categoryId);
       Alert.alert('Success', 'Category approved!');
-    } catch (error) {
+    } catch (_error) {
       Alert.alert('Error', 'Failed to approve category. Please try again.');
     }
   };

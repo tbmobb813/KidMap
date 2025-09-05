@@ -11,7 +11,7 @@ console.log('🧹 Cleaning previous builds...');
 try {
   execSync('rm -rf .expo dist web-build', { stdio: 'inherit' });
   console.log('✅ Cleaned previous builds\n');
-} catch (error) {
+} catch (_error) {
   console.warn('⚠️ Warning: Could not clean previous builds\n');
 }
 

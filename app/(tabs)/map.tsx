@@ -12,7 +12,7 @@ import { Route } from "@/types/navigation";
 import { Navigation, MapPin, Search } from "lucide-react-native";
 import useLocation from "@/hooks/useLocation";
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { height: screenHeight } = Dimensions.get('window');
 
 export default function MapScreen() {
   const router = useRouter();
