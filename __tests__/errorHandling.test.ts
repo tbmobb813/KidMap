@@ -26,9 +26,21 @@ import {
   createSafetyErrorBoundary
 } from '@/utils/errorHandling';
 
-// Helper to access the mock in tests
-const mockAsyncStorage = global.__mockAsyncStorage;
+// Type for the mock
+type MockAsyncStorage = {
+  getItem: jest.Mock;
+  setItem: jest.Mock;
+  removeItem: jest.Mock;
+};
 
+// Augment the global type
+declare global {
+  // eslint-disable-next-line no-var
+  var __mockAsyncStorage: MockAsyncStorage;
+}
+
+// Helper to access the mock in tests
+const mockAsyncStorage: MockAsyncStorage = global.__mockAsyncStorage;
 describe('Error Handling Utils', () => {
   beforeEach(() => {
     jest.clearAllMocks();
