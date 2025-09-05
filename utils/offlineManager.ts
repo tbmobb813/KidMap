@@ -186,7 +186,7 @@ class OfflineManager {
               retryCount: action.retryCount
             });
           } else {
-            log.error('Offline action exceeded max retries', {
+            log.error('Offline action exceeded max retries', undefined, {
               id: action.id,
               type: action.type,
               retryCount: action.retryCount
