@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { StyleSheet, Text, View, Animated, Platform } from "react-native";
+import { StyleSheet, Text, Animated, Platform } from "react-native";
 import Colors from "@/constants/colors";
 import { CheckCircle, AlertCircle, Info, X } from "lucide-react-native";
 

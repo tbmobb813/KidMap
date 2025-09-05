@@ -23,6 +23,42 @@ export default [
         Buffer: 'readonly',
         global: 'readonly',
         globalThis: 'readonly',
+        // Browser globals
+        window: 'readonly',
+        document: 'readonly',
+        fetch: 'readonly',
+        Request: 'readonly',
+        Response: 'readonly',
+        Headers: 'readonly',
+        URL: 'readonly',
+        URLSearchParams: 'readonly',
+        AbortController: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+        Notification: 'readonly',
+        performance: 'readonly',
+        navigator: 'readonly',
+        // Browser Web APIs
+        localStorage: 'readonly',
+        sessionStorage: 'readonly',
+        MediaRecorder: 'readonly',
+        MediaStream: 'readonly',
+        BlobPart: 'readonly',
+        BlobEvent: 'readonly',
+        Blob: 'readonly',
+        FormData: 'readonly',
+        File: 'readonly',
+        // React Native globals
+        __DEV__: 'readonly',
+        ErrorUtils: 'readonly',
+        // Node.js globals
+        module: 'readonly',
+        exports: 'readonly',
+        require: 'readonly',
+        // TypeScript globals
+        RequestInit: 'readonly',
       },
       parserOptions: {
         ecmaFeatures: {
@@ -37,7 +73,28 @@ export default [
     },
   },
   {
-    files: ['**/*.test.{js,jsx,ts,tsx}', '**/_tests_/**/*.{js,jsx,ts,tsx}'],
+    files: ['**/jest.setup.js'],
+    languageOptions: {
+      globals: {
+        jest: 'readonly',
+        console: 'readonly',
+        global: 'readonly',
+      },
+    },
+  },
+  {
+    files: ['**/__mocks__/**/*.{js,jsx,ts,tsx}'],
+    languageOptions: {
+      globals: {
+        jest: 'readonly',
+        module: 'readonly',
+        exports: 'readonly',
+        require: 'readonly',
+      },
+    },
+  },
+  {
+    files: ['**/*.test.{js,jsx,ts,tsx}', '**/_tests_/**/*.{js,jsx,ts,tsx}', '**/__tests__/**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
       globals: {
         describe: 'readonly',

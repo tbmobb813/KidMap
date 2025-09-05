@@ -1,4 +1,3 @@
-import { Platform } from 'react-native';
 import { log } from './logger';
 
 // Input validation utilities for safety-critical components
@@ -149,7 +148,7 @@ export function validateEmergencyContact(contact: any): ValidationResult {
     errors.push('Contact phone number is required');
   } else {
     // Basic phone number validation
-    const phoneRegex = /^[\+]?[1-9][\d\s\-\(\)]{7,15}$/;
+    const phoneRegex = /^[+]?[1-9][\d\s\-()]{7,15}$/;
     if (!phoneRegex.test(contact.phone.replace(/\s/g, ''))) {
       errors.push('Phone number format is invalid');
     }
