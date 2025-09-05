@@ -1,14 +1,20 @@
-import { performance } from 'perf_hooks';
+// Use React Native compatible performance API
+const performanceNow = () => {
+  if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+    return performance.now();
+  }
+  return Date.now();
+};
 
 describe('Performance Tests', () => {
   describe('Component Rendering Performance', () => {
     it('should render SafetyPanel within performance budget', async () => {
-      const startTime = performance.now();
+      const startTime = performanceNow();
       
       // Mock component rendering time
       await new Promise(resolve => setTimeout(resolve, 50));
       
-      const endTime = performance.now();
+      const endTime = performanceNow();
       const renderTime = endTime - startTime;
       
       // Should render within 100ms
@@ -16,7 +22,7 @@ describe('Performance Tests', () => {
     });
 
     it('should handle large lists efficiently', async () => {
-      const startTime = performance.now();
+      const startTime = performanceNow();
       
       // Simulate rendering 1000 items
       const items = Array.from({ length: 1000 }, (_, i) => ({ id: i, name: `Item ${i}` }));
@@ -28,7 +34,7 @@ describe('Performance Tests', () => {
         return processed;
       });
       
-      const endTime = performance.now();
+      const endTime = performanceNow();
       const processingTime = endTime - startTime;
       
       // Should process 1000 items within 50ms
@@ -52,9 +58,9 @@ describe('Performance Tests', () => {
       // Cleanup
       mockStore.cleanup();
       
-      // Force garbage collection if available
-      if (global.gc) {
-        global.gc();
+      // Force garbage collection if available  
+      if (typeof globalThis !== 'undefined' && (globalThis as any).gc) {
+        (globalThis as any).gc();
       }
       
       const finalMemory = process.memoryUsage().heapUsed;
@@ -91,7 +97,7 @@ describe('Performance Tests', () => {
 
   describe('Network Performance', () => {
     it('should handle API requests efficiently', async () => {
-      const startTime = performance.now();
+      const startTime = performanceNow();
       
       // Mock API request
       const mockApiCall = () => new Promise(resolve => {
@@ -100,7 +106,7 @@ describe('Performance Tests', () => {
       
       await mockApiCall();
       
-      const endTime = performance.now();
+      const endTime = performanceNow();
       const requestTime = endTime - startTime;
       
       // API calls should complete within 200ms (including mock delay)
@@ -108,7 +114,7 @@ describe('Performance Tests', () => {
     });
 
     it('should batch multiple requests efficiently', async () => {
-      const startTime = performance.now();
+      const startTime = performanceNow();
       
       // Mock multiple API calls
       const requests = Array.from({ length: 5 }, () => 
@@ -117,7 +123,7 @@ describe('Performance Tests', () => {
       
       await Promise.all(requests);
       
-      const endTime = performance.now();
+      const endTime = performanceNow();
       const totalTime = endTime - startTime;
       
       // Batched requests should complete faster than sequential
@@ -127,7 +133,7 @@ describe('Performance Tests', () => {
 
   describe('Storage Performance', () => {
     it('should handle storage operations efficiently', async () => {
-      const startTime = performance.now();
+      const startTime = performanceNow();
       
       // Mock storage operations
       const mockStorage = {
@@ -150,7 +156,7 @@ describe('Performance Tests', () => {
         await mockStorage.getItem(`key${i}`);
       }
       
-      const endTime = performance.now();
+      const endTime = performanceNow();
       const storageTime = endTime - startTime;
       
       // 200 storage operations should complete within 100ms
@@ -165,14 +171,14 @@ describe('Performance Tests', () => {
       
       // Mock animation frame timing
       const mockAnimationFrame = () => {
-        const start = performance.now();
+        const start = performanceNow();
         
         // Simulate animation work
         for (let i = 0; i < 1000; i++) {
           Math.sin(i * 0.01);
         }
         
-        const end = performance.now();
+        const end = performanceNow();
         return end - start;
       };
       
