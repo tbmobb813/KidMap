@@ -27,7 +27,7 @@ export const showInAppBanner = (banner: InAppBanner) => {
   inAppListeners.forEach((l) => {
     try { 
       l(banner); 
-    } catch (error) {
+    } catch (_error) {
       // Silently handle listener errors to prevent cascade failures
     }
   });
@@ -123,12 +123,9 @@ export const hasNotificationPermission = (): boolean => {
     return 'Notification' in window && Notification.permission === 'granted';
   }
   if (isExpoGo) return true;
-  try {
-    // In production you'd cache this
-    return true;
-  } catch {
-    return false;
-  }
+  // In production you'd check actual permission status
+  // For now, assume true for development
+  return true;
 };
 
 export const showDevelopmentBuildRecommendation = () => {

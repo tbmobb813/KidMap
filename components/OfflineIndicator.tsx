@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Colors from "@/constants/colors";
-import { WifiOff, Wifi } from "lucide-react-native";
+import { WifiOff } from "lucide-react-native";
 
 const OfflineIndicator: React.FC = () => {
   const [isOnline, setIsOnline] = useState(true);

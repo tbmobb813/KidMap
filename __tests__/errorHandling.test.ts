@@ -2,7 +2,7 @@
 
 // Add this declaration so TypeScript knows about global.__mockAsyncStorage
 declare global {
-  // eslint-disable-next-line no-var
+   
   var __mockAsyncStorage: {
     getItem: jest.Mock;
     setItem: jest.Mock;
@@ -49,7 +49,7 @@ type MockAsyncStorage = {
 
 // Augment the global type
 declare global {
-  // eslint-disable-next-line no-var
+   
   var __mockAsyncStorage: MockAsyncStorage;
 }
 

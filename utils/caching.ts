@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Platform } from 'react-native';
 import { SafeAsyncStorage } from './errorHandling';
 import { log } from './logger';
 import { Config } from './config';
@@ -310,7 +309,7 @@ class EnhancedCacheManager {
               newestEntry = Math.max(newestEntry, cacheEntry.timestamp);
             }
           }
-        } catch (error) {
+        } catch (_error) {
           // Skip invalid entries
         }
       }
@@ -356,7 +355,7 @@ class EnhancedCacheManager {
               cleanedCount++;
             }
           }
-        } catch (error) {
+        } catch (_error) {
           // Remove invalid entries
           await AsyncStorage.removeItem(key);
           cleanedCount++;
@@ -446,7 +445,7 @@ class EnhancedCacheManager {
               invalidatedCount++;
             }
           }
-        } catch (error) {
+        } catch (_error) {
           // Remove invalid entries
           await AsyncStorage.removeItem(key);
           invalidatedCount++;

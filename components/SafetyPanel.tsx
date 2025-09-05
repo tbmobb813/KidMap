@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Pressable, Alert, Linking, Platform } from "react-native";
 import Colors from "@/constants/colors";
-import { Shield, Phone, MessageCircle, MapPin, AlertTriangle, Camera, CheckCircle, XCircle } from "lucide-react-native";
+import { Shield, Phone, MessageCircle, MapPin, AlertTriangle, Camera } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useGamificationStore } from "@/stores/gamificationStore";
 import { useNavigationStore } from "@/stores/navigationStore";

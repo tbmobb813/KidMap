@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import Colors from "@/constants/colors";
-import { WifiOff, Wifi, RefreshCw } from "lucide-react-native";
+import { WifiOff, RefreshCw } from "lucide-react-native";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 
 type NetworkStatusBarProps = {

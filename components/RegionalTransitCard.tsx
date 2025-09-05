@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, Text, View, FlatList } from "react-native";
 import Colors from "@/constants/colors";
 import { useRegionStore } from "@/stores/regionStore";
-import TransitStepIndicator from "./TransitStepIndicator";
 import { Train, Bus, Navigation, Ship } from "lucide-react-native";
 
 const RegionalTransitCard: React.FC = () => {
