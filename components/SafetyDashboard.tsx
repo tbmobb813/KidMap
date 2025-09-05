@@ -20,8 +20,8 @@ type SafetyDashboardProps = {
 };
 
 const SafetyDashboard: React.FC<SafetyDashboardProps> = ({ 
-  currentLocation, 
-  currentPlace,
+  _currentLocation, 
+  _currentPlace,
   onNavigateToSettings 
 }) => {
   const { settings, checkInRequests, safeZones } = useParentalStore();
