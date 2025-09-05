@@ -1,14 +1,20 @@
-// Mock AsyncStorage before importing the module
-const mockAsyncStorage = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-};
-
-jest.mock('@react-native-async-storage/async-storage', () => ({
-  __esModule: true,
-  default: mockAsyncStorage,
-}));
+jest.mock('@react-native-async-storage/async-storage', () => {
+  // Define the mock inside the factory to avoid hoisting issues
+  const mockAsyncStorage = {
+    getItem: jest.fn(),
+    setItem: jest.fn(),
+    removeItem: jest.fn(),
+  };
+  // Attach to global so tests can access and reset it
+  global.__mockAsyncStorage = mockAsyncStorage;
+  return {
+    __esModule: true,
+    getItem: mockAsyncStorage.getItem,
+    setItem: mockAsyncStorage.setItem,
+    removeItem: mockAsyncStorage.removeItem,
+    default: mockAsyncStorage,
+  };
+});
 
 import { 
   SafeAsyncStorage, 
@@ -19,6 +25,9 @@ import {
   handleNetworkError,
   createSafetyErrorBoundary
 } from '@/utils/errorHandling';
+
+// Helper to access the mock in tests
+const mockAsyncStorage = global.__mockAsyncStorage;
 
 describe('Error Handling Utils', () => {
   beforeEach(() => {

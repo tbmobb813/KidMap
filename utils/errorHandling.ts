@@ -93,7 +93,7 @@ export async function withRetry<T>(
       // Don't wait after the last attempt
       if (attempt < options.maxAttempts) {
         log.debug(`Waiting ${delay}ms before retry`);
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise(resolve => globalThis.setTimeout(resolve, delay));
         
         // Apply backoff multiplier
         if (options.backoffMultiplier) {
@@ -121,20 +121,21 @@ export class SafeAsyncStorage {
     try {
       return await withRetry(async () => {
         switch (operation.operation) {
-          case 'get':
+          case 'get': {
             const stored = await AsyncStorage.getItem(operation.key);
             return stored ? JSON.parse(stored) : null;
-          
-          case 'set':
+          }
+          case 'set': {
             await AsyncStorage.setItem(operation.key, JSON.stringify(operation.value));
             return operation.value;
-          
-          case 'remove':
+          }
+          case 'remove': {
             await AsyncStorage.removeItem(operation.key);
             return null;
-          
-          default:
+          }
+          default: {
             throw new Error(`Unknown storage operation: ${operation.operation}`);
+          }
         }
       }, retryOptions, `AsyncStorage ${operation.operation} ${operation.key}`);
       
