@@ -1,3 +1,15 @@
+import { global } from '@jest/globals';
+
+// Add this declaration so TypeScript knows about global.__mockAsyncStorage
+declare global {
+  // eslint-disable-next-line no-var
+  var __mockAsyncStorage: {
+    getItem: jest.Mock;
+    setItem: jest.Mock;
+    removeItem: jest.Mock;
+  };
+}
+
 jest.mock('@react-native-async-storage/async-storage', () => {
   // Define the mock inside the factory to avoid hoisting issues
   const mockAsyncStorage = {
