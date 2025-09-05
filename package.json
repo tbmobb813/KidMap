@@ -2,6 +2,7 @@
   "name": "expo-app",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "start": "npx expo start --tunnel",
     "start-web": "npx expo start --web --tunnel",

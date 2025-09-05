@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, Pressable } from "react-native";
 import { Achievement } from "@/types/gamification";
 import Colors from "@/constants/colors";
 import { Star, Lock } from "lucide-react-native";

@@ -25,7 +25,11 @@ export const addInAppBannerListener = (cb: (banner: InAppBanner) => void) => {
 };
 export const showInAppBanner = (banner: InAppBanner) => {
   inAppListeners.forEach((l) => {
-    try { l(banner); } catch {}
+    try { 
+      l(banner); 
+    } catch (error) {
+      // Silently handle listener errors to prevent cascade failures
+    }
   });
 };
 
