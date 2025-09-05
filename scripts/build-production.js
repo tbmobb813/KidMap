@@ -18,7 +18,7 @@ try {
 // 2. Install dependencies
 console.log('📦 Installing dependencies...');
 try {
-  execSync('bun install', { stdio: 'inherit' });
+  execSync('npm install --legacy-peer-deps', { stdio: 'inherit' });
   console.log('✅ Dependencies installed\n');
 } catch (error) {
   console.error('❌ Failed to install dependencies');

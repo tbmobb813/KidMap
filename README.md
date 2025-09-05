@@ -1,6 +1,42 @@
-Let me start by saying the reason for the creatation of this application is my son, who I love and adore. I want to build a kid-friendly navigation app that simplifies Google Maps functionality while adding subway/train navigation features. The app should be intuitive for children under 16 to use.
+Let me start by saying the reason for the creation of this application is my son, who I love and adore. I want to build a kid-friendly navigation app that simplifies Google Maps functionality while adding subway/train navigation features. The app should be intuitive for children under 16 to use.
 
-Key features to include:
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 20 LTS or higher
+- npm (comes with Node.js)
+- Expo CLI (installed via npm)
+
+### Installation
+1. Clone the repository
+```bash
+git clone https://github.com/tbmobb813/KidMap.git
+cd KidMap
+```
+
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Start the development server
+```bash
+npm start
+```
+
+4. For web development
+```bash
+npm run start-web
+```
+
+### Available Scripts
+- `npm start` - Start the Expo development server
+- `npm run start-web` - Start the web development server
+- `npm run lint` - Run ESLint
+- `npm run typecheck` - Run TypeScript type checking
+- `npm test` - Run Jest tests
+
+## 📱 Key Features
 1. Simple, colorful UI with large buttons and clear visuals
 2. Easy destination search with kid-friendly categories (school, park, home, etc.)
 3. Public transit focus with subway/train route planning
