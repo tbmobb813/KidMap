@@ -22,19 +22,19 @@ export default function IndexPage() {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: '/*TODO theme*/ theme.colors.placeholder /*#f0f0f0*/',
+    backgroundColor: '#f0f0f0',
     flex: 1,
     justifyContent: 'center',
     padding: 20,
   },
   text: {
-    color: '/*TODO theme*/ theme.colors.placeholder /*#424242*/',
+    color: '#424242',
     fontSize: 16,
     marginBottom: 15,
     textAlign: 'center',
   },
   title: {
-    color: '/*TODO theme*/ theme.colors.placeholder /*#2e7d32*/',
+    color: '#2e7d32',
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 30,
