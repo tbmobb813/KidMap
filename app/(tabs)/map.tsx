@@ -151,7 +151,7 @@ export default function MapScreen() {
       )}
     </>;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [destination, selectedTravelMode, setTravelMode, handleSearchPress, routesToShow.length, isFetching]);
+  }, [destination, selectedTravelMode, setTravelMode, handleSearchPress, routesToShow.length, isFetching, styles]);
 
   return (
     <FlatList
