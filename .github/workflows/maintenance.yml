@@ -1,0 +1,51 @@
+name: Maintenance
+
+on:
+  schedule:
+    - cron: '0 5 * * 1' # Every Monday 05:00 UTC
+  workflow_dispatch:
+
+jobs:
+  dependency-update:
+    name: Dependency Auto Update
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - name: Install deps
+        run: bun install || bun install
+      - name: Run auto dependency script
+        run: |
+          if [ -f scripts/dependency-manager.js ]; then
+            node scripts/dependency-manager.js --auto-schedule || true
+          else
+            echo "No dependency-manager script present"
+          fi
+      - name: Create PR if changes
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "chore(deps): automated dependency maintenance"
+          title: "chore(deps): automated dependency maintenance"
+          body: "Automated dependency update run."
+          branch: chore/deps-auto
+          labels: maintenance, dependencies
+          signoff: false
+
+  audit:
+    name: Weekly Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - name: Install deps
+        run: bun install || bun install
+      - name: Run audit
+        run: |
+          if [ -f scripts/dependency-manager.js ]; then
+            node scripts/dependency-manager.js audit || true
+          else
+            echo "No dependency-manager script present"
+          fi
