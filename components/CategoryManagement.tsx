@@ -150,7 +150,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
   const openCreateModal = () => {
     setNewCategoryName('');
     setSelectedIcon('MapPin');
-    setSelectedColor('/*TODO theme*/ theme.colors.placeholder /*#007AFF*/');
+    setSelectedColor(theme.colors.placeholder);
     setEditingCategory(null);
     setShowCreateModal(true);
   };
