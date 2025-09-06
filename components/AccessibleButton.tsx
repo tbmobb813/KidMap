@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     minHeight: 48,
     paddingHorizontal: 24,
-  paddingVertical: 12, // Updated to meet recommended 48x48 minimum
+  paddingVertical: 12, // Results in a minimum height of 72px (48px minHeight + 24px paddingVertical)
   },
   disabled: {
     opacity: 0.5,
