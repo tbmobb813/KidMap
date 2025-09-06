@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import Colors from "@/constants/colors";
 import { RegionConfig } from "@/types/region";
-import { MapPin, Check } from "lucide-react-native";
+import { MapPin, Check } from "@expo/vector-icons";
 
 type RegionSelectorProps = {
   regions: RegionConfig[];

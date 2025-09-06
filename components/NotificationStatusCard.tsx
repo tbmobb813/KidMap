@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Pressable, Platform } from 'react-native';
-import { Bell, AlertTriangle, ExternalLink, CheckCircle } from 'lucide-react-native';
+import { Bell, AlertTriangle, ExternalLink, CheckCircle } from '@expo/vector-icons';
 import Colors from '@/constants/colors';
 import { showDevelopmentBuildRecommendation, requestNotificationPermission } from '@/utils/notification';
 

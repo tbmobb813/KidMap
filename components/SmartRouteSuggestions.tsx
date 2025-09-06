@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import { StyleSheet, Text, View, Pressable, ScrollView, ActivityIndicator } from 'react-native';
 import Colors from '@/constants/colors';
-import { Cloud, Sun, CloudRain, Users, Clock, Zap, MapPin, Heart } from 'lucide-react-native';
+import { Cloud, Sun, CloudRain, Users, Clock, Zap, MapPin, Heart } from '@expo/vector-icons';
 import { Place } from '@/types/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { handleApiError, smartRoutesApi, SmartSuggestionDTO } from '@/utils/api';

@@ -4,7 +4,7 @@ import Colors from "@/constants/colors";
 import AchievementBadge from "@/components/AchievementBadge";
 import UserStatsCard from "@/components/UserStatsCard";
 import { useGamificationStore } from "@/stores/gamificationStore";
-import { Trophy, Star, Target, Calendar } from "lucide-react-native";
+import { FontAwesome, Feather, Entypo } from "@expo/vector-icons";
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -23,11 +23,11 @@ export default function AchievementsScreen() {
         </Text>
         <View style={styles.ratingContainer}>
           {[1, 2, 3, 4, 5].map(star => (
-            <Star 
+            <FontAwesome
               key={star}
-              size={16} 
+              name="star"
+              size={16}
               color={star <= item.rating ? "#FFD700" : Colors.border}
-              fill={star <= item.rating ? "#FFD700" : "transparent"}
             />
           ))}
         </View>
@@ -69,7 +69,7 @@ export default function AchievementsScreen() {
           ]}
           onPress={() => setSelectedTab("achievements")}
         >
-          <Trophy size={20} color={selectedTab === "achievements" ? "#FFFFFF" : Colors.primary} />
+          <FontAwesome name="trophy" size={20} color={selectedTab === "achievements" ? "#FFFFFF" : Colors.primary} />
           <Text style={[
             styles.tabText,
             selectedTab === "achievements" && styles.activeTabText
@@ -85,7 +85,7 @@ export default function AchievementsScreen() {
           ]}
           onPress={() => setSelectedTab("journal")}
         >
-          <Calendar size={20} color={selectedTab === "journal" ? "#FFFFFF" : Colors.primary} />
+          <Feather name="calendar" size={20} color={selectedTab === "journal" ? "#FFFFFF" : Colors.primary} />
           <Text style={[
             styles.tabText,
             selectedTab === "journal" && styles.activeTabText
@@ -142,7 +142,7 @@ export default function AchievementsScreen() {
               </View>
             ) : (
               <View style={styles.emptyState}>
-                <Target size={40} color={Colors.textLight} />
+                <Entypo name="location-pin" size={40} color={Colors.textLight} />
                 <Text style={styles.emptyText}>
                   Start your first trip to begin your journey journal!
                 </Text>

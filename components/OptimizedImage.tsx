@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { Image } from "expo-image";
 import Colors from "@/constants/colors";
-import { ImageOff } from "lucide-react-native";
+import { ImageOff } from "@expo/vector-icons";
 
 type OptimizedImageProps = {
   source: { uri: string } | number;

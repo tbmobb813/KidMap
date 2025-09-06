@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import Colors from "@/constants/colors";
 import SearchBar from "./SearchBar";
-import { MapPin, Clock, Star } from "lucide-react-native";
+import { MapPin, Clock, Star } from "@expo/vector-icons";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Place } from "@/types/navigation";
 

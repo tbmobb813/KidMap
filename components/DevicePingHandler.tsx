@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Pressable, Alert, Platform, Vibration } from 'react-native';
-import { Phone, MapPin, MessageCircle, X, CheckCircle } from 'lucide-react-native';
+import { Phone, MapPin, MessageCircle, X, CheckCircle } from '@expo/vector-icons';
 import Colors from '@/constants/colors';
 import { useParentalStore } from '@/stores/parentalStore';
 import useLocation from '@/hooks/useLocation';

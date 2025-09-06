@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { TravelMode } from "@/types/navigation";
 import Colors from "@/constants/colors";
-import { Train, Car, Bike, MapPin } from "lucide-react-native";
+import { Train, Car, Bike, MapPin } from "@expo/vector-icons";
 
 type TravelModeSelectorProps = {
   selectedMode: TravelMode;

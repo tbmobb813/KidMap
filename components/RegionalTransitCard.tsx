@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, FlatList } from "react-native";
 import Colors from "@/constants/colors";
 import { useRegionStore } from "@/stores/regionStore";
-import { Train, Bus, Navigation, Ship } from "lucide-react-native";
+import { Train, Bus, Navigation, Ship } from "@expo/vector-icons";
 
 const RegionalTransitCard: React.FC = () => {
   const { currentRegion, getCurrentTransitSystems } = useRegionStore();

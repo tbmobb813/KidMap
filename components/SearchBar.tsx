@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, TextInput, View, Pressable } from "react-native";
-import { Search, X } from "lucide-react-native";
+import { Search, X } from "@expo/vector-icons";
 import Colors from "@/constants/colors";
 
 type SearchBarProps = {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Pressable, Alert, Linking, Platform } from "react-native";
 import Colors from "@/constants/colors";
-import { Shield, Phone, MessageCircle, MapPin, AlertTriangle, Camera } from "lucide-react-native";
+import { MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useGamificationStore } from "@/stores/gamificationStore";
 import { useNavigationStore } from "@/stores/navigationStore";
@@ -450,7 +450,7 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
         style={styles.header}
         onPress={() => setIsExpanded(!isExpanded)}
       >
-        <Shield size={20} color={Colors.primary} />
+        <MaterialCommunityIcons name="shield" size={20} color={Colors.primary} />
         <Text style={styles.title}>Safety Tools</Text>
         <Text style={styles.expandIcon}>{isExpanded ? "−" : "+"}</Text>
       </Pressable>
@@ -459,19 +459,19 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
         <View style={styles.content}>
           <View style={styles.buttonRow}>
             <Pressable style={styles.safetyButton} onPress={handleEmergencyCall}>
-              <Phone size={18} color="#FFFFFF" />
+              <Feather name="phone" size={18} color="#FFFFFF" />
               <Text style={styles.buttonText}>Emergency</Text>
             </Pressable>
 
             <Pressable style={styles.safetyButton} onPress={handleShareLocation}>
-              <MapPin size={18} color="#FFFFFF" />
+              <Feather name="map-pin" size={18} color="#FFFFFF" />
               <Text style={styles.buttonText}>Share Location</Text>
             </Pressable>
           </View>
 
           <View style={styles.buttonRow}>
             <Pressable style={styles.safetyButton} onPress={handleSafeArrival}>
-              <MessageCircle size={18} color="#FFFFFF" />
+              <Feather name="message-circle" size={18} color="#FFFFFF" />
               <Text style={styles.buttonText}>I Made It!</Text>
             </Pressable>
 
@@ -480,7 +480,7 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
               onPress={handlePhotoCheckIn}
               disabled={isPhotoLoading}
             >
-              <Camera size={18} color="#FFFFFF" />
+              <Feather name="camera" size={18} color="#FFFFFF" />
               <Text style={styles.buttonText}>
                 {isPhotoLoading ? "Taking Photo..." : "Photo Check-in"}
               </Text>
@@ -488,7 +488,7 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
           </View>
 
           <View style={styles.tipContainer}>
-            <AlertTriangle size={16} color={Colors.warning} />
+            <Feather name="alert-triangle" size={16} color={Colors.warning} />
             <Text style={styles.tipText}>
               Always stay with a trusted adult when traveling
             </Text>

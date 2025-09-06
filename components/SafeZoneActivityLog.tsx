@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { Activity, ArrowRight, ArrowLeft, Clock } from 'lucide-react-native';
+import { Activity, ArrowRight, ArrowLeft, Clock } from '@expo/vector-icons';
 import { useParentalStore } from '@/stores/parentalStore';
 
 export const SafeZoneActivityLog: React.FC = () => {

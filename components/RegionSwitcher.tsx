@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Pressable, Modal } from "react-native";
 import Colors from "@/constants/colors";
 import { useRegionStore } from "@/stores/regionStore";
 import RegionSelector from "./RegionSelector";
-import { Globe, X } from "lucide-react-native";
+import { Globe, X } from "@expo/vector-icons";
 
 const RegionSwitcher: React.FC = () => {
   const [showModal, setShowModal] = useState(false);

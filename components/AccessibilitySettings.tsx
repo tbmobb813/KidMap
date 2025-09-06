@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Switch, ScrollView, Pressable } from "react-native";
 import Colors from "@/constants/colors";
-import { Eye, Volume2, Zap, Settings, ArrowLeft } from "lucide-react-native";
+import { Eye, Volume2, Zap, Settings, ArrowLeft } from "@expo/vector-icons";
 import { useNavigationStore } from "@/stores/navigationStore";
 
 type AccessibilitySettingsProps = {

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { TransitStep } from "@/types/navigation";
 import Colors from "@/constants/colors";
 import TransitStepIndicator from "./TransitStepIndicator";
-import { Clock } from "lucide-react-native";
+import { Clock } from "@expo/vector-icons";
 
 type DirectionStepProps = {
   step: TransitStep;

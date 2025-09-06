@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Pressable, ScrollView } from "react-native";
 import Colors from "@/constants/colors";
 import RegionSelector from "./RegionSelector";
 import { useRegionStore } from "@/stores/regionStore";
-import { MapPin, Settings, Shield, CheckCircle } from "lucide-react-native";
+import { MapPin, Settings, Shield, CheckCircle } from "@expo/vector-icons";
 
 type OnboardingStep = "welcome" | "region" | "preferences" | "safety" | "complete";
 

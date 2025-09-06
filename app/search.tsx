@@ -5,7 +5,7 @@ import Colors from "@/constants/colors";
 import SearchBar from "@/components/SearchBar";
 import PlaceCard from "@/components/PlaceCard";
 import { useNavigationStore } from "@/stores/navigationStore";
-import { MapPin } from "lucide-react-native";
+import { MapPin } from "@expo/vector-icons";
 import { Place, PlaceCategory } from "@/types/navigation";
 import { favoriteLocations, recentSearches } from "@/mocks/places";
 

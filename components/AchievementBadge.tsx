@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, Pressable } from "react-native";
 import { Achievement } from "@/types/gamification";
 import Colors from "@/constants/colors";
-import { Star, Lock } from "lucide-react-native";
+import { Star, Lock } from "@expo/vector-icons";
 
 type AchievementBadgeProps = {
   achievement: Achievement;

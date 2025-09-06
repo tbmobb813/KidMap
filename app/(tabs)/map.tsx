@@ -9,7 +9,7 @@ import SafetyPanel from "@/components/SafetyPanel";
 import TravelModeSelector from "@/components/TravelModeSelector";
 import { useNavigationStore } from "@/stores/navigationStore";
 import { Route } from "@/types/navigation";
-import { Navigation, MapPin, Search } from "lucide-react-native";
+import { Navigation, MapPin, Search } from "@expo/vector-icons";
 import useLocation from "@/hooks/useLocation";
 
 const { height: screenHeight } = Dimensions.get('window');

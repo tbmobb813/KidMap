@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import Colors from "@/constants/colors";
 import TransitStepIndicator from "./TransitStepIndicator";
-import { Clock, MapPin, RefreshCw, Bell } from "lucide-react-native";
+import { Clock, MapPin, RefreshCw, Bell } from "@expo/vector-icons";
 
 export type LiveArrival = {
   id: string;

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView, Pressable, Dimensions, Platform } f
 import Colors from "@/constants/colors";
 import { subwayLines } from "@/mocks/transit";
 import SearchBar from "@/components/SearchBar";
-import { Clock, MapPin, AlertCircle, Bell } from "lucide-react-native";
+import { Clock, MapPin, AlertCircle, Bell } from "@expo/vector-icons";
 import LiveArrivalsCard from "@/components/LiveArrivalsCard";
 import { mockLiveArrivals, nearbyStations } from "@/mocks/liveArrivals";
 

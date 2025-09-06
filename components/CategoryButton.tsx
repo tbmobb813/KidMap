@@ -3,11 +3,11 @@ import { StyleSheet, Text, Pressable, View } from "react-native";
 import Colors from "@/constants/colors";
 import { PlaceCategory, CustomCategory } from "@/types/navigation";
 import { 
-  Home, GraduationCap, BookOpen, Trees, ShoppingBag, Pizza, Users, Heart, MapPin,
-  Car, Bike, Bus, Train, Plane, Hospital, Church, Building, Gamepad2, Music,
-  Camera, Gift, Coffee, Apple, Dumbbell, Palette, Star, Sun, Moon, Cloud,
-  Umbrella, Flower
-} from "lucide-react-native";
+  Feather,
+  FontAwesome5,
+  MaterialCommunityIcons,
+  Foundation
+} from "@expo/vector-icons";
 
 type CategoryButtonProps = {
   category?: PlaceCategory;
@@ -16,47 +16,47 @@ type CategoryButtonProps = {
   size?: 'small' | 'medium' | 'large';
 };
 
-const CategoryButton: React.FC<CategoryButtonProps> = ({ 
-  category, 
-  customCategory, 
-  onPress, 
-  size = 'large' 
+const CategoryButton: React.FC<CategoryButtonProps> = ({
+  category,
+  customCategory,
+  onPress,
+  size = 'large'
 }) => {
   const getIcon = (iconName: string, iconSize: number) => {
     const iconProps = { size: iconSize, color: "#FFF" };
-    
+
     switch (iconName) {
-      case "Home": return <Home {...iconProps} />;
-      case "GraduationCap": return <GraduationCap {...iconProps} />;
-      case "BookOpen": return <BookOpen {...iconProps} />;
-      case "Trees": return <Trees {...iconProps} />;
-      case "ShoppingBag": return <ShoppingBag {...iconProps} />;
-      case "Pizza": return <Pizza {...iconProps} />;
-      case "Users": return <Users {...iconProps} />;
-      case "Heart": return <Heart {...iconProps} />;
-      case "Car": return <Car {...iconProps} />;
-      case "Bike": return <Bike {...iconProps} />;
-      case "Bus": return <Bus {...iconProps} />;
-      case "Train": return <Train {...iconProps} />;
-      case "Plane": return <Plane {...iconProps} />;
-      case "Hospital": return <Hospital {...iconProps} />;
-      case "Church": return <Church {...iconProps} />;
-      case "Building": return <Building {...iconProps} />;
-      case "Gamepad2": return <Gamepad2 {...iconProps} />;
-      case "Music": return <Music {...iconProps} />;
-      case "Camera": return <Camera {...iconProps} />;
-      case "Gift": return <Gift {...iconProps} />;
-      case "Coffee": return <Coffee {...iconProps} />;
-      case "Apple": return <Apple {...iconProps} />;
-      case "Dumbbell": return <Dumbbell {...iconProps} />;
-      case "Palette": return <Palette {...iconProps} />;
-      case "Star": return <Star {...iconProps} />;
-      case "Sun": return <Sun {...iconProps} />;
-      case "Moon": return <Moon {...iconProps} />;
-      case "Cloud": return <Cloud {...iconProps} />;
-      case "Umbrella": return <Umbrella {...iconProps} />;
-      case "Flower": return <Flower {...iconProps} />;
-      default: return <MapPin {...iconProps} />;
+      case "Home": return <Feather name="home" {...iconProps} />;
+      case "GraduationCap": return <FontAwesome5 name="graduation-cap" {...iconProps} />;
+      case "BookOpen": return <Feather name="book-open" {...iconProps} />;
+      case "Trees": return <MaterialCommunityIcons name="tree" {...iconProps} />;
+      case "ShoppingBag": return <Feather name="shopping-bag" {...iconProps} />;
+      case "Pizza": return <MaterialCommunityIcons name="pizza" {...iconProps} />;
+      case "Users": return <Feather name="users" {...iconProps} />;
+      case "Heart": return <Feather name="heart" {...iconProps} />;
+      case "Car": return <MaterialCommunityIcons name="car" {...iconProps} />;
+      case "Bike": return <MaterialCommunityIcons name="bike" {...iconProps} />;
+      case "Bus": return <MaterialCommunityIcons name="bus" {...iconProps} />;
+      case "Train": return <MaterialCommunityIcons name="train" {...iconProps} />;
+      case "Plane": return <Feather name="airplay" {...iconProps} />;
+      case "Hospital": return <MaterialCommunityIcons name="hospital" {...iconProps} />;
+      case "Church": return <MaterialCommunityIcons name="church" {...iconProps} />;
+      case "Building": return <MaterialCommunityIcons name="office-building" {...iconProps} />;
+      case "Gamepad2": return <MaterialCommunityIcons name="gamepad-variant" {...iconProps} />;
+      case "Music": return <Feather name="music" {...iconProps} />;
+      case "Camera": return <Feather name="camera" {...iconProps} />;
+      case "Gift": return <Feather name="gift" {...iconProps} />;
+      case "Coffee": return <Feather name="coffee" {...iconProps} />;
+      case "Apple": return <FontAwesome5 name="apple" {...iconProps} />;
+      case "Dumbbell": return <MaterialCommunityIcons name="dumbbell" {...iconProps} />;
+      case "Palette": return <MaterialCommunityIcons name="palette" {...iconProps} />;
+      case "Star": return <Feather name="star" {...iconProps} />;
+      case "Sun": return <Feather name="sun" {...iconProps} />;
+      case "Moon": return <Feather name="moon" {...iconProps} />;
+      case "Cloud": return <Feather name="cloud" {...iconProps} />;
+      case "Umbrella": return <Feather name="umbrella" {...iconProps} />;
+      case "Flower": return <MaterialCommunityIcons name="flower" {...iconProps} />;
+      default: return <Feather name="map-pin" {...iconProps} />;
     }
   };
 

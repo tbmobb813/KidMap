@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import Colors from "@/constants/colors";
-import { LucideIcon } from "lucide-react-native";
+import { LucideIcon } from "@expo/vector-icons";
 
 type EmptyStateProps = {
   icon: LucideIcon;

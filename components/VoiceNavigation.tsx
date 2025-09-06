@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View, Pressable, Platform } from "react-native";
 import Colors from "@/constants/colors";
-import { Mic, Volume2 } from "lucide-react-native";
+import { Mic, Volume2 } from "@expo/vector-icons";
 import * as Speech from "expo-speech";
 import { Audio } from "expo-av";
 import { useToast } from "@/hooks/useToast";

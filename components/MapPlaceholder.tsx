@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import Colors from "@/constants/colors";
-import { MapPin } from "lucide-react-native";
+import { MapPin } from "@expo/vector-icons";
 
 type MapPlaceholderProps = {
   message?: string;

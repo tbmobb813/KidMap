@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { Place } from "@/types/navigation";
 import Colors from "@/constants/colors";
-import { Home, School, BookOpen, Trees, Store, Utensils, Users, Heart, MapPin } from "lucide-react-native";
+import { Home, School, BookOpen, Trees, Store, Utensils, Users, Heart, MapPin } from "@expo/vector-icons";
 
 type PlaceCardProps = {
   place: Place;

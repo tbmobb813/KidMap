@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { Phone, MapPin, MessageCircle, CheckCircle, X, Clock } from 'lucide-react-native';
+import { Phone, MapPin, MessageCircle, CheckCircle, X, Clock } from '@expo/vector-icons';
 import Colors from '@/constants/colors';
 import { useParentalStore } from '@/stores/parentalStore';
 import { DevicePingRequest } from '@/types/parental';

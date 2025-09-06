@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Pressable, Animated } from 'react-native';
 import Colors from '@/constants/colors';
-import { Bot, Volume2, VolumeX, Sparkles } from 'lucide-react-native';
+import { Bot, Volume2, VolumeX, Sparkles } from '@expo/vector-icons';
 import { Place } from '@/types/navigation';
 
 type AIJourneyCompanionProps = {

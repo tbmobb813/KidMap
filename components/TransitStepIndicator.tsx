@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { TransitStep } from "@/types/navigation";
 import Colors from "@/constants/colors";
-import { Train, Bus, Navigation, Bike, Car } from "lucide-react-native";
+import { Train, Bus, Navigation, Bike, Car } from "@expo/vector-icons";
 
 type TransitStepIndicatorProps = {
   step: TransitStep;

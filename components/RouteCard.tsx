@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import { Route } from "@/types/navigation";
 import Colors from "@/constants/colors";
-import { Clock, ArrowRight } from "lucide-react-native";
+import { Clock, ArrowRight } from "@expo/vector-icons";
 import TransitStepIndicator from "./TransitStepIndicator";
 
 type RouteCardProps = {

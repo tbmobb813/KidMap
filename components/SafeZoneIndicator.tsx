@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Shield } from 'lucide-react-native';
+import { Shield } from '@expo/vector-icons';
 import { useSafeZoneMonitor } from '@/hooks/useSafeZoneMonitor';
 import { useParentalStore } from '@/stores/parentalStore';
 

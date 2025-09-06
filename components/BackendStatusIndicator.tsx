@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { backendHealthMonitor } from '@/utils/api';
 import Colors from '@/constants/colors';
-import { Wifi, WifiOff, AlertTriangle } from 'lucide-react-native';
+import { Wifi, WifiOff, AlertTriangle } from '@expo/vector-icons';
 
 type HealthStatus = 'healthy' | 'degraded' | 'down';
 

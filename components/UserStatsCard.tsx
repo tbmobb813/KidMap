@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import Colors from "@/constants/colors";
-import { Trophy, MapPin, Zap, Target } from "lucide-react-native";
+import { Trophy, MapPin, Zap, Target } from "@expo/vector-icons";
 import { UserStats } from "@/types/gamification";
 
 type UserStatsCardProps = {

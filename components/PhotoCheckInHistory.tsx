@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
 import { useNavigationStore } from "@/stores/navigationStore";
 import Colors from "@/constants/colors";
-import { CheckCircle, XCircle, MapPin, Clock } from "lucide-react-native";
+import { CheckCircle, XCircle, MapPin, Clock } from "@expo/vector-icons";
 import { formatDistance, getLocationAccuracyDescription } from "@/utils/locationUtils";
 
 const PhotoCheckInHistory: React.FC = () => {

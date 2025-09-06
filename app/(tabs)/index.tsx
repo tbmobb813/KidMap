@@ -17,7 +17,7 @@ import EmptyState from "@/components/EmptyState";
 import PullToRefresh from "@/components/PullToRefresh";
 import { useNavigationStore } from "@/stores/navigationStore";
 import { PlaceCategory, Place } from "@/types/navigation";
-import { MapPin, Navigation } from "lucide-react-native";
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import useLocation from "@/hooks/useLocation";
 import { useGamificationStore } from "@/stores/gamificationStore";
 import { useRegionalData } from "@/hooks/useRegionalData";
@@ -229,7 +229,7 @@ export default function HomeScreen() {
             style={styles.currentLocationButton}
             onPress={handleCurrentLocation}
           >
-            <Navigation size={20} color={Colors.primary} />
+            <MaterialCommunityIcons name="navigation" size={20} color={Colors.primary} />
             <Text style={styles.currentLocationText}>Use my location</Text>
           </Pressable>
         </View>
@@ -260,7 +260,7 @@ export default function HomeScreen() {
           ))
         ) : (
           <EmptyState
-            icon={MapPin}
+            icon={Feather}
             title="No favorites yet"
             description={`Add places you visit often in ${currentRegion.name} to see them here`}
             actionText="Search Places"

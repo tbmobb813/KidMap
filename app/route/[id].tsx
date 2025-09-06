@@ -6,7 +6,7 @@ import DirectionStep from "@/components/DirectionStep";
 import MapPlaceholder from "@/components/MapPlaceholder";
 import SafetyPanel from "@/components/SafetyPanel";
 import { useNavigationStore } from "@/stores/navigationStore";
-import { Clock, Navigation, MapPin } from "lucide-react-native";
+import { Clock, Navigation, MapPin } from "@expo/vector-icons";
 import VoiceNavigation from "@/components/VoiceNavigation";
 import FunFactCard from "@/components/FunFactCard";
 import { getRandomFunFact } from "@/mocks/funFacts";

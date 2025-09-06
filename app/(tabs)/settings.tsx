@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Switch, ScrollView, Pressable } from "react-native";
 import Colors from "@/constants/colors";
-import { Bell, Shield, MapPin, Clock, HelpCircle, Info, ChevronRight, Eye, Globe, Settings, RefreshCw, Palette, Lock, Camera, LogOut } from "lucide-react-native";
+import { Bell, Shield, MapPin, Clock, HelpCircle, Info, ChevronRight, Eye, Globe, Settings, RefreshCw, Palette, Lock, Camera, LogOut } from "@expo/vector-icons";
 import AccessibilitySettings from "@/components/AccessibilitySettings";
 import RegionSwitcher from "@/components/RegionSwitcher";
 import RegionalTransitCard from "@/components/RegionalTransitCard";

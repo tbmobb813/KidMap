@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import Colors from "@/constants/colors";
-import { Clock, X, MapPin } from "lucide-react-native";
+import { Clock, X, MapPin } from "@expo/vector-icons";
 
 type SmartNotificationProps = {
   title: string;

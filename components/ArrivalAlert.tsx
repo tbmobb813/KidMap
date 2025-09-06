@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import Colors from "@/constants/colors";
-import { Bell, X } from "lucide-react-native";
+import { Bell, X } from "@expo/vector-icons";
 import TransitStepIndicator from "./TransitStepIndicator";
 import { LiveArrival } from "./LiveArrivalsCard";
 

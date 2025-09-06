@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import Colors from "@/constants/colors";
-import { AlertTriangle, RefreshCw } from "lucide-react-native";
+import { AlertTriangle, RefreshCw } from "@expo/vector-icons";
 
 type ErrorBoundaryState = {
   hasError: boolean;
