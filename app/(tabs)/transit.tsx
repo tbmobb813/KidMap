@@ -153,9 +153,14 @@ const createStyles = (theme: ReturnType<typeof useTheme>) => StyleSheet.create({
   },
 });
 
+
+function useStyles(theme: ReturnType<typeof useTheme>) {
+  return useMemo(() => createStyles(theme), [theme]);
+}
+
 export default function TransitScreen() {
   const theme = useTheme();
-  const styles = useMemo(() => createStyles(theme), [theme]); // styles already theme-based
+  const styles = useStyles(theme);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLine, setSelectedLine] = useState<string | null>(null);
   const [selectedStation, setSelectedStation] = useState<string | null>("main-st-station");
