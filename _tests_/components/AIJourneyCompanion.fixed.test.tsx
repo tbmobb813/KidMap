@@ -24,9 +24,17 @@ jest.mock("@/telemetry", () => ({
 }));
 
 // Mock fetch globally - make it resolve immediately
-global.fetch = jest.fn().mockResolvedValue({
-  json: () => Promise.resolve({ completion: "Test content" }),
-} as Response);
+global.fetch = jest.fn(async (input: RequestInfo | URL, init?: RequestInit) =>
+  ({
+    json: async () => ({ completion: "Test content" }),
+    ok: true,
+    status: 200,
+    headers: {
+      get: () => null,
+    },
+    // Add other Response properties/methods as needed for your tests
+  } as unknown as Response)
+);
 
 const mockTheme = {
   name: "light" as const,
