@@ -71,13 +71,13 @@ describe("Telemetry emissions", () => {
   it("emits accessibility_toggle events for setting changes", () => {
     // Seed zustand store baseline
     // Direct zustand mutation for test seeding (internal helper)
-    (useNavigationStore as any).setState({
-      accessibilitySettings: {
-        largeText: false,
-        highContrast: false,
-        voiceDescriptions: false,
-        simplifiedMode: false,
-      },
+    // Use the store's public API to set accessibility settings for test seeding
+    const setAccessibilitySettings = useNavigationStore.getState().setAccessibilitySettings;
+    setAccessibilitySettings({
+      largeText: false,
+      highContrast: false,
+      voiceDescriptions: false,
+      simplifiedMode: false,
     });
 
     const { getByLabelText } = render(<AccessibilitySettings />);
