@@ -1,6 +1,7 @@
-import { render } from "@testing-library/react-native";
 import React from "react";
 import { Text } from "react-native";
+
+import { render } from "../testUtils";
 
 // No need to re-export render in this test file
 

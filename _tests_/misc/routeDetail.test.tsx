@@ -1,10 +1,6 @@
-import { render as rtlRender } from "@testing-library/react-native";
 import React from "react";
 
-// Optionally, wrap with providers if your app uses them (e.g., ThemeProvider, QueryClientProvider)
-const render = (ui: React.ReactElement, options?: any) => {
-  return rtlRender(ui, options);
-};
+import { render } from "../testUtils";
 
 import RouteDetailScreen from "@/app/route/[id]";
 
