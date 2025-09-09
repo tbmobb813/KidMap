@@ -26,8 +26,7 @@ type DevicePingHandlerProps = {
 };
 
 const DevicePingHandler: React.FC<DevicePingHandlerProps> = ({ testId }) => {
-  const { devicePings, acknowledgePing, updateLastKnownLocation } =
-    useParentalStore();
+  const { devicePings, acknowledgePing, updateLastKnownLocation } = useParentalStore();
   const { location } = useLocation();
   const [activePing, setActivePing] = useState<DevicePingRequest | null>(null);
   const [isRinging, setIsRinging] = useState(false);
