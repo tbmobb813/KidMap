@@ -1,0 +1,308 @@
+{
+  "generated": "2025-09-08T21:40:31.832Z",
+  "moved": [
+    {
+      "from": "_tests_\\announceAPI.test.ts",
+      "to": "_tests_\\infra\\announceAPI.test.ts",
+      "category": "infra"
+    },
+    {
+      "from": "_tests_\\basic.test.tsx",
+      "to": "_tests_\\misc\\basic.test.tsx",
+      "category": "misc"
+    },
+    {
+      "from": "_tests_\\components\\AIJourneyCompanion.test.tsx",
+      "to": "_tests_\\core\\AIJourneyCompanion.test.tsx",
+      "category": "core"
+    },
+    {
+      "from": "_tests_\\components\\ApiErrorBoundary.test.tsx",
+      "to": "_tests_\\core\\ApiErrorBoundary.test.tsx",
+      "category": "core"
+    },
+    {
+      "from": "_tests_\\components\\ArrivalAlert.test.tsx",
+      "to": "_tests_\\core\\ArrivalAlert.test.tsx",
+      "category": "core"
+    },
+    {
+      "from": "_tests_\\components\\DevicePingHistory.test.tsx",
+      "to": "_tests_\\core\\DevicePingHistory.test.tsx",
+      "category": "core"
+    },
+    {
+      "from": "_tests_\\components\\SmartNotification.test.tsx",
+      "to": "_tests_\\core\\SmartNotification.test.tsx",
+      "category": "core"
+    },
+    {
+      "from": "_tests_\\components\\UserStatsCard.test.tsx",
+      "to": "_tests_\\core\\UserStatsCard.test.tsx",
+      "category": "core"
+    },
+    {
+      "from": "_tests_\\components\\VirtualPetCompanion.test.tsx",
+      "to": "_tests_\\core\\VirtualPetCompanion.test.tsx",
+      "category": "core"
+    },
+    {
+      "from": "_tests_\\components\\voiceNavigation.test.tsx",
+      "to": "_tests_\\core\\voiceNavigation.test.tsx",
+      "category": "core"
+    },
+    {
+      "from": "_tests_\\components\\WeatherCard.test.tsx",
+      "to": "_tests_\\core\\WeatherCard.test.tsx",
+      "category": "core"
+    },
+    {
+      "from": "_tests_\\deepLinking.test.ts",
+      "to": "_tests_\\infra\\deepLinking.test.ts",
+      "category": "infra"
+    },
+    {
+      "from": "_tests_\\directionStep.test.tsx",
+      "to": "_tests_\\core\\directionStep.test.1.tsx",
+      "category": "core"
+    },
+    {
+      "from": "_tests_\\favoritesList.test.tsx",
+      "to": "_tests_\\misc\\favoritesList.test.tsx",
+      "category": "misc"
+    },
+    {
+      "from": "_tests_\\routeDetail.test.tsx",
+      "to": "_tests_\\misc\\routeDetail.test.tsx",
+      "category": "misc"
+    },
+    {
+      "from": "_tests_\\themeSystem.test.tsx",
+      "to": "_tests_\\infra\\themeSystem.test.tsx",
+      "category": "infra"
+    },
+    {
+      "from": "_tests_\\utils\\accessibility.test.tsx",
+      "to": "_tests_\\core\\accessibility.test.tsx",
+      "category": "core"
+    },
+    {
+      "from": "_tests_\\utils\\contrastHighContrastTheme.test.ts",
+      "to": "_tests_\\infra\\contrastHighContrastTheme.test.ts",
+      "category": "infra"
+    },
+    {
+      "from": "_tests_\\utils\\performanceMarks.fixed.test.ts",
+      "to": "_tests_\\infra\\performanceMarks.fixed.test.ts",
+      "category": "infra"
+    },
+    {
+      "from": "_tests_\\utils\\persistence.test.ts",
+      "to": "_tests_\\infra\\persistence.test.ts",
+      "category": "infra"
+    },
+    {
+      "from": "_tests_\\utils\\touchTargetAudit.test.ts",
+      "to": "_tests_\\infra\\touchTargetAudit.test.ts",
+      "category": "infra"
+    }
+  ],
+  "skipped": [
+    {
+      "path": "_tests_\\components\\AccessibilitySettings.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\AccessibleButton.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\AchievementBadge.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\AIJourneyCompanion.basic.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\AIJourneyCompanion.fixed.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\AIJourneyCompanion.simplified.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\CategoryButton.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\CategoryManagement.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\CityManagement.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\DevicePingHandler.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\DirectionStep.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\EmptyState.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\ErrorBoundary.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\FeatureErrorBoundary.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\FunFactCard.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\LiveArrivalsCard.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\LoadingSpinner.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\MapPlaceholder.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\NetworkStatusBar.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\NotificationStatusCard.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\OfflineIndicator.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\OnboardingFlow.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\OptimizedImage.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\ParentDashboard.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\PhotoCheckInButton.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\PhotoCheckInHistory.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\PinAuthentication.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\PlaceCard.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\PullToRefresh.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\RegionalFunFactCard.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\RegionalTransitCard.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\RegionSelector.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\RegionSwitcher.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\routeCard.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\SafetyDashboard.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\SafetyPanel.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\SafeZoneActivityLog.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\SafeZoneIndicator.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\SafeZoneManagement.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\SafeZoneStatusCard.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\SearchBar.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\components\\toastAccessibility.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\constants\\ThemeProvider.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\hooks\\routePrefetch.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\routesCache.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\safety.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\stores\\routeService.test.ts",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\telemetry.test.tsx",
+      "reason": "missing"
+    },
+    {
+      "path": "_tests_\\utils\\performanceMarks.test.ts",
+      "reason": "missing"
+    }
+  ]
+}

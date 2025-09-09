@@ -3,9 +3,8 @@ import { fireEvent, render, waitFor } from "@testing-library/react-native";
 import { Animated } from "react-native";
 
 import AIJourneyCompanion from "../../components/AIJourneyCompanion";
-
-import { useTheme } from "@/constants/theme";
-import { Place } from "@/types/navigation";
+import { useTheme } from "../../constants/theme";
+import { Place } from "../../types/navigation";
 
 const mockTrack = jest.fn();
 
@@ -332,7 +331,7 @@ describe("AIJourneyCompanion", () => {
       await waitFor(
         () => {
           const buddyButton = getByText("Buddy").parent;
-          expect(buddyButton.type).toBe("Pressable");
+          expect(buddyButton && buddyButton.type).toBe("Pressable");
         },
         { timeout: 2000 }
       );

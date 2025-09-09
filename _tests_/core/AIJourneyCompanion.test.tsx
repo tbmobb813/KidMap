@@ -3,13 +3,14 @@ import { fireEvent, render, waitFor } from "@testing-library/react-native";
 import { Animated } from "react-native";
 
 import AIJourneyCompanion from "../../components/AIJourneyCompanion";
-import { useTheme } from "../../constants/theme";
-import { Place } from "../../types/navigation";
+
+import { useTheme } from "@/constants/theme";
+import { Place } from "@/types/navigation";
 
 const mockTrack = jest.fn();
 
 // Mock dependencies
-jest.mock("../../constants/theme");
+jest.mock("@/constants/theme");
 jest.mock("lucide-react-native", () => ({
   Bot: () => "Bot",
   Volume2: () => "Volume2",
@@ -134,7 +135,7 @@ describe("AIJourneyCompanion", () => {
         },
         { timeout: 2000 }
       );
-    });
+    }, 5000);
   });
 
   describe("AI Content Generation", () => {
@@ -159,7 +160,7 @@ describe("AIJourneyCompanion", () => {
         },
         { timeout: 2000 }
       );
-    });
+    }, 5000);
 
     it("displays AI generated content", async () => {
       const aiResponse = "Libraries are amazing places!";
@@ -179,7 +180,7 @@ describe("AIJourneyCompanion", () => {
         },
         { timeout: 2000 }
       );
-    });
+    }, 5000);
 
     it("handles API failures gracefully", async () => {
       mockFetch.mockRejectedValueOnce(new Error("Network error"));
@@ -198,7 +199,7 @@ describe("AIJourneyCompanion", () => {
         },
         { timeout: 2000 }
       );
-    });
+    }, 5000);
   });
 
   describe("Interactive Features", () => {
@@ -221,7 +222,7 @@ describe("AIJourneyCompanion", () => {
 
       expect(getByText("Quiz Me!")).toBeTruthy();
       expect(getByText("Tell Me More")).toBeTruthy();
-    });
+    }, 5000);
 
     it("generates quiz content when Quiz Me pressed", async () => {
       // Initial content
@@ -258,7 +259,7 @@ describe("AIJourneyCompanion", () => {
         },
         { timeout: 2000 }
       );
-    });
+    }, 10000);
   });
 
   describe("Error Handling", () => {
@@ -291,7 +292,7 @@ describe("AIJourneyCompanion", () => {
         },
         { timeout: 2000 }
       );
-    });
+    }, 5000);
 
     it("handles rapid interactions without crashing", async () => {
       mockFetch.mockResolvedValue({
@@ -313,7 +314,7 @@ describe("AIJourneyCompanion", () => {
       fireEvent.press(getByText("Buddy"));
 
       expect(getByText("Buddy")).toBeTruthy();
-    });
+    }, 5000);
   });
 
   describe("Accessibility", () => {
@@ -331,11 +332,11 @@ describe("AIJourneyCompanion", () => {
       await waitFor(
         () => {
           const buddyButton = getByText("Buddy").parent;
-          expect(buddyButton && buddyButton.type).toBe("Pressable");
+          expect(buddyButton.type).toBe("Pressable");
         },
         { timeout: 2000 }
       );
-    });
+    }, 5000);
   });
 
   describe("Theme Integration", () => {
@@ -361,6 +362,6 @@ describe("AIJourneyCompanion", () => {
         },
         { timeout: 2000 }
       );
-    });
+    }, 5000);
   });
 });

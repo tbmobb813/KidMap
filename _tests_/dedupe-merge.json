@@ -1,0 +1,2242 @@
+{
+  "generated": "2025-09-09T03:16:55.448Z",
+  "summary": {
+    "totalSubjects": 47,
+    "totalDuplicates": 53,
+    "counts": {
+      "discardable": 46,
+      "mergeable": 7,
+      "manual_review": 0,
+      "missing_index": 0
+    }
+  },
+  "groups": [
+    {
+      "subject": "(unknown)",
+      "canonical": {
+        "path": "_tests_\\critical\\hooks_routePrefetch.test.tsx",
+        "size": 1071,
+        "mtime": "2025-09-08T19:52:04.276Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\hooks\\routePrefetch.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [],
+            "imports": [
+              "@tanstack/react-query",
+              "@/hooks/useRoutePrefetch",
+              "@/services/routeService"
+            ],
+            "size": 1061
+          },
+          "canonical": {
+            "describes": [],
+            "imports": [
+              "@tanstack/react-query",
+              "@/hooks/useRoutePrefetch",
+              "@/services/routeService"
+            ],
+            "size": 1071
+          }
+        }
+      ]
+    },
+    {
+      "subject": "AIJourneyCompanion",
+      "canonical": {
+        "path": "_tests_\\components\\AIJourneyCompanion.test.tsx",
+        "size": 10360,
+        "mtime": "2025-09-08T18:02:37.230Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\misc\\AIJourneyCompanion.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "AIJourneyCompanion",
+              "Basic Rendering",
+              "AI Content Generation",
+              "Interactive Features",
+              "Error Handling",
+              "Accessibility",
+              "Theme Integration"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "react-native",
+              "../../components/AIJourneyCompanion",
+              "@/constants/theme",
+              "@/types/navigation"
+            ],
+            "size": 10315
+          },
+          "canonical": {
+            "describes": [
+              "AIJourneyCompanion",
+              "Basic Rendering",
+              "AI Content Generation",
+              "Interactive Features",
+              "Error Handling",
+              "Accessibility",
+              "Theme Integration"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "react-native",
+              "../../components/AIJourneyCompanion",
+              "@/constants/theme",
+              "@/types/navigation"
+            ],
+            "size": 10360
+          }
+        },
+        {
+          "path": "_tests_\\components\\AIJourneyCompanion.simplified.test.tsx",
+          "status": "mergeable",
+          "reason": [
+            "canonical subset of duplicate (mergeable)"
+          ],
+          "dup": {
+            "describes": [
+              "AIJourneyCompanion",
+              "Basic Rendering",
+              "AI Content Generation",
+              "Interactive Features",
+              "Error Handling",
+              "Accessibility",
+              "Theme Integration"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "react-native",
+              "../../components/AIJourneyCompanion",
+              "../../constants/theme",
+              "../../types/navigation"
+            ],
+            "size": 10310
+          },
+          "canonical": {
+            "describes": [
+              "AIJourneyCompanion",
+              "Basic Rendering",
+              "AI Content Generation",
+              "Interactive Features",
+              "Error Handling",
+              "Accessibility",
+              "Theme Integration"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "react-native",
+              "../../components/AIJourneyCompanion",
+              "@/constants/theme",
+              "@/types/navigation"
+            ],
+            "size": 10360
+          }
+        },
+        {
+          "path": "_tests_\\components\\AIJourneyCompanion.fixed.test.tsx",
+          "status": "mergeable",
+          "reason": [
+            "canonical subset of duplicate (mergeable)"
+          ],
+          "dup": {
+            "describes": [
+              "AIJourneyCompanion",
+              "Basic Rendering",
+              "Props Handling",
+              "Animation Setup",
+              "Theme Integration",
+              "Error Boundaries"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "react-native",
+              "../../components/AIJourneyCompanion",
+              "@/constants/theme",
+              "@/types/navigation"
+            ],
+            "size": 6466
+          },
+          "canonical": {
+            "describes": [
+              "AIJourneyCompanion",
+              "Basic Rendering",
+              "AI Content Generation",
+              "Interactive Features",
+              "Error Handling",
+              "Accessibility",
+              "Theme Integration"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "react-native",
+              "../../components/AIJourneyCompanion",
+              "@/constants/theme",
+              "@/types/navigation"
+            ],
+            "size": 10360
+          }
+        },
+        {
+          "path": "_tests_\\misc\\AIJourneyCompanion.simplified.test.tsx",
+          "status": "mergeable",
+          "reason": [
+            "partial overlap -> mergeable"
+          ],
+          "dup": {
+            "describes": [
+              "AIJourneyCompanion",
+              "Basic Rendering"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "react-native",
+              "../../components/AIJourneyCompanion",
+              "../../constants/theme",
+              "../../types/navigation"
+            ],
+            "size": 3890
+          },
+          "canonical": {
+            "describes": [
+              "AIJourneyCompanion",
+              "Basic Rendering",
+              "AI Content Generation",
+              "Interactive Features",
+              "Error Handling",
+              "Accessibility",
+              "Theme Integration"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "react-native",
+              "../../components/AIJourneyCompanion",
+              "@/constants/theme",
+              "@/types/navigation"
+            ],
+            "size": 10360
+          }
+        },
+        {
+          "path": "_tests_\\misc\\AIJourneyCompanion.fixed.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "AIJourneyCompanion",
+              "Basic Rendering"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "react-native",
+              "../../components/AIJourneyCompanion",
+              "@/constants/theme",
+              "@/types/navigation"
+            ],
+            "size": 3479
+          },
+          "canonical": {
+            "describes": [
+              "AIJourneyCompanion",
+              "Basic Rendering",
+              "AI Content Generation",
+              "Interactive Features",
+              "Error Handling",
+              "Accessibility",
+              "Theme Integration"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "react-native",
+              "../../components/AIJourneyCompanion",
+              "@/constants/theme",
+              "@/types/navigation"
+            ],
+            "size": 10360
+          }
+        },
+        {
+          "path": "_tests_\\components\\AIJourneyCompanion.basic.test.tsx",
+          "status": "mergeable",
+          "reason": [
+            "partial overlap -> mergeable"
+          ],
+          "dup": {
+            "describes": [
+              "AIJourneyCompanion",
+              "Basic Rendering",
+              "Error Handling"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "../../components/AIJourneyCompanion",
+              "../../constants/theme",
+              "../../types/navigation"
+            ],
+            "size": 2764
+          },
+          "canonical": {
+            "describes": [
+              "AIJourneyCompanion",
+              "Basic Rendering",
+              "AI Content Generation",
+              "Interactive Features",
+              "Error Handling",
+              "Accessibility",
+              "Theme Integration"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "react-native",
+              "../../components/AIJourneyCompanion",
+              "@/constants/theme",
+              "@/types/navigation"
+            ],
+            "size": 10360
+          }
+        }
+      ]
+    },
+    {
+      "subject": "AccessibilitySettings",
+      "canonical": {
+        "path": "_tests_\\core\\AccessibilitySettings.test.tsx",
+        "size": 876,
+        "mtime": "2025-09-08T19:52:11.919Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\AccessibilitySettings.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "AccessibilitySettings"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/AccessibilitySettings",
+              "../../constants/theme"
+            ],
+            "size": 437
+          },
+          "canonical": {
+            "describes": [
+              "AccessibilitySettings",
+              "AccessibilitySettings"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/AccessibilitySettings",
+              "../../constants/theme"
+            ],
+            "size": 876
+          }
+        }
+      ]
+    },
+    {
+      "subject": "AccessibleButton",
+      "canonical": {
+        "path": "_tests_\\core\\AccessibleButton.test.tsx",
+        "size": 876,
+        "mtime": "2025-09-08T19:52:11.934Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\AccessibleButton.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "AccessibleButton"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/AccessibleButton",
+              "@/constants/theme"
+            ],
+            "size": 441
+          },
+          "canonical": {
+            "describes": [
+              "AccessibleButton",
+              "AccessibleButton"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/AccessibleButton",
+              "@/constants/theme"
+            ],
+            "size": 876
+          }
+        }
+      ]
+    },
+    {
+      "subject": "AchievementBadge",
+      "canonical": {
+        "path": "_tests_\\core\\AchievementBadge.test.tsx",
+        "size": 1378,
+        "mtime": "2025-09-08T19:52:11.934Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\AchievementBadge.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "AchievementBadge"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/AchievementBadge",
+              "../../constants/theme"
+            ],
+            "size": 737
+          },
+          "canonical": {
+            "describes": [
+              "AchievementBadge",
+              "AchievementBadge"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/AchievementBadge",
+              "../../constants/theme"
+            ],
+            "size": 1378
+          }
+        }
+      ]
+    },
+    {
+      "subject": "CategoryButton",
+      "canonical": {
+        "path": "_tests_\\core\\CategoryButton.test.tsx",
+        "size": 429,
+        "mtime": "2025-09-08T19:52:04.840Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\CategoryButton.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "same file size",
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "CategoryButton"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/CategoryButton",
+              "../../constants/theme"
+            ],
+            "size": 429
+          },
+          "canonical": {
+            "describes": [
+              "CategoryButton"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/CategoryButton",
+              "../../constants/theme"
+            ],
+            "size": 429
+          }
+        }
+      ]
+    },
+    {
+      "subject": "CategoryManagement",
+      "canonical": {
+        "path": "_tests_\\core\\CategoryManagement.test.tsx",
+        "size": 2106,
+        "mtime": "2025-09-08T19:52:11.500Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\CategoryManagement.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "CategoryManagement"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react-native",
+              "../../components/CategoryManagement",
+              "../testUtils"
+            ],
+            "size": 10377
+          },
+          "canonical": {
+            "describes": [
+              "CategoryManagement"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react-native",
+              "../../components/CategoryManagement",
+              "../testUtils"
+            ],
+            "size": 2106
+          }
+        }
+      ]
+    },
+    {
+      "subject": "CityManagement",
+      "canonical": {
+        "path": "_tests_\\core\\CityManagement.test.tsx",
+        "size": 400,
+        "mtime": "2025-09-08T19:52:17.124Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\CityManagement.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "CityManagement"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/CityManagement",
+              "../../constants/theme"
+            ],
+            "size": 402
+          },
+          "canonical": {
+            "describes": [
+              "CityManagement"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/CityManagement",
+              "../../constants/theme"
+            ],
+            "size": 400
+          }
+        }
+      ]
+    },
+    {
+      "subject": "DevicePingHandler",
+      "canonical": {
+        "path": "_tests_\\core\\DevicePingHandler.test.tsx",
+        "size": 1423,
+        "mtime": "2025-09-08T19:52:11.925Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\DevicePingHandler.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "DevicePingHandler"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/DevicePingHandler",
+              "../testUtils"
+            ],
+            "size": 4277
+          },
+          "canonical": {
+            "describes": [
+              "DevicePingHandler"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/DevicePingHandler",
+              "../testUtils"
+            ],
+            "size": 1423
+          }
+        }
+      ]
+    },
+    {
+      "subject": "DirectionStep",
+      "canonical": {
+        "path": "_tests_\\core\\DirectionStep.test.tsx",
+        "size": 490,
+        "mtime": "2025-09-08T19:52:11.941Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\DirectionStep.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "DirectionStep"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/DirectionStep",
+              "../../constants/theme"
+            ],
+            "size": 568
+          },
+          "canonical": {
+            "describes": [
+              "DirectionStep"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/DirectionStep",
+              "../../constants/theme"
+            ],
+            "size": 490
+          }
+        }
+      ]
+    },
+    {
+      "subject": "EmptyState",
+      "canonical": {
+        "path": "_tests_\\core\\EmptyState.test.tsx",
+        "size": 531,
+        "mtime": "2025-09-08T19:52:11.929Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\EmptyState.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "EmptyState"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/EmptyState",
+              "@/constants/theme"
+            ],
+            "size": 530
+          },
+          "canonical": {
+            "describes": [
+              "EmptyState"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/EmptyState",
+              "@/constants/theme"
+            ],
+            "size": 531
+          }
+        }
+      ]
+    },
+    {
+      "subject": "ErrorBoundary",
+      "canonical": {
+        "path": "_tests_\\core\\ErrorBoundary.test.tsx",
+        "size": 463,
+        "mtime": "2025-09-08T19:52:11.537Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\ErrorBoundary.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "ErrorBoundary"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/ErrorBoundary",
+              "../../constants/theme"
+            ],
+            "size": 462
+          },
+          "canonical": {
+            "describes": [
+              "ErrorBoundary"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/ErrorBoundary",
+              "../../constants/theme"
+            ],
+            "size": 463
+          }
+        }
+      ]
+    },
+    {
+      "subject": "FeatureErrorBoundary",
+      "canonical": {
+        "path": "_tests_\\core\\FeatureErrorBoundary.test.tsx",
+        "size": 498,
+        "mtime": "2025-09-08T19:52:11.547Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\FeatureErrorBoundary.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "FeatureErrorBoundary"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/FeatureErrorBoundary",
+              "../../constants/theme"
+            ],
+            "size": 497
+          },
+          "canonical": {
+            "describes": [
+              "FeatureErrorBoundary"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/FeatureErrorBoundary",
+              "../../constants/theme"
+            ],
+            "size": 498
+          }
+        }
+      ]
+    },
+    {
+      "subject": "FunFactCard",
+      "canonical": {
+        "path": "_tests_\\core\\FunFactCard.test.tsx",
+        "size": 399,
+        "mtime": "2025-09-08T19:52:11.541Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\FunFactCard.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "FunFactCard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/FunFactCard",
+              "../../constants/theme"
+            ],
+            "size": 398
+          },
+          "canonical": {
+            "describes": [
+              "FunFactCard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/FunFactCard",
+              "../../constants/theme"
+            ],
+            "size": 399
+          }
+        }
+      ]
+    },
+    {
+      "subject": "LiveArrivalsCard",
+      "canonical": {
+        "path": "_tests_\\core\\LiveArrivalsCard.test.tsx",
+        "size": 431,
+        "mtime": "2025-09-08T19:52:11.944Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\LiveArrivalsCard.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "LiveArrivalsCard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/LiveArrivalsCard",
+              "../../constants/theme"
+            ],
+            "size": 433
+          },
+          "canonical": {
+            "describes": [
+              "LiveArrivalsCard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/LiveArrivalsCard",
+              "../../constants/theme"
+            ],
+            "size": 431
+          }
+        }
+      ]
+    },
+    {
+      "subject": "LoadingSpinner",
+      "canonical": {
+        "path": "_tests_\\core\\LoadingSpinner.test.tsx",
+        "size": 410,
+        "mtime": "2025-09-08T19:52:04.675Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\LoadingSpinner.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "same file size",
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "LoadingSpinner"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/LoadingSpinner",
+              "../../constants/theme"
+            ],
+            "size": 410
+          },
+          "canonical": {
+            "describes": [
+              "LoadingSpinner"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/LoadingSpinner",
+              "../../constants/theme"
+            ],
+            "size": 410
+          }
+        }
+      ]
+    },
+    {
+      "subject": "MapPlaceholder",
+      "canonical": {
+        "path": "_tests_\\core\\MapPlaceholder.test.tsx",
+        "size": 410,
+        "mtime": "2025-09-08T19:52:11.919Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\MapPlaceholder.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "MapPlaceholder"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/MapPlaceholder",
+              "../../constants/theme"
+            ],
+            "size": 409
+          },
+          "canonical": {
+            "describes": [
+              "MapPlaceholder"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/MapPlaceholder",
+              "../../constants/theme"
+            ],
+            "size": 410
+          }
+        }
+      ]
+    },
+    {
+      "subject": "NetworkStatusBar",
+      "canonical": {
+        "path": "_tests_\\core\\NetworkStatusBar.test.tsx",
+        "size": 418,
+        "mtime": "2025-09-08T19:52:11.500Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\NetworkStatusBar.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "NetworkStatusBar"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/NetworkStatusBar",
+              "../../constants/theme"
+            ],
+            "size": 417
+          },
+          "canonical": {
+            "describes": [
+              "NetworkStatusBar"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/NetworkStatusBar",
+              "../../constants/theme"
+            ],
+            "size": 418
+          }
+        }
+      ]
+    },
+    {
+      "subject": "NotificationStatusCard",
+      "canonical": {
+        "path": "_tests_\\core\\NotificationStatusCard.test.tsx",
+        "size": 442,
+        "mtime": "2025-09-08T19:52:11.505Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\NotificationStatusCard.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "NotificationStatusCard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/NotificationStatusCard",
+              "../../constants/theme"
+            ],
+            "size": 441
+          },
+          "canonical": {
+            "describes": [
+              "NotificationStatusCard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/NotificationStatusCard",
+              "../../constants/theme"
+            ],
+            "size": 442
+          }
+        }
+      ]
+    },
+    {
+      "subject": "OfflineIndicator",
+      "canonical": {
+        "path": "_tests_\\core\\OfflineIndicator.test.tsx",
+        "size": 836,
+        "mtime": "2025-09-08T19:52:11.929Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\OfflineIndicator.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "OfflineIndicator"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/OfflineIndicator",
+              "../../constants/theme"
+            ],
+            "size": 417
+          },
+          "canonical": {
+            "describes": [
+              "OfflineIndicator",
+              "OfflineIndicator"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/OfflineIndicator",
+              "../../constants/theme"
+            ],
+            "size": 836
+          }
+        }
+      ]
+    },
+    {
+      "subject": "OnboardingFlow",
+      "canonical": {
+        "path": "_tests_\\core\\OnboardingFlow.test.tsx",
+        "size": 1234,
+        "mtime": "2025-09-08T19:52:17.126Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\OnboardingFlow.test.tsx",
+          "status": "mergeable",
+          "reason": [
+            "canonical subset of duplicate (mergeable)"
+          ],
+          "dup": {
+            "describes": [
+              "OnboardingFlow",
+              "Basic Rendering (Original)",
+              "Welcome Step",
+              "Region Selection Step",
+              "Preferences Step",
+              "Safety Step",
+              "Complete Step",
+              "Step Navigation Flow",
+              "Accessibility",
+              "Theme Integration",
+              "Error Handling",
+              "Integration Behavior",
+              "Edge Cases"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "../testUtils",
+              "@/components/OnboardingFlow"
+            ],
+            "size": 22370
+          },
+          "canonical": {
+            "describes": [
+              "OnboardingFlow"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "../testUtils",
+              "@/components/OnboardingFlow"
+            ],
+            "size": 1234
+          }
+        }
+      ]
+    },
+    {
+      "subject": "OptimizedImage",
+      "canonical": {
+        "path": "_tests_\\core\\OptimizedImage.test.tsx",
+        "size": 1757,
+        "mtime": "2025-09-08T19:52:08.958Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\OptimizedImage.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "OptimizedImage"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/OptimizedImage",
+              "../testUtils"
+            ],
+            "size": 2069
+          },
+          "canonical": {
+            "describes": [
+              "OptimizedImage"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/OptimizedImage",
+              "../testUtils"
+            ],
+            "size": 1757
+          }
+        }
+      ]
+    },
+    {
+      "subject": "ParentDashboard",
+      "canonical": {
+        "path": "_tests_\\core\\ParentDashboard.test.tsx",
+        "size": 2885,
+        "mtime": "2025-09-08T19:52:05.408Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\ParentDashboard.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "ParentDashboard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react-native",
+              "../../components/ParentDashboard",
+              "../testUtils"
+            ],
+            "size": 7012
+          },
+          "canonical": {
+            "describes": [
+              "ParentDashboard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react-native",
+              "../../components/ParentDashboard",
+              "../testUtils"
+            ],
+            "size": 2885
+          }
+        }
+      ]
+    },
+    {
+      "subject": "PhotoCheckInButton",
+      "canonical": {
+        "path": "_tests_\\core\\PhotoCheckInButton.test.tsx",
+        "size": 523,
+        "mtime": "2025-09-08T19:52:04.832Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\PhotoCheckInButton.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "PhotoCheckInButton"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/PhotoCheckInButton",
+              "../../constants/theme"
+            ],
+            "size": 991
+          },
+          "canonical": {
+            "describes": [
+              "PhotoCheckInButton"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/PhotoCheckInButton",
+              "../../constants/theme"
+            ],
+            "size": 523
+          }
+        }
+      ]
+    },
+    {
+      "subject": "PhotoCheckInHistory",
+      "canonical": {
+        "path": "_tests_\\core\\PhotoCheckInHistory.test.tsx",
+        "size": 844,
+        "mtime": "2025-09-08T19:52:11.535Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\PhotoCheckInHistory.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "PhotoCheckInHistory"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/PhotoCheckInHistory",
+              "../../constants/theme"
+            ],
+            "size": 429
+          },
+          "canonical": {
+            "describes": [
+              "PhotoCheckInHistory",
+              "PhotoCheckInHistory"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/PhotoCheckInHistory",
+              "../../constants/theme"
+            ],
+            "size": 844
+          }
+        }
+      ]
+    },
+    {
+      "subject": "PinAuthentication",
+      "canonical": {
+        "path": "_tests_\\core\\PinAuthentication.test.tsx",
+        "size": 25907,
+        "mtime": "2025-09-08T19:52:12.721Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\PinAuthentication.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "PinAuthentication",
+              "Basic Rendering",
+              "Keypad Functionality",
+              "PIN Visibility",
+              "PIN Dots Display",
+              "Authentication Flow",
+              "PIN Setting Flow",
+              "User Interactions",
+              "Accessibility",
+              "Theme Support",
+              "Error Handling",
+              "Integration Behavior",
+              "Edge Cases"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "../../components/PinAuthentication",
+              "../testUtils"
+            ],
+            "size": 24713
+          },
+          "canonical": {
+            "describes": [
+              "PinAuthentication",
+              "Basic Rendering",
+              "Keypad Functionality",
+              "PIN Visibility",
+              "PIN Dots Display",
+              "Authentication Flow",
+              "PIN Setting Flow",
+              "User Interactions",
+              "Accessibility",
+              "Theme Support",
+              "Error Handling",
+              "Integration Behavior",
+              "Edge Cases",
+              "PinAuthentication"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "../../components/PinAuthentication",
+              "../testUtils"
+            ],
+            "size": 25907
+          }
+        }
+      ]
+    },
+    {
+      "subject": "PlaceCard",
+      "canonical": {
+        "path": "_tests_\\core\\PlaceCard.test.tsx",
+        "size": 1340,
+        "mtime": "2025-09-08T19:52:04.877Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\PlaceCard.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "PlaceCard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/PlaceCard",
+              "../../constants/theme",
+              "../../types/navigation"
+            ],
+            "size": 670
+          },
+          "canonical": {
+            "describes": [
+              "PlaceCard",
+              "PlaceCard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/PlaceCard",
+              "../../constants/theme",
+              "../../types/navigation"
+            ],
+            "size": 1340
+          }
+        }
+      ]
+    },
+    {
+      "subject": "PullToRefresh",
+      "canonical": {
+        "path": "_tests_\\core\\PullToRefresh.test.tsx",
+        "size": 948,
+        "mtime": "2025-09-08T19:52:02.887Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\PullToRefresh.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "PullToRefresh"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/PullToRefresh",
+              "../../constants/theme"
+            ],
+            "size": 473
+          },
+          "canonical": {
+            "describes": [
+              "PullToRefresh",
+              "PullToRefresh"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/PullToRefresh",
+              "../../constants/theme"
+            ],
+            "size": 948
+          }
+        }
+      ]
+    },
+    {
+      "subject": "RegionSelector",
+      "canonical": {
+        "path": "_tests_\\core\\RegionSelector.test.tsx",
+        "size": 597,
+        "mtime": "2025-09-08T19:52:04.690Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\RegionSelector.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "RegionSelector"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/RegionSelector",
+              "@/constants/theme"
+            ],
+            "size": 4977
+          },
+          "canonical": {
+            "describes": [
+              "RegionSelector"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/RegionSelector",
+              "@/constants/theme"
+            ],
+            "size": 597
+          }
+        }
+      ]
+    },
+    {
+      "subject": "RegionSwitcher",
+      "canonical": {
+        "path": "_tests_\\core\\RegionSwitcher.test.tsx",
+        "size": 410,
+        "mtime": "2025-09-08T19:52:04.831Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\RegionSwitcher.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "RegionSwitcher"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/RegionSwitcher",
+              "../../constants/theme"
+            ],
+            "size": 409
+          },
+          "canonical": {
+            "describes": [
+              "RegionSwitcher"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/RegionSwitcher",
+              "../../constants/theme"
+            ],
+            "size": 410
+          }
+        }
+      ]
+    },
+    {
+      "subject": "RegionalFunFactCard",
+      "canonical": {
+        "path": "_tests_\\core\\RegionalFunFactCard.test.tsx",
+        "size": 430,
+        "mtime": "2025-09-08T19:52:08.872Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\RegionalFunFactCard.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "RegionalFunFactCard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/RegionalFunFactCard",
+              "../../constants/theme"
+            ],
+            "size": 429
+          },
+          "canonical": {
+            "describes": [
+              "RegionalFunFactCard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/RegionalFunFactCard",
+              "../../constants/theme"
+            ],
+            "size": 430
+          }
+        }
+      ]
+    },
+    {
+      "subject": "RegionalTransitCard",
+      "canonical": {
+        "path": "_tests_\\core\\RegionalTransitCard.test.tsx",
+        "size": 430,
+        "mtime": "2025-09-08T19:52:09.025Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\RegionalTransitCard.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "RegionalTransitCard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/RegionalTransitCard",
+              "../../constants/theme"
+            ],
+            "size": 429
+          },
+          "canonical": {
+            "describes": [
+              "RegionalTransitCard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/RegionalTransitCard",
+              "../../constants/theme"
+            ],
+            "size": 430
+          }
+        }
+      ]
+    },
+    {
+      "subject": "RouteCard",
+      "canonical": {
+        "path": "_tests_\\core\\routeCard.test.tsx",
+        "size": 2918,
+        "mtime": "2025-09-08T19:52:04.680Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\routeCard.test.tsx",
+          "status": "mergeable",
+          "reason": [
+            "canonical subset of duplicate (mergeable)"
+          ],
+          "dup": {
+            "describes": [
+              "RouteCard",
+              "Nullability Safeguards (Original)",
+              "Basic Rendering",
+              "Extended Null/Undefined Handling",
+              "Time Formatting",
+              "Transit Steps Display",
+              "User Interactions",
+              "Selection State",
+              "Accessibility",
+              "Performance (React.memo)",
+              "Integration Behavior",
+              "Edge Cases"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "../testUtils",
+              "@/components/RouteCard",
+              "@/types/navigation"
+            ],
+            "size": 17070
+          },
+          "canonical": {
+            "describes": [
+              "RouteCard",
+              "Nullability Safeguards (Original)"
+            ],
+            "imports": [
+              "@jest/globals",
+              "@testing-library/react-native",
+              "../testUtils",
+              "@/components/RouteCard",
+              "@/types/navigation"
+            ],
+            "size": 2918
+          }
+        }
+      ]
+    },
+    {
+      "subject": "Routes query caching and metrics",
+      "canonical": {
+        "path": "_tests_\\critical\\routesCache.test.tsx",
+        "size": 3564,
+        "mtime": "2025-09-08T19:52:04.675Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\routesCache.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "Routes query caching and metrics"
+            ],
+            "imports": [
+              "@tanstack/react-query",
+              "@testing-library/react-native",
+              "@/hooks/useRoutesQuery",
+              "@/services/routeService"
+            ],
+            "size": 3665
+          },
+          "canonical": {
+            "describes": [
+              "Routes query caching and metrics"
+            ],
+            "imports": [
+              "@tanstack/react-query",
+              "@testing-library/react-native",
+              "@/hooks/useRoutesQuery",
+              "@/services/routeService"
+            ],
+            "size": 3564
+          }
+        }
+      ]
+    },
+    {
+      "subject": "SafeZoneActivityLog",
+      "canonical": {
+        "path": "_tests_\\core\\SafeZoneActivityLog.test.tsx",
+        "size": 434,
+        "mtime": "2025-09-08T19:52:11.500Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\SafeZoneActivityLog.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "SafeZoneActivityLog"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/SafeZoneActivityLog",
+              "../../constants/theme"
+            ],
+            "size": 432
+          },
+          "canonical": {
+            "describes": [
+              "SafeZoneActivityLog"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/SafeZoneActivityLog",
+              "../../constants/theme"
+            ],
+            "size": 434
+          }
+        }
+      ]
+    },
+    {
+      "subject": "SafeZoneIndicator",
+      "canonical": {
+        "path": "_tests_\\core\\SafeZoneIndicator.test.tsx",
+        "size": 715,
+        "mtime": "2025-09-08T19:52:04.882Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\SafeZoneIndicator.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "SafeZoneIndicator"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/SafeZoneIndicator",
+              "../../constants/theme"
+            ],
+            "size": 782
+          },
+          "canonical": {
+            "describes": [
+              "SafeZoneIndicator"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/SafeZoneIndicator",
+              "../../constants/theme"
+            ],
+            "size": 715
+          }
+        }
+      ]
+    },
+    {
+      "subject": "SafeZoneManagement",
+      "canonical": {
+        "path": "_tests_\\core\\SafeZoneManagement.test.tsx",
+        "size": 567,
+        "mtime": "2025-09-08T19:52:08.963Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\SafeZoneManagement.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "same file size",
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "SafeZoneManagement"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/SafeZoneManagement",
+              "../../constants/theme",
+              "../../stores/parentalStore"
+            ],
+            "size": 567
+          },
+          "canonical": {
+            "describes": [
+              "SafeZoneManagement"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../../components/SafeZoneManagement",
+              "../../constants/theme",
+              "../../stores/parentalStore"
+            ],
+            "size": 567
+          }
+        }
+      ]
+    },
+    {
+      "subject": "SafeZoneStatusCard",
+      "canonical": {
+        "path": "_tests_\\core\\SafeZoneStatusCard.test.tsx",
+        "size": 887,
+        "mtime": "2025-09-08T19:52:11.499Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\SafeZoneStatusCard.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "SafeZoneStatusCard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/SafeZoneStatusCard",
+              "../../constants/theme"
+            ],
+            "size": 904
+          },
+          "canonical": {
+            "describes": [
+              "SafeZoneStatusCard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/SafeZoneStatusCard",
+              "../../constants/theme"
+            ],
+            "size": 887
+          }
+        }
+      ]
+    },
+    {
+      "subject": "SafetyDashboard",
+      "canonical": {
+        "path": "_tests_\\critical\\components_SafetyDashboard.test.tsx",
+        "size": 6570,
+        "mtime": "2025-09-08T19:52:04.274Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\core\\SafetyDashboard.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "SafetyDashboard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/SafetyDashboard",
+              "../testUtils"
+            ],
+            "size": 2661
+          },
+          "canonical": {
+            "describes": [
+              "SafetyDashboard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/SafetyDashboard",
+              "../testUtils"
+            ],
+            "size": 6570
+          }
+        },
+        {
+          "path": "_tests_\\components\\SafetyDashboard.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "SafetyDashboard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/SafetyDashboard",
+              "../testUtils"
+            ],
+            "size": 7485
+          },
+          "canonical": {
+            "describes": [
+              "SafetyDashboard"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/SafetyDashboard",
+              "../testUtils"
+            ],
+            "size": 6570
+          }
+        }
+      ]
+    },
+    {
+      "subject": "SafetyPanel",
+      "canonical": {
+        "path": "_tests_\\core\\SafetyPanel.test.tsx",
+        "size": 1317,
+        "mtime": "2025-09-08T19:52:08.967Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\SafetyPanel.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "SafetyPanel"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/SafetyPanel",
+              "../../constants/theme"
+            ],
+            "size": 3779
+          },
+          "canonical": {
+            "describes": [
+              "SafetyPanel"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/SafetyPanel",
+              "../../constants/theme"
+            ],
+            "size": 1317
+          }
+        }
+      ]
+    },
+    {
+      "subject": "SearchBar",
+      "canonical": {
+        "path": "_tests_\\core\\SearchBar.test.tsx",
+        "size": 414,
+        "mtime": "2025-09-08T19:52:04.682Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\SearchBar.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "SearchBar"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/SearchBar",
+              "../../constants/theme"
+            ],
+            "size": 458
+          },
+          "canonical": {
+            "describes": [
+              "SearchBar"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "../../components/SearchBar",
+              "../../constants/theme"
+            ],
+            "size": 414
+          }
+        }
+      ]
+    },
+    {
+      "subject": "Telemetry emissions",
+      "canonical": {
+        "path": "_tests_\\critical\\telemetry.test.tsx",
+        "size": 5004,
+        "mtime": "2025-09-08T19:52:04.284Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\telemetry.test.tsx",
+          "status": "mergeable",
+          "reason": [
+            "canonical subset of duplicate (mergeable)"
+          ],
+          "dup": {
+            "describes": [
+              "Telemetry emissions"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "./testUtils",
+              "@/components/AccessibilitySettings",
+              "@/hooks/useRoutePrefetch",
+              "@/modules/safety/components/SafetyPanel",
+              "@/modules/safety/hooks/useSafeZoneMonitor",
+              "@/stores/navigationStore",
+              "@/telemetry"
+            ],
+            "size": 5525
+          },
+          "canonical": {
+            "describes": [
+              "Telemetry emissions"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "../testUtils",
+              "@/components/AccessibilitySettings",
+              "@/hooks/useRoutePrefetch",
+              "@/modules/safety/components/SafetyPanel",
+              "@/modules/safety/hooks/useSafeZoneMonitor",
+              "@/stores/navigationStore",
+              "@/telemetry"
+            ],
+            "size": 5004
+          }
+        }
+      ]
+    },
+    {
+      "subject": "ThemeProvider",
+      "canonical": {
+        "path": "_tests_\\critical\\constants_ThemeProvider.test.tsx",
+        "size": 2465,
+        "mtime": "2025-09-08T19:52:04.681Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\constants\\ThemeProvider.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "ThemeProvider"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "react-native",
+              "../../constants/theme"
+            ],
+            "size": 2449
+          },
+          "canonical": {
+            "describes": [
+              "ThemeProvider"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "react-native",
+              "../../constants/theme"
+            ],
+            "size": 2465
+          }
+        }
+      ]
+    },
+    {
+      "subject": "Toast accessibility",
+      "canonical": {
+        "path": "_tests_\\core\\toastAccessibility.test.tsx",
+        "size": 1608,
+        "mtime": "2025-09-08T19:52:11.918Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\toastAccessibility.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "Toast accessibility"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "@/components/Toast",
+              "@/constants/theme"
+            ],
+            "size": 1728
+          },
+          "canonical": {
+            "describes": [
+              "Toast accessibility"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "@/components/Toast",
+              "@/constants/theme"
+            ],
+            "size": 1608
+          }
+        }
+      ]
+    },
+    {
+      "subject": "performanceMarks utility",
+      "canonical": {
+        "path": "_tests_\\utils\\performanceMarks.fixed.test.ts",
+        "size": 1256,
+        "mtime": "2025-09-02T03:44:02.698Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\utils\\performanceMarks.test.ts",
+          "status": "discardable",
+          "reason": [
+            "same file size",
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "performanceMarks utility"
+            ],
+            "imports": [
+              "../../utils/performance/performanceMarks"
+            ],
+            "size": 1256
+          },
+          "canonical": {
+            "describes": [
+              "performanceMarks utility"
+            ],
+            "imports": [
+              "../../utils/performance/performanceMarks"
+            ],
+            "size": 1256
+          }
+        }
+      ]
+    },
+    {
+      "subject": "routeService.fetchRoutes",
+      "canonical": {
+        "path": "_tests_\\critical\\stores_routeService.test.ts",
+        "size": 1015,
+        "mtime": "2025-09-08T19:52:04.673Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\stores\\routeService.test.ts",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "routeService.fetchRoutes"
+            ],
+            "imports": [
+              "@/services/routeService"
+            ],
+            "size": 1529
+          },
+          "canonical": {
+            "describes": [
+              "routeService.fetchRoutes"
+            ],
+            "imports": [
+              "@/services/routeService"
+            ],
+            "size": 1015
+          }
+        }
+      ]
+    },
+    {
+      "subject": "useSafeZoneMonitor",
+      "canonical": {
+        "path": "_tests_\\critical\\safety.test.tsx",
+        "size": 6965,
+        "mtime": "2025-09-08T19:52:02.887Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\safety.test.tsx",
+          "status": "discardable",
+          "reason": [
+            "describes+imports subset of canonical"
+          ],
+          "dup": {
+            "describes": [
+              "useSafeZoneMonitor"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "react-test-renderer",
+              "@/modules/safety/hooks/useSafeZoneMonitor"
+            ],
+            "size": 7867
+          },
+          "canonical": {
+            "describes": [
+              "useSafeZoneMonitor"
+            ],
+            "imports": [
+              "@testing-library/react-native",
+              "react",
+              "react-test-renderer",
+              "@/modules/safety/hooks/useSafeZoneMonitor"
+            ],
+            "size": 6965
+          }
+        }
+      ]
+    }
+  ]
+}
