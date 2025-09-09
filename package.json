@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "type": "commonjs",
   "scripts": {
-    "start": "bunx rork start -p fwkirhovhuv8bp6hssbjv --tunnel",
-    "start-web": "bunx rork start -p fwkirhovhuv8bp6hssbjv --web --tunnel",
-    "start-web-dev": "DEBUG=expo* bunx rork start -p fwkirhovhuv8bp6hssbjv --web --tunnel",
+    "start": "npx expo start --tunnel",
+    "start-web": "npx expo start --web --tunnel",
+    "start-web-dev": "cross-env DEBUG=expo* npx expo start --web --tunnel",
     "deps:check": "node scripts/dependency-manager.js check",
     "deps:update": "node scripts/dependency-manager.js update",
     "deps:fix": "node scripts/dependency-manager.js fix",
