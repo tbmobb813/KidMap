@@ -90,6 +90,8 @@ describe("AIJourneyCompanion", () => {
 
   afterEach(() => {
     jest.useRealTimers();
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe("Basic Rendering", () => {
