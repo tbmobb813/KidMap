@@ -175,7 +175,12 @@ const CategoryButtonComponent: React.FC<CategoryButtonProps> = ({
 };
 
 const CategoryButton = React.memo(CategoryButtonComponent, (prev, next) => {
-  return prev.customCategory === next.customCategory && prev.category === next.category && prev.size === next.size;
+  return (
+    prev.customCategory === next.customCategory &&
+    prev.category === next.category &&
+    prev.size === next.size &&
+    prev.onPress === next.onPress
+  );
 });
 
 const styles = StyleSheet.create({
