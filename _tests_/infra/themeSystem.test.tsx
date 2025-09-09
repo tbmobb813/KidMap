@@ -4,6 +4,7 @@
  * Validates theme switching, accessibility integration, and contrast compliance.
  */
 import { palettes } from "../../constants/colors";
+// Ensure '../../constants/colors' exports 'palettes' as a named export
 
 // Simplified contrast calculation for testing
 const getContrastRatio = (color1: string, color2: string): number => {
