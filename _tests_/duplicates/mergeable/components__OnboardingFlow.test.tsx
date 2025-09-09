@@ -501,7 +501,7 @@ describe('OnboardingFlow', () => {
     });
 
     it('handles missing preferences gracefully', () => {
-      mockRegionStore.userPreferences = null as any;
+      mockRegionStore.userPreferences = null as typeof mockRegionStore.userPreferences;
       
       const { getByText } = render(<OnboardingFlow {...defaultProps} />);
       
