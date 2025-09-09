@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, ScrollView, Pressable, TextInput, Alert } from 
 
 import Toast from "./Toast";
 
-import Colors from "@/constants/colors"; // TODO: phase out direct Colors references
+import Colors from "@/constants/colors"; // THEME MIGRATION: See issue #1234 for tracking phase-out of direct Colors references
 import { useTheme } from "@/constants/theme";
 import { useToast } from "@/hooks/useToast";
 import { useRegionStore } from "@/stores/regionStore";
