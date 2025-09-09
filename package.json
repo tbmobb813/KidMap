@@ -106,12 +106,6 @@
       "eslint --fix"
     ]
   },
-  "overrides": {
-    "lucide-react-native": {
-      "react": "$react",
-      "react-native": "$react-native"
-    }
-  },
   "private": true,
   "trustedDependencies": [
     "core-js"
