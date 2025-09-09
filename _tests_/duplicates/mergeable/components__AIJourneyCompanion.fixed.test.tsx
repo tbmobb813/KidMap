@@ -1,10 +1,9 @@
-import { jest } from "@jest/globals";
 import { render } from "@testing-library/react-native";
 import { Animated } from "react-native";
 
-import AIJourneyCompanion from "../../components/AIJourneyCompanion";
-import { useTheme } from "../../constants/theme";
-import { Place } from "../../types/navigation";
+import AIJourneyCompanion from "@/components/AIJourneyCompanion";
+import { useTheme } from "@/constants/theme";
+import { Place } from "@/types/navigation";
 
 const mockTrack = jest.fn();
 

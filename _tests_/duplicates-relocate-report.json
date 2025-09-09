@@ -1,0 +1,271 @@
+{
+  "generated": "2025-09-09T03:22:39.611Z",
+  "moved": [
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\hooks__routePrefetch.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\hooks__routePrefetch.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\misc__AIJourneyCompanion.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\misc__AIJourneyCompanion.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__AIJourneyCompanion.simplified.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\mergeable\\components__AIJourneyCompanion.simplified.test.tsx",
+      "status": "mergeable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__AIJourneyCompanion.fixed.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\mergeable\\components__AIJourneyCompanion.fixed.test.tsx",
+      "status": "mergeable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\misc__AIJourneyCompanion.simplified.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\mergeable\\misc__AIJourneyCompanion.simplified.test.tsx",
+      "status": "mergeable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\misc__AIJourneyCompanion.fixed.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\misc__AIJourneyCompanion.fixed.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__AIJourneyCompanion.basic.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\mergeable\\components__AIJourneyCompanion.basic.test.tsx",
+      "status": "mergeable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__AccessibilitySettings.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__AccessibilitySettings.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__AccessibleButton.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__AccessibleButton.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__AchievementBadge.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__AchievementBadge.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__CategoryButton.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__CategoryButton.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__CategoryManagement.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__CategoryManagement.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__CityManagement.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__CityManagement.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__DevicePingHandler.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__DevicePingHandler.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__DirectionStep.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__DirectionStep.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__EmptyState.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__EmptyState.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__ErrorBoundary.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__ErrorBoundary.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__FeatureErrorBoundary.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__FeatureErrorBoundary.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__FunFactCard.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__FunFactCard.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__LiveArrivalsCard.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__LiveArrivalsCard.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__LoadingSpinner.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__LoadingSpinner.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__MapPlaceholder.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__MapPlaceholder.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__NetworkStatusBar.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__NetworkStatusBar.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__NotificationStatusCard.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__NotificationStatusCard.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__OfflineIndicator.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__OfflineIndicator.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__OnboardingFlow.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\mergeable\\components__OnboardingFlow.test.tsx",
+      "status": "mergeable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__OptimizedImage.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__OptimizedImage.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__ParentDashboard.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__ParentDashboard.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__PhotoCheckInButton.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__PhotoCheckInButton.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__PhotoCheckInHistory.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__PhotoCheckInHistory.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__PinAuthentication.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__PinAuthentication.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__PlaceCard.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__PlaceCard.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__PullToRefresh.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__PullToRefresh.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__RegionSelector.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__RegionSelector.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__RegionSwitcher.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__RegionSwitcher.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__RegionalFunFactCard.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__RegionalFunFactCard.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__RegionalTransitCard.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__RegionalTransitCard.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__routeCard.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\mergeable\\components__routeCard.test.tsx",
+      "status": "mergeable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\routesCache.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\routesCache.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__SafeZoneActivityLog.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__SafeZoneActivityLog.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__SafeZoneIndicator.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__SafeZoneIndicator.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__SafeZoneManagement.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__SafeZoneManagement.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__SafeZoneStatusCard.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__SafeZoneStatusCard.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\core__SafetyDashboard.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\core__SafetyDashboard.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__SafetyDashboard.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__SafetyDashboard.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__SafetyPanel.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__SafetyPanel.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__SearchBar.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__SearchBar.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\telemetry.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\mergeable\\telemetry.test.tsx",
+      "status": "mergeable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\constants__ThemeProvider.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\constants__ThemeProvider.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\components__toastAccessibility.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__toastAccessibility.test.tsx",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\utils__performanceMarks.test.ts",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\utils__performanceMarks.test.ts",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\stores__routeService.test.ts",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\stores__routeService.test.ts",
+      "status": "discardable"
+    },
+    {
+      "from": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\safety.test.tsx",
+      "to": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\safety.test.tsx",
+      "status": "discardable"
+    }
+  ],
+  "missing": []
+}

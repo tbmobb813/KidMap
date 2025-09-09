@@ -1,0 +1,1753 @@
+{
+  "generated": "2025-09-08T20:20:27.014Z",
+  "count": 119,
+  "entries": [
+    {
+      "path": "_tests_\\announceAPI.test.ts",
+      "size": 3237,
+      "mtime": "2025-09-02T00:20:29.784Z",
+      "describes": [
+        "announce API (web live regions)"
+      ],
+      "imports": [
+        "../utils/accessibility/accessibility"
+      ]
+    },
+    {
+      "path": "_tests_\\basic.test.tsx",
+      "size": 294,
+      "mtime": "2025-09-02T03:44:02.003Z",
+      "describes": [
+        "Smoke test"
+      ],
+      "imports": [
+        "react",
+        "react-native",
+        "./testUtils"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\AccessibilitySettings.test.tsx",
+      "size": 437,
+      "mtime": "2025-09-02T03:47:12.889Z",
+      "describes": [
+        "AccessibilitySettings"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/AccessibilitySettings",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\AccessibleButton.test.tsx",
+      "size": 441,
+      "mtime": "2025-09-03T18:16:26.771Z",
+      "describes": [
+        "AccessibleButton"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/AccessibleButton",
+        "@/constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\AchievementBadge.test.tsx",
+      "size": 737,
+      "mtime": "2025-09-03T18:16:26.777Z",
+      "describes": [
+        "AchievementBadge"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/AchievementBadge",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\AIJourneyCompanion.basic.test.tsx",
+      "size": 2764,
+      "mtime": "2025-09-03T23:23:50.260Z",
+      "describes": [
+        "AIJourneyCompanion",
+        "Basic Rendering",
+        "Error Handling"
+      ],
+      "imports": [
+        "@jest/globals",
+        "@testing-library/react-native",
+        "../../components/AIJourneyCompanion",
+        "../../constants/theme",
+        "../../types/navigation"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\AIJourneyCompanion.fixed.test.tsx",
+      "size": 6466,
+      "mtime": "2025-09-08T18:21:11.627Z",
+      "describes": [
+        "AIJourneyCompanion",
+        "Basic Rendering",
+        "Props Handling",
+        "Animation Setup",
+        "Theme Integration",
+        "Error Boundaries"
+      ],
+      "imports": [
+        "@jest/globals",
+        "@testing-library/react-native",
+        "react-native",
+        "../../components/AIJourneyCompanion",
+        "@/constants/theme",
+        "@/types/navigation"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\AIJourneyCompanion.simplified.test.tsx",
+      "size": 10310,
+      "mtime": "2025-09-03T22:46:21.902Z",
+      "describes": [
+        "AIJourneyCompanion",
+        "Basic Rendering",
+        "AI Content Generation",
+        "Interactive Features",
+        "Error Handling",
+        "Accessibility",
+        "Theme Integration"
+      ],
+      "imports": [
+        "@jest/globals",
+        "@testing-library/react-native",
+        "react-native",
+        "../../components/AIJourneyCompanion",
+        "../../constants/theme",
+        "../../types/navigation"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\AIJourneyCompanion.test.tsx",
+      "size": 10360,
+      "mtime": "2025-09-08T18:02:37.230Z",
+      "describes": [
+        "AIJourneyCompanion",
+        "Basic Rendering",
+        "AI Content Generation",
+        "Interactive Features",
+        "Error Handling",
+        "Accessibility",
+        "Theme Integration"
+      ],
+      "imports": [
+        "@jest/globals",
+        "@testing-library/react-native",
+        "react-native",
+        "../../components/AIJourneyCompanion",
+        "@/constants/theme",
+        "@/types/navigation"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\ApiErrorBoundary.test.tsx",
+      "size": 417,
+      "mtime": "2025-09-02T03:47:12.892Z",
+      "describes": [
+        "ApiErrorBoundary"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/ApiErrorBoundary",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\ArrivalAlert.test.tsx",
+      "size": 652,
+      "mtime": "2025-09-03T18:16:26.781Z",
+      "describes": [
+        "ArrivalAlert"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/ArrivalAlert",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\CategoryButton.test.tsx",
+      "size": 429,
+      "mtime": "2025-09-03T18:16:26.788Z",
+      "describes": [
+        "CategoryButton"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/CategoryButton",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\CategoryManagement.test.tsx",
+      "size": 10377,
+      "mtime": "2025-09-03T18:16:58.668Z",
+      "describes": [
+        "CategoryManagement"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react-native",
+        "../../components/CategoryManagement",
+        "../testUtils"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\CityManagement.test.tsx",
+      "size": 402,
+      "mtime": "2025-09-03T18:16:58.672Z",
+      "describes": [
+        "CityManagement"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/CityManagement",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\DevicePingHandler.test.tsx",
+      "size": 4277,
+      "mtime": "2025-09-03T18:16:58.676Z",
+      "describes": [
+        "DevicePingHandler"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/DevicePingHandler",
+        "../testUtils"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\DevicePingHistory.test.tsx",
+      "size": 1796,
+      "mtime": "2025-09-03T18:16:58.680Z",
+      "describes": [
+        "DevicePingHistory"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/DevicePingHistory",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\DirectionStep.test.tsx",
+      "size": 568,
+      "mtime": "2025-09-03T18:16:58.684Z",
+      "describes": [
+        "DirectionStep"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/DirectionStep",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\EmptyState.test.tsx",
+      "size": 530,
+      "mtime": "2025-09-02T03:47:12.905Z",
+      "describes": [
+        "EmptyState"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/EmptyState",
+        "@/constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\ErrorBoundary.test.tsx",
+      "size": 462,
+      "mtime": "2025-09-02T03:47:12.908Z",
+      "describes": [
+        "ErrorBoundary"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/ErrorBoundary",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\FeatureErrorBoundary.test.tsx",
+      "size": 497,
+      "mtime": "2025-09-02T03:47:12.914Z",
+      "describes": [
+        "FeatureErrorBoundary"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/FeatureErrorBoundary",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\FunFactCard.test.tsx",
+      "size": 398,
+      "mtime": "2025-09-02T03:47:12.908Z",
+      "describes": [
+        "FunFactCard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/FunFactCard",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\LiveArrivalsCard.test.tsx",
+      "size": 433,
+      "mtime": "2025-09-03T18:16:58.689Z",
+      "describes": [
+        "LiveArrivalsCard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/LiveArrivalsCard",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\LoadingSpinner.test.tsx",
+      "size": 410,
+      "mtime": "2025-09-03T18:16:26.817Z",
+      "describes": [
+        "LoadingSpinner"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/LoadingSpinner",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\MapPlaceholder.test.tsx",
+      "size": 409,
+      "mtime": "2025-09-02T03:47:12.919Z",
+      "describes": [
+        "MapPlaceholder"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/MapPlaceholder",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\NetworkStatusBar.test.tsx",
+      "size": 417,
+      "mtime": "2025-09-02T03:47:12.919Z",
+      "describes": [
+        "NetworkStatusBar"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/NetworkStatusBar",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\NotificationStatusCard.test.tsx",
+      "size": 441,
+      "mtime": "2025-09-02T03:47:12.920Z",
+      "describes": [
+        "NotificationStatusCard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/NotificationStatusCard",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\OfflineIndicator.test.tsx",
+      "size": 417,
+      "mtime": "2025-09-02T03:47:12.920Z",
+      "describes": [
+        "OfflineIndicator"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/OfflineIndicator",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\OnboardingFlow.test.tsx",
+      "size": 22370,
+      "mtime": "2025-09-03T18:16:58.702Z",
+      "describes": [
+        "OnboardingFlow",
+        "Basic Rendering (Original)",
+        "Welcome Step",
+        "Region Selection Step",
+        "Preferences Step",
+        "Safety Step",
+        "Complete Step",
+        "Step Navigation Flow",
+        "Accessibility",
+        "Theme Integration",
+        "Error Handling",
+        "Integration Behavior",
+        "Edge Cases"
+      ],
+      "imports": [
+        "@jest/globals",
+        "@testing-library/react-native",
+        "../testUtils",
+        "@/components/OnboardingFlow"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\OptimizedImage.test.tsx",
+      "size": 2069,
+      "mtime": "2025-09-03T18:16:58.707Z",
+      "describes": [
+        "OptimizedImage"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/OptimizedImage",
+        "../testUtils"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\ParentDashboard.test.tsx",
+      "size": 7012,
+      "mtime": "2025-09-03T18:16:58.712Z",
+      "describes": [
+        "ParentDashboard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react-native",
+        "../../components/ParentDashboard",
+        "../testUtils"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\PhotoCheckInButton.test.tsx",
+      "size": 991,
+      "mtime": "2025-09-03T18:16:58.716Z",
+      "describes": [
+        "PhotoCheckInButton"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/PhotoCheckInButton",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\PhotoCheckInHistory.test.tsx",
+      "size": 429,
+      "mtime": "2025-09-02T03:47:12.924Z",
+      "describes": [
+        "PhotoCheckInHistory"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/PhotoCheckInHistory",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\PinAuthentication.test.tsx",
+      "size": 24713,
+      "mtime": "2025-09-03T18:16:58.722Z",
+      "describes": [
+        "PinAuthentication",
+        "Basic Rendering",
+        "Keypad Functionality",
+        "PIN Visibility",
+        "PIN Dots Display",
+        "Authentication Flow",
+        "PIN Setting Flow",
+        "User Interactions",
+        "Accessibility",
+        "Theme Support",
+        "Error Handling",
+        "Integration Behavior",
+        "Edge Cases"
+      ],
+      "imports": [
+        "@jest/globals",
+        "@testing-library/react-native",
+        "../../components/PinAuthentication",
+        "../testUtils"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\PlaceCard.test.tsx",
+      "size": 670,
+      "mtime": "2025-09-02T07:56:54.861Z",
+      "describes": [
+        "PlaceCard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/PlaceCard",
+        "../../constants/theme",
+        "../../types/navigation"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\PullToRefresh.test.tsx",
+      "size": 473,
+      "mtime": "2025-09-02T03:47:12.928Z",
+      "describes": [
+        "PullToRefresh"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/PullToRefresh",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\RegionalFunFactCard.test.tsx",
+      "size": 429,
+      "mtime": "2025-09-02T03:47:12.931Z",
+      "describes": [
+        "RegionalFunFactCard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/RegionalFunFactCard",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\RegionalTransitCard.test.tsx",
+      "size": 429,
+      "mtime": "2025-09-02T03:47:12.932Z",
+      "describes": [
+        "RegionalTransitCard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/RegionalTransitCard",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\RegionSelector.test.tsx",
+      "size": 4977,
+      "mtime": "2025-09-02T07:56:54.872Z",
+      "describes": [
+        "RegionSelector"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/RegionSelector",
+        "@/constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\RegionSwitcher.test.tsx",
+      "size": 409,
+      "mtime": "2025-09-02T03:47:12.931Z",
+      "describes": [
+        "RegionSwitcher"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/RegionSwitcher",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\routeCard.test.tsx",
+      "size": 17070,
+      "mtime": "2025-09-03T18:16:58.793Z",
+      "describes": [
+        "RouteCard",
+        "Nullability Safeguards (Original)",
+        "Basic Rendering",
+        "Extended Null/Undefined Handling",
+        "Time Formatting",
+        "Transit Steps Display",
+        "User Interactions",
+        "Selection State",
+        "Accessibility",
+        "Performance (React.memo)",
+        "Integration Behavior",
+        "Edge Cases"
+      ],
+      "imports": [
+        "@jest/globals",
+        "@testing-library/react-native",
+        "../testUtils",
+        "@/components/RouteCard",
+        "@/types/navigation"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\SafetyDashboard.test.tsx",
+      "size": 7485,
+      "mtime": "2025-09-03T18:16:58.747Z",
+      "describes": [
+        "SafetyDashboard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/SafetyDashboard",
+        "../testUtils"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\SafetyPanel.test.tsx",
+      "size": 3779,
+      "mtime": "2025-09-03T18:16:58.753Z",
+      "describes": [
+        "SafetyPanel"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/SafetyPanel",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\SafeZoneActivityLog.test.tsx",
+      "size": 432,
+      "mtime": "2025-09-03T18:16:26.862Z",
+      "describes": [
+        "SafeZoneActivityLog"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/SafeZoneActivityLog",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\SafeZoneIndicator.test.tsx",
+      "size": 782,
+      "mtime": "2025-09-03T18:16:58.726Z",
+      "describes": [
+        "SafeZoneIndicator"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/SafeZoneIndicator",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\SafeZoneManagement.test.tsx",
+      "size": 567,
+      "mtime": "2025-09-02T07:56:54.875Z",
+      "describes": [
+        "SafeZoneManagement"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/SafeZoneManagement",
+        "../../constants/theme",
+        "../../stores/parentalStore"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\SafeZoneStatusCard.test.tsx",
+      "size": 904,
+      "mtime": "2025-09-03T18:16:58.730Z",
+      "describes": [
+        "SafeZoneStatusCard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/SafeZoneStatusCard",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\SearchBar.test.tsx",
+      "size": 458,
+      "mtime": "2025-09-03T18:16:58.759Z",
+      "describes": [
+        "SearchBar"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/SearchBar",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\SmartNotification.test.tsx",
+      "size": 13290,
+      "mtime": "2025-09-03T18:16:58.763Z",
+      "describes": [
+        "SmartNotification",
+        "Basic Rendering",
+        "Notification Types",
+        "User Interactions",
+        "Conditional Rendering",
+        "Props Variations",
+        "Accessibility",
+        "Theme Support",
+        "Integration Behavior",
+        "Edge Cases"
+      ],
+      "imports": [
+        "@jest/globals",
+        "@testing-library/react-native",
+        "../../components/SmartNotification",
+        "../testUtils"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\toastAccessibility.test.tsx",
+      "size": 1728,
+      "mtime": "2025-09-02T03:44:02.540Z",
+      "describes": [
+        "Toast accessibility"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "@/components/Toast",
+        "@/constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\UserStatsCard.test.tsx",
+      "size": 840,
+      "mtime": "2025-09-03T18:16:58.769Z",
+      "describes": [
+        "UserStatsCard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/UserStatsCard",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\VirtualPetCompanion.test.tsx",
+      "size": 17629,
+      "mtime": "2025-09-03T18:16:58.773Z",
+      "describes": [
+        "VirtualPetCompanion",
+        "Basic Rendering",
+        "Gamification Integration",
+        "Pet Interactions",
+        "Conditional Rendering",
+        "Props Variations",
+        "State Management",
+        "User Interactions",
+        "Accessibility",
+        "Theme Support",
+        "Integration Behavior",
+        "Edge Cases",
+        "Animations"
+      ],
+      "imports": [
+        "@jest/globals",
+        "@testing-library/react-native",
+        "../../components/VirtualPetCompanion",
+        "../testUtils"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\voiceNavigation.test.tsx",
+      "size": 2251,
+      "mtime": "2025-09-02T03:44:02.549Z",
+      "describes": [
+        "VoiceNavigation (S3-3)"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../testUtils",
+        "@/components/VoiceNavigation",
+        "@/types/navigation"
+      ]
+    },
+    {
+      "path": "_tests_\\components\\WeatherCard.test.tsx",
+      "size": 565,
+      "mtime": "2025-09-03T18:16:58.778Z",
+      "describes": [
+        "WeatherCard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/WeatherCard",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\constants\\ThemeProvider.test.tsx",
+      "size": 2449,
+      "mtime": "2025-09-03T18:16:58.798Z",
+      "describes": [
+        "ThemeProvider"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "react-native",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\AccessibilitySettings.test.tsx",
+      "size": 876,
+      "mtime": "2025-09-08T19:52:11.919Z",
+      "describes": [
+        "AccessibilitySettings",
+        "AccessibilitySettings"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/AccessibilitySettings",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\AccessibleButton.test.tsx",
+      "size": 876,
+      "mtime": "2025-09-08T19:52:11.934Z",
+      "describes": [
+        "AccessibleButton",
+        "AccessibleButton"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/AccessibleButton",
+        "@/constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\AchievementBadge.test.tsx",
+      "size": 1378,
+      "mtime": "2025-09-08T19:52:11.934Z",
+      "describes": [
+        "AchievementBadge",
+        "AchievementBadge"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/AchievementBadge",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\CategoryButton.test.tsx",
+      "size": 429,
+      "mtime": "2025-09-08T19:52:04.840Z",
+      "describes": [
+        "CategoryButton"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/CategoryButton",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\CategoryManagement.test.tsx",
+      "size": 2106,
+      "mtime": "2025-09-08T19:52:11.500Z",
+      "describes": [
+        "CategoryManagement"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react-native",
+        "../../components/CategoryManagement",
+        "../testUtils"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\CityManagement.test.tsx",
+      "size": 400,
+      "mtime": "2025-09-08T19:52:17.124Z",
+      "describes": [
+        "CityManagement"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/CityManagement",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\DevicePingHandler.test.tsx",
+      "size": 1423,
+      "mtime": "2025-09-08T19:52:11.925Z",
+      "describes": [
+        "DevicePingHandler"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/DevicePingHandler",
+        "../testUtils"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\DirectionStep.test.tsx",
+      "size": 490,
+      "mtime": "2025-09-08T19:52:11.941Z",
+      "describes": [
+        "DirectionStep"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/DirectionStep",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\EmptyState.test.tsx",
+      "size": 531,
+      "mtime": "2025-09-08T19:52:11.929Z",
+      "describes": [
+        "EmptyState"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/EmptyState",
+        "@/constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\ErrorBoundary.test.tsx",
+      "size": 463,
+      "mtime": "2025-09-08T19:52:11.537Z",
+      "describes": [
+        "ErrorBoundary"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/ErrorBoundary",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\FeatureErrorBoundary.test.tsx",
+      "size": 498,
+      "mtime": "2025-09-08T19:52:11.547Z",
+      "describes": [
+        "FeatureErrorBoundary"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/FeatureErrorBoundary",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\FunFactCard.test.tsx",
+      "size": 399,
+      "mtime": "2025-09-08T19:52:11.541Z",
+      "describes": [
+        "FunFactCard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/FunFactCard",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\LiveArrivalsCard.test.tsx",
+      "size": 431,
+      "mtime": "2025-09-08T19:52:11.944Z",
+      "describes": [
+        "LiveArrivalsCard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/LiveArrivalsCard",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\LoadingSpinner.test.tsx",
+      "size": 410,
+      "mtime": "2025-09-08T19:52:04.675Z",
+      "describes": [
+        "LoadingSpinner"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/LoadingSpinner",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\MapPlaceholder.test.tsx",
+      "size": 410,
+      "mtime": "2025-09-08T19:52:11.919Z",
+      "describes": [
+        "MapPlaceholder"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/MapPlaceholder",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\NetworkStatusBar.test.tsx",
+      "size": 418,
+      "mtime": "2025-09-08T19:52:11.500Z",
+      "describes": [
+        "NetworkStatusBar"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/NetworkStatusBar",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\NotificationStatusCard.test.tsx",
+      "size": 442,
+      "mtime": "2025-09-08T19:52:11.505Z",
+      "describes": [
+        "NotificationStatusCard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/NotificationStatusCard",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\OfflineIndicator.test.tsx",
+      "size": 836,
+      "mtime": "2025-09-08T19:52:11.929Z",
+      "describes": [
+        "OfflineIndicator",
+        "OfflineIndicator"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/OfflineIndicator",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\OnboardingFlow.test.tsx",
+      "size": 1234,
+      "mtime": "2025-09-08T19:52:17.126Z",
+      "describes": [
+        "OnboardingFlow"
+      ],
+      "imports": [
+        "@jest/globals",
+        "@testing-library/react-native",
+        "../testUtils",
+        "@/components/OnboardingFlow"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\OptimizedImage.test.tsx",
+      "size": 1757,
+      "mtime": "2025-09-08T19:52:08.958Z",
+      "describes": [
+        "OptimizedImage"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/OptimizedImage",
+        "../testUtils"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\ParentDashboard.test.tsx",
+      "size": 2885,
+      "mtime": "2025-09-08T19:52:05.408Z",
+      "describes": [
+        "ParentDashboard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react-native",
+        "../../components/ParentDashboard",
+        "../testUtils"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\PhotoCheckInButton.test.tsx",
+      "size": 523,
+      "mtime": "2025-09-08T19:52:04.832Z",
+      "describes": [
+        "PhotoCheckInButton"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/PhotoCheckInButton",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\PhotoCheckInHistory.test.tsx",
+      "size": 844,
+      "mtime": "2025-09-08T19:52:11.535Z",
+      "describes": [
+        "PhotoCheckInHistory",
+        "PhotoCheckInHistory"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/PhotoCheckInHistory",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\PinAuthentication.test.tsx",
+      "size": 25907,
+      "mtime": "2025-09-08T19:52:12.721Z",
+      "describes": [
+        "PinAuthentication",
+        "Basic Rendering",
+        "Keypad Functionality",
+        "PIN Visibility",
+        "PIN Dots Display",
+        "Authentication Flow",
+        "PIN Setting Flow",
+        "User Interactions",
+        "Accessibility",
+        "Theme Support",
+        "Error Handling",
+        "Integration Behavior",
+        "Edge Cases",
+        "PinAuthentication"
+      ],
+      "imports": [
+        "@jest/globals",
+        "@testing-library/react-native",
+        "../../components/PinAuthentication",
+        "../testUtils"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\PlaceCard.test.tsx",
+      "size": 1340,
+      "mtime": "2025-09-08T19:52:04.877Z",
+      "describes": [
+        "PlaceCard",
+        "PlaceCard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/PlaceCard",
+        "../../constants/theme",
+        "../../types/navigation"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\PullToRefresh.test.tsx",
+      "size": 948,
+      "mtime": "2025-09-08T19:52:02.887Z",
+      "describes": [
+        "PullToRefresh",
+        "PullToRefresh"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/PullToRefresh",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\RegionalFunFactCard.test.tsx",
+      "size": 430,
+      "mtime": "2025-09-08T19:52:08.872Z",
+      "describes": [
+        "RegionalFunFactCard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/RegionalFunFactCard",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\RegionalTransitCard.test.tsx",
+      "size": 430,
+      "mtime": "2025-09-08T19:52:09.025Z",
+      "describes": [
+        "RegionalTransitCard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/RegionalTransitCard",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\RegionSelector.test.tsx",
+      "size": 597,
+      "mtime": "2025-09-08T19:52:04.690Z",
+      "describes": [
+        "RegionSelector"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/RegionSelector",
+        "@/constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\RegionSwitcher.test.tsx",
+      "size": 410,
+      "mtime": "2025-09-08T19:52:04.831Z",
+      "describes": [
+        "RegionSwitcher"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/RegionSwitcher",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\routeCard.test.tsx",
+      "size": 2918,
+      "mtime": "2025-09-08T19:52:04.680Z",
+      "describes": [
+        "RouteCard",
+        "Nullability Safeguards (Original)"
+      ],
+      "imports": [
+        "@jest/globals",
+        "@testing-library/react-native",
+        "../testUtils",
+        "@/components/RouteCard",
+        "@/types/navigation"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\SafetyDashboard.test.tsx",
+      "size": 2661,
+      "mtime": "2025-09-08T19:52:04.837Z",
+      "describes": [
+        "SafetyDashboard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/SafetyDashboard",
+        "../testUtils"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\SafetyPanel.test.tsx",
+      "size": 1317,
+      "mtime": "2025-09-08T19:52:08.967Z",
+      "describes": [
+        "SafetyPanel"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/SafetyPanel",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\SafeZoneActivityLog.test.tsx",
+      "size": 434,
+      "mtime": "2025-09-08T19:52:11.500Z",
+      "describes": [
+        "SafeZoneActivityLog"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/SafeZoneActivityLog",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\SafeZoneIndicator.test.tsx",
+      "size": 715,
+      "mtime": "2025-09-08T19:52:04.882Z",
+      "describes": [
+        "SafeZoneIndicator"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/SafeZoneIndicator",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\SafeZoneManagement.test.tsx",
+      "size": 567,
+      "mtime": "2025-09-08T19:52:08.963Z",
+      "describes": [
+        "SafeZoneManagement"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../../components/SafeZoneManagement",
+        "../../constants/theme",
+        "../../stores/parentalStore"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\SafeZoneStatusCard.test.tsx",
+      "size": 887,
+      "mtime": "2025-09-08T19:52:11.499Z",
+      "describes": [
+        "SafeZoneStatusCard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/SafeZoneStatusCard",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\SearchBar.test.tsx",
+      "size": 414,
+      "mtime": "2025-09-08T19:52:04.682Z",
+      "describes": [
+        "SearchBar"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/SearchBar",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\core\\toastAccessibility.test.tsx",
+      "size": 1608,
+      "mtime": "2025-09-08T19:52:11.918Z",
+      "describes": [
+        "Toast accessibility"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "@/components/Toast",
+        "@/constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\critical\\components_SafetyDashboard.test.tsx",
+      "size": 6570,
+      "mtime": "2025-09-08T19:52:04.274Z",
+      "describes": [
+        "SafetyDashboard"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "../../components/SafetyDashboard",
+        "../testUtils"
+      ]
+    },
+    {
+      "path": "_tests_\\critical\\constants_ThemeProvider.test.tsx",
+      "size": 2465,
+      "mtime": "2025-09-08T19:52:04.681Z",
+      "describes": [
+        "ThemeProvider"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "react-native",
+        "../../constants/theme"
+      ]
+    },
+    {
+      "path": "_tests_\\critical\\hooks_routePrefetch.test.tsx",
+      "size": 1071,
+      "mtime": "2025-09-08T19:52:04.276Z",
+      "describes": [],
+      "imports": [
+        "@tanstack/react-query",
+        "@/hooks/useRoutePrefetch",
+        "@/services/routeService"
+      ]
+    },
+    {
+      "path": "_tests_\\critical\\routesCache.test.tsx",
+      "size": 3564,
+      "mtime": "2025-09-08T19:52:04.675Z",
+      "describes": [
+        "Routes query caching and metrics"
+      ],
+      "imports": [
+        "@tanstack/react-query",
+        "@testing-library/react-native",
+        "@/hooks/useRoutesQuery",
+        "@/services/routeService"
+      ]
+    },
+    {
+      "path": "_tests_\\critical\\safety.test.tsx",
+      "size": 6965,
+      "mtime": "2025-09-08T19:52:02.887Z",
+      "describes": [
+        "useSafeZoneMonitor"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "react-test-renderer",
+        "@/modules/safety/hooks/useSafeZoneMonitor"
+      ]
+    },
+    {
+      "path": "_tests_\\critical\\stores_routeService.test.ts",
+      "size": 1015,
+      "mtime": "2025-09-08T19:52:04.673Z",
+      "describes": [
+        "routeService.fetchRoutes"
+      ],
+      "imports": [
+        "@/services/routeService"
+      ]
+    },
+    {
+      "path": "_tests_\\critical\\telemetry.test.tsx",
+      "size": 5004,
+      "mtime": "2025-09-08T19:52:04.284Z",
+      "describes": [
+        "Telemetry emissions"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "../testUtils",
+        "@/components/AccessibilitySettings",
+        "@/hooks/useRoutePrefetch",
+        "@/modules/safety/components/SafetyPanel",
+        "@/modules/safety/hooks/useSafeZoneMonitor",
+        "@/stores/navigationStore",
+        "@/telemetry"
+      ]
+    },
+    {
+      "path": "_tests_\\deepLinking.test.ts",
+      "size": 1252,
+      "mtime": "2025-09-02T03:44:02.554Z",
+      "describes": [
+        "handleDeepLink"
+      ],
+      "imports": [
+        "expo-router",
+        "@/utils/navigation/deepLinking"
+      ]
+    },
+    {
+      "path": "_tests_\\directionStep.test.tsx",
+      "size": 1068,
+      "mtime": "2025-09-02T03:44:02.564Z",
+      "describes": [
+        "DirectionStep nullability safeguards"
+      ],
+      "imports": [
+        "react",
+        "./testUtils",
+        "@/components/DirectionStep",
+        "@/types/navigation"
+      ]
+    },
+    {
+      "path": "_tests_\\favoritesList.test.tsx",
+      "size": 4234,
+      "mtime": "2025-09-02T00:20:40.844Z",
+      "describes": [
+        "Favorites list virtualization"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "./testUtils",
+        "@/app/(tabs)/index"
+      ]
+    },
+    {
+      "path": "_tests_\\hooks\\routePrefetch.test.tsx",
+      "size": 1061,
+      "mtime": "2025-09-02T03:44:02.570Z",
+      "describes": [],
+      "imports": [
+        "@tanstack/react-query",
+        "@/hooks/useRoutePrefetch",
+        "@/services/routeService"
+      ]
+    },
+    {
+      "path": "_tests_\\misc\\AIJourneyCompanion.fixed.test.tsx",
+      "size": 3479,
+      "mtime": "2025-09-08T18:49:16.857Z",
+      "describes": [
+        "AIJourneyCompanion",
+        "Basic Rendering"
+      ],
+      "imports": [
+        "@jest/globals",
+        "@testing-library/react-native",
+        "react-native",
+        "../../components/AIJourneyCompanion",
+        "@/constants/theme",
+        "@/types/navigation"
+      ]
+    },
+    {
+      "path": "_tests_\\misc\\AIJourneyCompanion.simplified.test.tsx",
+      "size": 3890,
+      "mtime": "2025-09-08T18:49:14.159Z",
+      "describes": [
+        "AIJourneyCompanion",
+        "Basic Rendering"
+      ],
+      "imports": [
+        "@jest/globals",
+        "@testing-library/react-native",
+        "react-native",
+        "../../components/AIJourneyCompanion",
+        "../../constants/theme",
+        "../../types/navigation"
+      ]
+    },
+    {
+      "path": "_tests_\\misc\\AIJourneyCompanion.test.tsx",
+      "size": 10315,
+      "mtime": "2025-09-08T18:49:09.021Z",
+      "describes": [
+        "AIJourneyCompanion",
+        "Basic Rendering",
+        "AI Content Generation",
+        "Interactive Features",
+        "Error Handling",
+        "Accessibility",
+        "Theme Integration"
+      ],
+      "imports": [
+        "@jest/globals",
+        "@testing-library/react-native",
+        "react-native",
+        "../../components/AIJourneyCompanion",
+        "@/constants/theme",
+        "@/types/navigation"
+      ]
+    },
+    {
+      "path": "_tests_\\routeDetail.test.tsx",
+      "size": 2699,
+      "mtime": "2025-09-02T03:44:02.619Z",
+      "describes": [
+        "RouteDetailScreen"
+      ],
+      "imports": [
+        "react",
+        "./testUtils",
+        "@/app/route/[id]"
+      ]
+    },
+    {
+      "path": "_tests_\\routesCache.test.tsx",
+      "size": 3665,
+      "mtime": "2025-09-03T18:16:58.804Z",
+      "describes": [
+        "Routes query caching and metrics"
+      ],
+      "imports": [
+        "@tanstack/react-query",
+        "@testing-library/react-native",
+        "@/hooks/useRoutesQuery",
+        "@/services/routeService"
+      ]
+    },
+    {
+      "path": "_tests_\\safety.test.tsx",
+      "size": 7867,
+      "mtime": "2025-09-02T03:44:02.639Z",
+      "describes": [
+        "useSafeZoneMonitor"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "react-test-renderer",
+        "@/modules/safety/hooks/useSafeZoneMonitor"
+      ]
+    },
+    {
+      "path": "_tests_\\stores\\routeService.test.ts",
+      "size": 1529,
+      "mtime": "2025-09-02T03:44:02.649Z",
+      "describes": [
+        "routeService.fetchRoutes"
+      ],
+      "imports": [
+        "@/services/routeService"
+      ]
+    },
+    {
+      "path": "_tests_\\telemetry.test.tsx",
+      "size": 5525,
+      "mtime": "2025-09-02T03:44:02.655Z",
+      "describes": [
+        "Telemetry emissions"
+      ],
+      "imports": [
+        "@testing-library/react-native",
+        "react",
+        "./testUtils",
+        "@/components/AccessibilitySettings",
+        "@/hooks/useRoutePrefetch",
+        "@/modules/safety/components/SafetyPanel",
+        "@/modules/safety/hooks/useSafeZoneMonitor",
+        "@/stores/navigationStore",
+        "@/telemetry"
+      ]
+    },
+    {
+      "path": "_tests_\\themeSystem.test.tsx",
+      "size": 9964,
+      "mtime": "2025-09-02T03:44:02.667Z",
+      "describes": [
+        "Theme Color Palettes",
+        "WCAG Contrast Compliance",
+        "Theme Token Semantic Consistency",
+        "Transit and Map Color Accessibility"
+      ],
+      "imports": [
+        "../constants/colors"
+      ]
+    },
+    {
+      "path": "_tests_\\utils\\accessibility.test.tsx",
+      "size": 1466,
+      "mtime": "2025-09-02T03:44:02.685Z",
+      "describes": [
+        "Accessibility roles & labels"
+      ],
+      "imports": [
+        "react",
+        "../testUtils",
+        "@/components/CategoryButton",
+        "@/components/RouteCard",
+        "@/components/TravelModeSelector",
+        "@/components/VoiceNavigation",
+        "@/types/navigation"
+      ]
+    },
+    {
+      "path": "_tests_\\utils\\contrastHighContrastTheme.test.ts",
+      "size": 1059,
+      "mtime": "2025-09-02T03:44:02.689Z",
+      "describes": [
+        "highContrast palette accessibility"
+      ],
+      "imports": [
+        "@/constants/colors",
+        "@/utils/color/contrast"
+      ]
+    },
+    {
+      "path": "_tests_\\utils\\performanceMarks.fixed.test.ts",
+      "size": 1256,
+      "mtime": "2025-09-02T03:44:02.698Z",
+      "describes": [
+        "performanceMarks utility"
+      ],
+      "imports": [
+        "../../utils/performance/performanceMarks"
+      ]
+    },
+    {
+      "path": "_tests_\\utils\\performanceMarks.test.ts",
+      "size": 1256,
+      "mtime": "2025-09-02T03:44:02.703Z",
+      "describes": [
+        "performanceMarks utility"
+      ],
+      "imports": [
+        "../../utils/performance/performanceMarks"
+      ]
+    },
+    {
+      "path": "_tests_\\utils\\persistence.test.ts",
+      "size": 1262,
+      "mtime": "2025-09-02T03:44:02.707Z",
+      "describes": [
+        "navigationStore persistence"
+      ],
+      "imports": [
+        "@react-native-async-storage/async-storage",
+        "@testing-library/react-native",
+        "@/stores/navigationStore"
+      ]
+    },
+    {
+      "path": "_tests_\\utils\\touchTargetAudit.test.ts",
+      "size": 1475,
+      "mtime": "2025-09-02T03:44:02.716Z",
+      "describes": [
+        "touchTargetAudit"
+      ],
+      "imports": [
+        "@/utils/accessibility/touchTargetAudit"
+      ]
+    }
+  ]
+}

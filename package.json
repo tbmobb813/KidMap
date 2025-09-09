@@ -29,7 +29,11 @@
     "codemod:colors": "node scripts/codemod-color-literals.js",
     "lint:fix": "eslint . --fix --max-warnings=0",
     "danger:ci": "danger ci",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:critical": "jest _tests_/critical/**",
+    "test:core": "jest _tests_/core/**",
+    "test:infra": "jest _tests_/infra/**",
+    "test:misc": "jest _tests_/misc/**"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",

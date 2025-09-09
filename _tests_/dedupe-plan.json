@@ -1,0 +1,740 @@
+{
+  "generated": "2025-09-08T20:22:34.292Z",
+  "groups": [
+    {
+      "subject": "(unknown)",
+      "canonical": {
+        "path": "_tests_\\critical\\hooks_routePrefetch.test.tsx",
+        "size": 1071,
+        "mtime": "2025-09-08T19:52:04.276Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\hooks\\routePrefetch.test.tsx",
+          "size": 1061,
+          "mtime": "2025-09-02T03:44:02.570Z"
+        }
+      ]
+    },
+    {
+      "subject": "AIJourneyCompanion",
+      "canonical": {
+        "path": "_tests_\\components\\AIJourneyCompanion.test.tsx",
+        "size": 10360,
+        "mtime": "2025-09-08T18:02:37.230Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\misc\\AIJourneyCompanion.test.tsx",
+          "size": 10315,
+          "mtime": "2025-09-08T18:49:09.021Z"
+        },
+        {
+          "path": "_tests_\\components\\AIJourneyCompanion.simplified.test.tsx",
+          "size": 10310,
+          "mtime": "2025-09-03T22:46:21.902Z"
+        },
+        {
+          "path": "_tests_\\components\\AIJourneyCompanion.fixed.test.tsx",
+          "size": 6466,
+          "mtime": "2025-09-08T18:21:11.627Z"
+        },
+        {
+          "path": "_tests_\\misc\\AIJourneyCompanion.simplified.test.tsx",
+          "size": 3890,
+          "mtime": "2025-09-08T18:49:14.159Z"
+        },
+        {
+          "path": "_tests_\\misc\\AIJourneyCompanion.fixed.test.tsx",
+          "size": 3479,
+          "mtime": "2025-09-08T18:49:16.857Z"
+        },
+        {
+          "path": "_tests_\\components\\AIJourneyCompanion.basic.test.tsx",
+          "size": 2764,
+          "mtime": "2025-09-03T23:23:50.260Z"
+        }
+      ]
+    },
+    {
+      "subject": "AccessibilitySettings",
+      "canonical": {
+        "path": "_tests_\\core\\AccessibilitySettings.test.tsx",
+        "size": 876,
+        "mtime": "2025-09-08T19:52:11.919Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\AccessibilitySettings.test.tsx",
+          "size": 437,
+          "mtime": "2025-09-02T03:47:12.889Z"
+        }
+      ]
+    },
+    {
+      "subject": "AccessibleButton",
+      "canonical": {
+        "path": "_tests_\\core\\AccessibleButton.test.tsx",
+        "size": 876,
+        "mtime": "2025-09-08T19:52:11.934Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\AccessibleButton.test.tsx",
+          "size": 441,
+          "mtime": "2025-09-03T18:16:26.771Z"
+        }
+      ]
+    },
+    {
+      "subject": "AchievementBadge",
+      "canonical": {
+        "path": "_tests_\\core\\AchievementBadge.test.tsx",
+        "size": 1378,
+        "mtime": "2025-09-08T19:52:11.934Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\AchievementBadge.test.tsx",
+          "size": 737,
+          "mtime": "2025-09-03T18:16:26.777Z"
+        }
+      ]
+    },
+    {
+      "subject": "CategoryButton",
+      "canonical": {
+        "path": "_tests_\\core\\CategoryButton.test.tsx",
+        "size": 429,
+        "mtime": "2025-09-08T19:52:04.840Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\CategoryButton.test.tsx",
+          "size": 429,
+          "mtime": "2025-09-03T18:16:26.788Z"
+        }
+      ]
+    },
+    {
+      "subject": "CategoryManagement",
+      "canonical": {
+        "path": "_tests_\\core\\CategoryManagement.test.tsx",
+        "size": 2106,
+        "mtime": "2025-09-08T19:52:11.500Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\CategoryManagement.test.tsx",
+          "size": 10377,
+          "mtime": "2025-09-03T18:16:58.668Z"
+        }
+      ]
+    },
+    {
+      "subject": "CityManagement",
+      "canonical": {
+        "path": "_tests_\\core\\CityManagement.test.tsx",
+        "size": 400,
+        "mtime": "2025-09-08T19:52:17.124Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\CityManagement.test.tsx",
+          "size": 402,
+          "mtime": "2025-09-03T18:16:58.672Z"
+        }
+      ]
+    },
+    {
+      "subject": "DevicePingHandler",
+      "canonical": {
+        "path": "_tests_\\core\\DevicePingHandler.test.tsx",
+        "size": 1423,
+        "mtime": "2025-09-08T19:52:11.925Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\DevicePingHandler.test.tsx",
+          "size": 4277,
+          "mtime": "2025-09-03T18:16:58.676Z"
+        }
+      ]
+    },
+    {
+      "subject": "DirectionStep",
+      "canonical": {
+        "path": "_tests_\\core\\DirectionStep.test.tsx",
+        "size": 490,
+        "mtime": "2025-09-08T19:52:11.941Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\DirectionStep.test.tsx",
+          "size": 568,
+          "mtime": "2025-09-03T18:16:58.684Z"
+        }
+      ]
+    },
+    {
+      "subject": "EmptyState",
+      "canonical": {
+        "path": "_tests_\\core\\EmptyState.test.tsx",
+        "size": 531,
+        "mtime": "2025-09-08T19:52:11.929Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\EmptyState.test.tsx",
+          "size": 530,
+          "mtime": "2025-09-02T03:47:12.905Z"
+        }
+      ]
+    },
+    {
+      "subject": "ErrorBoundary",
+      "canonical": {
+        "path": "_tests_\\core\\ErrorBoundary.test.tsx",
+        "size": 463,
+        "mtime": "2025-09-08T19:52:11.537Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\ErrorBoundary.test.tsx",
+          "size": 462,
+          "mtime": "2025-09-02T03:47:12.908Z"
+        }
+      ]
+    },
+    {
+      "subject": "FeatureErrorBoundary",
+      "canonical": {
+        "path": "_tests_\\core\\FeatureErrorBoundary.test.tsx",
+        "size": 498,
+        "mtime": "2025-09-08T19:52:11.547Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\FeatureErrorBoundary.test.tsx",
+          "size": 497,
+          "mtime": "2025-09-02T03:47:12.914Z"
+        }
+      ]
+    },
+    {
+      "subject": "FunFactCard",
+      "canonical": {
+        "path": "_tests_\\core\\FunFactCard.test.tsx",
+        "size": 399,
+        "mtime": "2025-09-08T19:52:11.541Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\FunFactCard.test.tsx",
+          "size": 398,
+          "mtime": "2025-09-02T03:47:12.908Z"
+        }
+      ]
+    },
+    {
+      "subject": "LiveArrivalsCard",
+      "canonical": {
+        "path": "_tests_\\core\\LiveArrivalsCard.test.tsx",
+        "size": 431,
+        "mtime": "2025-09-08T19:52:11.944Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\LiveArrivalsCard.test.tsx",
+          "size": 433,
+          "mtime": "2025-09-03T18:16:58.689Z"
+        }
+      ]
+    },
+    {
+      "subject": "LoadingSpinner",
+      "canonical": {
+        "path": "_tests_\\core\\LoadingSpinner.test.tsx",
+        "size": 410,
+        "mtime": "2025-09-08T19:52:04.675Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\LoadingSpinner.test.tsx",
+          "size": 410,
+          "mtime": "2025-09-03T18:16:26.817Z"
+        }
+      ]
+    },
+    {
+      "subject": "MapPlaceholder",
+      "canonical": {
+        "path": "_tests_\\core\\MapPlaceholder.test.tsx",
+        "size": 410,
+        "mtime": "2025-09-08T19:52:11.919Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\MapPlaceholder.test.tsx",
+          "size": 409,
+          "mtime": "2025-09-02T03:47:12.919Z"
+        }
+      ]
+    },
+    {
+      "subject": "NetworkStatusBar",
+      "canonical": {
+        "path": "_tests_\\core\\NetworkStatusBar.test.tsx",
+        "size": 418,
+        "mtime": "2025-09-08T19:52:11.500Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\NetworkStatusBar.test.tsx",
+          "size": 417,
+          "mtime": "2025-09-02T03:47:12.919Z"
+        }
+      ]
+    },
+    {
+      "subject": "NotificationStatusCard",
+      "canonical": {
+        "path": "_tests_\\core\\NotificationStatusCard.test.tsx",
+        "size": 442,
+        "mtime": "2025-09-08T19:52:11.505Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\NotificationStatusCard.test.tsx",
+          "size": 441,
+          "mtime": "2025-09-02T03:47:12.920Z"
+        }
+      ]
+    },
+    {
+      "subject": "OfflineIndicator",
+      "canonical": {
+        "path": "_tests_\\core\\OfflineIndicator.test.tsx",
+        "size": 836,
+        "mtime": "2025-09-08T19:52:11.929Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\OfflineIndicator.test.tsx",
+          "size": 417,
+          "mtime": "2025-09-02T03:47:12.920Z"
+        }
+      ]
+    },
+    {
+      "subject": "OnboardingFlow",
+      "canonical": {
+        "path": "_tests_\\core\\OnboardingFlow.test.tsx",
+        "size": 1234,
+        "mtime": "2025-09-08T19:52:17.126Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\OnboardingFlow.test.tsx",
+          "size": 22370,
+          "mtime": "2025-09-03T18:16:58.702Z"
+        }
+      ]
+    },
+    {
+      "subject": "OptimizedImage",
+      "canonical": {
+        "path": "_tests_\\core\\OptimizedImage.test.tsx",
+        "size": 1757,
+        "mtime": "2025-09-08T19:52:08.958Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\OptimizedImage.test.tsx",
+          "size": 2069,
+          "mtime": "2025-09-03T18:16:58.707Z"
+        }
+      ]
+    },
+    {
+      "subject": "ParentDashboard",
+      "canonical": {
+        "path": "_tests_\\core\\ParentDashboard.test.tsx",
+        "size": 2885,
+        "mtime": "2025-09-08T19:52:05.408Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\ParentDashboard.test.tsx",
+          "size": 7012,
+          "mtime": "2025-09-03T18:16:58.712Z"
+        }
+      ]
+    },
+    {
+      "subject": "PhotoCheckInButton",
+      "canonical": {
+        "path": "_tests_\\core\\PhotoCheckInButton.test.tsx",
+        "size": 523,
+        "mtime": "2025-09-08T19:52:04.832Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\PhotoCheckInButton.test.tsx",
+          "size": 991,
+          "mtime": "2025-09-03T18:16:58.716Z"
+        }
+      ]
+    },
+    {
+      "subject": "PhotoCheckInHistory",
+      "canonical": {
+        "path": "_tests_\\core\\PhotoCheckInHistory.test.tsx",
+        "size": 844,
+        "mtime": "2025-09-08T19:52:11.535Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\PhotoCheckInHistory.test.tsx",
+          "size": 429,
+          "mtime": "2025-09-02T03:47:12.924Z"
+        }
+      ]
+    },
+    {
+      "subject": "PinAuthentication",
+      "canonical": {
+        "path": "_tests_\\core\\PinAuthentication.test.tsx",
+        "size": 25907,
+        "mtime": "2025-09-08T19:52:12.721Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\PinAuthentication.test.tsx",
+          "size": 24713,
+          "mtime": "2025-09-03T18:16:58.722Z"
+        }
+      ]
+    },
+    {
+      "subject": "PlaceCard",
+      "canonical": {
+        "path": "_tests_\\core\\PlaceCard.test.tsx",
+        "size": 1340,
+        "mtime": "2025-09-08T19:52:04.877Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\PlaceCard.test.tsx",
+          "size": 670,
+          "mtime": "2025-09-02T07:56:54.861Z"
+        }
+      ]
+    },
+    {
+      "subject": "PullToRefresh",
+      "canonical": {
+        "path": "_tests_\\core\\PullToRefresh.test.tsx",
+        "size": 948,
+        "mtime": "2025-09-08T19:52:02.887Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\PullToRefresh.test.tsx",
+          "size": 473,
+          "mtime": "2025-09-02T03:47:12.928Z"
+        }
+      ]
+    },
+    {
+      "subject": "RegionSelector",
+      "canonical": {
+        "path": "_tests_\\core\\RegionSelector.test.tsx",
+        "size": 597,
+        "mtime": "2025-09-08T19:52:04.690Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\RegionSelector.test.tsx",
+          "size": 4977,
+          "mtime": "2025-09-02T07:56:54.872Z"
+        }
+      ]
+    },
+    {
+      "subject": "RegionSwitcher",
+      "canonical": {
+        "path": "_tests_\\core\\RegionSwitcher.test.tsx",
+        "size": 410,
+        "mtime": "2025-09-08T19:52:04.831Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\RegionSwitcher.test.tsx",
+          "size": 409,
+          "mtime": "2025-09-02T03:47:12.931Z"
+        }
+      ]
+    },
+    {
+      "subject": "RegionalFunFactCard",
+      "canonical": {
+        "path": "_tests_\\core\\RegionalFunFactCard.test.tsx",
+        "size": 430,
+        "mtime": "2025-09-08T19:52:08.872Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\RegionalFunFactCard.test.tsx",
+          "size": 429,
+          "mtime": "2025-09-02T03:47:12.931Z"
+        }
+      ]
+    },
+    {
+      "subject": "RegionalTransitCard",
+      "canonical": {
+        "path": "_tests_\\core\\RegionalTransitCard.test.tsx",
+        "size": 430,
+        "mtime": "2025-09-08T19:52:09.025Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\RegionalTransitCard.test.tsx",
+          "size": 429,
+          "mtime": "2025-09-02T03:47:12.932Z"
+        }
+      ]
+    },
+    {
+      "subject": "RouteCard",
+      "canonical": {
+        "path": "_tests_\\core\\routeCard.test.tsx",
+        "size": 2918,
+        "mtime": "2025-09-08T19:52:04.680Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\routeCard.test.tsx",
+          "size": 17070,
+          "mtime": "2025-09-03T18:16:58.793Z"
+        }
+      ]
+    },
+    {
+      "subject": "Routes query caching and metrics",
+      "canonical": {
+        "path": "_tests_\\critical\\routesCache.test.tsx",
+        "size": 3564,
+        "mtime": "2025-09-08T19:52:04.675Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\routesCache.test.tsx",
+          "size": 3665,
+          "mtime": "2025-09-03T18:16:58.804Z"
+        }
+      ]
+    },
+    {
+      "subject": "SafeZoneActivityLog",
+      "canonical": {
+        "path": "_tests_\\core\\SafeZoneActivityLog.test.tsx",
+        "size": 434,
+        "mtime": "2025-09-08T19:52:11.500Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\SafeZoneActivityLog.test.tsx",
+          "size": 432,
+          "mtime": "2025-09-03T18:16:26.862Z"
+        }
+      ]
+    },
+    {
+      "subject": "SafeZoneIndicator",
+      "canonical": {
+        "path": "_tests_\\core\\SafeZoneIndicator.test.tsx",
+        "size": 715,
+        "mtime": "2025-09-08T19:52:04.882Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\SafeZoneIndicator.test.tsx",
+          "size": 782,
+          "mtime": "2025-09-03T18:16:58.726Z"
+        }
+      ]
+    },
+    {
+      "subject": "SafeZoneManagement",
+      "canonical": {
+        "path": "_tests_\\core\\SafeZoneManagement.test.tsx",
+        "size": 567,
+        "mtime": "2025-09-08T19:52:08.963Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\SafeZoneManagement.test.tsx",
+          "size": 567,
+          "mtime": "2025-09-02T07:56:54.875Z"
+        }
+      ]
+    },
+    {
+      "subject": "SafeZoneStatusCard",
+      "canonical": {
+        "path": "_tests_\\core\\SafeZoneStatusCard.test.tsx",
+        "size": 887,
+        "mtime": "2025-09-08T19:52:11.499Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\SafeZoneStatusCard.test.tsx",
+          "size": 904,
+          "mtime": "2025-09-03T18:16:58.730Z"
+        }
+      ]
+    },
+    {
+      "subject": "SafetyDashboard",
+      "canonical": {
+        "path": "_tests_\\critical\\components_SafetyDashboard.test.tsx",
+        "size": 6570,
+        "mtime": "2025-09-08T19:52:04.274Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\core\\SafetyDashboard.test.tsx",
+          "size": 2661,
+          "mtime": "2025-09-08T19:52:04.837Z"
+        },
+        {
+          "path": "_tests_\\components\\SafetyDashboard.test.tsx",
+          "size": 7485,
+          "mtime": "2025-09-03T18:16:58.747Z"
+        }
+      ]
+    },
+    {
+      "subject": "SafetyPanel",
+      "canonical": {
+        "path": "_tests_\\core\\SafetyPanel.test.tsx",
+        "size": 1317,
+        "mtime": "2025-09-08T19:52:08.967Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\SafetyPanel.test.tsx",
+          "size": 3779,
+          "mtime": "2025-09-03T18:16:58.753Z"
+        }
+      ]
+    },
+    {
+      "subject": "SearchBar",
+      "canonical": {
+        "path": "_tests_\\core\\SearchBar.test.tsx",
+        "size": 414,
+        "mtime": "2025-09-08T19:52:04.682Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\SearchBar.test.tsx",
+          "size": 458,
+          "mtime": "2025-09-03T18:16:58.759Z"
+        }
+      ]
+    },
+    {
+      "subject": "Telemetry emissions",
+      "canonical": {
+        "path": "_tests_\\critical\\telemetry.test.tsx",
+        "size": 5004,
+        "mtime": "2025-09-08T19:52:04.284Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\telemetry.test.tsx",
+          "size": 5525,
+          "mtime": "2025-09-02T03:44:02.655Z"
+        }
+      ]
+    },
+    {
+      "subject": "ThemeProvider",
+      "canonical": {
+        "path": "_tests_\\critical\\constants_ThemeProvider.test.tsx",
+        "size": 2465,
+        "mtime": "2025-09-08T19:52:04.681Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\constants\\ThemeProvider.test.tsx",
+          "size": 2449,
+          "mtime": "2025-09-03T18:16:58.798Z"
+        }
+      ]
+    },
+    {
+      "subject": "Toast accessibility",
+      "canonical": {
+        "path": "_tests_\\core\\toastAccessibility.test.tsx",
+        "size": 1608,
+        "mtime": "2025-09-08T19:52:11.918Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\components\\toastAccessibility.test.tsx",
+          "size": 1728,
+          "mtime": "2025-09-02T03:44:02.540Z"
+        }
+      ]
+    },
+    {
+      "subject": "performanceMarks utility",
+      "canonical": {
+        "path": "_tests_\\utils\\performanceMarks.fixed.test.ts",
+        "size": 1256,
+        "mtime": "2025-09-02T03:44:02.698Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\utils\\performanceMarks.test.ts",
+          "size": 1256,
+          "mtime": "2025-09-02T03:44:02.703Z"
+        }
+      ]
+    },
+    {
+      "subject": "routeService.fetchRoutes",
+      "canonical": {
+        "path": "_tests_\\critical\\stores_routeService.test.ts",
+        "size": 1015,
+        "mtime": "2025-09-08T19:52:04.673Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\stores\\routeService.test.ts",
+          "size": 1529,
+          "mtime": "2025-09-02T03:44:02.649Z"
+        }
+      ]
+    },
+    {
+      "subject": "useSafeZoneMonitor",
+      "canonical": {
+        "path": "_tests_\\critical\\safety.test.tsx",
+        "size": 6965,
+        "mtime": "2025-09-08T19:52:02.887Z"
+      },
+      "duplicates": [
+        {
+          "path": "_tests_\\safety.test.tsx",
+          "size": 7867,
+          "mtime": "2025-09-02T03:44:02.639Z"
+        }
+      ]
+    }
+  ]
+}

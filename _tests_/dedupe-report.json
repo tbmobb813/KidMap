@@ -1,0 +1,44 @@
+{
+    "generated": "2025-09-08T00:00:00Z",
+    "summary": {
+        "total_tests_indexed_est": 238,
+        "duplicate_subjects_found": 7
+    },
+    "duplicates": {
+        "PinAuthentication": [
+            "_tests_/core/PinAuthentication.test.tsx"
+        ],
+        "routesCache": [
+            "_tests_/critical/routesCache.test.tsx",
+            "_tests_/routesCache.test.tsx"
+        ],
+        "routeService.fetchRoutes": [
+            "_tests_/critical/stores_routeService.test.ts",
+            "_tests_/stores/routeService.test.ts"
+        ],
+        "hooks/routePrefetch": [
+            "_tests_/critical/hooks_routePrefetch.test.tsx",
+            "_tests_/hooks/routePrefetch.test.tsx"
+        ],
+        "telemetry": [
+            "_tests_/critical/telemetry.test.tsx",
+            "_tests_/telemetry.test.tsx"
+        ],
+        "SafetyDashboard": [
+            "_tests_/critical/components_SafetyDashboard.test.tsx",
+            "_tests_/core/SafetyDashboard.test.tsx"
+        ],
+        "AIJourneyCompanion": [
+            "_tests_/components/AIJourneyCompanion.basic.test.tsx",
+            "_tests_/components/AIJourneyCompanion.fixed.test.tsx",
+            "_tests_/components/AIJourneyCompanion.simplified.test.tsx",
+            "_tests_/misc/AIJourneyCompanion.test.tsx",
+            "_tests_/misc/AIJourneyCompanion.simplified.test.tsx",
+            "_tests_/misc/AIJourneyCompanion.fixed.test.tsx"
+        ]
+    },
+    "notes": {
+        "method": "Fast workspace grep for key subjects; this is a draft. There are other near-duplicates (same subject with slightly different assertions) that require manual review.",
+        "caveat": "Report uses a best-effort scan and known duplicate patterns. If you want, I can expand to a full pass that parses every test file and extracts top-level describe() strings and component imports into a CSV/JSON for complete coverage."
+    }
+}

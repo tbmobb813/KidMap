@@ -1,4 +1,3 @@
-import { jest } from "@jest/globals";
 import { render } from "@testing-library/react-native";
 import { Animated } from "react-native";
 

@@ -9,7 +9,7 @@ import { Place } from "../../types/navigation";
 const mockTrack = jest.fn();
 
 // Mock dependencies
-jest.mock("../../constants/theme");
+jest.mock("@/constants/theme");
 jest.mock("lucide-react-native", () => ({
   Bot: () => "Bot",
   Volume2: () => "Volume2",
@@ -331,7 +331,7 @@ describe("AIJourneyCompanion", () => {
       await waitFor(
         () => {
           const buddyButton = getByText("Buddy").parent;
-          expect(buddyButton && buddyButton.type).toBe("Pressable");
+          expect(buddyButton.type).toBe("Pressable");
         },
         { timeout: 2000 }
       );
