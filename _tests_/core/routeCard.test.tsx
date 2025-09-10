@@ -40,7 +40,10 @@ jest.mock("lucide-react-native", () => ({
 }));
 
 describe("RouteCard", () => {
-  const route: Route = mockRoute({ id: "mock-route-1", totalDuration: 25 }) as any;
+  const route: Route = mockRoute({
+    id: "mock-route-1",
+    totalDuration: 25,
+  }) as any;
 
   const mockTransitSteps: TransitStep[] = [
     {
@@ -96,13 +99,7 @@ describe("RouteCard", () => {
 
   it("fires onPress when pressing the duration text", () => {
     const onPress = jest.fn();
-  // debug: print route to diagnose missing duration/id in CI runs
-  // (temporary; will be removed after diagnosis)
-   
-  console.log('DBG_ROUTE', JSON.stringify(route));
-   
-  console.log('DBG_TOTAL', route && route.totalDuration);
-  const { getByText } = render(<RouteCard route={route} onPress={onPress} />);
+    const { getByText } = render(<RouteCard route={route} onPress={onPress} />);
     // Some older tests expect '25 min' from mockRoute; use a more tolerant assertion
     expect(() => getByText(/min$/)).not.toThrow();
     const el = getByText(/min$/);
