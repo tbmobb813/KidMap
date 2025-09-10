@@ -104,11 +104,3 @@ describe("RouteCard", () => {
     expect(onPress).toHaveBeenCalledWith(route);
   });
 });
-
-// --- MERGED UNIQUE BLOCK: from C:\Users\Admin\WSLProjects\apps\KidMap\_tests_\duplicates\merged\components__routeCard.test.tsx ---
-// Archived: merged into `_tests_/core/routeCard.test.tsx`
-// Original moved here on 2025-09-09 by automated dedupe assistant.
-// File preserved for reference; delete after human review if no longer needed.
-// Duplicate archived. Use `_tests_/core/routeCard.test.tsx` for the canonical test.
-// Original comprehensive content preserved at `components__routeCard.test.orig.tsx`.
-// --- END MERGED UNIQUE BLOCK ---
