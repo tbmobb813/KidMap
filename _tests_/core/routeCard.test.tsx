@@ -96,7 +96,13 @@ describe("RouteCard", () => {
 
   it("fires onPress when pressing the duration text", () => {
     const onPress = jest.fn();
-    const { getByText } = render(<RouteCard route={route} onPress={onPress} />);
+  // debug: print route to diagnose missing duration/id in CI runs
+  // (temporary; will be removed after diagnosis)
+   
+  console.log('DBG_ROUTE', JSON.stringify(route));
+   
+  console.log('DBG_TOTAL', route && route.totalDuration);
+  const { getByText } = render(<RouteCard route={route} onPress={onPress} />);
     // Some older tests expect '25 min' from mockRoute; use a more tolerant assertion
     expect(() => getByText(/min$/)).not.toThrow();
     const el = getByText(/min$/);
