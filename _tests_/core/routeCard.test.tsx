@@ -40,10 +40,10 @@ jest.mock("lucide-react-native", () => ({
 }));
 
 describe("RouteCard", () => {
-  const route: Route = mockRoute({
+  const route: Route = {
     id: "mock-route-1",
     totalDuration: 25,
-  }) as any;
+  } as any;
 
   const mockTransitSteps: TransitStep[] = [
     {
