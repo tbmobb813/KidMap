@@ -1,0 +1,72 @@
+[
+  {
+    "MergedFile": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\components__AIJourneyCompanion.basic.test.tsx",
+    "CanonicalDeclared": "_tests_/core/AIJourneyCompanion.test.tsx",
+    "CanonicalPath": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\components\\AIJourneyCompanion.basic.test.tsx",
+    "CanonicalExists": true,
+    "UniqueLinesInMerged": 0,
+    "UniqueLinesSample": "",
+    "UniqueLinesInCanonical": 0,
+    "CanSafelyDeleteMergedArchive": true
+  },
+  {
+    "MergedFile": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\components__AIJourneyCompanion.fixed.test.tsx",
+    "CanonicalDeclared": "_tests_/core/AIJourneyCompanion.test.tsx",
+    "CanonicalPath": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\components\\AIJourneyCompanion.fixed.test.tsx",
+    "CanonicalExists": true,
+    "UniqueLinesInMerged": 18,
+    "UniqueLinesSample": "// Archived: merged into `_tests_/core/AIJourneyCompanion.test.tsx`\n// Original moved here on 2025-09-09 by automated dedupe assistant.\n// File preserved for reference; delete after human review if no longer needed.\nimport AIJourneyCompanion from \"@/components/AIJourneyCompanion\";\nimport { useTheme } from \"@/constants/theme\";\nimport { Place } from \"@/types/navigation\";\nglobal.fetch = jest.fn(\n  async (_input: RequestInfo | URL, _init?: RequestInit) =>",
+    "UniqueLinesInCanonical": 14,
+    "CanSafelyDeleteMergedArchive": false
+  },
+  {
+    "MergedFile": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\components__AIJourneyCompanion.simplified.test.tsx",
+    "CanonicalDeclared": "_tests_/core/AIJourneyCompanion.test.tsx",
+    "CanonicalPath": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\components\\AIJourneyCompanion.simplified.test.tsx",
+    "CanonicalExists": true,
+    "UniqueLinesInMerged": 10,
+    "UniqueLinesSample": "// Archived: merged into `_tests_/core/AIJourneyCompanion.test.tsx`\n// Original moved here on 2025-09-09 by automated dedupe assistant.\n// File preserved for reference; delete after human review if no longer needed.\nimport AIJourneyCompanion from \"@/components/AIJourneyCompanion\";\nimport { useTheme } from \"@/constants/theme\";\nimport { Place } from \"@/types/navigation\";\njest.mock(\"@/constants/theme\");\n            getByText(\"\\ud83e\\udde0 Quiz Time! What makes libraries special?\")",
+    "UniqueLinesInCanonical": 7,
+    "CanSafelyDeleteMergedArchive": false
+  },
+  {
+    "MergedFile": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\components__OnboardingFlow.test.tsx",
+    "CanonicalDeclared": "_tests_/core/OnboardingFlow.test.tsx",
+    "CanonicalPath": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\core\\OnboardingFlow.test.tsx",
+    "CanonicalExists": true,
+    "UniqueLinesInMerged": 118,
+    "UniqueLinesSample": "// Archived: merged into `_tests_/core/OnboardingFlow.test.tsx`\n// Original moved here on 2025-09-09 by automated dedupe assistant.\n// File preserved for reference; delete after human review if no longer needed.\n/**\n * COMPREHENSIVE TEST SUITE: OnboardingFlow Component\n *\n * This component is COMPLEX with 243 lines, multi-step wizard workflow,\n * state management, region integration, and preferences handling. Requires thorough testing.",
+    "UniqueLinesInCanonical": 9,
+    "CanSafelyDeleteMergedArchive": false
+  },
+  {
+    "MergedFile": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\components__routeCard.test.tsx",
+    "CanonicalDeclared": "_tests_/core/routeCard.test.tsx",
+    "CanonicalPath": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\core\\routeCard.test.tsx",
+    "CanonicalExists": true,
+    "UniqueLinesInMerged": 5,
+    "UniqueLinesSample": "// Archived: merged into `_tests_/core/routeCard.test.tsx`\n// Original moved here on 2025-09-09 by automated dedupe assistant.\n// File preserved for reference; delete after human review if no longer needed.\n// Duplicate archived. Use `_tests_/core/routeCard.test.tsx` for the canonical test.\n// Original comprehensive content preserved at `components__routeCard.test.orig.tsx`.",
+    "UniqueLinesInCanonical": 105,
+    "CanSafelyDeleteMergedArchive": false
+  },
+  {
+    "MergedFile": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\misc__AIJourneyCompanion.simplified.test.tsx",
+    "CanonicalDeclared": "_tests_/core/AIJourneyCompanion.test.tsx",
+    "CanonicalPath": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\components\\AIJourneyCompanion.simplified.test.tsx",
+    "CanonicalExists": true,
+    "UniqueLinesInMerged": 93,
+    "UniqueLinesSample": "// Archived: merged into `_tests_/core/AIJourneyCompanion.test.tsx`\n// Original moved here on 2025-09-09 by automated dedupe assistant.\n// File preserved for reference; delete after human review if no longer needed.\nimport { render } from \"@testing-library/react-native\";\nimport AIJourneyCompanion from \"@/components/AIJourneyCompanion\";\nimport { useTheme } from \"@/constants/theme\";\nimport { Place } from \"@/types/navigation\";\njest.mock(\"@/constants/theme\");",
+    "UniqueLinesInCanonical": 221,
+    "CanSafelyDeleteMergedArchive": false
+  },
+  {
+    "MergedFile": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\telemetry.test.tsx",
+    "CanonicalDeclared": "_tests_/critical/telemetry.test.tsx",
+    "CanonicalPath": "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\critical\\telemetry.test.tsx",
+    "CanonicalExists": true,
+    "UniqueLinesInMerged": 14,
+    "UniqueLinesSample": "// Archived: merged into `_tests_/critical/telemetry.test.tsx`\n// Original moved here on 2025-09-09 by automated dedupe assistant.\n// File preserved for reference; delete after human review if no longer needed.\nimport { render } from \"../../testUtils\";\n// Mock telemetry module to track events properly\n// Mock useToast to avoid real side effects\n// Mock parental store context to avoid AsyncStorage + complex provider tree\n    mockEvents.length = 0; // Clear events before each test",
+    "UniqueLinesInCanonical": 2,
+    "CanSafelyDeleteMergedArchive": false
+  }
+]

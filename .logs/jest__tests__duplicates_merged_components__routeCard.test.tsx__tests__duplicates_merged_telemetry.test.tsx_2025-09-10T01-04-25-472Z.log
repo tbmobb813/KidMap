@@ -1,0 +1,19 @@
+timestamp: 2025-09-10T01:04:26.448Z
+branch: copilot/vscode1757400080380
+sha: 95b9ef079aa76aeb7e716dc4cf8d48b3e5bbb472
+args: jest _tests_/duplicates/merged/components__routeCard.test.tsx _tests_/duplicates/merged/telemetry.test.tsx
+---
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [2m_tests_/duplicates/merged/[22m[1mtelemetry.test.tsx[22m ([0m[1m[41m8.563 s[49m[22m[0m)
+  Telemetry emissions
+    [32m√[39m [2memits accessibility_toggle events for setting changes (107 ms)[22m
+    [32m√[39m [2memits route_prefetch_start/complete for each prefetched mode (21 ms)[22m
+    [32m√[39m [2memits safety monitor toggle & zone entry events (53 ms)[22m
+
+[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+[1mTests:       [22m[1m[32m3 passed[39m[22m, 3 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m13.144 s[39m[22m
+[2mRan all test suites[22m[2m matching [22m/_tests_\\duplicates\\merged\\telemetry.test.tsx/i[2m.[22m
+
+EXIT CODE: 0

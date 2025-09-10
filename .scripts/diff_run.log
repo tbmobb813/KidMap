@@ -1,0 +1,68 @@
+At C:\Users\Admin\WSLProjects\apps\KidMap\.scripts\diff_me
+rged_to_canonical_v2.ps1:110 char:43
++     [regex]::new('merged\\s+into\\s+[`"\\'â?oâ??]?([^`"\
+\'â?oâ??\\s]+ ...
++                                           ~
+Missing ')' in method call.
+At C:\Users\Admin\WSLProjects\apps\KidMap\.scripts\diff_me
+rged_to_canonical_v2.ps1:110 char:43
++     [regex]::new('merged\\s+into\\s+[`"\\'â?oâ??]?([^`"\
+\'â?oâ??\\s]+ ...
++                                           ~~~~~~~~
+Unexpected token 'â?oâ??]?' in expression or statement.
+At C:\Users\Admin\WSLProjects\apps\KidMap\.scripts\diff_me
+rged_to_canonical_v2.ps1:110 char:53
++     [regex]::new('merged\\s+into\\s+[`"\\'â?oâ??]?([^`"\
+\'â?oâ??\\s]+ ...
++                                                     ~
+Missing type name after '['.
+At C:\Users\Admin\WSLProjects\apps\KidMap\.scripts\diff_me
+rged_to_canonical_v2.ps1:111 char:61
++     [regex]::new('Use\\s+[`"\\'â?oâ??]?([^`"\\'â?oâ??\\s
+]+)[`"\\'â?oâ ...
++                                                         
+    ~
+Array index expression is missing or not valid.
+At C:\Users\Admin\WSLProjects\apps\KidMap\.scripts\diff_me
+rged_to_canonical_v2.ps1:112 char:37
++     [regex]::new('(_tests_[^\\s`"\\'\\)\\;]+)', 
+[System.Text.RegularE ...
++                                     ~
+Missing ')' in method call.
+At C:\Users\Admin\WSLProjects\apps\KidMap\.scripts\diff_me
+rged_to_canonical_v2.ps1:112 char:37
++     [regex]::new('(_tests_[^\\s`"\\'\\)\\;]+)', 
+[System.Text.RegularE ...
++                                     ~~
+Unexpected token '\\' in expression or statement.
+At C:\Users\Admin\WSLProjects\apps\KidMap\.scripts\diff_me
+rged_to_canonical_v2.ps1:87 char:29
++ function Normalize-RealPath {
++                             ~
+Missing closing '}' in statement block or type definition.
+At C:\Users\Admin\WSLProjects\apps\KidMap\.scripts\diff_me
+rged_to_canonical_v2.ps1:112 char:39
++     [regex]::new('(_tests_[^\\s`"\\'\\)\\;]+)', 
+[System.Text.RegularE ...
++                                       ~
+Unexpected token ')' in expression or statement.
+At C:\Users\Admin\WSLProjects\apps\KidMap\.scripts\diff_me
+rged_to_canonical_v2.ps1:112 char:45
++     [regex]::new('(_tests_[^\\s`"\\'\\)\\;]+)', 
+[System.Text.RegularE ...
++                                             ~
+Unexpected token ')' in expression or statement.
+At C:\Users\Admin\WSLProjects\apps\KidMap\.scripts\diff_me
+rged_to_canonical_v2.ps1:142 char:66
++ ... e = if ($base -match '__') { ($base -split 
+'__')[-1] } else { $base }
++                                                   
+~~~~~~~~~~~~~~~~~~~~~~~
+The string is missing the terminator: '.
+Not all parse errors were reported.  Correct the reported 
+errors and try again.
+    + CategoryInfo          : ParserError: (:) [], Parent 
+   ContainsErrorRecordException
+    + FullyQualifiedErrorId : MissingEndParenthesisInMeth 
+   odCall
+ 

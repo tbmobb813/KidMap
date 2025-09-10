@@ -1,0 +1,65 @@
+﻿[
+    {
+        "MergedFile":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\components__AIJourneyCompanion.basic.test.tsx",
+        "CanonicalDeclared":  "_tests_/core/AIJourneyCompanion.test.tsx",
+        "CanonicalPath":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\components\\AIJourneyCompanion.basic.test.tsx",
+        "CanonicalExists":  true,
+        "UniqueLinesInMerged":  0,
+        "UniqueLinesInCanonical":  0,
+        "CanSafelyDeleteMergedArchive":  true
+    },
+    {
+        "MergedFile":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\components__AIJourneyCompanion.fixed.test.tsx",
+        "CanonicalDeclared":  "_tests_/core/AIJourneyCompanion.test.tsx",
+        "CanonicalPath":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\components\\AIJourneyCompanion.fixed.test.tsx",
+        "CanonicalExists":  true,
+        "UniqueLinesInMerged":  18,
+        "UniqueLinesInCanonical":  14,
+        "CanSafelyDeleteMergedArchive":  false
+    },
+    {
+        "MergedFile":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\components__AIJourneyCompanion.simplified.test.tsx",
+        "CanonicalDeclared":  "_tests_/core/AIJourneyCompanion.test.tsx",
+        "CanonicalPath":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\components\\AIJourneyCompanion.simplified.test.tsx",
+        "CanonicalExists":  true,
+        "UniqueLinesInMerged":  10,
+        "UniqueLinesInCanonical":  7,
+        "CanSafelyDeleteMergedArchive":  false
+    },
+    {
+        "MergedFile":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\components__OnboardingFlow.test.tsx",
+        "CanonicalDeclared":  "_tests_/core/OnboardingFlow.test.tsx",
+        "CanonicalPath":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\core\\OnboardingFlow.test.tsx",
+        "CanonicalExists":  true,
+        "UniqueLinesInMerged":  118,
+        "UniqueLinesInCanonical":  9,
+        "CanSafelyDeleteMergedArchive":  false
+    },
+    {
+        "MergedFile":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\components__routeCard.test.tsx",
+        "CanonicalDeclared":  "_tests_/core/routeCard.test.tsx",
+        "CanonicalPath":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\core\\routeCard.test.tsx",
+        "CanonicalExists":  true,
+        "UniqueLinesInMerged":  5,
+        "UniqueLinesInCanonical":  105,
+        "CanSafelyDeleteMergedArchive":  false
+    },
+    {
+        "MergedFile":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\misc__AIJourneyCompanion.simplified.test.tsx",
+        "CanonicalDeclared":  "_tests_/core/AIJourneyCompanion.test.tsx",
+        "CanonicalPath":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\components\\AIJourneyCompanion.simplified.test.tsx",
+        "CanonicalExists":  true,
+        "UniqueLinesInMerged":  93,
+        "UniqueLinesInCanonical":  221,
+        "CanSafelyDeleteMergedArchive":  false
+    },
+    {
+        "MergedFile":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\telemetry.test.tsx",
+        "CanonicalDeclared":  "_tests_/critical/telemetry.test.tsx",
+        "CanonicalPath":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\critical\\telemetry.test.tsx",
+        "CanonicalExists":  true,
+        "UniqueLinesInMerged":  14,
+        "UniqueLinesInCanonical":  2,
+        "CanSafelyDeleteMergedArchive":  false
+    }
+]

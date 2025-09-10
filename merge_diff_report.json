@@ -1,0 +1,72 @@
+﻿[
+    {
+        "MergedFile":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\components__AIJourneyCompanion.basic.test.tsx",
+        "CanonicalDeclared":  null,
+        "CanonicalPath":  null,
+        "CanonicalExists":  false,
+        "UniqueLinesInMerged":  90,
+        "UniqueLinesSample":  "// Archived: merged into `_tests_/core/AIJourneyCompanion.test.tsx`\\n// Original moved here on 2025-09-09 by automated dedupe assistant.\\n// File preserved for reference; delete after human review if no longer needed.\\nimport { jest } from \"@jest/globals\";\\nimport { render } from \"@testing-library/react-native\";\\nimport AIJourneyCompanion from \"@/components/AIJourneyCompanion\";\\nimport { useTheme } from \"@/constants/theme\";\\nimport { Place } from \"@/types/navigation\";",
+        "UniqueLinesInCanonical":  0,
+        "CanSafelyDeleteMergedArchive":  false
+    },
+    {
+        "MergedFile":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\components__AIJourneyCompanion.fixed.test.tsx",
+        "CanonicalDeclared":  null,
+        "CanonicalPath":  null,
+        "CanonicalExists":  false,
+        "UniqueLinesInMerged":  203,
+        "UniqueLinesSample":  "// Archived: merged into `_tests_/core/AIJourneyCompanion.test.tsx`\\n// Original moved here on 2025-09-09 by automated dedupe assistant.\\n// File preserved for reference; delete after human review if no longer needed.\\nimport { render } from \"@testing-library/react-native\";\\nimport { Animated } from \"react-native\";\\nimport AIJourneyCompanion from \"@/components/AIJourneyCompanion\";\\nimport { useTheme } from \"@/constants/theme\";\\nimport { Place } from \"@/types/navigation\";",
+        "UniqueLinesInCanonical":  0,
+        "CanSafelyDeleteMergedArchive":  false
+    },
+    {
+        "MergedFile":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\components__AIJourneyCompanion.simplified.test.tsx",
+        "CanonicalDeclared":  null,
+        "CanonicalPath":  null,
+        "CanonicalExists":  false,
+        "UniqueLinesInMerged":  302,
+        "UniqueLinesSample":  "// Archived: merged into `_tests_/core/AIJourneyCompanion.test.tsx`\\n// Original moved here on 2025-09-09 by automated dedupe assistant.\\n// File preserved for reference; delete after human review if no longer needed.\\nimport { fireEvent, render, waitFor } from \"@testing-library/react-native\";\\nimport { Animated } from \"react-native\";\\nimport AIJourneyCompanion from \"@/components/AIJourneyCompanion\";\\nimport { useTheme } from \"@/constants/theme\";\\nimport { Place } from \"@/types/navigation\";",
+        "UniqueLinesInCanonical":  0,
+        "CanSafelyDeleteMergedArchive":  false
+    },
+    {
+        "MergedFile":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\components__OnboardingFlow.test.tsx",
+        "CanonicalDeclared":  null,
+        "CanonicalPath":  null,
+        "CanonicalExists":  false,
+        "UniqueLinesInMerged":  136,
+        "UniqueLinesSample":  "// Archived: merged into `_tests_/core/OnboardingFlow.test.tsx`\\n// Original moved here on 2025-09-09 by automated dedupe assistant.\\n// File preserved for reference; delete after human review if no longer needed.\\n/**\\n * COMPREHENSIVE TEST SUITE: OnboardingFlow Component\\n *\\n * This component is COMPLEX with 243 lines, multi-step wizard workflow,\\n * state management, region integration, and preferences handling. Requires thorough testing.",
+        "UniqueLinesInCanonical":  0,
+        "CanSafelyDeleteMergedArchive":  false
+    },
+    {
+        "MergedFile":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\components__routeCard.test.tsx",
+        "CanonicalDeclared":  null,
+        "CanonicalPath":  null,
+        "CanonicalExists":  false,
+        "UniqueLinesInMerged":  5,
+        "UniqueLinesSample":  "// Archived: merged into `_tests_/core/routeCard.test.tsx`\\n// Original moved here on 2025-09-09 by automated dedupe assistant.\\n// File preserved for reference; delete after human review if no longer needed.\\n// Duplicate archived. Use `_tests_/core/routeCard.test.tsx` for the canonical test.\\n// Original comprehensive content preserved at `components__routeCard.test.orig.tsx`.",
+        "UniqueLinesInCanonical":  0,
+        "CanSafelyDeleteMergedArchive":  false
+    },
+    {
+        "MergedFile":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\misc__AIJourneyCompanion.simplified.test.tsx",
+        "CanonicalDeclared":  null,
+        "CanonicalPath":  null,
+        "CanonicalExists":  false,
+        "UniqueLinesInMerged":  203,
+        "UniqueLinesSample":  "// Archived: merged into `_tests_/core/AIJourneyCompanion.test.tsx`\\n// Original moved here on 2025-09-09 by automated dedupe assistant.\\n// File preserved for reference; delete after human review if no longer needed.\\nimport { render } from \"@testing-library/react-native\";\\nimport { Animated } from \"react-native\";\\nimport AIJourneyCompanion from \"@/components/AIJourneyCompanion\";\\nimport { useTheme } from \"@/constants/theme\";\\nimport { Place } from \"@/types/navigation\";",
+        "UniqueLinesInCanonical":  0,
+        "CanSafelyDeleteMergedArchive":  false
+    },
+    {
+        "MergedFile":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\telemetry.test.tsx",
+        "CanonicalDeclared":  null,
+        "CanonicalPath":  null,
+        "CanonicalExists":  false,
+        "UniqueLinesInMerged":  150,
+        "UniqueLinesSample":  "// Archived: merged into `_tests_/critical/telemetry.test.tsx`\\n// Original moved here on 2025-09-09 by automated dedupe assistant.\\n// File preserved for reference; delete after human review if no longer needed.\\nimport { fireEvent, waitFor } from \"@testing-library/react-native\";\\nimport React from \"react\";\\nimport { render } from \"../../testUtils\";\\nimport AccessibilitySettings from \"@/components/AccessibilitySettings\";\\nimport { prefetchRouteVariants } from \"@/hooks/useRoutePrefetch\";",
+        "UniqueLinesInCanonical":  0,
+        "CanSafelyDeleteMergedArchive":  false
+    }
+]

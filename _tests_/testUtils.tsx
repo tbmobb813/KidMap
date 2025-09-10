@@ -9,6 +9,14 @@ import React from "react";
 
 import { ThemeProvider } from "../constants/theme";
 
+// Ensure manual mock for lucide icons is used across tests
+try {
+  // jest may not be defined in some runtimes; guard it
+  if (typeof jest !== "undefined" && typeof jest.mock === "function") {
+    jest.mock("lucide-react-native");
+  }
+} catch {}
+
 type CustomRenderOptions = Omit<RenderOptions, "wrapper"> & {
   theme?: "light" | "dark" | "highContrast";
   queryClient?: QueryClient;

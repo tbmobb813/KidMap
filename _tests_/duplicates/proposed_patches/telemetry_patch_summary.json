@@ -1,0 +1,9 @@
+{
+    "Name":  "telemetry",
+    "Merged":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\telemetry.test.tsx",
+    "Canonical":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\critical\\telemetry.test.tsx",
+    "Backup":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\proposed_patches\\telemetry .backup",
+    "Patched":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\proposed_patches\\telemetry.patched",
+    "UniqueCount":  14,
+    "Diff":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\proposed_patches\\telemetry.patch"
+}

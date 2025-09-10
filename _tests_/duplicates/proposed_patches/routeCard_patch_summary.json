@@ -1,0 +1,9 @@
+{
+    "Name":  "routeCard",
+    "Merged":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\merged\\components__routeCard.test.tsx",
+    "Canonical":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\core\\routeCard.test.tsx",
+    "Backup":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\proposed_patches\\routeCard .backup",
+    "Patched":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\proposed_patches\\routeCard.patched",
+    "UniqueCount":  5,
+    "Diff":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\proposed_patches\\routeCard.patch"
+}

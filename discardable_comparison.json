@@ -1,0 +1,252 @@
+﻿[
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__AccessibilitySettings.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__AccessibleButton.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__AchievementBadge.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__AIJourneyCompanion.fixed.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__AIJourneyCompanion.simplified.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__CategoryButton.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__CategoryManagement.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__CityManagement.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__DevicePingHandler.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__DirectionStep.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__EmptyState.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__ErrorBoundary.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__FeatureErrorBoundary.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__FunFactCard.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__LiveArrivalsCard.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__LoadingSpinner.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__MapPlaceholder.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__NetworkStatusBar.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__NotificationStatusCard.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__OfflineIndicator.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__OnboardingFlow.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__OptimizedImage.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__ParentDashboard.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__PhotoCheckInButton.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__PhotoCheckInHistory.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__PinAuthentication.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__PlaceCard.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__PullToRefresh.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__RegionalFunFactCard.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__RegionalTransitCard.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__RegionSelector.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__RegionSwitcher.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__routeCard.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__SafetyDashboard.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__SafetyPanel.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__SafeZoneActivityLog.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__SafeZoneIndicator.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__SafeZoneManagement.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__SafeZoneStatusCard.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__SearchBar.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\components__toastAccessibility.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\constants__ThemeProvider.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\core__SafetyDashboard.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\hooks__routePrefetch.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\misc__AIJourneyCompanion.fixed.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\misc__AIJourneyCompanion.simplified.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\misc__AIJourneyCompanion.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\routesCache.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\safety.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    },
+    {
+        "Discardable":  "C:\\Users\\Admin\\WSLProjects\\apps\\KidMap\\_tests_\\duplicates\\discardable\\telemetry.test.tsx",
+        "Canonical":  null,
+        "Status":  "no-canonical-found"
+    }
+]

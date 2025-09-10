@@ -116,7 +116,7 @@ export default function SearchScreen() {
           <View style={styles.emptyStateContainer}>
             <MapPin size={40} color={theme.colors.textSecondary} />
             <Text style={styles.emptyStateText}>
-              No places found for "{searchQuery}"
+              No places found for &quot;{searchQuery}&quot;
             </Text>
           </View>
         )
