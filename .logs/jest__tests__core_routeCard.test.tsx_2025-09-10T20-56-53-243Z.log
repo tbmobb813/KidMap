@@ -1,0 +1,19 @@
+timestamp: 2025-09-10T20:56:53.871Z
+branch: dedupe/routeCard-proposed-patch
+sha: bc85ff61b1627f1af16472ea0626352e445e9681
+args: jest _tests_/core/routeCard.test.tsx
+---
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [2m_tests_/core/[22m[1mrouteCard.test.tsx[22m ([0m[1m[41m8.33 s[49m[22m[0m)
+  RouteCard
+    [32m√[39m [2mrenders without crashing and shows duration (92 ms)[22m
+    [32m√[39m [2mrenders unavailable state when route is null (17 ms)[22m
+    [32m√[39m [2mfires onPress when pressing the duration text (21 ms)[22m
+
+[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+[1mTests:       [22m[1m[32m3 passed[39m[22m, 3 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m17.367 s[39m[22m
+[2mRan all test suites[22m[2m matching [22m/_tests_\\core\\routeCard.test.tsx/i[2m.[22m
+
+EXIT CODE: 0
