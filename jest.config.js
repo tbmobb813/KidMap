@@ -22,10 +22,7 @@ module.exports = {
         '^@/(.*)$': '<rootDir>/$1'
     },
     setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-    testMatch: [
-        '<rootDir>/_tests_/**/*.(test|spec).(ts|tsx|js)',
-        '<rootDir>/__tests__/**/*.(test|spec).(ts|tsx|js)'
-    ],
+    testMatch: ['<rootDir>/_tests_/**/*.(test|spec).(ts|tsx|js)'],
     collectCoverageFrom: [
         'components/**/*.{ts,tsx}',
         'hooks/**/*.{ts,tsx}',

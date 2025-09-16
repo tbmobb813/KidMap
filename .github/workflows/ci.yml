@@ -218,10 +218,13 @@ jobs:
           fi
 
       - name: Run safety-specific tests
-        run: npx jest __tests__/safety.test.ts --coverage --ci --colors
+        # Run any tests under the repository's critical safety tests folder
+        # (maps to repository path: _tests_/critical/safety.test.tsx)
+        run: npx jest --testPathPattern='_tests_/critical' --coverage --ci --colors
 
       - name: Validate error handling
-        run: npx jest __tests__/errorHandling.test.ts --coverage --ci --colors
+        # Also run any error-handling tests placed in the critical folder
+        run: npx jest --testPathPattern='_tests_/critical' --coverage --ci --colors
 
   performance:
     name: Performance Tests
@@ -288,7 +291,8 @@ jobs:
           node scripts/build-production.js
 
       - name: Performance benchmarks
-        run: npx jest __tests__/performance.test.ts --ci --colors
+        # Run any performance tests under the repository's performance tests folder
+        run: npx jest --testPathPattern='_tests_/performance' --ci --colors
 
   # Security and Compliance
   security:
@@ -419,7 +423,8 @@ jobs:
       - name: Validate iOS compatibility
         run: |
           echo "Validating iOS-specific code..."
-          npx jest __tests__/platform/ios.test.ts --ci --colors || echo "iOS tests completed"
+          # Run any platform tests under the canonical tests folder
+          npx jest --testPathPattern='_tests_/platform' --ci --colors || echo "iOS tests completed"
 
   build-android:
     name: Android Build Validation
@@ -484,7 +489,8 @@ jobs:
       - name: Validate Android compatibility
         run: |
           echo "Validating Android-specific code..."
-          npx jest __tests__/platform/android.test.ts --ci --colors || echo "Android tests completed"
+          # Run any platform tests under the canonical tests folder
+          npx jest --testPathPattern='_tests_/platform' --ci --colors || echo "Android tests completed"
 
   # Deployment readiness
   deployment-check:
