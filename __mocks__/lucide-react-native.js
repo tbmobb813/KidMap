@@ -27,7 +27,7 @@ module.exports = {
   MessageCircle: createIcon('MessageCircle'),
   Camera: createIcon('Camera'),
   Users: createIcon('Users'),
-  AlertTriangle: createIcon('AlertTriangle'),
+  AlertTriangle: () => null,
   Timer: createIcon('Timer'),
   Bell: createIcon('Bell'),
   Navigation: createIcon('Navigation'),

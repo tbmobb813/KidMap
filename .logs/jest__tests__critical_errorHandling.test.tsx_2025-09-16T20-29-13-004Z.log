@@ -1,0 +1,108 @@
+timestamp: 2025-09-16T20:29:13.698Z
+branch: dedupe/routeCard-proposed-patch
+sha: 991e87a58e68bca990d0afb3eb091c7a264f4c3f
+args: jest _tests_/critical/errorHandling.test.tsx
+---
+
+[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2m_tests_/critical/[22m[1merrorHandling.test.tsx[22m ([0m[1m[41m13.4 s[49m[22m[0m)
+  ErrorBoundary smoke
+    [32m√[39m [2mrenders fallback when child throws (215 ms)[22m
+    [32m√[39m [2mpasses through children when no error occurs (28 ms)[22m
+    [31m×[39m [2mallows retry to recover after error (1198 ms)[22m
+
+[1m[31m  [1m● [22m[1mErrorBoundary smoke › allows retry to recover after error[39m[22m
+
+    There was an error during concurrent rendering but React was able to recover by instead synchronously rendering the entire root.
+[2m[22m
+[2m    [0m [90m 54 |[39m ) {[22m
+[2m     [90m 55 |[39m   [36mconst[39m { theme [33m=[39m [32m"light"[39m[33m,[39m queryClient[33m,[39m [33m...[39mrenderOptions } [33m=[39m options[33m;[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 56 |[39m   [36mreturn[39m rtlRender(ui[33m,[39m {[22m
+[2m     [90m    |[39m                   [31m[1m^[22m[2m[39m[22m
+[2m     [90m 57 |[39m     wrapper[33m:[39m ({ children }) [33m=>[39m ([22m
+[2m     [90m 58 |[39m       [33m<[39m[33mAllTheProviders[39m theme[33m=[39m{theme} queryClient[33m=[39m{queryClient}[33m>[39m[22m
+[2m     [90m 59 |[39m         {children}[0m[22m
+[2m[22m
+[2m      [2mat throwException ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:5295:9)[22m[2m[22m
+[2m      [2mat throwAndUnwindWorkLoop ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:10993:11)[22m[2m[22m
+[2m      [2mat renderRootSync ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:10741:19)[22m[2m[22m
+[2m      [2mat performWorkOnRoot ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:10257:13)[22m[2m[22m
+[2m      [2mat performWorkOnRootViaSchedulerTask ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:1879:7)[22m[2m[22m
+[2m      [2mat flushActQueue ([22m[2mnode_modules/react/cjs/react.development.js[2m:566:34)[22m[2m[22m
+[2m      [2mat Object.<anonymous>.process.env.NODE_ENV.exports.act ([22m[2mnode_modules/react/cjs/react.development.js[2m:860:10)[22m[2m[22m
+[2m      [2mat actImplementation ([22m[2mnode_modules/@testing-library/react-native/src/act.ts[2m:30:25)[22m[2m[22m
+[2m      [2mat renderWithAct ([22m[2mnode_modules/@testing-library/react-native/src/render-act.ts[2m:12:11)[22m[2m[22m
+[2m      [2mat renderInternal ([22m[2mnode_modules/@testing-library/react-native/src/render.tsx[2m:81:33)[22m[2m[22m
+[2m      [2mat renderInternal ([22m[2mnode_modules/@testing-library/react-native/src/render.tsx[2m:44:10)[22m[2m[22m
+[2m      [2mat customRender ([22m[2m_tests_/testUtils.tsx[2m:56:19)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36m_tests_/critical/errorHandling.test.tsx[39m[0m[2m:61:68)[22m[2m[22m
+[2m      [2mat asyncGeneratorStep ([22m[2mnode_modules/@babel/runtime/helpers/asyncToGenerator.js[2m:3:17)[22m[2m[22m
+[2m      [2mat _next ([22m[2mnode_modules/@babel/runtime/helpers/asyncToGenerator.js[2m:17:9)[22m[2m[22m
+[2m      [2mat [22m[2mnode_modules/@babel/runtime/helpers/asyncToGenerator.js[2m:22:7[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2mnode_modules/@babel/runtime/helpers/asyncToGenerator.js[2m:14:12)[22m[2m[22m
+
+    Cause:
+    initial boom
+[2m[22m
+[2m    [0m [90m 54 |[39m       [36mif[39m (attempt [33m===[39m [35m0[39m) {[22m
+[2m     [90m 55 |[39m         attempt[33m++[39m[33m;[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 56 |[39m         [36mthrow[39m [36mnew[39m [33mError[39m([32m"initial boom"[39m)[33m;[39m[22m
+[2m     [90m    |[39m               [31m[1m^[22m[2m[39m[22m
+[2m     [90m 57 |[39m       }[22m
+[2m     [90m 58 |[39m       [36mreturn[39m [33m<[39m[33mText[39m accessibilityLabel[33m=[39m[32m"recovered"[39m[33m>[39m[33mRecovered[39m[33m<[39m[33m/[39m[33mText[39m[33m>[39m[33m;[39m[22m
+[2m     [90m 59 |[39m     }[33m;[39m[0m[22m
+[2m[22m
+[2m      [2mat BombThenOK ([22m[2m[0m[36m_tests_/critical/errorHandling.test.tsx[39m[0m[2m:56:15)[22m[2m[22m
+[2m      [2mat Object.react-stack-bottom-frame ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:12679:20)[22m[2m[22m
+[2m      [2mat renderWithHooks ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:3622:25)[22m[2m[22m
+[2m      [2mat updateFunctionComponent ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:5635:19)[22m[2m[22m
+[2m      [2mat beginWork ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:7086:18)[22m[2m[22m
+[2m      [2mat runWithFiberInDEV ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:540:16)[22m[2m[22m
+[2m      [2mat performUnitOfWork ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:10917:22)[22m[2m[22m
+[2m      [2mat workLoopSync ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:10763:41)[22m[2m[22m
+[2m      [2mat renderRootSync ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:10744:11)[22m[2m[22m
+[2m      [2mat performWorkOnRoot ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:10257:13)[22m[2m[22m
+[2m      [2mat performWorkOnRootViaSchedulerTask ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:1879:7)[22m[2m[22m
+[2m      [2mat flushActQueue ([22m[2mnode_modules/react/cjs/react.development.js[2m:566:34)[22m[2m[22m
+[2m      [2mat Object.<anonymous>.process.env.NODE_ENV.exports.act ([22m[2mnode_modules/react/cjs/react.development.js[2m:860:10)[22m[2m[22m
+[2m      [2mat actImplementation ([22m[2mnode_modules/@testing-library/react-native/src/act.ts[2m:30:25)[22m[2m[22m
+[2m      [2mat renderWithAct ([22m[2mnode_modules/@testing-library/react-native/src/render-act.ts[2m:12:11)[22m[2m[22m
+[2m      [2mat renderInternal ([22m[2mnode_modules/@testing-library/react-native/src/render.tsx[2m:81:33)[22m[2m[22m
+[2m      [2mat renderInternal ([22m[2mnode_modules/@testing-library/react-native/src/render.tsx[2m:44:10)[22m[2m[22m
+[2m      [2mat customRender ([22m[2m_tests_/testUtils.tsx[2m:56:19)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36m_tests_/critical/errorHandling.test.tsx[39m[0m[2m:61:68)[22m[2m[22m
+[2m      [2mat asyncGeneratorStep ([22m[2mnode_modules/@babel/runtime/helpers/asyncToGenerator.js[2m:3:17)[22m[2m[22m
+[2m      [2mat _next ([22m[2mnode_modules/@babel/runtime/helpers/asyncToGenerator.js[2m:17:9)[22m[2m[22m
+[2m      [2mat [22m[2mnode_modules/@babel/runtime/helpers/asyncToGenerator.js[2m:22:7[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2mnode_modules/@babel/runtime/helpers/asyncToGenerator.js[2m:14:12)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1mErrorBoundary smoke › allows retry to recover after error[39m[22m
+
+    Unable to find an element with testID: error-retry-button
+
+    [36m<span[39m
+      [33maccessibilityLabel[39m=[32m"recovered"[39m
+    [36m>[39m
+      [0mRecovered[0m
+    [36m</span>[39m
+[2m[22m
+[2m    [0m [90m 66 |[39m[22m
+[2m     [90m 67 |[39m     [90m// Fallback visible[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 68 |[39m     [36mconst[39m retryButton [33m=[39m [36mawait[39m findByTestId([32m"error-retry-button"[39m)[33m;[39m[22m
+[2m     [90m    |[39m                               [31m[1m^[22m[2m[39m[22m
+[2m     [90m 69 |[39m     expect(retryButton)[33m.[39mtoBeTruthy()[33m;[39m[22m
+[2m     [90m 70 |[39m     fireEvent[33m.[39mpress(retryButton)[33m;[39m[22m
+[2m     [90m 71 |[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.findByTestId ([22m[2m[0m[36m_tests_/critical/errorHandling.test.tsx[39m[0m[2m:68:31)[22m[2m[22m
+[2m      [2mat asyncGeneratorStep ([22m[2mnode_modules/@babel/runtime/helpers/asyncToGenerator.js[2m:3:17)[22m[2m[22m
+[2m      [2mat _next ([22m[2mnode_modules/@babel/runtime/helpers/asyncToGenerator.js[2m:17:9)[22m[2m[22m
+[2m      [2mat [22m[2mnode_modules/@babel/runtime/helpers/asyncToGenerator.js[2m:22:7[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2mnode_modules/@babel/runtime/helpers/asyncToGenerator.js[2m:14:12)[22m[2m[22m
+
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, 1 total
+[1mTests:       [22m[1m[31m1 failed[39m[22m, [1m[32m2 passed[39m[22m, 3 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m20.591 s[39m[22m
+[2mRan all test suites[22m[2m matching [22m/_tests_\\critical\\errorHandling.test.tsx/i[2m.[22m
+
+EXIT CODE: 1
