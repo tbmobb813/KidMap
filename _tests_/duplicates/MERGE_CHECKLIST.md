@@ -59,22 +59,19 @@ Recommended next steps (minimal, ordered)
 4. Run `node ./.scripts/run-tests-and-log.js _tests_/core/routeCard.test.tsx _tests_/critical/telemetry.test.tsx` to produce verification logs.
 5. Open a PR from the verification branch (or create a new branch) with the applied patches. Mark large items (OnboardingFlow, AIJourneyCompanion variants) as Manual-Review in the PR description and attach the unified diffs.
 
+## Archive Moves — 2025-09-16
 
-# Archive Moves — 2025-09-16
+  The following files were moved from `merged/` to `discardable/` as part of safe dedupe cleanup:
 
-# The following files were moved from `merged/` to `discardable/` as part of safe dedupe cleanup
+- components__AIJourneyCompanion.basic.test.tsx
+- components__routeCard.test.tsx
+- telemetry.test.tsx
 
-# - components__AIJourneyCompanion.basic.test.tsx
-
-# - components__routeCard.test.tsx
-
-# - telemetry.test.tsx
-
-# These are now ready for final removal after review
+These are now ready for final removal after review
 
 Timestamp: 2025-09-16T20:46:20Z
 
-# Merge Checklist for `_tests_/duplicates/merged`
+## Merge Checklist for `_tests_/duplicates/merged`
 
 This checklist summarizes each archived merged test file, the declared canonical target (if found), whether the canonical exists, a short unique-lines sample, and a recommended action.
 
