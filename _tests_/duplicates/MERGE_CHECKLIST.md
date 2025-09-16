@@ -1,9 +1,11 @@
 # MERGE CHECKLIST — `_tests_/duplicates`
 
 Summary
+
 - This checklist records the recommended action for each merged duplicate test file discovered by the automated dedupe workflow. It points at the prepared patch artifacts, backups, and indicates whether the change is safe to auto-apply or requires manual review.
 
 How to use
+
 - Review the proposed patch files under `_tests_/duplicates/proposed_patches/` and the unified diffs (`*.patch`).
 - For safe items, prefer a small branch + test run and open a PR. For Manual-Review items, inspect the `merge_diff_report_v4.json` entry and the original archive under `_tests_/duplicates/merged/`.
 
@@ -45,21 +47,33 @@ Per-file actions
   - Action: apply on a branch, run jest/lint/tsc, open PR.
 
 Other artifacts to inspect
+
 - `merge_diff_report_v4.json` — comprehensive per-file diff report produced by the diff script.
 - `merge_actions.json` — actionable summary generated from the diff report.
 
 Recommended next steps (minimal, ordered)
+
 1. Review diffs for `routeCard` and `telemetry` in `_tests_/duplicates/proposed_patches/`.
 2. Remove temporary debug logs from `_tests_/core/routeCard.test.tsx` (if present) and finalize commits on the verification branch.
 3. Run `npm run lint` and `npm run typecheck` locally; fix any issues.
 4. Run `node ./.scripts/run-tests-and-log.js _tests_/core/routeCard.test.tsx _tests_/critical/telemetry.test.tsx` to produce verification logs.
 5. Open a PR from the verification branch (or create a new branch) with the applied patches. Mark large items (OnboardingFlow, AIJourneyCompanion variants) as Manual-Review in the PR description and attach the unified diffs.
 
-Notes
-- No canonical tests were overwritten without creating backups and branch commits. Large/complex files were intentionally left for manual review.
-- If you want me to open the PR and push the branch, say so and I will push the branch `dedupe/routeCard-proposed-patch` and open a PR with the patches and logs.
 
-Timestamp: 2025-09-10T20:46:20Z
+# Archive Moves — 2025-09-16
+
+# The following files were moved from `merged/` to `discardable/` as part of safe dedupe cleanup
+
+# - components__AIJourneyCompanion.basic.test.tsx
+
+# - components__routeCard.test.tsx
+
+# - telemetry.test.tsx
+
+# These are now ready for final removal after review
+
+Timestamp: 2025-09-16T20:46:20Z
+
 # Merge Checklist for `_tests_/duplicates/merged`
 
 This checklist summarizes each archived merged test file, the declared canonical target (if found), whether the canonical exists, a short unique-lines sample, and a recommended action.

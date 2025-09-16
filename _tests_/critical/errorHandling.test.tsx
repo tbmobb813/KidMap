@@ -5,7 +5,6 @@ import { Text } from "react-native";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { render, screen } from "../testUtils";
 
-
 jest.mock("lucide-react-native", () => ({
   AlertTriangle: () => null,
   RefreshCw: () => null,
