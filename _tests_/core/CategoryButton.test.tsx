@@ -7,8 +7,16 @@
  *
  * @group core
  */
-// ===== MOCK SETUP =====
+// ===== TEST IMPORTS =====
 import { jest } from "@jest/globals";
+import { fireEvent, render } from "@testing-library/react-native";
+
+import { createTestWrapper } from "../testUtils";
+
+import CategoryButton from "@/components/CategoryButton";
+import { CustomCategory, PlaceCategory } from "@/types/navigation";
+
+// ===== MOCK SETUP =====
 // Mock lucide-react-native icons (extensive icon set)
 jest.mock("lucide-react-native", () => ({
   Home: ({ size, color, ...props }: any) =>
@@ -73,12 +81,7 @@ jest.mock("@/utils/accessibility/touchTargetAudit", () => ({
   auditTouchTarget: jest.fn(),
 }));
 
-// ===== TEST IMPORTS =====
-import { fireEvent, render } from "@testing-library/react-native";
-import { createTestWrapper } from "../testUtils";
-
-import CategoryButton from "@/components/CategoryButton";
-import { CustomCategory, PlaceCategory } from "@/types/navigation";
+// ===== END MOCK SETUP =====
 
 // ===== TEST HELPER FUNCTIONS =====
 const createMockCustomCategory = (

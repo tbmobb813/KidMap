@@ -86,18 +86,7 @@ const updateLocation = (
 /**
  * Test harness component to render the hook and capture its return value
  */
-const TestHarness: React.FC<{
-  onUpdate: (monitor: ReturnType<typeof useSafeZoneMonitor>) => void;
-}> = ({ onUpdate }) => {
-  const monitor = useSafeZoneMonitor();
-  
-  // Call onUpdate in useEffect to avoid state updates during render
-  React.useEffect(() => {
-    onUpdate(monitor);
-  }, [monitor, onUpdate]);
-  
-  return null;
-};
+// Removed unused TestHarness component.
 
 // ===== TEST SETUP =====
 describe('useSafeZoneMonitor Hook - Critical Safety Tests', () => {

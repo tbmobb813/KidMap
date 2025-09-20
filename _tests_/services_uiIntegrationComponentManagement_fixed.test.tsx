@@ -15,7 +15,6 @@
  * Pattern: Tenth ServiceTestTemplate migration using proven singleton methodology
  */
 
-import React from "react";
 
 // =====================================================================================
 // MOCK SETUP - Compatible with Bun test runner
@@ -105,10 +104,6 @@ const mockPlace = {
   description: "A test library for navigation",
 };
 
-const mockLocation = {
-  latitude: 40.7589,
-  longitude: -73.9851,
-};
 
 // =============================================================================
 // UI INTEGRATION & COMPONENT MANAGEMENT SERVICE

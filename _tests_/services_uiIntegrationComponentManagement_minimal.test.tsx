@@ -15,7 +15,6 @@
  * Pattern: Tenth ServiceTestTemplate migration using proven methodology
  */
 
-import React from "react";
 
 // =====================================================================================
 // MOCK SETUP - Simplified pattern following successful ServiceTestTemplate approach
@@ -53,7 +52,6 @@ jest.mock("@/components/AccessibleButton", () => {
 });
 
 // Import service functions (non-component imports)
-import { useTheme } from "@/constants/theme";
 
 // =====================================================================================
 // SERVICE: UIIntegrationComponentService Singleton
@@ -235,12 +233,12 @@ class UIIntegrationComponentService {
     return this.validateComponent(componentName);
   }
 
-  handleThemeError(themeName: string): boolean {
+  handleThemeError(_themeName: string): boolean {
     // Fallback to light theme
     return this.validateTheme("light");
   }
 
-  handleAccessibilityError(feature: string): boolean {
+  handleAccessibilityError(_feature: string): boolean {
     // Graceful degradation
     return true;
   }

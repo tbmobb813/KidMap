@@ -18,6 +18,7 @@
  */
 
 // Import location validation functions
+import { validatePhotoCheckIn, PhotoCheckInSchema } from "@/core/validation";
 import { LocationSchema } from "@/src/core/validation/baseSchemas";
 import type { LocationData } from "@/src/core/validation/baseSchemas";
 import { validateDistance } from "@/src/core/validation/helpers";
@@ -28,7 +29,6 @@ import {
   formatDistance,
   getLocationAccuracyDescription,
 } from "@/utils/location/locationUtils";
-import { validatePhotoCheckIn, PhotoCheckInSchema } from "@/core/validation";
 
 describe("Location & Geographic Validation Suite", () => {
   // ===== COORDINATE VALIDATION TESTS =====

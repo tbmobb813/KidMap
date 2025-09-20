@@ -16,7 +16,7 @@
  * Test Count: ~40 tests covering all validation scenarios
  */
 
-import { render } from "../testUtils";
+// Note: render imported previously was unused.
 
 // Import validation functions from core validation
 import {
@@ -27,12 +27,10 @@ import {
   SafeZoneCreateSchema,
   ParentalSettingsSchema,
 } from "@/src/core/validation/safetySchemas";
-
 // Types
 import type {
   EmergencyContact,
   SafeZone,
-  ParentalSettings,
 } from "@/src/modules/safety/types/parental";
 
 describe("Safety Validation Suite", () => {

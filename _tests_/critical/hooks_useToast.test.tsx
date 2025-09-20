@@ -1,18 +1,18 @@
 /**
  * HOOK TEST: useToast - Toast Notification Management Tests
- * 
+ *
  * Testing the useToast hook following HookTestTemplate pattern.
  * This hook is critical for user feedback - manages toast state and actions.
- * 
+ *
  * Key test areas:
  * - Toast state management (visibility, message, type)
  * - Show toast functionality with different types
- * - Hide toast functionality  
+ * - Hide toast functionality
  * - State persistence and updates
  * - Hook return value structure
  */
 
-import { jest } from '@jest/globals';
+import { jest } from "@jest/globals";
 import { act, renderHook } from "@testing-library/react-native";
 
 import { useToast } from "@/hooks/useToast";
@@ -30,7 +30,7 @@ const renderToastHook = () => {
 };
 
 // ===== TEST SETUP =====
-describe('useToast Hook - Toast Notification Management Tests', () => {
+describe("useToast Hook - Toast Notification Management Tests", () => {
   beforeEach(() => {
     // Clear all mocks
     jest.clearAllMocks();
@@ -38,7 +38,7 @@ describe('useToast Hook - Toast Notification Management Tests', () => {
 
   // ===== CORE FUNCTIONALITY TESTS =====
 
-  it('should return initial toast state', () => {
+  it("should return initial toast state", () => {
     const { result } = renderToastHook();
 
     // Verify initial state
@@ -49,11 +49,11 @@ describe('useToast Hook - Toast Notification Management Tests', () => {
     });
 
     // Verify function availability
-    expect(typeof result.current.showToast).toBe('function');
-    expect(typeof result.current.hideToast).toBe('function');
+    expect(typeof result.current.showToast).toBe("function");
+    expect(typeof result.current.hideToast).toBe("function");
   });
 
-  it('should show toast with default info type', () => {
+  it("should show toast with default info type", () => {
     const { result } = renderToastHook();
     const testMessage = "Test notification message";
 
@@ -69,7 +69,7 @@ describe('useToast Hook - Toast Notification Management Tests', () => {
     });
   });
 
-  it('should show toast with specified type', () => {
+  it("should show toast with specified type", () => {
     const { result } = renderToastHook();
     const testMessage = "Success message";
 
@@ -85,13 +85,13 @@ describe('useToast Hook - Toast Notification Management Tests', () => {
     });
   });
 
-  it('should handle all toast types correctly', () => {
+  it("should handle all toast types correctly", () => {
     const { result } = renderToastHook();
     const toastTypes = ["success", "error", "info", "warning"] as const;
 
     toastTypes.forEach((type) => {
       const message = `${type} message`;
-      
+
       act(() => {
         result.current.showToast(message, type);
       });
@@ -104,7 +104,7 @@ describe('useToast Hook - Toast Notification Management Tests', () => {
     });
   });
 
-  it('should hide toast while preserving message and type', () => {
+  it("should hide toast while preserving message and type", () => {
     const { result } = renderToastHook();
     const testMessage = "Test message";
     const testType = "error";
@@ -130,7 +130,7 @@ describe('useToast Hook - Toast Notification Management Tests', () => {
     });
   });
 
-  it('should update toast when showToast is called multiple times', () => {
+  it("should update toast when showToast is called multiple times", () => {
     const { result } = renderToastHook();
 
     // Show first toast
@@ -155,7 +155,7 @@ describe('useToast Hook - Toast Notification Management Tests', () => {
 
   // ===== EDGE CASES =====
 
-  it('should handle empty message', () => {
+  it("should handle empty message", () => {
     const { result } = renderToastHook();
 
     act(() => {
@@ -169,7 +169,7 @@ describe('useToast Hook - Toast Notification Management Tests', () => {
     });
   });
 
-  it('should handle very long messages', () => {
+  it("should handle very long messages", () => {
     const { result } = renderToastHook();
     const longMessage = "A".repeat(1000);
 
@@ -184,7 +184,7 @@ describe('useToast Hook - Toast Notification Management Tests', () => {
     });
   });
 
-  it('should handle rapid show/hide operations', () => {
+  it("should handle rapid show/hide operations", () => {
     const { result } = renderToastHook();
 
     // Rapid sequence of operations
@@ -206,14 +206,14 @@ describe('useToast Hook - Toast Notification Management Tests', () => {
 
   // ===== FUNCTION REFERENCE STABILITY =====
 
-  it('should maintain stable function references', () => {
-  const { result, rerender } = renderToastHook();
-    
+  it("should maintain stable function references", () => {
+    const { result, rerender } = renderToastHook();
+
     const initialShowToast = result.current.showToast;
     const initialHideToast = result.current.hideToast;
 
-  // Trigger re-render (no props to pass, provide a noop object to satisfy types)
-  rerender({});
+    // Trigger re-render (no props to pass, provide a noop object to satisfy types)
+    rerender({});
 
     // Function references should be stable
     expect(result.current.showToast).toBe(initialShowToast);

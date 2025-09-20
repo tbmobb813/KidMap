@@ -18,6 +18,7 @@ import { render, fireEvent } from "@testing-library/react-native";
 import React from "react";
 
 import { mockRoute } from "../testUtils";
+
 const { queryAllByLabelText } = require("@testing-library/react-native");
 
 // Test implementations using mock components
@@ -34,7 +35,7 @@ jest.mock("expo-router", () => ({
 }));
 
 // Mock helper functions
-const handleDeepLink = jest.fn((url) => {
+const _handleDeepLink = jest.fn((url) => {
   try {
     const mockUrl = new URL(url);
     const path = mockUrl.pathname;
@@ -54,7 +55,7 @@ const handleDeepLink = jest.fn((url) => {
   }
 });
 
-const createMockRouteWithSteps = jest.fn((overrides = {}) => ({
+const _createMockRouteWithSteps = jest.fn((overrides = {}) => ({
   id: "mock-route-1",
   name: "Test Route",
   totalDuration: 28,
@@ -67,7 +68,7 @@ const createMockRouteWithSteps = jest.fn((overrides = {}) => ({
 }));
 
 // Mock Components for testing
-const RouteCard = (props: any) =>
+const _RouteCard = (props: any) =>
   React.createElement(
     "View",
     {
@@ -109,7 +110,7 @@ const RouteCard = (props: any) =>
     ]
   );
 
-const RouteDetailScreen = (props: any) =>
+const _RouteDetailScreen = (props: any) =>
   React.createElement(
     "View",
     {
@@ -121,7 +122,7 @@ const RouteDetailScreen = (props: any) =>
       : [React.createElement("Text", { key: "fallback" }, "Route not found")]
   );
 
-const CategoryButton = (props: any) =>
+const _CategoryButton = (props: any) =>
   React.createElement("View", {
     testID: "category-button",
     accessibilityLabel: `${props.category} category`,
@@ -129,14 +130,14 @@ const CategoryButton = (props: any) =>
     ...props,
   });
 
-const TravelModeSelector = (props: any) =>
+const _TravelModeSelector = (props: any) =>
   React.createElement("View", {
     testID: "travel-mode-selector",
     accessibilityLabel: `Travel mode: ${props.selectedMode}`,
     ...props,
   });
 
-const VoiceNavigation = (props: any) =>
+const _VoiceNavigation = (props: any) =>
   React.createElement("View", {
     testID: "voice-navigation",
     accessibilityLabel: "Voice navigation controls",
@@ -501,7 +502,7 @@ describe("Navigation & Routing Integration - ServiceTestTemplate", () => {
       });
 
       it("adds accessibility props to CategoryButton", () => {
-        const { getByTestId } = render(
+        const { getByTestId: _getByTestId } = render(
           React.createElement(TestCategoryButton, {
             category: "Restaurants",
             accessibilityLabel: "Filter by restaurants",

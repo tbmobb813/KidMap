@@ -281,7 +281,4 @@ jobs:
           });
 
 # Scheduled nightly runs
-on:
-  schedule:
-    # Run nightly at 2 AM UTC
-    - cron: '0 2 * * *'
+# (Removed duplicate 'on:' block to fix workflow error)

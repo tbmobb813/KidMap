@@ -17,7 +17,7 @@
  * Test Count: ~42 tests covering all regional validation scenarios
  */
 
-import { render } from "../testUtils";
+// test utils not needed here
 
 // Import validation functions and types
 
@@ -264,7 +264,7 @@ describe("Regional Configuration & Transit System Validation Suite", () => {
         ];
 
         validTypes.forEach((type) => {
-          const transit = { ...validTransitBase, type };
+          const _transit = { ...validTransitBase, type };
           expect(["subway", "train", "bus", "tram", "ferry"]).toContain(type);
         });
       });
@@ -371,7 +371,7 @@ describe("Regional Configuration & Transit System Validation Suite", () => {
         ];
 
         validStatuses.forEach((status) => {
-          const transit = { ...validTransitBase, status };
+          const _transit = { ...validTransitBase, status };
           expect(["operational", "delayed", "suspended"]).toContain(status);
         });
       });
@@ -390,14 +390,14 @@ describe("Regional Configuration & Transit System Validation Suite", () => {
     ];
 
     it("validates all real regions pass basic validation", () => {
-      realRegions.forEach(({ name, config }) => {
+      realRegions.forEach(({ name: _name, config }) => {
         const isValid = validateRegionConfig(config);
         expect(isValid).toBe(true);
       });
     });
 
     it("ensures geographic coordinates are reasonable", () => {
-      realRegions.forEach(({ name, config }) => {
+      realRegions.forEach(({ name: _name, config }) => {
         const { latitude, longitude } = config.coordinates;
 
         // Validate latitude
@@ -414,7 +414,7 @@ describe("Regional Configuration & Transit System Validation Suite", () => {
     });
 
     it("validates transit systems have consistent data", () => {
-      realRegions.forEach(({ name, config }) => {
+      realRegions.forEach(({ name: _name, config }) => {
         config.transitSystems.forEach((transit) => {
           // Basic transit validation
           expect(transit.id).toBeDefined();

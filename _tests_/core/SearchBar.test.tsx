@@ -7,8 +7,15 @@
  *
  * @group core
  */
-// ===== MOCK SETUP =====
+// ===== TEST IMPORTS =====
 import { jest } from "@jest/globals";
+import { fireEvent, render } from "@testing-library/react-native";
+
+import { createTestWrapper } from "../testUtils";
+
+import SearchBar from "@/components/SearchBar";
+
+// ===== MOCK SETUP =====
 // Mock lucide-react-native icons
 jest.mock("lucide-react-native", () => ({
   Search: ({ size, color, ...props }: any) =>
@@ -25,11 +32,7 @@ jest.mock("lucide-react-native", () => ({
     }),
 }));
 
-// ===== TEST IMPORTS =====
-import { fireEvent, render } from "@testing-library/react-native";
-import { createTestWrapper } from "../testUtils";
-
-import SearchBar from "@/components/SearchBar";
+// ===== END MOCK SETUP =====
 
 // ===== TEST HELPER FUNCTIONS =====
 const renderSearchBar = (

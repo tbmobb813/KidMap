@@ -62,6 +62,7 @@ const createMockAnimatedValueXY = (initialValue = { x: 0, y: 0 }) => ({
 // Mock animation functions
 const createMockAnimation = () => ({
   start: jest.fn((_callback) => {
+    void _callback; // Suppress unused variable warning
     // Don't call callback to avoid infinite recursion in tests
     // Components can test animation behavior without actually running the animation loop
   }),

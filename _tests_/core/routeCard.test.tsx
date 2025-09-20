@@ -7,8 +7,16 @@
  * @group core
  */
 
-// ===== MOCK SETUP =====
+// ===== TEST IMPORTS =====
 import { jest } from "@jest/globals";
+import { fireEvent, render } from "@testing-library/react-native";
+
+import { createTestWrapper, mockRoute } from "../testUtils";
+
+import RouteCard from "@/components/RouteCard";
+import { Route, TransitStep } from "@/types/navigation";
+
+// ===== MOCK SETUP =====
 // Mock the transit step indicator that the component composes
 jest.mock("@/components/TransitStepIndicator", () => {
   return function MockTransitStepIndicator({ step }: any) {
@@ -35,13 +43,6 @@ jest.mock("lucide-react-native", () => ({
       ...props,
     }),
 }));
-
-// ===== TEST IMPORTS =====
-import { fireEvent, render } from "@testing-library/react-native";
-import { createTestWrapper, mockRoute } from "../testUtils";
-
-import RouteCard from "@/components/RouteCard";
-import { Route, TransitStep } from "@/types/navigation";
 
 // ===== TEST HELPER FUNCTIONS =====
 const createMockTransitSteps = (): TransitStep[] => [

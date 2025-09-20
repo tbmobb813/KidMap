@@ -19,8 +19,7 @@ type AlertButton = {
   onPress?: (() => void) | (() => Promise<void>);
 };
 
-const getButtons = () =>
-  (mockAlert.mock.calls[0]?.[2] ?? []) as AlertButton[];
+const getButtons = () => (mockAlert.mock.calls[0]?.[2] ?? []) as AlertButton[];
 
 const createMockCallbacks = () => ({
   onConfirm: jest.fn(),
@@ -171,8 +170,8 @@ describe("ConfirmDialog Component", () => {
       onConfirm,
     });
 
-  const buttons = getButtons();
-  buttons[1].onPress?.();
+    const buttons = getButtons();
+    buttons[1].onPress?.();
 
     expect(onConfirm).toHaveBeenCalledTimes(1);
   });
@@ -187,8 +186,8 @@ describe("ConfirmDialog Component", () => {
       onCancel,
     });
 
-  const buttons = getButtons();
-  buttons[0].onPress?.();
+    const buttons = getButtons();
+    buttons[0].onPress?.();
 
     expect(onCancel).toHaveBeenCalledTimes(1);
   });
@@ -219,8 +218,8 @@ describe("ConfirmDialog Component", () => {
       onConfirm,
     });
 
-  const buttons = getButtons();
-  buttons[1].onPress?.();
+    const buttons = getButtons();
+    buttons[1].onPress?.();
 
     expect(onConfirm).toHaveBeenCalledTimes(1);
   });
@@ -234,8 +233,8 @@ describe("ConfirmDialog Component", () => {
       onConfirm,
     });
 
-  const buttons = getButtons();
-  await buttons[1].onPress?.();
+    const buttons = getButtons();
+    await buttons[1].onPress?.();
 
     expect(onConfirm).toHaveBeenCalledTimes(1);
   });
@@ -250,8 +249,8 @@ describe("ConfirmDialog Component", () => {
       onConfirm,
     });
 
-  const buttons = getButtons();
-  await buttons[1].onPress?.();
+    const buttons = getButtons();
+    await buttons[1].onPress?.();
 
     expect(onConfirm).toHaveBeenCalledTimes(1);
     expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error));

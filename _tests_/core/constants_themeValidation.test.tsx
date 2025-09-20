@@ -19,13 +19,13 @@
  * @timeout 20000
  */
 import { palettes } from "../../constants/colors";
+import { withAlpha, tint } from "../../utils/color/color";
 import {
   parseHex,
   luminance,
   contrastRatio,
   meetsAA,
 } from "../../utils/color/contrast";
-import { withAlpha, tint } from "../../utils/color/color";
 
 // =============================================================================
 // SERVICE TEST TEMPLATE IMPLEMENTATION
@@ -330,7 +330,7 @@ describe("WCAG Accessibility Compliance", () => {
         },
       ];
 
-      textCombinations.forEach(({ fg, bg, desc }) => {
+      textCombinations.forEach(({ fg, bg, desc: _desc }) => {
         const details = getDetailedContrastRatio(fg, bg);
         expect(details.ratio).toBeGreaterThanOrEqual(4.5);
         expect(details.meetsAA).toBe(true);
@@ -372,7 +372,7 @@ describe("WCAG Accessibility Compliance", () => {
         { fg: light.infoForeground, bg: light.info, desc: "info button text" },
       ];
 
-      buttonCombinations.forEach(({ fg, bg, desc }) => {
+      buttonCombinations.forEach(({ fg, bg, desc: _desc }) => {
         const details = getDetailedContrastRatio(fg, bg);
         expect(details.ratio).toBeGreaterThanOrEqual(4.5);
         expect(details.meetsAA).toBe(true);
@@ -422,7 +422,7 @@ describe("WCAG Accessibility Compliance", () => {
         },
       ];
 
-      textCombinations.forEach(({ fg, bg, desc }) => {
+      textCombinations.forEach(({ fg, bg, desc: _desc }) => {
         const details = getDetailedContrastRatio(fg, bg);
         expect(details.ratio).toBeGreaterThanOrEqual(4.5);
         expect(details.meetsAA).toBe(true);
@@ -457,7 +457,7 @@ describe("WCAG Accessibility Compliance", () => {
         { fg: dark.infoForeground, bg: dark.info, desc: "info button text" },
       ];
 
-      buttonCombinations.forEach(({ fg, bg, desc }) => {
+      buttonCombinations.forEach(({ fg, bg, desc: _desc }) => {
         const details = getDetailedContrastRatio(fg, bg);
         expect(details.ratio).toBeGreaterThanOrEqual(4.5);
         expect(details.meetsAA).toBe(true);
@@ -488,7 +488,7 @@ describe("WCAG Accessibility Compliance", () => {
         },
       ];
 
-      criticalCombinations.forEach(({ fg, bg, desc }) => {
+      criticalCombinations.forEach(({ fg, bg, desc: _desc }) => {
         const details = getDetailedContrastRatio(fg, bg);
         expect(details.ratio).toBeGreaterThanOrEqual(7.0);
         expect(details.meetsAAA).toBe(true);
@@ -545,7 +545,7 @@ describe("Transit Color Standards", () => {
         { color: light.walk, mode: "walk" },
       ];
 
-      transitColors.forEach(({ color, mode }) => {
+      transitColors.forEach(({ color, mode: _mode }) => {
         // Transit colors should be distinguishable on light backgrounds (3:1 minimum)
         const bgRatio = getDetailedContrastRatio(color, light.background);
         expect(bgRatio.ratio).toBeGreaterThanOrEqual(3.0);

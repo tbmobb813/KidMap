@@ -25,10 +25,6 @@ jest.mock("@/services/routeService", () => ({
 }));
 
 // Mock QueryClient methods
-const mockPrefetchQuery = jest.fn();
-const mockQueryClient = {
-  prefetchQuery: mockPrefetchQuery,
-} as any;
 
 // ===== TEST UTILITIES =====
 /**

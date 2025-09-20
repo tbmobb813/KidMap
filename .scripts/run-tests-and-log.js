@@ -37,18 +37,21 @@ function run() {
     // If the JS runner exists, prefer invoking it with the current node executable
     const jestJsRunner = join(repoRoot, 'node_modules', 'jest', 'bin', 'jest.js');
     let cmd;
-    let cmdArgs = ['--colors', ...args];
-
     if (existsSync(jestJsRunner)) {
+        // Use current Node to execute the local Jest JS runner
         cmd = process.execPath; // node
-        cmdArgs = [jestJsRunner, '--colors', ...args];
     } else {
         // Prefer local shell script/binary under node_modules/.bin if present
-        const localJest = join(repoRoot, 'node_modules', '.bin', process.platform === 'win32' ? 'jest.cmd' : 'jest');
+        const localJest = join(
+            repoRoot,
+            'node_modules',
+            '.bin',
+            process.platform === 'win32' ? 'jest.cmd' : 'jest'
+        );
         if (existsSync(localJest)) {
             cmd = localJest;
         } else {
-            // Fallback to npx
+            // Fallback to npx (we will pass 'jest' explicitly later)
             cmd = 'npx';
         }
     }
@@ -104,8 +107,19 @@ function run() {
     }
 
     // Use scannedArgs for the actual jest invocation
-    const finalArgs = ['--colors', ...scannedArgs];
-    const proc = spawnSync(cmd, (cmd === process.execPath ? [jestJsRunner, '--colors', ...scannedArgs] : finalArgs), { encoding: 'utf8' });
+    // Build the argument vector based on which command we are invoking.
+    let argv;
+    if (cmd === process.execPath) {
+        // node <jest.js> --colors ...
+        argv = [jestJsRunner, '--colors', ...scannedArgs];
+    } else if (cmd === 'npx') {
+        // npx jest --colors ... (ensure jest is specified)
+        argv = ['jest', '--colors', ...scannedArgs];
+    } else {
+        // local jest(.cmd) binary
+        argv = ['--colors', ...scannedArgs];
+    }
+    const proc = spawnSync(cmd, argv, { encoding: 'utf8' });
 
     const out = (proc.stdout || '') + '\n' + (proc.stderr || '') + '\nEXIT CODE: ' + (proc.status ?? (proc.error && proc.error.code) ?? 'unknown');
     writeFileSync(logfile, header.join('\n') + out, { encoding: 'utf8' });
