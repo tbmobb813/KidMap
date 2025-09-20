@@ -1,0 +1,390 @@
+import { renderHook, act } from '@testing-library/react-native';
+import { jest } from '@jest/globals';
+
+import { use{{HOOK_NAME}} } from '@/hooks/use{{HOOK_NAME}}';
+import { render, createTestWrapper } from '../testUtils';
+
+// ===== MOCK SECTION =====
+// Mock dependencies specific to this hook
+jest.mock('@/stores/{{STORE_NAME}}', () => ({
+  use{{STORE_NAME}}: jest.fn(),
+}));
+
+jest.mock('@/services/{{SERVICE_NAME}}', () => ({
+  {{SERVICE_METHOD}}: jest.fn(),
+}));
+
+// Mock external dependencies
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+);
+
+// ===== TEST DATA SETUP =====
+const mockStore = {
+  {{STORE_PROPERTY}}: 'default-value',
+  {{STORE_METHOD}}: jest.fn(),
+};
+
+const mockService = {
+  {{SERVICE_METHOD}}: jest.fn(),
+};
+
+const setup{{HOOK_NAME}}Test = (initialProps = {}) => {
+  const defaultProps = {
+    // Add default hook parameters here
+    ...initialProps,
+  };
+
+  return renderHook(() => use{{HOOK_NAME}}(defaultProps), {
+    wrapper: createTestWrapper(),
+  });
+};
+
+describe('use{{HOOK_NAME}}', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    // Reset store mocks
+    const { use{{STORE_NAME}} } = require('@/stores/{{STORE_NAME}}');
+    use{{STORE_NAME}}.mockReturnValue(mockStore);
+
+    // Reset service mocks
+    const { {{SERVICE_METHOD}} } = require('@/services/{{SERVICE_NAME}}');
+    {{SERVICE_METHOD}}.mockImplementation(mockService.{{SERVICE_METHOD}});
+  });
+
+  // ===== BASIC HOOK BEHAVIOR =====
+  describe('Basic Hook Behavior', () => {
+    it('returns initial values correctly', () => {
+      const { result } = setup{{HOOK_NAME}}Test();
+      
+      expect(result.current).toMatchObject({
+        // Define expected initial state
+        isLoading: false,
+        error: null,
+        data: null,
+      });
+    });
+
+    it('handles hook initialization without crashing', () => {
+      expect(() => setup{{HOOK_NAME}}Test()).not.toThrow();
+    });
+
+    it('returns consistent interface across re-renders', () => {
+      const { result, rerender } = setup{{HOOK_NAME}}Test();
+      const initialKeys = Object.keys(result.current);
+      
+      rerender();
+      
+      expect(Object.keys(result.current)).toEqual(initialKeys);
+    });
+  });
+
+  // ===== PARAMETER HANDLING =====
+  describe('Parameter Handling', () => {
+    it('handles valid parameters correctly', () => {
+      const testParams = {
+        // Add test parameters
+      };
+      
+      const { result } = setup{{HOOK_NAME}}Test(testParams);
+      
+      expect(result.current).toBeDefined();
+      // Add specific assertions for parameter handling
+    });
+
+    it('handles undefined parameters gracefully', () => {
+      const { result } = setup{{HOOK_NAME}}Test({ param: undefined });
+      
+      expect(result.current.error).toBeNull();
+    });
+
+    it('handles null parameters gracefully', () => {
+      const { result } = setup{{HOOK_NAME}}Test({ param: null });
+      
+      expect(result.current.error).toBeNull();
+    });
+
+    it('validates parameter types appropriately', () => {
+      const invalidParams = {
+        // Add invalid parameter test cases
+      };
+      
+      const { result } = setup{{HOOK_NAME}}Test(invalidParams);
+      
+      // Should handle invalid params gracefully
+      expect(result.current).toBeDefined();
+    });
+  });
+
+  // ===== ASYNC OPERATIONS =====
+  describe('Async Operations', () => {
+    it('handles async operations correctly', async () => {
+      mockService.{{SERVICE_METHOD}}.mockResolvedValue({ success: true });
+      
+      const { result } = setup{{HOOK_NAME}}Test();
+      
+      await act(async () => {
+        await result.current.{{ASYNC_METHOD}}();
+      });
+      
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.error).toBeNull();
+    });
+
+    it('handles async operation failures', async () => {
+      const errorMessage = 'Test error';
+      mockService.{{SERVICE_METHOD}}.mockRejectedValue(new Error(errorMessage));
+      
+      const { result } = setup{{HOOK_NAME}}Test();
+      
+      await act(async () => {
+        await result.current.{{ASYNC_METHOD}}();
+      });
+      
+      expect(result.current.error).toBeTruthy();
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    it('sets loading state during async operations', async () => {
+      let resolvePromise: (value: any) => void;
+      const promise = new Promise(resolve => {
+        resolvePromise = resolve;
+      });
+      mockService.{{SERVICE_METHOD}}.mockReturnValue(promise);
+      
+      const { result } = setup{{HOOK_NAME}}Test();
+      
+      act(() => {
+        result.current.{{ASYNC_METHOD}}();
+      });
+      
+      expect(result.current.isLoading).toBe(true);
+      
+      await act(async () => {
+        resolvePromise({ success: true });
+        await promise;
+      });
+      
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    it('cancels pending operations on unmount', async () => {
+      const { result, unmount } = setup{{HOOK_NAME}}Test();
+      
+      act(() => {
+        result.current.{{ASYNC_METHOD}}();
+      });
+      
+      expect(() => unmount()).not.toThrow();
+    });
+  });
+
+  // ===== STATE MANAGEMENT =====
+  describe('State Management', () => {
+    it('updates state correctly through actions', () => {
+      const { result } = setup{{HOOK_NAME}}Test();
+      
+      act(() => {
+        result.current.{{STATE_METHOD}}('new-value');
+      });
+      
+      expect(result.current.{{STATE_PROPERTY}}).toBe('new-value');
+    });
+
+    it('maintains state consistency', () => {
+      const { result } = setup{{HOOK_NAME}}Test();
+      
+      act(() => {
+        result.current.{{STATE_METHOD}}('value1');
+        result.current.{{STATE_METHOD}}('value2');
+      });
+      
+      expect(result.current.{{STATE_PROPERTY}}).toBe('value2');
+    });
+
+    it('handles state reset correctly', () => {
+      const { result } = setup{{HOOK_NAME}}Test();
+      
+      act(() => {
+        result.current.{{STATE_METHOD}}('test-value');
+      });
+      
+      act(() => {
+        result.current.reset();
+      });
+      
+      expect(result.current.{{STATE_PROPERTY}}).toBe('default-value');
+    });
+  });
+
+  // ===== SIDE EFFECTS =====
+  describe('Side Effects', () => {
+    it('calls external services when appropriate', async () => {
+      const { result } = setup{{HOOK_NAME}}Test();
+      
+      await act(async () => {
+        await result.current.{{TRIGGER_METHOD}}();
+      });
+      
+      expect(mockService.{{SERVICE_METHOD}}).toHaveBeenCalledTimes(1);
+    });
+
+    it('updates store when necessary', () => {
+      const { result } = setup{{HOOK_NAME}}Test();
+      
+      act(() => {
+        result.current.{{STORE_UPDATE_METHOD}}('test-data');
+      });
+      
+      expect(mockStore.{{STORE_METHOD}}).toHaveBeenCalledWith('test-data');
+    });
+
+    it('handles side effect failures gracefully', async () => {
+      mockService.{{SERVICE_METHOD}}.mockRejectedValue(new Error('Side effect error'));
+      
+      const { result } = setup{{HOOK_NAME}}Test();
+      
+      await act(async () => {
+        await result.current.{{TRIGGER_METHOD}}();
+      });
+      
+      expect(result.current.error).toBeTruthy();
+    });
+  });
+
+  // ===== DEPENDENCY CHANGES =====
+  describe('Dependency Changes', () => {
+    it('reacts to dependency changes correctly', () => {
+      const { result, rerender } = setup{{HOOK_NAME}}Test({ dependency: 'value1' });
+      
+      rerender({ dependency: 'value2' });
+      
+      // Hook should react to dependency changes
+      expect(result.current).toBeDefined();
+    });
+
+    it('debounces frequent dependency changes', async () => {
+      const { result, rerender } = setup{{HOOK_NAME}}Test({ dependency: 'value1' });
+      
+      // Rapid changes
+      rerender({ dependency: 'value2' });
+      rerender({ dependency: 'value3' });
+      rerender({ dependency: 'value4' });
+      
+      // Should handle rapid changes gracefully
+      expect(result.current).toBeDefined();
+    });
+  });
+
+  // ===== CLEANUP AND MEMORY =====
+  describe('Cleanup and Memory', () => {
+    it('cleans up resources on unmount', () => {
+      const { unmount } = setup{{HOOK_NAME}}Test();
+      
+      expect(() => unmount()).not.toThrow();
+    });
+
+    it('cancels ongoing operations on unmount', async () => {
+      const { result, unmount } = setup{{HOOK_NAME}}Test();
+      
+      act(() => {
+        result.current.{{ASYNC_METHOD}}();
+      });
+      
+      unmount();
+      
+      // Should not cause memory leaks or warnings
+    });
+
+    it('removes event listeners on cleanup', () => {
+      const removeListenerSpy = jest.fn();
+      const addEventListenerSpy = jest.spyOn(global, 'addEventListener').mockImplementation();
+      const removeEventListenerSpy = jest.spyOn(global, 'removeEventListener').mockImplementation(removeListenerSpy);
+      
+      const { unmount } = setup{{HOOK_NAME}}Test();
+      
+      unmount();
+      
+      // Verify cleanup if hook uses event listeners
+      if (addEventListenerSpy.mock.calls.length > 0) {
+        expect(removeEventListenerSpy).toHaveBeenCalled();
+      }
+      
+      addEventListenerSpy.mockRestore();
+      removeEventListenerSpy.mockRestore();
+    });
+  });
+
+  // ===== EDGE CASES =====
+  describe('Edge Cases', () => {
+    it('handles rapid successive calls', async () => {
+      const { result } = setup{{HOOK_NAME}}Test();
+      
+      await act(async () => {
+        // Rapid successive calls
+        const promises = [
+          result.current.{{ASYNC_METHOD}}(),
+          result.current.{{ASYNC_METHOD}}(),
+          result.current.{{ASYNC_METHOD}}(),
+        ];
+        
+        await Promise.all(promises);
+      });
+      
+      expect(result.current.error).toBeNull();
+    });
+
+    it('handles hook recreation correctly', () => {
+      const { result, rerender } = setup{{HOOK_NAME}}Test();
+      const initialResult = result.current;
+      
+      rerender();
+      
+      // Should maintain functionality across recreations
+      expect(typeof result.current.{{METHOD_NAME}}).toBe(typeof initialResult.{{METHOD_NAME}});
+    });
+
+    it('maintains referential stability of callbacks', () => {
+      const { result, rerender } = setup{{HOOK_NAME}}Test();
+      const initialCallback = result.current.{{CALLBACK_METHOD}};
+      
+      rerender();
+      
+      expect(result.current.{{CALLBACK_METHOD}}).toBe(initialCallback);
+    });
+  });
+
+  // ===== PERFORMANCE =====
+  describe('Performance', () => {
+    it('does not cause unnecessary re-renders', () => {
+      const { result, rerender } = setup{{HOOK_NAME}}Test();
+      const renderCount = jest.fn();
+      
+      // Track renders
+      renderHook(() => {
+        renderCount();
+        return use{{HOOK_NAME}}();
+      });
+      
+      rerender();
+      rerender();
+      
+      // Should optimize re-renders appropriately
+      expect(renderCount).toHaveBeenCalledTimes(3); // Initial + 2 rerenders
+    });
+
+    it('memoizes expensive computations', () => {
+      const expensiveComputation = jest.fn(() => 'computed-value');
+      
+      const { result, rerender } = renderHook(() => 
+        use{{HOOK_NAME}}({ computeValue: expensiveComputation })
+      );
+      
+      rerender();
+      
+      // Should not recompute unnecessarily
+      expect(expensiveComputation).toHaveBeenCalledTimes(1);
+    });
+  });
+});

@@ -7,7 +7,33 @@ import { track } from "@/telemetry";
 import { Place, RouteOptions, TravelMode } from "@/types/navigation";
 import { mark } from "@/utils/performance/performanceMarks";
 
-// Prefetch route variants for other travel modes to speed up mode switching.
+// User behavior tracking for intelligent prefetching
+type UserPattern = {
+  commonModes: TravelMode[];
+  preferredTimes: string[];
+  frequentRoutes: string[];
+  lastSwitches: Array<{ from: TravelMode; to: TravelMode; timestamp: number }>;
+};
+
+// Simple pattern detection (in production, this would use ML/analytics)
+function getUserPrefetchPatterns(): UserPattern {
+  // Heuristic: Most users switch from transit to walking/biking
+  // Time-based: Morning prefers faster modes, evening prefers safer modes
+  const hour = new Date().getHours();
+  const isRushHour = (hour >= 7 && hour <= 9) || (hour >= 17 && hour <= 19);
+  const isEvening = hour >= 18;
+
+  return {
+    commonModes: isRushHour
+      ? ["transit", "walking"]
+      : ["walking", "biking", "transit"],
+    preferredTimes: isEvening ? ["safest", "shortest"] : ["fastest", "scenic"],
+    frequentRoutes: [], // Would be populated from usage analytics
+    lastSwitches: [], // Would track actual user behavior
+  };
+}
+
+// Intelligent prefetch route variants based on user patterns and heuristics
 export async function prefetchRouteVariants(
   client: ReturnType<typeof useQueryClient>,
   origin: Place,
@@ -15,10 +41,22 @@ export async function prefetchRouteVariants(
   excludeMode: TravelMode,
   baseOptions: RouteOptions
 ) {
+  const patterns = getUserPrefetchPatterns();
   const modes: TravelMode[] = ["transit", "walking", "biking", "driving"];
-  const targets = modes.filter((m) => m !== excludeMode);
+
+  // Intelligent prioritization based on user patterns
+  const prioritizedModes = modes
+    .filter((m) => m !== excludeMode)
+    .sort((a, b) => {
+      const aIndex = patterns.commonModes.indexOf(a);
+      const bIndex = patterns.commonModes.indexOf(b);
+      return (aIndex === -1 ? 999 : aIndex) - (bIndex === -1 ? 999 : bIndex);
+    });
+
+  track({ type: "route_prefetch_start", mode: excludeMode });
+
   await Promise.all(
-    targets.map(async (mode) => {
+    prioritizedModes.map(async (mode, index) => {
       // Build query key structure mirroring useRoutesQuery
       const key = [
         "routes",
@@ -31,6 +69,11 @@ export async function prefetchRouteVariants(
         baseOptions.accessibilityMode,
       ];
       if (client.getQueryState(key)) return; // already cached
+
+      // Stagger prefetches to avoid overwhelming the network
+      const delay = index * 200; // 200ms between prefetches
+      await new Promise((resolve) => setTimeout(resolve, delay));
+
       mark(`routes_prefetch_start:${origin.id}->${destination.id}:${mode}`);
       track({ type: "route_prefetch_start", mode });
       const start = Date.now();

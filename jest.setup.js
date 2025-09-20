@@ -6,12 +6,57 @@ jest.mock('@react-native-async-storage/async-storage', () =>
     require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 );
 
+// Mock stores
+jest.mock('./stores/navigationStore', () => {
+    const mockState = {
+        accessibilitySettings: {
+            largeText: false,
+            highContrast: false,
+            voiceEnabled: false,
+            voiceDescriptions: false,
+            simplifiedMode: false,
+        },
+        photoCheckIns: [],
+        favorites: [],
+        recentSearches: [],
+        addPhotoCheckIn: jest.fn(),
+        updateAccessibilitySettings: jest.fn(),
+        addToFavorites: jest.fn(),
+        removeFromFavorites: jest.fn(),
+        clearRecentSearches: jest.fn(),
+        addRecentSearch: jest.fn(),
+    };
+
+    return {
+        useNavigationStore: jest.fn(() => mockState),
+    };
+});
+
+jest.mock('./stores/parentalStore', () => ({
+    useParentalStore: jest.fn(() => ({
+        settings: {
+            emergencyContacts: [{ id: "p1", phone: "9876543210", isPrimary: true }],
+        },
+        dashboardData: {
+            safeZoneActivity: [],
+            checkInRequests: [],
+        },
+        checkInRequests: [],
+        safeZones: [],
+        devicePings: [],
+        addCheckInToDashboard: jest.fn(),
+        updateLastKnownLocation: jest.fn(),
+        addDevicePing: jest.fn(),
+        clearDevicePing: jest.fn(),
+    })),
+}));
+
 // Mock Expo modules
 jest.mock('expo-location', () => ({
-    requestForegroundPermissionsAsync: jest.fn(() => 
+    requestForegroundPermissionsAsync: jest.fn(() =>
         Promise.resolve({ status: 'granted' })
     ),
-    getCurrentPositionAsync: jest.fn(() => 
+    getCurrentPositionAsync: jest.fn(() =>
         Promise.resolve({
             coords: {
                 latitude: 37.7749,
@@ -20,7 +65,7 @@ jest.mock('expo-location', () => ({
             },
         })
     ),
-    watchPositionAsync: jest.fn(() => 
+    watchPositionAsync: jest.fn(() =>
         Promise.resolve({ remove: jest.fn() })
     ),
     LocationAccuracy: {

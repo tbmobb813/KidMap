@@ -4,6 +4,28 @@
 
 This guide covers comprehensive testing procedures for the KidMap application, including all implemented features and edge cases.
 
+## Sprint 1 Implementation Patterns
+
+### UX/Validation Enhancements
+
+#### Toast Notification System
+
+- **Global Toast Provider**: Centralized toast management via `ToastProvider` context
+- **Alert→Toast Migration**: Converted error/success messages from Alert.alert to toast notifications
+- **Implementation**: Use `useGlobalToast()` hook for consistent user feedback
+
+#### Confirmation Dialog Standardization
+
+- **ConfirmDialog Component**: Reusable confirmation dialog replacing ad-hoc Alert.confirm
+- **API**: `ConfirmDialog.show({ title, message, confirmText, destructive, onConfirm, onCancel })`
+- **Usage**: Standardized for destructive actions (delete, remove, clear)
+
+#### Validation Consolidation
+
+- **Central Location**: All validation schemas in `@/core/validation`
+- **Removed**: Deprecated `utils/validation` and `utils/photoCheckInValidation`
+- **Pattern**: Import from `@/core/validation` barrel export for consistency
+
 ## Testing Environment Setup
 
 ### Prerequisites

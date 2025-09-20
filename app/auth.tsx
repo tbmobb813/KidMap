@@ -1,9 +1,8 @@
-import { router } from 'expo-router';
-import { Eye, EyeOff, Lock, Mail, User } from 'lucide-react-native';
-import { useState } from 'react';
+import { router } from "expo-router";
+import { Eye, EyeOff, Lock, Mail, User } from "lucide-react-native";
+import { useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -11,14 +10,14 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  View
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from "../hooks/useAuth";
 
-import Colors from '@/constants/colors';
-// Remove this incorrect import
+import Colors from "@/constants/colors";
+import { useGlobalToast } from "@/providers/ToastProvider";
 // import { default as isValidEmail, default as isValidPassword } from './auth';
 
 // Add your own email and password validation functions here or import them from the correct file:
@@ -27,9 +26,13 @@ function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-function isValidPassword(password: string): { isValid: boolean; errors: string[] } {
+function isValidPassword(password: string): {
+  isValid: boolean;
+  errors: string[];
+} {
   const errors: string[] = [];
-  if (password.length < 8) errors.push('Password must be at least 8 characters.');
+  if (password.length < 8)
+    errors.push("Password must be at least 8 characters.");
   // Add more password rules as needed
   return { isValid: errors.length === 0, errors };
 }
@@ -37,41 +40,42 @@ function isValidPassword(password: string): { isValid: boolean; errors: string[]
 export default function AuthScreen() {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    name: '',
-    role: 'user' as 'user' | 'parent'
+    email: "",
+    password: "",
+    confirmPassword: "",
+    name: "",
+    role: "user" as "user" | "parent",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const { login, register, error, clearError } = useAuth();
+  const { showToast } = useGlobalToast();
 
   const handleSubmit = async () => {
     clearError();
-    
+
     // Validation
     if (!isValidEmail(formData.email)) {
-      Alert.alert('Invalid Email', 'Please enter a valid email address');
+      showToast("Please enter a valid email address", "error");
       return;
     }
 
     if (!isLogin) {
       if (!formData.name.trim()) {
-        Alert.alert('Name Required', 'Please enter your name');
+        showToast("Please enter your name", "error");
         return;
       }
 
       const passwordValidation = isValidPassword(formData.password);
       if (!passwordValidation.isValid) {
-        Alert.alert('Invalid Password', passwordValidation.errors.join('\n'));
+        showToast(passwordValidation.errors.join("\n"), "error");
         return;
       }
 
       if (formData.password !== formData.confirmPassword) {
-        Alert.alert('Password Mismatch', 'Passwords do not match');
+        showToast("Passwords do not match", "error");
         return;
       }
     }
@@ -80,11 +84,11 @@ export default function AuthScreen() {
 
     try {
       let result;
-      
+
       if (isLogin) {
         result = await login({
           email: formData.email,
-          password: formData.password
+          password: formData.password,
         });
       } else {
         result = await register({
@@ -97,15 +101,12 @@ export default function AuthScreen() {
 
       if (result) {
         // Navigation will be handled by the auth state change
-        router.replace('/(tabs)');
+        router.replace("/(tabs)");
       } else {
-        Alert.alert(
-          isLogin ? 'Login Failed' : 'Registration Failed',
-          'Please try again'
-        );
+        showToast("Please try again", "error");
       }
     } catch {
-      Alert.alert('Error', 'Something went wrong. Please try again.');
+      showToast("Something went wrong. Please try again.", "error");
     } finally {
       setIsLoading(false);
     }
@@ -115,46 +116,51 @@ export default function AuthScreen() {
     setIsLogin(!isLogin);
     clearError();
     setFormData({
-      email: '',
-      password: '',
-      confirmPassword: '',
-      name: '',
-      role: 'user'
+      email: "",
+      password: "",
+      confirmPassword: "",
+      name: "",
+      role: "user",
     });
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.keyboardView}
       >
-        <ScrollView 
+        <ScrollView
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.header}>
             <Text style={styles.title}>
-              {isLogin ? 'Welcome Back' : 'Create Account'}
+              {isLogin ? "Welcome Back" : "Create Account"}
             </Text>
             <Text style={styles.subtitle}>
-              {isLogin 
-                ? 'Sign in to continue your journey' 
-                : 'Join us for safer travels'
-              }
+              {isLogin
+                ? "Sign in to continue your journey"
+                : "Join us for safer travels"}
             </Text>
           </View>
 
           <View style={styles.form}>
             {!isLogin && (
               <View style={styles.inputContainer}>
-                <User size={20} color={Colors.textSecondary} style={styles.inputIcon} />
+                <User
+                  size={20}
+                  color={Colors.textSecondary}
+                  style={styles.inputIcon}
+                />
                 <TextInput
                   style={styles.input}
                   placeholder="Full Name"
                   placeholderTextColor={Colors.textSecondary}
                   value={formData.name}
-                  onChangeText={(text) => setFormData(prev => ({ ...prev, name: text }))}
+                  onChangeText={(text) =>
+                    setFormData((prev) => ({ ...prev, name: text }))
+                  }
                   autoCapitalize="words"
                   testID="name-input"
                 />
@@ -162,13 +168,19 @@ export default function AuthScreen() {
             )}
 
             <View style={styles.inputContainer}>
-              <Mail size={20} color={Colors.textSecondary} style={styles.inputIcon} />
+              <Mail
+                size={20}
+                color={Colors.textSecondary}
+                style={styles.inputIcon}
+              />
               <TextInput
                 style={styles.input}
                 placeholder="Email Address"
                 placeholderTextColor={Colors.textSecondary}
                 value={formData.email}
-                onChangeText={(text) => setFormData(prev => ({ ...prev, email: text }))}
+                onChangeText={(text) =>
+                  setFormData((prev) => ({ ...prev, email: text }))
+                }
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -177,13 +189,19 @@ export default function AuthScreen() {
             </View>
 
             <View style={styles.inputContainer}>
-              <Lock size={20} color={Colors.textSecondary} style={styles.inputIcon} />
+              <Lock
+                size={20}
+                color={Colors.textSecondary}
+                style={styles.inputIcon}
+              />
               <TextInput
                 style={[styles.input, styles.passwordInput]}
                 placeholder="Password"
                 placeholderTextColor={Colors.textSecondary}
                 value={formData.password}
-                onChangeText={(text) => setFormData(prev => ({ ...prev, password: text }))}
+                onChangeText={(text) =>
+                  setFormData((prev) => ({ ...prev, password: text }))
+                }
                 secureTextEntry={!showPassword}
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -204,13 +222,19 @@ export default function AuthScreen() {
 
             {!isLogin && (
               <View style={styles.inputContainer}>
-                <Lock size={20} color={Colors.textSecondary} style={styles.inputIcon} />
+                <Lock
+                  size={20}
+                  color={Colors.textSecondary}
+                  style={styles.inputIcon}
+                />
                 <TextInput
                   style={[styles.input, styles.passwordInput]}
                   placeholder="Confirm Password"
                   placeholderTextColor={Colors.textSecondary}
                   value={formData.confirmPassword}
-                  onChangeText={(text) => setFormData(prev => ({ ...prev, confirmPassword: text }))}
+                  onChangeText={(text) =>
+                    setFormData((prev) => ({ ...prev, confirmPassword: text }))
+                  }
                   secureTextEntry={!showConfirmPassword}
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -237,30 +261,39 @@ export default function AuthScreen() {
                   <Pressable
                     style={[
                       styles.roleButton,
-                      formData.role === 'user' && styles.roleButtonActive
+                      formData.role === "user" && styles.roleButtonActive,
                     ]}
-                    onPress={() => setFormData(prev => ({ ...prev, role: 'user' }))}
+                    onPress={() =>
+                      setFormData((prev) => ({ ...prev, role: "user" }))
+                    }
                     testID="user-role-button"
                   >
-                    <Text style={[
-                      styles.roleButtonText,
-                      formData.role === 'user' && styles.roleButtonTextActive
-                    ]}>
+                    <Text
+                      style={[
+                        styles.roleButtonText,
+                        formData.role === "user" && styles.roleButtonTextActive,
+                      ]}
+                    >
                       Regular User
                     </Text>
                   </Pressable>
                   <Pressable
                     style={[
                       styles.roleButton,
-                      formData.role === 'parent' && styles.roleButtonActive
+                      formData.role === "parent" && styles.roleButtonActive,
                     ]}
-                    onPress={() => setFormData(prev => ({ ...prev, role: 'parent' }))}
+                    onPress={() =>
+                      setFormData((prev) => ({ ...prev, role: "parent" }))
+                    }
                     testID="parent-role-button"
                   >
-                    <Text style={[
-                      styles.roleButtonText,
-                      formData.role === 'parent' && styles.roleButtonTextActive
-                    ]}>
+                    <Text
+                      style={[
+                        styles.roleButtonText,
+                        formData.role === "parent" &&
+                          styles.roleButtonTextActive,
+                      ]}
+                    >
                       Parent/Guardian
                     </Text>
                   </Pressable>
@@ -275,7 +308,10 @@ export default function AuthScreen() {
             )}
 
             <Pressable
-              style={[styles.submitButton, isLoading && styles.submitButtonDisabled]}
+              style={[
+                styles.submitButton,
+                isLoading && styles.submitButtonDisabled,
+              ]}
               onPress={handleSubmit}
               disabled={isLoading}
               testID="submit-button"
@@ -284,7 +320,7 @@ export default function AuthScreen() {
                 <ActivityIndicator color="white" size="small" />
               ) : (
                 <Text style={styles.submitButtonText}>
-                  {isLogin ? 'Sign In' : 'Create Account'}
+                  {isLogin ? "Sign In" : "Create Account"}
                 </Text>
               )}
             </Pressable>
@@ -294,7 +330,7 @@ export default function AuthScreen() {
                 style={styles.forgotPasswordButton}
                 onPress={() => {
                   // TODO: Implement forgot password
-                  Alert.alert('Forgot Password', 'This feature will be available soon.');
+                  showToast("This feature will be available soon.", "info");
                 }}
                 testID="forgot-password-button"
               >
@@ -305,11 +341,13 @@ export default function AuthScreen() {
 
           <View style={styles.footer}>
             <Text style={styles.footerText}>
-              {isLogin ? "Don't have an account? " : "Already have an account? "}
+              {isLogin
+                ? "Don't have an account? "
+                : "Already have an account? "}
             </Text>
             <Pressable onPress={toggleMode} testID="toggle-mode-button">
               <Text style={styles.footerLink}>
-                {isLogin ? 'Sign Up' : 'Sign In'}
+                {isLogin ? "Sign Up" : "Sign In"}
               </Text>
             </Pressable>
           </View>
@@ -329,30 +367,30 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 24,
   },
   header: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 32,
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: Colors.text,
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
     color: Colors.textSecondary,
-    textAlign: 'center',
+    textAlign: "center",
   },
   form: {
     marginBottom: 32,
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: Colors.surface,
     borderRadius: 12,
     marginBottom: 16,
@@ -374,7 +412,7 @@ const styles = StyleSheet.create({
     paddingRight: 40,
   },
   eyeButton: {
-    position: 'absolute',
+    position: "absolute",
     right: 16,
     padding: 4,
   },
@@ -383,12 +421,12 @@ const styles = StyleSheet.create({
   },
   roleLabel: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.text,
     marginBottom: 12,
   },
   roleButtons: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 12,
   },
   roleButton: {
@@ -399,22 +437,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
     backgroundColor: Colors.surface,
-    alignItems: 'center',
+    alignItems: "center",
   },
   roleButtonActive: {
     borderColor: Colors.primary,
-    backgroundColor: Colors.primary + '10',
+    backgroundColor: Colors.primary + "10",
   },
   roleButtonText: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
     color: Colors.textSecondary,
   },
   roleButtonTextActive: {
     color: Colors.primary,
   },
   errorContainer: {
-    backgroundColor: Colors.error + '10',
+    backgroundColor: Colors.error + "10",
     borderRadius: 8,
     padding: 12,
     marginBottom: 16,
@@ -422,35 +460,35 @@ const styles = StyleSheet.create({
   errorText: {
     color: Colors.error,
     fontSize: 14,
-    textAlign: 'center',
+    textAlign: "center",
   },
   submitButton: {
     backgroundColor: Colors.primary,
     borderRadius: 12,
     paddingVertical: 16,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 16,
   },
   submitButtonDisabled: {
     opacity: 0.6,
   },
   submitButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   forgotPasswordButton: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   forgotPasswordText: {
     color: Colors.primary,
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   footerText: {
     color: Colors.textSecondary,
@@ -459,6 +497,6 @@ const styles = StyleSheet.create({
   footerLink: {
     color: Colors.primary,
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

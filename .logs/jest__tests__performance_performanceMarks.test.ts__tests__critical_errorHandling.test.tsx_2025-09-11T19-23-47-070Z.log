@@ -1,0 +1,18 @@
+timestamp: 2025-09-11T19:23:47.432Z
+branch: dedupe/routeCard-proposed-patch
+sha: 991e87a58e68bca990d0afb3eb091c7a264f4c3f
+args: jest _tests_/performance/performanceMarks.test.ts _tests_/critical/errorHandling.test.tsx
+---
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [2m_tests_/performance/[22m[1mperformanceMarks.test.ts[22m ([0m[1m[41m7.282 s[49m[22m[0m)
+  performanceMarks utility
+    [32m√[39m [2mrecords mark and measure in non-production env (25 ms)[22m
+    [32m√[39m [2mworks correctly in test environment (5 ms)[22m
+
+[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+[1mTests:       [22m[1m[32m2 passed[39m[22m, 2 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        12.645 s, estimated 13 s
+[2mRan all test suites[22m[2m matching [22m/_tests_\\performance\\performanceMarks.test.ts|_tests_\\critical\\errorHandling.test.tsx/i[2m.[22m
+
+EXIT CODE: 0
