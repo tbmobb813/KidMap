@@ -1,4 +1,5 @@
 import { Alert } from "react-native";
+
 import ConfirmDialog from "@/components/ConfirmDialog";
 
 // ===== MOCKS =====
@@ -11,6 +12,15 @@ jest.mock("react-native", () => ({
 
 // ===== HELPER FUNCTIONS =====
 const mockAlert = Alert.alert as jest.MockedFunction<typeof Alert.alert>;
+
+type AlertButton = {
+  text?: string;
+  style?: "default" | "cancel" | "destructive";
+  onPress?: (() => void) | (() => Promise<void>);
+};
+
+const getButtons = () =>
+  (mockAlert.mock.calls[0]?.[2] ?? []) as AlertButton[];
 
 const createMockCallbacks = () => ({
   onConfirm: jest.fn(),
@@ -88,7 +98,7 @@ describe("ConfirmDialog Component", () => {
       onConfirm,
     });
 
-    const [, , buttons] = mockAlert.mock.calls[0];
+    const buttons = getButtons();
     expect(buttons).toHaveLength(2);
     expect(buttons[0].text).toBe("Cancel");
     expect(buttons[1].text).toBe("Confirm");
@@ -105,7 +115,7 @@ describe("ConfirmDialog Component", () => {
       onConfirm,
     });
 
-    const [, , buttons] = mockAlert.mock.calls[0];
+    const buttons = getButtons();
     expect(buttons[0].text).toBe("Keep");
     expect(buttons[1].text).toBe("Delete");
   });
@@ -119,7 +129,7 @@ describe("ConfirmDialog Component", () => {
       onConfirm,
     });
 
-    const [, , buttons] = mockAlert.mock.calls[0];
+    const buttons = getButtons();
     expect(buttons[0].style).toBe("cancel");
   });
 
@@ -133,7 +143,7 @@ describe("ConfirmDialog Component", () => {
       onConfirm,
     });
 
-    const [, , buttons] = mockAlert.mock.calls[0];
+    const buttons = getButtons();
     expect(buttons[1].style).toBe("default");
   });
 
@@ -147,7 +157,7 @@ describe("ConfirmDialog Component", () => {
       onConfirm,
     });
 
-    const [, , buttons] = mockAlert.mock.calls[0];
+    const buttons = getButtons();
     expect(buttons[1].style).toBe("destructive");
   });
 
@@ -161,8 +171,8 @@ describe("ConfirmDialog Component", () => {
       onConfirm,
     });
 
-    const [, , buttons] = mockAlert.mock.calls[0];
-    buttons[1].onPress?.();
+  const buttons = getButtons();
+  buttons[1].onPress?.();
 
     expect(onConfirm).toHaveBeenCalledTimes(1);
   });
@@ -177,8 +187,8 @@ describe("ConfirmDialog Component", () => {
       onCancel,
     });
 
-    const [, , buttons] = mockAlert.mock.calls[0];
-    buttons[0].onPress?.();
+  const buttons = getButtons();
+  buttons[0].onPress?.();
 
     expect(onCancel).toHaveBeenCalledTimes(1);
   });
@@ -192,7 +202,7 @@ describe("ConfirmDialog Component", () => {
       onConfirm,
     });
 
-    const [, , buttons] = mockAlert.mock.calls[0];
+    const buttons = getButtons();
 
     expect(() => {
       buttons[0].onPress?.();
@@ -209,8 +219,8 @@ describe("ConfirmDialog Component", () => {
       onConfirm,
     });
 
-    const [, , buttons] = mockAlert.mock.calls[0];
-    buttons[1].onPress?.();
+  const buttons = getButtons();
+  buttons[1].onPress?.();
 
     expect(onConfirm).toHaveBeenCalledTimes(1);
   });
@@ -224,8 +234,8 @@ describe("ConfirmDialog Component", () => {
       onConfirm,
     });
 
-    const [, , buttons] = mockAlert.mock.calls[0];
-    await buttons[1].onPress?.();
+  const buttons = getButtons();
+  await buttons[1].onPress?.();
 
     expect(onConfirm).toHaveBeenCalledTimes(1);
   });
@@ -240,8 +250,8 @@ describe("ConfirmDialog Component", () => {
       onConfirm,
     });
 
-    const [, , buttons] = mockAlert.mock.calls[0];
-    await buttons[1].onPress?.();
+  const buttons = getButtons();
+  await buttons[1].onPress?.();
 
     expect(onConfirm).toHaveBeenCalledTimes(1);
     expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error));
@@ -262,7 +272,7 @@ describe("ConfirmDialog Component", () => {
       onCancel,
     });
 
-    const [, , buttons] = mockAlert.mock.calls[0];
+    const buttons = getButtons();
     expect(buttons).toHaveLength(2);
     expect(buttons[0].text).toBe("No"); // Cancel first
     expect(buttons[1].text).toBe("Yes"); // Confirm second
@@ -328,7 +338,7 @@ describe("ConfirmDialog Component", () => {
       onConfirm,
     });
 
-    const [, , buttons] = mockAlert.mock.calls[0];
+    const buttons = getButtons();
     expect(buttons[0].text).toBe("");
     expect(buttons[1].text).toBe("");
   });
@@ -378,7 +388,7 @@ describe("ConfirmDialog Component", () => {
       onCancel,
     });
 
-    const [, , buttons] = mockAlert.mock.calls[0];
+    const buttons = getButtons();
     expect(buttons[1].style).toBe("default");
     expect(buttons[1].text).toBe("Save");
   });

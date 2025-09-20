@@ -1,5 +1,6 @@
-import { render } from "@testing-library/react-native";
+import { act, render } from "@testing-library/react-native";
 import React from "react";
+import { Animated, Platform } from "react-native";
 
 import { createTestWrapper } from "@/_tests_/testUtils";
 import Toast from "@/components/Toast";

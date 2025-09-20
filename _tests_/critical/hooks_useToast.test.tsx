@@ -207,13 +207,13 @@ describe('useToast Hook - Toast Notification Management Tests', () => {
   // ===== FUNCTION REFERENCE STABILITY =====
 
   it('should maintain stable function references', () => {
-    const { result, rerender } = renderToastHook();
+  const { result, rerender } = renderToastHook();
     
     const initialShowToast = result.current.showToast;
     const initialHideToast = result.current.hideToast;
 
-    // Trigger re-render
-    rerender();
+  // Trigger re-render (no props to pass, provide a noop object to satisfy types)
+  rerender({});
 
     // Function references should be stable
     expect(result.current.showToast).toBe(initialShowToast);
