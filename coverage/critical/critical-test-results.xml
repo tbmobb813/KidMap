@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Critical Test Suite" tests="21" failures="0" errors="0" time="39.454">
+  <testsuite name="useSafeZoneMonitor - Critical Safety Tests" errors="0" failures="0" skipped="0" timestamp="2025-09-19T18:41:47" time="24.107" tests="6">
+    <testcase classname="useSafeZoneMonitor - Critical Safety Tests" name="produces entry event when inside a safe zone on first refresh" time="0.233">
+    </testcase>
+    <testcase classname="useSafeZoneMonitor - Critical Safety Tests" name="produces exit event when leaving a safe zone" time="0.04">
+    </testcase>
+    <testcase classname="useSafeZoneMonitor - Critical Safety Tests" name="classifies inside vs outside zones correctly" time="0.014">
+    </testcase>
+    <testcase classname="useSafeZoneMonitor - Critical Safety Tests" name="returns outside status when location unavailable" time="0.01">
+    </testcase>
+    <testcase classname="useSafeZoneMonitor - Critical Safety Tests" name="caps event history at 20 entries (entry/exit cycles)" time="0.039">
+    </testcase>
+    <testcase classname="useSafeZoneMonitor - Critical Safety Tests" name="ignores inactive zones (no events generated)" time="0.012">
+    </testcase>
+  </testsuite>
+  <testsuite name="Telemetry - Critical Event Tracking" errors="0" failures="0" skipped="0" timestamp="2025-09-19T18:41:47" time="26.917" tests="3">
+    <testcase classname="Telemetry - Critical Event Tracking" name="emits accessibility_toggle events for setting changes" time="0.406">
+    </testcase>
+    <testcase classname="Telemetry - Critical Event Tracking" name="emits route_prefetch_start/complete for each prefetched mode" time="0.01">
+    </testcase>
+    <testcase classname="Telemetry - Critical Event Tracking" name="emits safety monitor toggle &amp; zone entry events" time="0.147">
+    </testcase>
+  </testsuite>
+  <testsuite name="SafetyDashboard - Critical Functionality" errors="0" failures="0" skipped="0" timestamp="2025-09-19T18:42:14" time="1.263" tests="6">
+    <testcase classname="SafetyDashboard - Critical Functionality" name="should render basic component structure" time="0.003">
+    </testcase>
+    <testcase classname="SafetyDashboard - Critical Functionality" name="should validate critical safety functionality exists" time="0.005">
+    </testcase>
+    <testcase classname="SafetyDashboard - Critical Functionality" name="should handle emergency scenarios" time="0.003">
+    </testcase>
+    <testcase classname="SafetyDashboard - Critical Functionality" name="should maintain safe zone monitoring" time="0.004">
+    </testcase>
+    <testcase classname="SafetyDashboard - Critical Functionality" name="should handle user interactions safely" time="0.003">
+    </testcase>
+    <testcase classname="SafetyDashboard - Critical Functionality" name="should perform within critical time limits" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="useRoutePrefetch - Critical Functionality" errors="0" failures="0" skipped="0" timestamp="2025-09-19T18:42:15" time="2.118" tests="1">
+    <testcase classname="useRoutePrefetch - Critical Functionality" name="calls fetchRoutes for other modes (walking,biking,driving)" time="0.02">
+    </testcase>
+  </testsuite>
+  <testsuite name="routeService.fetchRoutes" errors="0" failures="0" skipped="0" timestamp="2025-09-19T18:42:17" time="1.375" tests="2">
+    <testcase classname="routeService.fetchRoutes" name="transforms walking routes with increased duration" time="0.129">
+    </testcase>
+    <testcase classname="routeService.fetchRoutes" name="transforms driving routes with decreased duration" time="0.139">
+    </testcase>
+  </testsuite>
+  <testsuite name="Routes Query Caching - Critical Tests" errors="0" failures="0" skipped="0" timestamp="2025-09-19T18:42:16" time="3.363" tests="3">
+    <testcase classname="Routes Query Caching - Critical Tests" name="reuses cached data without refetch for identical keys (multiple hooks)" time="0.315">
+    </testcase>
+    <testcase classname="Routes Query Caching - Critical Tests" name="calls fetchRoutes only once; second mount reuses cache (remount)" time="0.341">
+    </testcase>
+    <testcase classname="Routes Query Caching - Critical Tests" name="metrics: fetch count increments only once per unique query" time="0.076">
+    </testcase>
+  </testsuite>
+</testsuites>

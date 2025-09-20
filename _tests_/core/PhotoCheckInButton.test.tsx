@@ -1,14 +1,26 @@
-import { render } from "@testing-library/react-native";
+import React from "react";
 
 import PhotoCheckInButton from "../../components/PhotoCheckInButton";
-import { ThemeProvider } from "../../constants/theme";
+import { render } from "../testUtils";
+
+jest.mock("@/stores/navigationStore", () => ({
+  useNavigationStore: () => ({
+    addPhotoCheckIn: jest.fn(),
+  }),
+}));
+
+jest.mock("@/hooks/useToast", () => ({
+  useToast: () => ({
+    toast: { message: "", type: "info", visible: false },
+    showToast: jest.fn(),
+    hideToast: jest.fn(),
+  }),
+}));
 
 describe("PhotoCheckInButton", () => {
   it("renders and is accessible", () => {
     const { getByText } = render(
-      <ThemeProvider initial="light">
-        <PhotoCheckInButton placeName="Test Place" placeId="p1" />
-      </ThemeProvider>
+      <PhotoCheckInButton placeName="Test Place" placeId="p1" />
     );
     expect(getByText("Photo Check-in")).toBeTruthy();
   });

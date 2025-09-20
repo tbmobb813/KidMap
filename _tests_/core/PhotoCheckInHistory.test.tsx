@@ -1,15 +1,16 @@
-import { render } from "@testing-library/react-native";
 import React from "react";
 
 import PhotoCheckInHistory from "../../components/PhotoCheckInHistory";
-import { ThemeProvider } from "../../constants/theme";
+import { render } from "../testUtils";
+
+jest.mock("@/stores/navigationStore", () => ({
+  useNavigationStore: () => ({
+    photoCheckIns: [{ placeName: "Test Place", timestamp: Date.now() }],
+  }),
+}));
 
 describe("PhotoCheckInHistory", () => {
   it("renders without crashing", () => {
-    render(
-      <ThemeProvider>
-        <PhotoCheckInHistory />
-      </ThemeProvider>
-    );
+    render(<PhotoCheckInHistory />);
   });
 });

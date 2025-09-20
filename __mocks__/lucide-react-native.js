@@ -44,5 +44,13 @@ module.exports = {
   Star: createIcon('Star'),
   Trophy: createIcon('Trophy'),
   Award: createIcon('Award'),
+  Search: createIcon('Search'),
+  Home: createIcon('Home'),
+  School: createIcon('School'),
+  BookOpen: createIcon('BookOpen'),
+  Trees: createIcon('Trees'),
+  Store: createIcon('Store'),
+  Utensils: createIcon('Utensils'),
+  Target: createIcon('Target'),
   default: createIcon('DefaultIcon'),
 };

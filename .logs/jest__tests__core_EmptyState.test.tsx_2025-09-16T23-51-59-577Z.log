@@ -1,0 +1,21 @@
+timestamp: 2025-09-16T23:52:00.507Z
+branch: dedupe/routeCard-proposed-patch
+sha: 09236501df27c3ac0d77f6315a5f474cb8a9dcaf
+args: jest _tests_/core/EmptyState.test.tsx
+---
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [2m_tests_/core/[22m[1mEmptyState.test.tsx[22m ([0m[1m[41m11.821 s[49m[22m[0m)
+  EmptyState
+    [32m√[39m [2mrenders title and description (94 ms)[22m
+    [32m√[39m [2mrenders action button when provided (31 ms)[22m
+    [32m√[39m [2mdoes not render action button when actionText is missing (23 ms)[22m
+    [32m√[39m [2mdoes not render action button when onAction is missing (13 ms)[22m
+    [32m√[39m [2mrenders with different content (31 ms)[22m
+
+[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+[1mTests:       [22m[1m[32m5 passed[39m[22m, 5 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m19.306 s[39m[22m
+[2mRan all test suites[22m[2m matching [22m/_tests_\\core\\EmptyState.test.tsx/i[2m.[22m
+
+EXIT CODE: 0

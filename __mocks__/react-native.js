@@ -39,6 +39,12 @@ const createMockAnimatedValue = (initialValue = 0) => ({
   _startNativeLoop: jest.fn(),
   _stopNativeLoop: jest.fn(),
   _value: initialValue,
+  interpolate: jest.fn((config) => ({
+    inputRange: config.inputRange,
+    outputRange: config.outputRange,
+    extrapolate: config.extrapolate,
+    _interpolation: 'mock-interpolation',
+  })),
 });
 
 const createMockAnimatedValueXY = (initialValue = { x: 0, y: 0 }) => ({
@@ -55,7 +61,10 @@ const createMockAnimatedValueXY = (initialValue = { x: 0, y: 0 }) => ({
 
 // Mock animation functions
 const createMockAnimation = () => ({
-  start: jest.fn((callback) => callback && callback({ finished: true })),
+  start: jest.fn((_callback) => {
+    // Don't call callback to avoid infinite recursion in tests
+    // Components can test animation behavior without actually running the animation loop
+  }),
   stop: jest.fn(),
   reset: jest.fn(),
 });
@@ -105,32 +114,43 @@ module.exports = {
   FlatList: MockComponent,
   SectionList: MockComponent,
   VirtualizedList: MockComponent,
-  
+
   // Input components
   TextInput: MockComponent,
   Switch: MockComponent,
   Slider: MockComponent,
-  
+
   // Touchable components
   TouchableOpacity: MockComponent,
   TouchableHighlight: MockComponent,
   TouchableWithoutFeedback: MockComponent,
+  TouchableNativeFeedback: {
+    ...MockComponent,
+    Ripple: jest.fn((color, borderless) => ({
+      type: 'ripple',
+      color,
+      borderless,
+    })),
+    SelectableBackground: jest.fn(() => ({ type: 'selectableBackground' })),
+    SelectableBackgroundBorderless: jest.fn(() => ({ type: 'selectableBackgroundBorderless' })),
+    canUseNativeForeground: jest.fn(() => true),
+  },
   Pressable: MockComponent,
-  
+
   // Layout components
   SafeAreaView: MockComponent,
   KeyboardAvoidingView: MockComponent,
-  
+
   // Navigation components
   StatusBar: MockComponent,
-  
+
   // Modal and overlay components
   Modal: MockComponent,
-  
+
   // Progress components
   ActivityIndicator: MockComponent,
   ProgressBarAndroid: MockComponent,
-  
+
   // Platform and device info
   Platform: {
     OS: 'ios',
@@ -139,7 +159,7 @@ module.exports = {
     isTV: false,
     select: jest.fn((specifics) => specifics.ios || specifics.default),
   },
-  
+
   Dimensions: {
     get: jest.fn(() => ({
       width: 375,
@@ -150,7 +170,7 @@ module.exports = {
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
   },
-  
+
   // StyleSheet
   StyleSheet: {
     create: jest.fn((styles) => styles),
@@ -166,7 +186,7 @@ module.exports = {
     absoluteFill: 0,
     hairlineWidth: 1,
   },
-  
+
   // Animated API
   Animated: {
     View: MockComponent,
@@ -175,25 +195,25 @@ module.exports = {
     ScrollView: MockComponent,
     FlatList: MockComponent,
     SectionList: MockComponent,
-    
+
     Value: jest.fn(createMockAnimatedValue),
     ValueXY: jest.fn(createMockAnimatedValueXY),
-    
+
     // Animation functions
     timing: jest.fn(() => createMockAnimation()),
     spring: jest.fn(() => createMockAnimation()),
     decay: jest.fn(() => createMockAnimation()),
-    
+
     // Composition functions
     sequence: jest.fn(() => createMockAnimation()),
     parallel: jest.fn(() => createMockAnimation()),
     stagger: jest.fn(() => createMockAnimation()),
     delay: jest.fn(() => createMockAnimation()),
     loop: jest.fn(() => createMockAnimation()),
-    
+
     // Events
     event: jest.fn(() => jest.fn()),
-    
+
     // Transform functions
     add: jest.fn(),
     subtract: jest.fn(),
@@ -201,29 +221,29 @@ module.exports = {
     divide: jest.fn(),
     modulo: jest.fn(),
     diffClamp: jest.fn(),
-    
+
     // Interpolation
     interpolate: jest.fn(),
-    
+
     // Component creation
     createAnimatedComponent: jest.fn((component) => component),
-    
+
     // Native driver
     isNativeDriverSupported: true,
   },
-  
+
   // Native APIs
-  Alert: Alert,  
+  Alert: Alert,
   Vibration: {
     vibrate: jest.fn(),
     cancel: jest.fn(),
   },
-  
+
   Clipboard: {
     getString: jest.fn(() => Promise.resolve('')),
     setString: jest.fn(() => Promise.resolve()),
   },
-  
+
   Linking: {
     openURL: jest.fn(() => Promise.resolve()),
     canOpenURL: jest.fn(() => Promise.resolve(true)),
@@ -233,18 +253,18 @@ module.exports = {
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
   },
-  
+
   Share: {
     share: jest.fn(() => Promise.resolve({ action: 'sharedAction' })),
   },
-  
+
   // Appearance and Accessibility
   Appearance: {
     getColorScheme: jest.fn(() => 'light'),
     addChangeListener: jest.fn(),
     removeChangeListener: jest.fn(),
   },
-  
+
   AccessibilityInfo: {
     isReduceMotionEnabled: jest.fn(() => Promise.resolve(false)),
     isScreenReaderEnabled: jest.fn(() => Promise.resolve(false)),
@@ -253,7 +273,7 @@ module.exports = {
     announceForAccessibility: jest.fn(),
     setAccessibilityFocus: jest.fn(),
   },
-  
+
   // Layout and Keyboard
   Keyboard: {
     addListener: jest.fn(() => ({ remove: jest.fn() })),
@@ -261,14 +281,14 @@ module.exports = {
     removeAllListeners: jest.fn(),
     dismiss: jest.fn(),
   },
-  
+
   // Pan Responder (needed for react-native-svg)
   PanResponder: {
     create: jest.fn(() => ({
       panHandlers: {},
     })),
   },
-  
+
   // Utilities
   PixelRatio: {
     get: jest.fn(() => 2),
@@ -276,22 +296,22 @@ module.exports = {
     getPixelSizeForLayoutSize: jest.fn((size) => size * 2),
     roundToNearestPixel: jest.fn((size) => size),
   },
-  
+
   // Native Modules
   NativeModules: {},
-  
+
   // TurboModules (causing the Flow parsing error)
   TurboModuleRegistry: {
     get: jest.fn(() => null),
     getEnforcing: jest.fn(() => ({})),
   },
-  
+
   // DevSettings
   DevSettings: {
     addMenuItem: jest.fn(),
     reload: jest.fn(),
   },
-  
+
   // Touchable (needed for react-native-svg)
   Touchable: {
     Mixin: {
@@ -306,10 +326,10 @@ module.exports = {
     TOUCH_TARGET_DEBUG: false,
     renderDebugView: jest.fn(),
   },
-  
+
   // Transforms
   processColor: jest.fn((color) => color),
-  
+
   // Constants
   __DEV__: true,
 };

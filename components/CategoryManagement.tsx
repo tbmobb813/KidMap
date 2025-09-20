@@ -1,23 +1,38 @@
-import { ArrowLeft, Plus, Edit3, Trash2, Check, X } from 'lucide-react-native';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable, TextInput, Modal, Alert } from 'react-native';
+import { ArrowLeft, Plus, Edit3, Trash2, Check, X } from "lucide-react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Pressable,
+  TextInput,
+  Modal,
+} from "react-native";
 
-import CategoryButton from './CategoryButton';
-import Toast from './Toast';
+import CategoryButton from "./CategoryButton";
+import ConfirmDialog from "./ConfirmDialog";
+import Toast from "./Toast";
 
-import { useTheme } from '@/constants/theme';
-import { CategoryCreateSchema, CategoryUpdateSchema, safeParseWithToast } from '@/core/validation';
-import { useToast } from '@/hooks/useToast';
-import { useCategoryManagement } from '@/stores/categoryStore';
-import { CustomCategory } from '@/types/navigation';
-
+import { useTheme } from "@/constants/theme";
+import {
+  CategoryCreateSchema,
+  CategoryUpdateSchema,
+  safeParseWithToast,
+} from "@/core/validation";
+import { useToast } from "@/hooks/useToast";
+import { useCategoryManagement } from "@/stores/categoryStore";
+import { CustomCategory } from "@/types/navigation";
 
 type CategoryManagementProps = {
   onBack: () => void;
-  userMode: 'parent' | 'child';
+  userMode: "parent" | "child";
 };
 
-const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMode }) => {
+const CategoryManagement: React.FC<CategoryManagementProps> = ({
+  onBack,
+  userMode,
+}) => {
   const theme = useTheme();
   const styles = React.useMemo(() => createStyles(theme), [theme]);
   const {
@@ -35,10 +50,14 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
   } = useCategoryManagement();
 
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [editingCategory, setEditingCategory] = useState<CustomCategory | null>(null);
-  const [newCategoryName, setNewCategoryName] = useState('');
-  const [selectedIcon, setSelectedIcon] = useState('MapPin');
-  const [selectedColor, setSelectedColor] = useState('/*TODO theme*/ theme.colors.placeholder /*#007AFF*/');
+  const [editingCategory, setEditingCategory] = useState<CustomCategory | null>(
+    null
+  );
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [selectedIcon, setSelectedIcon] = useState("MapPin");
+  const [selectedColor, setSelectedColor] = useState(
+    "/*TODO theme*/ theme.colors.placeholder /*#007AFF*/"
+  );
 
   const approvedCategories = getApprovedCategories();
   const { toast, showToast, hideToast } = useToast();
@@ -48,109 +67,115 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
 
   const handleCreateCategory = async () => {
     if (!newCategoryName.trim()) {
-      showToast('Please enter a category name', 'error');
+      showToast("Please enter a category name", "error");
       return;
     }
 
     if (!canCreateCategory(userMode)) {
-      showToast(`Limit reached: max ${settings.maxCustomCategories} custom categories`, 'warning');
+      showToast(
+        `Limit reached: max ${settings.maxCustomCategories} custom categories`,
+        "warning"
+      );
       return;
     }
 
     try {
       const isApproved = !needsApproval(userMode);
-      
-      const parsed = safeParseWithToast(CategoryCreateSchema, {
-        name: newCategoryName.trim(),
-        icon: selectedIcon,
-        color: selectedColor,
-        isDefault: false,
-        createdBy: userMode,
-        isApproved,
-      }, showToast);
+
+      const parsed = safeParseWithToast(
+        CategoryCreateSchema,
+        {
+          name: newCategoryName.trim(),
+          icon: selectedIcon,
+          color: selectedColor,
+          isDefault: false,
+          createdBy: userMode,
+          isApproved,
+        },
+        showToast
+      );
       if (!parsed) return;
       await addCategory(parsed);
 
       setShowCreateModal(false);
-      setNewCategoryName('');
-      setSelectedIcon('MapPin');
-      setSelectedColor('/*TODO theme*/ theme.colors.placeholder /*#007AFF*/');
+      setNewCategoryName("");
+      setSelectedIcon("MapPin");
+      setSelectedColor("/*TODO theme*/ theme.colors.placeholder /*#007AFF*/");
 
       if (needsApproval(userMode)) {
-        showToast('Category created; awaiting approval', 'info');
+        showToast("Category created; awaiting approval", "info");
       } else {
-        showToast('Category created', 'success');
+        showToast("Category created", "success");
       }
-  } catch {
-      showToast('Failed to create category', 'error');
+    } catch {
+      showToast("Failed to create category", "error");
     }
   };
 
   const handleEditCategory = async () => {
     if (!editingCategory || !newCategoryName.trim()) {
-      showToast('Please enter a category name', 'error');
+      showToast("Please enter a category name", "error");
       return;
     }
 
     try {
-      const parsed = safeParseWithToast(CategoryUpdateSchema, {
-        name: newCategoryName.trim(),
-        icon: selectedIcon,
-        color: selectedColor,
-      }, showToast);
+      const parsed = safeParseWithToast(
+        CategoryUpdateSchema,
+        {
+          name: newCategoryName.trim(),
+          icon: selectedIcon,
+          color: selectedColor,
+        },
+        showToast
+      );
       if (!parsed) return;
       await updateCategory(editingCategory.id, parsed);
 
       setEditingCategory(null);
-      setNewCategoryName('');
-      setSelectedIcon('MapPin');
-      setSelectedColor('/*TODO theme*/ theme.colors.placeholder /*#007AFF*/');
-  showToast('Category updated', 'success');
-  } catch {
-  showToast('Failed to update category', 'error');
+      setNewCategoryName("");
+      setSelectedIcon("MapPin");
+      setSelectedColor("/*TODO theme*/ theme.colors.placeholder /*#007AFF*/");
+      showToast("Category updated", "success");
+    } catch {
+      showToast("Failed to update category", "error");
     }
   };
 
   const handleDeleteCategory = (category: CustomCategory) => {
     if (category.isDefault) {
-      showToast('Default categories cannot be deleted', 'warning');
+      showToast("Default categories cannot be deleted", "warning");
       return;
     }
 
-    Alert.alert(
-      'Delete Category',
-      `Are you sure you want to delete "${category.name}"?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await deleteCategory(category.id);
-              showToast('Category deleted', 'success');
-            } catch {
-              showToast('Failed to delete category', 'error');
-            }
-          },
-        },
-      ]
-    );
+    ConfirmDialog.show({
+      title: "Delete Category",
+      message: `Are you sure you want to delete "${category.name}"?`,
+      confirmText: "Delete",
+      destructive: true,
+      onConfirm: async () => {
+        try {
+          await deleteCategory(category.id);
+          showToast("Category deleted", "success");
+        } catch {
+          showToast("Failed to delete category", "error");
+        }
+      },
+    });
   };
 
   const handleApproveCategory = async (categoryId: string) => {
     try {
       await approveCategory(categoryId);
-  showToast('Category approved', 'success');
-  } catch {
-  showToast('Failed to approve category', 'error');
+      showToast("Category approved", "success");
+    } catch {
+      showToast("Failed to approve category", "error");
     }
   };
 
   const openCreateModal = () => {
-    setNewCategoryName('');
-    setSelectedIcon('MapPin');
-    setSelectedColor('/*TODO theme*/ theme.colors.placeholder /*#007AFF*/');
+    setNewCategoryName("");
+    setSelectedIcon("MapPin");
+    setSelectedColor("/*TODO theme*/ theme.colors.placeholder /*#007AFF*/");
     setEditingCategory(null);
     setShowCreateModal(true);
   };
@@ -171,14 +196,19 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalHeader}>
-          <Pressable onPress={() => setShowCreateModal(false)} style={styles.modalButton}>
+          <Pressable
+            onPress={() => setShowCreateModal(false)}
+            style={styles.modalButton}
+          >
             <X size={24} color={theme.colors.text} />
           </Pressable>
           <Text style={styles.modalTitle}>
-            {editingCategory ? 'Edit Category' : 'Create Category'}
+            {editingCategory ? "Edit Category" : "Create Category"}
           </Text>
-          <Pressable 
-            onPress={editingCategory ? handleEditCategory : handleCreateCategory}
+          <Pressable
+            onPress={
+              editingCategory ? handleEditCategory : handleCreateCategory
+            }
             style={styles.modalButton}
           >
             <Check size={24} color={theme.colors.primary} />
@@ -190,8 +220,8 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
             <Text style={styles.sectionTitle}>Preview</Text>
             <CategoryButton
               customCategory={{
-                id: 'preview',
-                name: newCategoryName || 'Category Name',
+                id: "preview",
+                name: newCategoryName || "Category Name",
                 icon: selectedIcon,
                 color: selectedColor,
                 isDefault: false,
@@ -217,7 +247,11 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
 
           <View style={styles.inputSection}>
             <Text style={styles.sectionTitle}>Choose Icon</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.iconScroll}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.iconScroll}
+            >
               {availableIcons.map((icon) => (
                 <Pressable
                   key={icon}
@@ -229,8 +263,8 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
                 >
                   <CategoryButton
                     customCategory={{
-                      id: 'temp',
-                      name: '',
+                      id: "temp",
+                      name: "",
                       icon,
                       color: selectedColor,
                       isDefault: false,
@@ -282,7 +316,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
       </View>
 
       <ScrollView style={styles.content}>
-        {userMode === 'parent' && pendingCategories.length > 0 && (
+        {userMode === "parent" && pendingCategories.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Pending Approval</Text>
             <Text style={styles.sectionDescription}>
@@ -323,10 +357,9 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>All Categories</Text>
           <Text style={styles.sectionDescription}>
-            {userMode === 'parent' 
-              ? 'Manage all categories available to your child'
-              : 'Your available categories'
-            }
+            {userMode === "parent"
+              ? "Manage all categories available to your child"
+              : "Your available categories"}
           </Text>
           {approvedCategories.map((category) => (
             <View key={category.id} style={styles.categoryItem}>
@@ -338,32 +371,38 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
               <View style={styles.categoryInfo}>
                 <Text style={styles.categoryName}>{category.name}</Text>
                 <Text style={styles.categoryMeta}>
-                  {category.isDefault ? 'Default' : `Created by ${category.createdBy}`}
+                  {category.isDefault
+                    ? "Default"
+                    : `Created by ${category.createdBy}`}
                 </Text>
               </View>
-              {!category.isDefault && (userMode === 'parent' || category.createdBy === userMode) && (
-                <View style={styles.categoryActions}>
-                  <Pressable
-                    onPress={() => openEditModal(category)}
-                    style={[styles.actionButton, styles.editButton]}
-                  >
-                    <Edit3 size={20} color={theme.colors.primaryForeground} />
-                  </Pressable>
-                  <Pressable
-                    onPress={() => handleDeleteCategory(category)}
-                    style={[styles.actionButton, styles.deleteButton]}
-                  >
-                    <Trash2 size={20} color={theme.colors.primaryForeground} />
-                  </Pressable>
-                </View>
-              )}
+              {!category.isDefault &&
+                (userMode === "parent" || category.createdBy === userMode) && (
+                  <View style={styles.categoryActions}>
+                    <Pressable
+                      onPress={() => openEditModal(category)}
+                      style={[styles.actionButton, styles.editButton]}
+                    >
+                      <Edit3 size={20} color={theme.colors.primaryForeground} />
+                    </Pressable>
+                    <Pressable
+                      onPress={() => handleDeleteCategory(category)}
+                      style={[styles.actionButton, styles.deleteButton]}
+                    >
+                      <Trash2
+                        size={20}
+                        color={theme.colors.primaryForeground}
+                      />
+                    </Pressable>
+                  </View>
+                )}
             </View>
           ))}
         </View>
       </ScrollView>
 
       <CategoryModal />
-      <Toast 
+      <Toast
         message={toast.message}
         type={toast.type}
         visible={toast.visible}
@@ -373,74 +412,104 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({ onBack, userMod
   );
 };
 
-const createStyles = (theme: ReturnType<typeof useTheme>) => StyleSheet.create({
-  actionButton: {
-    alignItems: 'center',
-    borderRadius: 18,
-    height: 36,
-    justifyContent: 'center',
-    width: 36,
-  },
-  addButton: { padding: 8 },
-  approveButton: { backgroundColor: theme.colors.success },
-  backButton: { padding: 8 },
-  categoryActions: { flexDirection: 'row', gap: 8 },
-  categoryInfo: { flex: 1, marginLeft: 16 },
-  categoryItem: {
-    alignItems: 'center',
-    backgroundColor: theme.colors.surface,
-    borderRadius: 12,
-    flexDirection: 'row',
-    marginBottom: 12,
-    padding: 16,
-  },
-  categoryMeta: { color: theme.colors.textSecondary, fontSize: 12, marginTop: 2 },
-  categoryName: { color: theme.colors.text, fontSize: 16, fontWeight: '600' },
-  colorGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginTop: 8 },
-  colorOption: { borderColor: 'transparent', borderRadius: 20, borderWidth: 3, height: 40, width: 40 },
-  container: { backgroundColor: theme.colors.background, flex: 1 },
-  content: { flex: 1 },
-  deleteButton: { backgroundColor: theme.colors.error },
-  editButton: { backgroundColor: theme.colors.primary },
-  header: {
-    alignItems: 'center',
-    borderBottomColor: theme.colors.border,
-    borderBottomWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 16,
-  },
-  iconOption: { borderColor: 'transparent', borderRadius: 12, borderWidth: 2, marginRight: 8 },
-  iconScroll: { marginTop: 8 },
-  inputSection: { marginBottom: 24 },
-  modalButton: { padding: 8 },
-  modalContainer: { backgroundColor: theme.colors.background, flex: 1 },
-  modalContent: { flex: 1, padding: 16 },
-  modalHeader: {
-    alignItems: 'center',
-    borderBottomColor: theme.colors.border,
-    borderBottomWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 16,
-  },
-  modalTitle: { color: theme.colors.text, fontSize: 18, fontWeight: '700' },
-  previewContainer: { alignItems: 'center', marginBottom: 24 },
-  section: { padding: 16 },
-  sectionDescription: { color: theme.colors.textSecondary, fontSize: 14, marginBottom: 16 },
-  sectionTitle: { color: theme.colors.text, fontSize: 16, fontWeight: '600', marginBottom: 8 },
-  selectedColorOption: { borderColor: theme.colors.text },
-  selectedIconOption: { borderColor: theme.colors.primary },
-  textInput: {
-    backgroundColor: theme.colors.surface,
-    borderColor: theme.colors.border,
-    borderRadius: 8,
-    borderWidth: 1,
-    color: theme.colors.text,
-    fontSize: 16,
-    padding: 12,
-  },
-  title: { color: theme.colors.text, fontSize: 18, fontWeight: '700' },
-});
+const createStyles = (theme: ReturnType<typeof useTheme>) =>
+  StyleSheet.create({
+    actionButton: {
+      alignItems: "center",
+      borderRadius: 18,
+      height: 36,
+      justifyContent: "center",
+      width: 36,
+    },
+    addButton: { padding: 8 },
+    approveButton: { backgroundColor: theme.colors.success },
+    backButton: { padding: 8 },
+    categoryActions: { flexDirection: "row", gap: 8 },
+    categoryInfo: { flex: 1, marginLeft: 16 },
+    categoryItem: {
+      alignItems: "center",
+      backgroundColor: theme.colors.surface,
+      borderRadius: 12,
+      flexDirection: "row",
+      marginBottom: 12,
+      padding: 16,
+    },
+    categoryMeta: {
+      color: theme.colors.textSecondary,
+      fontSize: 12,
+      marginTop: 2,
+    },
+    categoryName: { color: theme.colors.text, fontSize: 16, fontWeight: "600" },
+    colorGrid: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      gap: 12,
+      marginTop: 8,
+    },
+    colorOption: {
+      borderColor: "transparent",
+      borderRadius: 20,
+      borderWidth: 3,
+      height: 40,
+      width: 40,
+    },
+    container: { backgroundColor: theme.colors.background, flex: 1 },
+    content: { flex: 1 },
+    deleteButton: { backgroundColor: theme.colors.error },
+    editButton: { backgroundColor: theme.colors.primary },
+    header: {
+      alignItems: "center",
+      borderBottomColor: theme.colors.border,
+      borderBottomWidth: 1,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      padding: 16,
+    },
+    iconOption: {
+      borderColor: "transparent",
+      borderRadius: 12,
+      borderWidth: 2,
+      marginRight: 8,
+    },
+    iconScroll: { marginTop: 8 },
+    inputSection: { marginBottom: 24 },
+    modalButton: { padding: 8 },
+    modalContainer: { backgroundColor: theme.colors.background, flex: 1 },
+    modalContent: { flex: 1, padding: 16 },
+    modalHeader: {
+      alignItems: "center",
+      borderBottomColor: theme.colors.border,
+      borderBottomWidth: 1,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      padding: 16,
+    },
+    modalTitle: { color: theme.colors.text, fontSize: 18, fontWeight: "700" },
+    previewContainer: { alignItems: "center", marginBottom: 24 },
+    section: { padding: 16 },
+    sectionDescription: {
+      color: theme.colors.textSecondary,
+      fontSize: 14,
+      marginBottom: 16,
+    },
+    sectionTitle: {
+      color: theme.colors.text,
+      fontSize: 16,
+      fontWeight: "600",
+      marginBottom: 8,
+    },
+    selectedColorOption: { borderColor: theme.colors.text },
+    selectedIconOption: { borderColor: theme.colors.primary },
+    textInput: {
+      backgroundColor: theme.colors.surface,
+      borderColor: theme.colors.border,
+      borderRadius: 8,
+      borderWidth: 1,
+      color: theme.colors.text,
+      fontSize: 16,
+      padding: 12,
+    },
+    title: { color: theme.colors.text, fontSize: 18, fontWeight: "700" },
+  });
 
 export default CategoryManagement;

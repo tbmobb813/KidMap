@@ -1,7 +1,24 @@
-import { Search, Plus, MapPin, Trash2, Edit3, Globe, Clock, Phone } from "lucide-react-native";
+import {
+  Search,
+  Plus,
+  MapPin,
+  Trash2,
+  Edit3,
+  Globe,
+  Clock,
+  Phone,
+} from "lucide-react-native";
 import React, { useState } from "react";
-import { StyleSheet, Text, View, ScrollView, Pressable, TextInput, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Pressable,
+  TextInput,
+} from "react-native";
 
+import ConfirmDialog from "./ConfirmDialog";
 import Toast from "./Toast";
 
 import Colors from "@/constants/colors"; // THEME MIGRATION: See issue #1234 for tracking phase-out of direct Colors references
@@ -34,9 +51,13 @@ export default function CityManagement({ onBack }: CityManagementProps) {
   const { toast, showToast, hideToast } = useToast();
 
   // --- Helpers / derived data
-  const filteredRegions = searchQuery ? searchRegions(searchQuery) : availableRegions;
+  const filteredRegions = searchQuery
+    ? searchRegions(searchQuery)
+    : availableRegions;
   const usRegions = getRegionsByCountry("United States");
-  const internationalRegions = availableRegions.filter((r) => r.country !== "United States");
+  const internationalRegions = availableRegions.filter(
+    (r) => r.country !== "United States"
+  );
 
   // Place handleUpdateTransitData after useToast and showToast definition
   const handleUpdateTransitData = (_regionId: string) => {
@@ -51,10 +72,13 @@ export default function CityManagement({ onBack }: CityManagementProps) {
       showToast("Cannot delete current region", "error");
       return;
     }
-    Alert.alert("Delete Region", "Are you sure you want to delete this region?", [
-      { text: "Cancel", style: "cancel" },
-      { text: "Delete", style: "destructive", onPress: () => removeRegion(regionId) },
-    ]);
+    ConfirmDialog.show({
+      title: "Delete Region",
+      message: "Are you sure you want to delete this region?",
+      confirmText: "Delete",
+      destructive: true,
+      onConfirm: () => removeRegion(regionId),
+    });
   };
 
   const RegionCard = ({ region }: { region: RegionConfig }) => (
@@ -65,12 +89,20 @@ export default function CityManagement({ onBack }: CityManagementProps) {
         { backgroundColor: themeCtx.colors.surface },
       ]}
     >
-      <Pressable style={styles.regionHeader} onPress={() => setRegion(region.id)}>
+      <Pressable
+        style={styles.regionHeader}
+        onPress={() => setRegion(region.id)}
+      >
         <View style={styles.regionTitleRow}>
           <MapPin size={20} color={themeCtx.colors.primary} />
           <Text style={styles.regionName}>{region.name}</Text>
           {region.id === currentRegion.id && (
-            <View style={[styles.currentBadge, { backgroundColor: themeCtx.colors.primary }]}>
+            <View
+              style={[
+                styles.currentBadge,
+                { backgroundColor: themeCtx.colors.primary },
+              ]}
+            >
               <Text style={styles.currentBadgeText}>Current</Text>
             </View>
           )}
@@ -79,37 +111,68 @@ export default function CityManagement({ onBack }: CityManagementProps) {
         <View style={styles.regionDetails}>
           <View style={styles.detailItem}>
             <Globe size={14} color={themeCtx.colors.textSecondary} />
-            <Text style={[styles.detailText, { color: themeCtx.colors.textSecondary }]}>
+            <Text
+              style={[
+                styles.detailText,
+                { color: themeCtx.colors.textSecondary },
+              ]}
+            >
               {region.country}
             </Text>
           </View>
           <View style={styles.detailItem}>
             <Clock size={14} color={themeCtx.colors.textSecondary} />
-            <Text style={[styles.detailText, { color: themeCtx.colors.textSecondary }]}>
+            <Text
+              style={[
+                styles.detailText,
+                { color: themeCtx.colors.textSecondary },
+              ]}
+            >
               {region.timezone}
             </Text>
           </View>
           <View style={styles.detailItem}>
             <Phone size={14} color={themeCtx.colors.textSecondary} />
-            <Text style={[styles.detailText, { color: themeCtx.colors.textSecondary }]}>
+            <Text
+              style={[
+                styles.detailText,
+                { color: themeCtx.colors.textSecondary },
+              ]}
+            >
               {region.emergencyNumber}
             </Text>
           </View>
         </View>
 
-        <Text style={[styles.transitCount, { color: themeCtx.colors.textSecondary }]}>
+        <Text
+          style={[
+            styles.transitCount,
+            { color: themeCtx.colors.textSecondary },
+          ]}
+        >
           {region.transitSystems.length} transit system
           {region.transitSystems.length !== 1 ? "s" : ""}
         </Text>
 
         <View style={styles.regionActions}>
-          <Pressable style={styles.actionButton} onPress={() => handleUpdateTransitData(region.id)}>
-            <Text style={[styles.actionButtonText, { color: themeCtx.colors.primary }]}>
+          <Pressable
+            style={styles.actionButton}
+            onPress={() => handleUpdateTransitData(region.id)}
+          >
+            <Text
+              style={[
+                styles.actionButtonText,
+                { color: themeCtx.colors.primary },
+              ]}
+            >
               Update Transit
             </Text>
           </Pressable>
 
-          <Pressable style={styles.actionButton} onPress={() => setEditingRegion(region)}>
+          <Pressable
+            style={styles.actionButton}
+            onPress={() => setEditingRegion(region)}
+          >
             <Edit3 size={16} color={themeCtx.colors.primary} />
           </Pressable>
 
@@ -146,7 +209,12 @@ export default function CityManagement({ onBack }: CityManagementProps) {
   }
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: themeCtx.colors.background }]}>
+    <ScrollView
+      style={[
+        styles.container,
+        { backgroundColor: themeCtx.colors.background },
+      ]}
+    >
       <View style={styles.header}>
         <Pressable style={styles.backButton} onPress={onBack}>
           <Text style={styles.backButtonText}>← Back</Text>
@@ -155,7 +223,10 @@ export default function CityManagement({ onBack }: CityManagementProps) {
         <Text style={styles.title}>City Management</Text>
 
         <Pressable
-          style={[styles.addButton, { backgroundColor: themeCtx.colors.primary }]}
+          style={[
+            styles.addButton,
+            { backgroundColor: themeCtx.colors.primary },
+          ]}
           onPress={() => setShowAddForm(true)}
         >
           <Plus size={20} color="#FFFFFF" />
@@ -166,7 +237,11 @@ export default function CityManagement({ onBack }: CityManagementProps) {
       <View
         style={[
           styles.searchContainer,
-          { backgroundColor: themeCtx.colors.surface, borderColor: Colors.border, borderWidth: 1 },
+          {
+            backgroundColor: themeCtx.colors.surface,
+            borderColor: Colors.border,
+            borderWidth: 1,
+          },
         ]}
       >
         <Search size={20} color={themeCtx.colors.textSecondary} />
@@ -183,11 +258,12 @@ export default function CityManagement({ onBack }: CityManagementProps) {
         <Text style={[styles.sectionTitle, { color: themeCtx.colors.text }]}>
           United States ({usRegions.length})
         </Text>
-        {(searchQuery ? filteredRegions.filter((r) => r.country === "United States") : usRegions).map(
-          (region) => (
-            <RegionCard key={region.id} region={region} />
-          )
-        )}
+        {(searchQuery
+          ? filteredRegions.filter((r) => r.country === "United States")
+          : usRegions
+        ).map((region) => (
+          <RegionCard key={region.id} region={region} />
+        ))}
       </View>
 
       <View style={styles.section}>
@@ -202,15 +278,28 @@ export default function CityManagement({ onBack }: CityManagementProps) {
         ))}
       </View>
 
-      <View style={[styles.infoSection, { backgroundColor: themeCtx.colors.surface }]}>
-        <Text style={[styles.infoTitle, { color: themeCtx.colors.text }]}>Transit Data Updates</Text>
-        <Text style={[styles.infoText, { color: themeCtx.colors.textSecondary }]}>
-          Transit schedules and route information are automatically updated when available. You can
-          manually refresh data for any city by tapping &quot;Update Transit&quot;.
+      <View
+        style={[
+          styles.infoSection,
+          { backgroundColor: themeCtx.colors.surface },
+        ]}
+      >
+        <Text style={[styles.infoTitle, { color: themeCtx.colors.text }]}>
+          Transit Data Updates
         </Text>
-        <Text style={[styles.infoText, { color: themeCtx.colors.textSecondary }]}>
-          Custom cities can be added with their own transit API endpoints for real-time data integration.
-          You can import a configuration file with advanced options (e.g., &quot;nyc.json&quot;, &quot;sf.json&quot;).
+        <Text
+          style={[styles.infoText, { color: themeCtx.colors.textSecondary }]}
+        >
+          Transit schedules and route information are automatically updated when
+          available. You can manually refresh data for any city by tapping
+          &quot;Update Transit&quot;.
+        </Text>
+        <Text
+          style={[styles.infoText, { color: themeCtx.colors.textSecondary }]}
+        >
+          Custom cities can be added with their own transit API endpoints for
+          real-time data integration. You can import a configuration file with
+          advanced options (e.g., &quot;nyc.json&quot;, &quot;sf.json&quot;).
         </Text>
       </View>
 
@@ -230,7 +319,12 @@ type AddEditRegionFormProps = {
   onCancel: () => void;
 };
 
-function AddEditRegionForm({ region, onSave, onCancel }: AddEditRegionFormProps) {
+function AddEditRegionForm({
+  region,
+  onSave,
+  onCancel,
+}: AddEditRegionFormProps) {
+  const { showToast } = useToast();
   const [formData, setFormData] = useState<Partial<RegionConfig>>({
     id: region?.id || "",
     name: region?.name || "",
@@ -250,7 +344,7 @@ function AddEditRegionForm({ region, onSave, onCancel }: AddEditRegionFormProps)
 
   const handleSave = () => {
     if (!formData.id || !formData.name || !formData.country) {
-      Alert.alert("Error", "Please fill in all required fields.");
+      showToast("Please fill in all required fields", "error");
       return;
     }
     onSave(formData as RegionConfig);
@@ -263,8 +357,13 @@ function AddEditRegionForm({ region, onSave, onCancel }: AddEditRegionFormProps)
           <Text style={styles.backButtonText}>Cancel</Text>
         </Pressable>
         <Text style={styles.title}>{region ? "Edit" : "Add"} City</Text>
-        <Pressable style={[styles.saveButton, { backgroundColor: Colors.primary }]} onPress={handleSave}>
-          <Text style={[styles.saveButtonText, { color: "#FFFFFF" }]}>Save</Text>
+        <Pressable
+          style={[styles.saveButton, { backgroundColor: Colors.primary }]}
+          onPress={handleSave}
+        >
+          <Text style={[styles.saveButtonText, { color: "#FFFFFF" }]}>
+            Save
+          </Text>
         </Pressable>
       </View>
 
@@ -304,7 +403,9 @@ function AddEditRegionForm({ region, onSave, onCancel }: AddEditRegionFormProps)
         <TextInput
           style={[styles.formInput, { borderColor: Colors.border }]}
           value={formData.transitApiEndpoint}
-          onChangeText={(text) => setFormData({ ...formData, transitApiEndpoint: text })}
+          onChangeText={(text) =>
+            setFormData({ ...formData, transitApiEndpoint: text })
+          }
           placeholder="https://api.example.com/"
         />
       </View>
@@ -314,14 +415,17 @@ function AddEditRegionForm({ region, onSave, onCancel }: AddEditRegionFormProps)
         <TextInput
           style={[styles.formInput, { borderColor: Colors.border }]}
           value={formData.emergencyNumber}
-          onChangeText={(text) => setFormData({ ...formData, emergencyNumber: text })}
+          onChangeText={(text) =>
+            setFormData({ ...formData, emergencyNumber: text })
+          }
           placeholder="911"
         />
       </View>
 
       <Text style={styles.infoText}>
-        Additional configuration options like transit systems, coordinates, and local information can be
-        added through the advanced settings or by importing from a configuration file.
+        Additional configuration options like transit systems, coordinates, and
+        local information can be added through the advanced settings or by
+        importing from a configuration file.
       </Text>
     </ScrollView>
   );
