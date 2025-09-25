@@ -29,6 +29,7 @@ module.exports = {
         '<rootDir>/_tests_/misc/**/*.(test|spec).(ts|tsx|js)',
         '<rootDir>/_tests_/mergeable-to-review/**/*.(test|spec).(ts|tsx|js)',
         '<rootDir>/_tests_/components/**/*.(test|spec).(ts|tsx|js)' // ADD THIS LINE
+        , '<rootDir>/_tests_/platform/**/*.(test|spec).(ts|tsx|js)'
     ],
     collectCoverageFrom: [
         'components/**/*.{ts,tsx}',
