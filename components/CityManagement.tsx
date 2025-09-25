@@ -19,6 +19,7 @@ import {
 } from "react-native";
 
 import ConfirmDialog from "./ConfirmDialog";
+import RegionCard from "@/components/RegionCard";
 import Toast from "./Toast";
 
 import Colors from "@/constants/colors"; // THEME MIGRATION: See issue #1234 for tracking phase-out of direct Colors references
@@ -36,7 +37,6 @@ export default function CityManagement({ onBack }: CityManagementProps) {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [showAddForm, setShowAddForm] = useState<boolean>(false);
   const [editingRegion, setEditingRegion] = useState<RegionConfig | null>(null);
-
   const {
     availableRegions,
     currentRegion,
@@ -47,10 +47,7 @@ export default function CityManagement({ onBack }: CityManagementProps) {
     searchRegions,
     getRegionsByCountry,
   } = useRegionStore();
-
   const { toast, showToast, hideToast } = useToast();
-
-  // --- Helpers / derived data
   const filteredRegions = searchQuery
     ? searchRegions(searchQuery)
     : availableRegions;
@@ -58,133 +55,122 @@ export default function CityManagement({ onBack }: CityManagementProps) {
   const internationalRegions = availableRegions.filter(
     (r) => r.country !== "United States"
   );
-
-  // Place handleUpdateTransitData after useToast and showToast definition
-  const handleUpdateTransitData = (_regionId: string) => {
-    // In a real app, this would make API calls to update transit data
-    showToast("Transit data updated", "success");
-    // Optionally:
-    // updateRegionTransitData(regionId, ...payload)
-  };
-
-  const handleDeleteRegion = (regionId: string) => {
-    if (regionId === currentRegion.id) {
-      showToast("Cannot delete current region", "error");
-      return;
-    }
-    ConfirmDialog.show({
-      title: "Delete Region",
-      message: "Are you sure you want to delete this region?",
-      confirmText: "Delete",
-      destructive: true,
-      onConfirm: () => removeRegion(regionId),
-    });
-  };
-
-  const RegionCard = ({ region }: { region: RegionConfig }) => (
-    <View
+  // ...existing code...
+  if (showAddForm || editingRegion) {
+    return (
+      <AddEditRegionForm
+        region={editingRegion}
+        onSave={(region) => {
+          if (editingRegion) {
+            updateRegionTransitData(region.id, region);
+          } else {
+            addCustomRegion(region);
+          }
+          setShowAddForm(false);
+          setEditingRegion(null);
+        }}
+        onCancel={() => {
+          setShowAddForm(false);
+          setEditingRegion(null);
+        }}
+      />
+    );
+  }
+  return (
+    <ScrollView
       style={[
-        styles.regionCard,
-        region.id === currentRegion.id && styles.currentRegionCard,
-        { backgroundColor: themeCtx.colors.surface },
+        styles.container,
+        { backgroundColor: themeCtx.colors.background },
       ]}
     >
-      <Pressable
-        style={styles.regionHeader}
-        onPress={() => setRegion(region.id)}
-      >
-        <View style={styles.regionTitleRow}>
-          <MapPin size={20} color={themeCtx.colors.primary} />
-          <Text style={styles.regionName}>{region.name}</Text>
-          {region.id === currentRegion.id && (
-            <View
-              style={[
-                styles.currentBadge,
-                { backgroundColor: themeCtx.colors.primary },
-              ]}
-            >
-              <Text style={styles.currentBadgeText}>Current</Text>
-            </View>
-          )}
-        </View>
-
-        <View style={styles.regionDetails}>
-          <View style={styles.detailItem}>
-            <Globe size={14} color={themeCtx.colors.textSecondary} />
-            <Text
-              style={[
-                styles.detailText,
-                { color: themeCtx.colors.textSecondary },
-              ]}
-            >
-              {region.country}
-            </Text>
-          </View>
-          <View style={styles.detailItem}>
-            <Clock size={14} color={themeCtx.colors.textSecondary} />
-            <Text
-              style={[
-                styles.detailText,
-                { color: themeCtx.colors.textSecondary },
-              ]}
-            >
-              {region.timezone}
-            </Text>
-          </View>
-          <View style={styles.detailItem}>
-            <Phone size={14} color={themeCtx.colors.textSecondary} />
-            <Text
-              style={[
-                styles.detailText,
-                { color: themeCtx.colors.textSecondary },
-              ]}
-            >
-              {region.emergencyNumber}
-            </Text>
-          </View>
-        </View>
-
-        <Text
+      <View style={styles.header}>
+        <Pressable style={styles.backButton} onPress={onBack}>
+          <Text style={styles.backButtonText}>← Back</Text>
+        </Pressable>
+        <Text style={styles.title}>City Management</Text>
+        <Pressable
           style={[
-            styles.transitCount,
-            { color: themeCtx.colors.textSecondary },
+            styles.addButton,
+            { backgroundColor: themeCtx.colors.primary },
           ]}
+          onPress={() => setShowAddForm(true)}
         >
-          {region.transitSystems.length} transit system
-          {region.transitSystems.length !== 1 ? "s" : ""}
+          <Plus size={20} color="#FFFFFF" />
+          <Text style={styles.addButtonText}>Add City</Text>
+        </Pressable>
+      </View>
+      <View
+        style={[
+          styles.searchContainer,
+          {
+            backgroundColor: themeCtx.colors.surface,
+            borderColor: Colors.border,
+            borderWidth: 1,
+          },
+        ]}
+      >
+        <Search size={20} color={themeCtx.colors.textSecondary} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search cities..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          placeholderTextColor={themeCtx.colors.textSecondary}
+        />
+      </View>
+      <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { color: themeCtx.colors.text }]}> 
+          United States ({usRegions.length})
         </Text>
-
-        <View style={styles.regionActions}>
-          <Pressable
-            style={styles.actionButton}
-            onPress={() => handleUpdateTransitData(region.id)}
-          >
-            <Text
-              style={[
-                styles.actionButtonText,
-                { color: themeCtx.colors.primary },
-              ]}
-            >
-              Update Transit
-            </Text>
-          </Pressable>
-
-          <Pressable
-            style={styles.actionButton}
-            onPress={() => setEditingRegion(region)}
-          >
-            <Edit3 size={16} color={themeCtx.colors.primary} />
-          </Pressable>
-
-          <Pressable
-            style={[styles.actionButton, styles.deleteButton]}
-            onPress={() => handleDeleteRegion(region.id)}
-          >
-            <Trash2 size={16} color="#FF4444" />
-          </Pressable>
-        </View>
-      </Pressable>
-    </View>
+        {(searchQuery
+          ? filteredRegions.filter((r) => r.country === "United States")
+          : usRegions
+        ).map((region) => (
+          <RegionCard key={region.id} region={region} />
+        ))}
+      </View>
+      <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { color: themeCtx.colors.text }]}> 
+          International ({internationalRegions.length})
+        </Text>
+        {(searchQuery
+          ? filteredRegions.filter((r) => r.country !== "United States")
+          : internationalRegions
+        ).map((region) => (
+          <RegionCard key={region.id} region={region} />
+        ))}
+      </View>
+      <View
+        style={[
+          styles.infoSection,
+          { backgroundColor: themeCtx.colors.surface },
+        ]}
+      >
+        <Text style={[styles.infoTitle, { color: themeCtx.colors.text }]}> 
+          Transit Data Updates
+        </Text>
+        <Text
+          style={[styles.infoText, { color: themeCtx.colors.textSecondary }]}
+        >
+          Transit schedules and route information are automatically updated when
+          available. You can manually refresh data for any city by tapping
+          &quot;Update Transit&quot;.
+        </Text>
+        <Text
+          style={[styles.infoText, { color: themeCtx.colors.textSecondary }]}
+        >
+          Custom cities can be added with their own transit API endpoints for
+          real-time data integration. You can import a configuration file with
+          advanced options (e.g., &quot;nyc.json&quot;, &quot;sf.json&quot;).
+        </Text>
+      </View>
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        visible={toast.visible}
+        onHide={hideToast}
+      />
+    </ScrollView>
   );
 
   if (showAddForm || editingRegion) {

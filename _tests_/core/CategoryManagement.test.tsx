@@ -1,59 +1,28 @@
-import { Alert } from "react-native";
-
-import CategoryManagement from "../../components/CategoryManagement";
-import { render, } from "../testUtils";
-
-const mockAddCategory = jest.fn();
-const mockUpdateCategory = jest.fn();
-const mockDeleteCategory = jest.fn();
-const mockApproveCategory = jest.fn();
-const mockShowToast = jest.fn();
-const mockHideToast = jest.fn();
-
 jest.mock("@/stores/categoryStore", () => ({
   useCategoryManagement: () => ({
-    settings: {
-      maxCustomCategories: 10,
-      allowChildCategoryCreation: true,
-      requireApprovalForCategories: true,
-    },
-    getApprovedCategories: () => [
-      /* ... */
-    ],
-    getPendingCategories: () => [
-      /* ... */
-    ],
-    addCategory: mockAddCategory,
-    updateCategory: mockUpdateCategory,
-    deleteCategory: mockDeleteCategory,
-    approveCategory: mockApproveCategory,
+    settings: { maxCustomCategories: 10, allowChildCategoryCreation: true, requireApprovalForCategories: true },
+    getApprovedCategories: () => [],
+    getPendingCategories: () => [],
+    addCategory: jest.fn(),
+    updateCategory: jest.fn(),
+    deleteCategory: jest.fn(),
+    approveCategory: jest.fn(),
     getAvailableIcons: () => ["Home", "Building", "MapPin", "Heart", "Star"],
-    getAvailableColors: () => [
-      "#007AFF",
-      "#FF9500",
-      "#34C759",
-      "#FF3B30",
-      "#AF52DE",
-    ],
-    canCreateCategory: (userMode: string) =>
-      userMode === "parent" || userMode === "child",
-    needsApproval: (userMode: string) => userMode === "child",
+    getAvailableColors: () => ["#007AFF", "#FF9500", "#34C759", "#FF3B30", "#AF52DE"],
+    canCreateCategory: (userMode) => userMode === "parent" || userMode === "child",
+    needsApproval: (userMode) => userMode === "child",
   }),
 }));
-
-jest.mock("@/hooks/useToast", () => ({
-  useToast: () => ({
-    toast: { message: "", type: "info", visible: false },
-    showToast: mockShowToast,
-    hideToast: mockHideToast,
-  }),
+import { Alert } from "react-native";
+jest.mock("@/components/CategoryButton", () => ({
+  __esModule: true,
+  default: () => null,
 }));
 
-jest.mock("@/core/validation", () => ({
-  CategoryCreateSchema: {},
-  CategoryUpdateSchema: {},
-  safeParseWithToast: jest.fn((schema, data) => data),
-}));
+import CategoryManagement from "../../components/CategoryManagement";
+import { render } from "../testUtils";
+import { useCategoryManagement as mockUseCategoryManagement } from "../../__mocks__/stores/categoryStore";
+
 
 jest.spyOn(Alert, "alert");
 
@@ -62,6 +31,7 @@ describe("CategoryManagement", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.spyOn(require("@/stores/categoryStore"), "useCategoryManagement").mockImplementation(mockUseCategoryManagement);
   });
 
   it("renders without crashing", () => {

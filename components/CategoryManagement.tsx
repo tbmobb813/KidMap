@@ -303,6 +303,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Category Management</Text>
       <View style={styles.header}>
         <Pressable onPress={onBack} style={styles.backButton}>
           <ArrowLeft size={24} color={theme.colors.text} />

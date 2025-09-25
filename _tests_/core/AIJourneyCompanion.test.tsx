@@ -1,3 +1,21 @@
+// Mock ThemeProvider for tests
+import React, { createContext } from "react";
+const ThemeContext = createContext({ theme: {
+  colors: {
+    primary: "#007AFF",
+    background: "#FFFFFF",
+    text: "#222222",
+  },
+}});
+const ThemeProvider = ({ children }: { children: React.ReactNode }) => (
+  <ThemeContext.Provider value={{ theme: {
+    colors: {
+      primary: "#007AFF",
+      background: "#FFFFFF",
+      text: "#222222",
+    },
+  }}}>{children}</ThemeContext.Provider>
+);
 /**
  * AIJourneyCompanion Component Tests
  *
@@ -7,7 +25,6 @@
 
 import { jest } from "@jest/globals";
 import { fireEvent, render, waitFor } from "@testing-library/react-native";
-import React from "react";
 import { Animated } from "react-native";
 
 
@@ -22,6 +39,16 @@ jest.mock("lucide-react-native", () => ({
   Volume2: ({ size, color }: any) => `MockVolume2-${size}-${color}`,
   VolumeX: ({ size, color }: any) => `MockVolumeX-${size}-${color}`,
   Sparkles: ({ size, color }: any) => `MockSparkles-${size}-${color}`,
+}));
+jest.mock("@/hooks/useTheme", () => ({
+  __esModule: true,
+  default: jest.fn(() => ({
+    colors: {
+      primary: "#007AFF",
+      background: "#FFFFFF",
+      text: "#222222",
+    },
+  })),
 }));
 
 // Mock telemetry
@@ -74,23 +101,9 @@ describe("AIJourneyCompanion", () => {
     (Animated as any).timing = jest.fn(() => mockAnimation);
   });
 
-  jest.mock("@/hooks/useTheme", () => ({
-    __esModule: true,
-    default: jest.fn(),
-  }));
-  const mockUseTheme = require("@/hooks/useTheme").default;
-
-  const mockTheme = {
-    colors: {
-      primary: "#007AFF",
-      background: "#FFFFFF",
-      text: "#222222",
-    },
-  };
 
   describe("AIJourneyCompanion", () => {
     beforeEach(() => {
-      mockUseTheme.mockReturnValue(mockTheme as any);
       jest.clearAllMocks();
       jest.useFakeTimers();
     });
@@ -102,22 +115,24 @@ describe("AIJourneyCompanion", () => {
     describe("Basic Rendering", () => {
       it("renders without crashing", () => {
         expect(() =>
-          render(<AIJourneyCompanion {...defaultProps} />)
+          render(<ThemeProvider><AIJourneyCompanion {...defaultProps} /></ThemeProvider>)
         ).not.toThrow();
       });
 
       it("does not render when not navigating", () => {
-        const { queryByText } = render(<AIJourneyCompanion {...defaultProps} />);
+  const { queryByText } = render(<ThemeProvider><AIJourneyCompanion {...defaultProps} /></ThemeProvider>);
         expect(queryByText("Buddy")).toBeNull();
       });
 
       it("does not render when no destination", () => {
         const { queryByText } = render(
-          <AIJourneyCompanion
-            currentLocation={defaultProps.currentLocation}
-            destination={undefined}
-            isNavigating={true}
-          />
+          <ThemeProvider>
+            <AIJourneyCompanion
+              currentLocation={defaultProps.currentLocation}
+              destination={undefined}
+              isNavigating={true}
+            />
+          </ThemeProvider>
         );
         expect(queryByText("Buddy")).toBeNull();
       });
@@ -128,7 +143,9 @@ describe("AIJourneyCompanion", () => {
         } as Response);
 
         const { getByText } = render(
-          <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          <ThemeProvider>
+            <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          </ThemeProvider>
         );
 
         // Fast forward timers to complete async operations
@@ -149,7 +166,7 @@ describe("AIJourneyCompanion", () => {
           json: () => Promise.resolve({ completion: "Test content" }),
         } as Response);
 
-        render(<AIJourneyCompanion {...defaultProps} isNavigating={true} />);
+  render(<ThemeProvider><AIJourneyCompanion {...defaultProps} isNavigating={true} /></ThemeProvider>);
 
         jest.advanceTimersByTime(100);
 
@@ -174,7 +191,9 @@ describe("AIJourneyCompanion", () => {
         } as Response);
 
         const { getByText } = render(
-          <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          <ThemeProvider>
+            <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          </ThemeProvider>
         );
 
         jest.advanceTimersByTime(100);
@@ -191,7 +210,9 @@ describe("AIJourneyCompanion", () => {
         mockFetch.mockRejectedValueOnce(new Error("Network error"));
 
         const { getByText } = render(
-          <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          <ThemeProvider>
+            <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          </ThemeProvider>
         );
 
         jest.advanceTimersByTime(100);
@@ -214,7 +235,9 @@ describe("AIJourneyCompanion", () => {
         } as Response);
 
         const { getByText } = render(
-          <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          <ThemeProvider>
+            <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          </ThemeProvider>
         );
 
         jest.advanceTimersByTime(100);
@@ -236,7 +259,9 @@ describe("AIJourneyCompanion", () => {
         } as Response);
 
         const { getByText } = render(
-          <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          <ThemeProvider>
+            <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          </ThemeProvider>
         );
 
         jest.advanceTimersByTime(100);
@@ -286,7 +311,9 @@ describe("AIJourneyCompanion", () => {
         } as Response);
 
         const { getByText } = render(
-          <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          <ThemeProvider>
+            <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          </ThemeProvider>
         );
 
         jest.advanceTimersByTime(100);
@@ -305,7 +332,9 @@ describe("AIJourneyCompanion", () => {
         } as Response);
 
         const { getByText } = render(
-          <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          <ThemeProvider>
+            <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          </ThemeProvider>
         );
 
         jest.advanceTimersByTime(100);
@@ -329,7 +358,9 @@ describe("AIJourneyCompanion", () => {
         } as Response);
 
         const { getByText } = render(
-          <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          <ThemeProvider>
+            <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          </ThemeProvider>
         );
 
         jest.advanceTimersByTime(100);
@@ -351,7 +382,9 @@ describe("AIJourneyCompanion", () => {
         } as Response);
 
         const { getByText } = render(
-          <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          <ThemeProvider>
+            <AIJourneyCompanion {...defaultProps} isNavigating={true} />
+          </ThemeProvider>
         );
 
         jest.advanceTimersByTime(100);
@@ -373,11 +406,13 @@ describe("AIJourneyCompanion", () => {
     describe("Animation Lifecycle", () => {
       it("initializes animations when navigating", () => {
         render(
-          <AIJourneyCompanion
-            currentLocation={{ latitude: 40.7128, longitude: -74.006 }}
-            destination={mockPlace}
-            isNavigating={true}
-          />
+          <ThemeProvider>
+            <AIJourneyCompanion
+              currentLocation={{ latitude: 40.7128, longitude: -74.006 }}
+              destination={mockPlace}
+              isNavigating={true}
+            />
+          </ThemeProvider>
         );
 
         // Verify animation setup was called
@@ -386,11 +421,13 @@ describe("AIJourneyCompanion", () => {
 
       it("handles animation lifecycle", () => {
         const { unmount } = render(
-          <AIJourneyCompanion
-            currentLocation={{ latitude: 40.7128, longitude: -74.006 }}
-            destination={mockPlace}
-            isNavigating={true}
-          />
+          <ThemeProvider>
+            <AIJourneyCompanion
+              currentLocation={{ latitude: 40.7128, longitude: -74.006 }}
+              destination={mockPlace}
+              isNavigating={true}
+            />
+          </ThemeProvider>
         );
 
         // Should not throw when unmounting
@@ -402,11 +439,13 @@ describe("AIJourneyCompanion", () => {
 
         expect(() =>
           render(
-            <AIJourneyCompanion
-              currentLocation={newLocation}
-              destination={mockPlace}
-              isNavigating={true}
-            />
+            <ThemeProvider>
+              <AIJourneyCompanion
+                currentLocation={newLocation}
+                destination={mockPlace}
+                isNavigating={true}
+              />
+            </ThemeProvider>
           )
         ).not.toThrow();
       });
