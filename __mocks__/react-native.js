@@ -197,20 +197,41 @@ module.exports = {
     FlatList: MockComponent,
     SectionList: MockComponent,
 
-    Value: jest.fn(createMockAnimatedValue),
+    Value: jest.fn(() => ({
+      setValue: jest.fn(),
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      interpolate: jest.fn(),
+    })),
     ValueXY: jest.fn(createMockAnimatedValueXY),
 
-    // Animation functions
-    timing: jest.fn(() => createMockAnimation()),
-    spring: jest.fn(() => createMockAnimation()),
-    decay: jest.fn(() => createMockAnimation()),
+    // Animation functions (aggressive: immediately call callback)
+    timing: jest.fn(() => ({
+      start: (cb) => cb && cb({ finished: true }),
+    })),
+    spring: jest.fn(() => ({
+      start: (cb) => cb && cb({ finished: true }),
+    })),
+    decay: jest.fn(() => ({
+      start: (cb) => cb && cb({ finished: true }),
+    })),
 
     // Composition functions
-    sequence: jest.fn(() => createMockAnimation()),
-    parallel: jest.fn(() => createMockAnimation()),
-    stagger: jest.fn(() => createMockAnimation()),
-    delay: jest.fn(() => createMockAnimation()),
-    loop: jest.fn(() => createMockAnimation()),
+    sequence: jest.fn(() => ({
+      start: (cb) => cb && cb({ finished: true }),
+    })),
+    parallel: jest.fn(() => ({
+      start: (cb) => cb && cb({ finished: true }),
+    })),
+    stagger: jest.fn(() => ({
+      start: (cb) => cb && cb({ finished: true }),
+    })),
+    delay: jest.fn(() => ({
+      start: (cb) => cb && cb({ finished: true }),
+    })),
+    loop: jest.fn(() => ({
+      start: (cb) => cb && cb({ finished: true }),
+    })),
 
     // Events
     event: jest.fn(() => jest.fn()),

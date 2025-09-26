@@ -9,8 +9,8 @@ jest.mock("@/stores/categoryStore", () => ({
     approveCategory: jest.fn(),
     getAvailableIcons: () => ["Home", "Building", "MapPin", "Heart", "Star"],
     getAvailableColors: () => ["#007AFF", "#FF9500", "#34C759", "#FF3B30", "#AF52DE"],
-    canCreateCategory: (userMode) => userMode === "parent" || userMode === "child",
-    needsApproval: (userMode) => userMode === "child",
+    canCreateCategory: (userMode: string) => userMode === "parent" || userMode === "child",
+    needsApproval: (userMode: string) => userMode === "child",
   }),
 }));
 import { Alert } from "react-native";

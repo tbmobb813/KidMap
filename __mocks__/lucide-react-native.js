@@ -10,6 +10,9 @@ function createIcon(name) {
 
 // Export the icons used across the tests and a default fallback
 module.exports = {
+  Bot: createIcon('Bot'),
+  VolumeX: createIcon('VolumeX'),
+  Sparkles: createIcon('Sparkles'),
   Eye: createIcon('Eye'),
   Volume2: createIcon('Volume2'),
   Zap: createIcon('Zap'),
