@@ -28,10 +28,15 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     spin();
   }, [spinValue]);
 
-  const spin = spinValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["0deg", "360deg"],
-  });
+  // Some test mocks replace Animated.Value with objects that don't implement
+  // interpolate. Be defensive: if interpolate isn't present, fall back to a
+  // static rotation so tests won't throw.
+  const spin = (spinValue && typeof (spinValue as any).interpolate === 'function')
+    ? (spinValue as any).interpolate({
+        inputRange: [0, 1],
+        outputRange: ["0deg", "360deg"],
+      })
+    : '0deg';
 
   const getSize = () => {
     switch (size) {

@@ -1,6 +1,7 @@
+import { Edit3, Trash2, Globe, MapPin } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import { Edit3, Trash2, Globe, MapPin } from "lucide-react-native";
+
 import Colors from "@/constants/colors";
 import { RegionConfig } from "@/types/region";
 

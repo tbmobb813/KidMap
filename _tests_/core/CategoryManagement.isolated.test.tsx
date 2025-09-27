@@ -42,8 +42,9 @@ jest.mock("@/hooks/useToast", () => ({
   }),
 }));
 import React from "react";
+
 import CategoryManagement from "../../components/CategoryManagement";
-console.log('DEBUG CategoryManagement import:', CategoryManagement);
+// debug log removed
 import { render } from "../testUtils";
 jest.mock("@/components/CategoryButton", () => ({
   __esModule: true,

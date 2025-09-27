@@ -18,8 +18,9 @@ import {
   TextInput,
 } from "react-native";
 
-import ConfirmDialog from "./ConfirmDialog";
 import RegionCard from "../components/RegionCard";
+
+import ConfirmDialog from "./ConfirmDialog";
 import Toast from "./Toast";
 
 import Colors from "@/constants/colors"; // THEME MIGRATION: See issue #1234 for tracking phase-out of direct Colors references

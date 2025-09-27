@@ -37,6 +37,10 @@ export function useRoutesQuery(
       const params: FetchRoutesParams = { origin, destination, mode, options };
       const before = getRouteServiceMetrics().fetchCount;
       const result = await fetchRoutes(params);
+  // Debug: surface the fetched result during tests to help triage
+  // (kept minimal; remove once tests stabilize)
+  // eslint-disable-next-line no-console
+  console.log("[useRoutesQuery] fetched:", JSON.stringify(result));
       const after = getRouteServiceMetrics().fetchCount;
       const cacheHit = after === before;
       if (cacheHit) mark(`routes_cache_hit:${keyId}`);

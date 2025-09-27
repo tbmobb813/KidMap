@@ -160,3 +160,52 @@ export const integrationTestHelpers = {
     }
   },
 };
+
+// Helpers to access shared test mocks configured in jest.setup.js
+export function getGlobalMockTrack(): jest.Mock | undefined {
+  return (global as any).__mockTrack as jest.Mock | undefined;
+}
+
+export function getGlobalFetchMock(): jest.Mock | undefined {
+  return (global as any).fetch as jest.Mock | undefined;
+}
+
+export function resetGlobalFetchMock() {
+  (global as any).fetch = jest.fn(() =>
+    Promise.resolve(createMockFetchResponse("Test content"))
+  );
+}
+
+/**
+ * Create a minimal fetch response object suitable for Jest fetch mocks.
+ * Use this to avoid casting to `any` in tests when mocking fetch responses.
+ */
+export function createMockFetchResponse(
+  text: string,
+  ok = true,
+  status = 200,
+  body: any = undefined
+) {
+  const payload = body !== undefined ? body : { completion: text };
+  return {
+    ok,
+    status,
+    json: () => Promise.resolve(payload),
+  } as unknown as Response;
+}
+
+/**
+ * Recursively extract visible text from react-test-renderer instances,
+ * plain strings, arrays or element props used by tests. Useful when
+ * the test renderer returns ReactTestInstance shapes rather than
+ * simple DOM nodes.
+ */
+export function extractText(node: any): string {
+  if (!node) return "";
+  if (typeof node === "string") return node;
+  if (Array.isArray(node)) return node.map((n) => extractText(n)).filter(Boolean).join(" ");
+  if (node.props && typeof node.props.children === "string") return node.props.children;
+  if (node.props && node.props.children) return extractText(node.props.children);
+  if (node.children && Array.isArray(node.children)) return node.children.map((c: any) => extractText(c)).filter(Boolean).join(" ");
+  return "";
+}

@@ -130,7 +130,7 @@ afterAll(() => {
       });
 
       it("renders when navigating with destination", async () => {
-        console.log("[TEST] Start: renders when navigating with destination");
+  // debug logs removed
         mockFetch.mockResolvedValueOnce({
           json: () => Promise.resolve({ completion: "Welcome to your journey!" }),
         } as Response);
@@ -140,43 +140,43 @@ afterAll(() => {
 
         let renderResult: ReturnType<typeof render>;
         await act(async () => {
-          console.log("[TEST] Before render (act)");
+          // debug logs removed
           renderResult = render(
             <ThemeProvider>
               <AIJourneyCompanion {...defaultProps} isNavigating={true} />
             </ThemeProvider>
           );
-          console.log("[TEST] After render (act)");
+          // debug logs removed
         });
 
         await waitFor(() => {
           expect(renderResult.getByText("Buddy")).toBeTruthy();
         }, { timeout: 2000 });
-        console.log("[TEST] End: renders when navigating with destination");
+  // debug logs removed
       }, 20000);
     });
 
     describe("AI Content Generation", () => {
       it("makes API call when starting navigation", async () => {
-        console.log("[TEST] Start: makes API call when starting navigation");
+  // debug logs removed
         mockFetch.mockResolvedValueOnce({
           json: () => Promise.resolve({ completion: "Test content" }),
         } as Response);
 
   let renderResult: ReturnType<typeof render>;
         await act(async () => {
-          console.log("[TEST] Before render (act)");
+          // debug logs removed
           renderResult = render(<ThemeProvider><AIJourneyCompanion {...defaultProps} isNavigating={true} /></ThemeProvider>);
-          console.log("[TEST] After render (act)");
+          // debug logs removed
           jest.advanceTimersByTime(100);
           jest.runAllTimers();
           await Promise.resolve();
-          console.log("[TEST] After timers and Promise.resolve (act)");
+          // debug logs removed
         });
 
         await waitFor(
           () => {
-            console.log("[TEST] Inside waitFor callback");
+            // debug logs removed
             expect(mockFetch).toHaveBeenCalledWith(
               "https://toolkit.rork.com/text/llm/",
               expect.objectContaining({
@@ -187,7 +187,7 @@ afterAll(() => {
           },
           { timeout: 2000 }
         );
-        console.log("[TEST] End: makes API call when starting navigation");
+  // debug logs removed
       }, 20000);
 
       it("displays AI generated content", async () => {

@@ -1,3 +1,9 @@
+// Restore generic MockComponent for all non-Text/View exports
+const MockComponent = function(props) {
+  const { children } = props;
+  const mapped = mapPropsForDom(props);
+  return React.createElement('div', mapped, children);
+};
 /**
  * React Native Mock for Jest Testing
  * Bypasses Flow parsing issues by providing complete mock implementation
@@ -7,20 +13,47 @@
 
 const React = require('react');
 
-// Mock component that renders a simple div
-const MockComponent = (props) => {
-  return React.createElement('div', props, props.children);
+// Helper to map common React Native props to DOM-friendly attributes
+const mapPropsForDom = (props = {}) => {
+  const mapped = { ...props };
+  // map testID -> data-testid for DOM queries
+  if (props.testID && !props['data-testid']) mapped['data-testid'] = props.testID;
+  if (props.testId && !props['data-testid']) mapped['data-testid'] = props.testId;
+  // map accessibilityLabel -> aria-label for a11y queries
+  if (props.accessibilityLabel && !props['aria-label']) mapped['aria-label'] = props.accessibilityLabel;
+  if (props.accessibilityLabel && !mapped['aria-label']) mapped['aria-label'] = props.accessibilityLabel;
+  // map onPress -> onClick for DOM event simulation
+  if (props.onPress && !props.onClick) mapped.onClick = props.onPress;
+  // Preserve original RN props (testID/accessibilityLabel) so react-test-renderer
+  // can detect host components in tests. Also copy them to DOM-friendly names.
+  // (Do not delete testID/accessibilityLabel)
+  return mapped;
 };
 
-// Mock Text component
-const MockText = (props) => {
-  return React.createElement('span', props, props.children);
-};
+// Mock View component as a plain function component so legacy tests can call
+// require('react-native').View({...}) directly. We intentionally keep a
+// host-component style by returning a DOM element for react-test-renderer.
+function View(props) {
+  const { children } = props;
+  const mapped = { ...mapPropsForDom(props) };
+  return React.createElement('div', mapped, children);
+}
+View.displayName = 'View';
+
+// Mock Text component as a plain function component so tests can call
+// require('react-native').Text({...}) in legacy mocks. Also keep a named
+// component for react-test-renderer host detection.
+function Text(props) {
+  const mapped = { ...mapPropsForDom(props) };
+  return React.createElement('span', mapped, props.children);
+}
+Text.displayName = 'Text';
 
 // Mock Image component
 const MockImage = (props) => {
+  const mapped = mapPropsForDom(props);
   return React.createElement('img', {
-    ...props,
+    ...mapped,
     src: props.source?.uri || props.source,
   });
 };
@@ -108,8 +141,52 @@ const Alert = {
 
 module.exports = {
   // Basic components
-  View: MockComponent,
-  Text: MockText,
+  View,
+  Text,
+  // Other RN primitives
+  ScrollView: MockComponent,
+  FlatList: MockComponent,
+  SectionList: MockComponent,
+  VirtualizedList: MockComponent,
+
+  // Input components
+  TextInput: MockComponent,
+  Switch: MockComponent,
+  Slider: MockComponent,
+
+  // Touchable components
+  TouchableOpacity: MockComponent,
+  TouchableHighlight: MockComponent,
+  TouchableWithoutFeedback: MockComponent,
+  // TouchableNativeFeedback should be a callable component. Provide helper
+  // static methods (Ripple, SelectableBackground...) attached to the function
+  TouchableNativeFeedback: (() => {
+    const Comp = MockComponent;
+    Comp.Ripple = jest.fn((color, borderless) => ({
+      type: 'ripple',
+      color,
+      borderless,
+    }));
+    Comp.SelectableBackground = jest.fn(() => ({ type: 'selectableBackground' }));
+    Comp.SelectableBackgroundBorderless = jest.fn(() => ({ type: 'selectableBackgroundBorderless' }));
+    Comp.canUseNativeForeground = jest.fn(() => true);
+    return Comp;
+  })(),
+  Pressable: MockComponent,
+
+  // Layout components
+  SafeAreaView: MockComponent,
+  KeyboardAvoidingView: MockComponent,
+
+  // Navigation components
+  StatusBar: MockComponent,
+
+  // Modal and overlay components
+  Modal: MockComponent,
+
+  // Progress components
+  ActivityIndicator: MockComponent,
+  ProgressBarAndroid: MockComponent,
   Image: MockImage,
   ScrollView: MockComponent,
   FlatList: MockComponent,
@@ -125,17 +202,20 @@ module.exports = {
   TouchableOpacity: MockComponent,
   TouchableHighlight: MockComponent,
   TouchableWithoutFeedback: MockComponent,
-  TouchableNativeFeedback: {
-    ...MockComponent,
-    Ripple: jest.fn((color, borderless) => ({
+  // TouchableNativeFeedback should be a callable component. Provide helper
+  // static methods (Ripple, SelectableBackground...) attached to the function
+  TouchableNativeFeedback: (() => {
+    const Comp = MockComponent;
+    Comp.Ripple = jest.fn((color, borderless) => ({
       type: 'ripple',
       color,
       borderless,
-    })),
-    SelectableBackground: jest.fn(() => ({ type: 'selectableBackground' })),
-    SelectableBackgroundBorderless: jest.fn(() => ({ type: 'selectableBackgroundBorderless' })),
-    canUseNativeForeground: jest.fn(() => true),
-  },
+    }));
+    Comp.SelectableBackground = jest.fn(() => ({ type: 'selectableBackground' }));
+    Comp.SelectableBackgroundBorderless = jest.fn(() => ({ type: 'selectableBackgroundBorderless' }));
+    Comp.canUseNativeForeground = jest.fn(() => true);
+    return Comp;
+  })(),
   Pressable: MockComponent,
 
   // Layout components
@@ -190,8 +270,8 @@ module.exports = {
 
   // Animated API
   Animated: {
-    View: MockComponent,
-    Text: MockText,
+  View,
+  Text,
     Image: MockImage,
     ScrollView: MockComponent,
     FlatList: MockComponent,

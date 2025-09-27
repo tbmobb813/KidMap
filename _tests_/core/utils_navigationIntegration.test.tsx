@@ -17,9 +17,7 @@
 import { render, fireEvent } from "@testing-library/react-native";
 import React from "react";
 
-import { mockRoute } from "../testUtils";
-
-const { queryAllByLabelText } = require("@testing-library/react-native");
+import { mockRoute, extractText } from "../testUtils";
 
 // Test implementations using mock components
 const mockRouter = {
@@ -247,30 +245,43 @@ const testRoute = {
   ],
 };
 
-// Test components
+// Use mocked RN primitives for host detection
+const { View, Text } = require('react-native');
+
 const TestRouteCard = ({ route, onPress, disabled }: any) => {
   return React.createElement(
-    "div",
+    View,
     {
-      "data-testid": "route-card",
-      onClick: disabled ? undefined : onPress,
+      testID: "route-card",
+      onPress: disabled ? undefined : onPress,
     },
     [
       React.createElement(
-        "span",
+        Text,
         {
           key: "name",
-          "data-testid": "route-name",
+          testID: "route-name",
         },
         route?.name || "Unavailable"
       ),
       React.createElement(
-        "span",
+        Text,
         {
           key: "duration",
-          "data-testid": "route-duration",
+          testID: "route-duration",
         },
         `${route?.totalDuration || 0}min`
+      ),
+      // Render step details (transit line info or step type)
+      ...(route?.steps || []).map((step: any, i: number) =>
+        React.createElement(
+          Text,
+          {
+            key: `step-${i}`,
+            testID: `step-${i}`,
+          },
+          step.line ? step.line : step.type
+        )
       ),
     ]
   );
@@ -278,19 +289,25 @@ const TestRouteCard = ({ route, onPress, disabled }: any) => {
 
 const TestCategoryButton = ({ category, onPress, accessibilityLabel }: any) => {
   return React.createElement(
-    "button",
+    View,
     {
-      "data-testid": "category-button",
-      onClick: onPress,
-      "aria-label": accessibilityLabel,
+      testID: "category-button",
+      onPress,
+      accessibilityLabel,
     },
-    category
+    React.createElement(Text, null, category)
   );
 };
+
+// Use shared extractText from ../testUtils
 
 describe("Navigation & Routing Integration - ServiceTestTemplate", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  beforeAll(() => {
+    // Intentionally left empty - previous debug logging removed
   });
 
   describe("Deep Linking Navigation", () => {
@@ -369,17 +386,22 @@ describe("Navigation & Routing Integration - ServiceTestTemplate", () => {
         const { getByTestId } = render(
           React.createElement(TestRouteCard, { route: testRoute })
         );
+        const card = getByTestId("route-card");
+        const combinedText = Array.isArray(card.children)
+          ? card.children.map((c: any) => extractText(c)).join(' ')
+          : extractText(card.props && card.props.children);
 
-        expect(getByTestId("route-name")).toHaveTextContent("Test Route");
-        expect(getByTestId("route-duration")).toHaveTextContent("30min");
+        expect(combinedText).toContain('Test Route');
+        expect(combinedText).toContain('30min');
       });
 
       it("renders unavailable state when route is null", () => {
         const { getByTestId } = render(
           React.createElement(TestRouteCard, { route: null })
         );
-
-        expect(getByTestId("route-name")).toHaveTextContent("Unavailable");
+        const card = getByTestId("route-card");
+  const text = extractText(Array.isArray(card.children) ? card.children : card.props && card.props.children);
+        expect(text).toContain("Unavailable");
       });
 
       it("handles empty steps array gracefully", () => {
@@ -387,8 +409,9 @@ describe("Navigation & Routing Integration - ServiceTestTemplate", () => {
         const { getByTestId } = render(
           React.createElement(TestRouteCard, { route: routeWithoutSteps })
         );
-
-        expect(getByTestId("route-name")).toHaveTextContent("Test Route");
+        const card = getByTestId("route-card");
+  const text = extractText(Array.isArray(card.children) ? card.children : card.props && card.props.children);
+        expect(text).toContain("Test Route");
       });
     });
 
@@ -401,10 +424,9 @@ describe("Navigation & Routing Integration - ServiceTestTemplate", () => {
             onPress: mockOnPress,
           })
         );
-
-        expect(getByTestId("route-card")).toBeTruthy();
-
-        fireEvent.press(getByTestId("route-card"));
+        const card = getByTestId("route-card");
+        expect(card).toBeTruthy();
+        fireEvent.press(card);
         expect(mockOnPress).toHaveBeenCalledTimes(1);
       });
 
@@ -416,12 +438,14 @@ describe("Navigation & Routing Integration - ServiceTestTemplate", () => {
             { id: "2", type: "transit", line: "Blue Line", duration: 10 },
           ],
         };
-
         const { getByTestId } = render(
           React.createElement(TestRouteCard, { route: transitRoute })
         );
-
-        expect(getByTestId("route-card")).toBeTruthy();
+        const card = getByTestId("route-card");
+        expect(card).toBeTruthy();
+        const text = extractText(Array.isArray(card.children) ? card.children : card.props && card.props.children);
+        expect(text).toContain("Red Line");
+        expect(text).toContain("Blue Line");
       });
     });
 
@@ -509,7 +533,12 @@ describe("Navigation & Routing Integration - ServiceTestTemplate", () => {
           })
         );
 
-        expect(getByLabelText("Filter by restaurants")).toBeTruthy();
+        // Use testID-scoped assertion instead of global accessibility lookup to avoid
+        // relying on renderer-specific label mapping. Assert the prop exists on the
+        // rendered instance directly.
+        const btn = _getByTestId("category-button");
+        expect(btn).toBeTruthy();
+        expect(btn.props && btn.props.accessibilityLabel).toBe("Filter by restaurants");
       });
 
       it("adds accessibility props to TravelModeSelector", () => {
@@ -707,13 +736,5 @@ describe("Navigation & Routing Integration - ServiceTestTemplate", () => {
 });
 // =============================================================================
 
-function getByLabelText(label: string | RegExp): HTMLElement {
-  // Use @testing-library/react-native's screen API if available
-  // Otherwise, fallback to querying the document
-  // This is a simplified implementation for test context
-  const matches = queryAllByLabelText(label);
-  if (matches.length === 0) {
-    throw new Error(`Unable to find element with accessibilityLabel: ${label}`);
-  }
-  return matches[0];
-}
+// NOTE: previous fallback getByLabelText removed in favor of using
+// testing-library/react-native helpers or direct prop assertions.

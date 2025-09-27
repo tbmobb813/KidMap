@@ -166,8 +166,7 @@ describe('useSafeZoneMonitor Hook - Critical Safety Tests', () => {
     });
     
     const initialStatus = monitor.getCurrentSafeZoneStatus();
-    console.log('Initial status (should be outside):', initialStatus);
-    console.log('Initial events:', monitor.events.length);
+  // Debug logs removed: initialStatus and monitor.events are asserted below
     
     // Now move inside the zone (at center)
     updateLocationAndRerender(0, 0); 
@@ -176,9 +175,7 @@ describe('useSafeZoneMonitor Hook - Critical Safety Tests', () => {
     });
     
     const afterStatus = monitor.getCurrentSafeZoneStatus();
-    console.log('After move status (should be inside):', afterStatus);
-    console.log('After move events:', monitor.events.length);
-    console.log('Events:', monitor.events);
+  // Debug logs removed: events asserted in tests
     
     // Verify entry event was generated
     const entries = monitor.events.filter(

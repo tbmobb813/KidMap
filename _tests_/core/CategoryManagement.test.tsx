@@ -19,9 +19,9 @@ jest.mock("@/components/CategoryButton", () => ({
   default: () => null,
 }));
 
+import { useCategoryManagement as mockUseCategoryManagement } from "../../__mocks__/stores/categoryStore";
 import CategoryManagement from "../../components/CategoryManagement";
 import { render } from "../testUtils";
-import { useCategoryManagement as mockUseCategoryManagement } from "../../__mocks__/stores/categoryStore";
 
 
 jest.spyOn(Alert, "alert");
