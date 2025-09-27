@@ -1,3 +1,8 @@
+/**
+ * Telemetry system test following Basic Template pattern
+ * Critical telemetry functionality - event tracking and emissions
+ */
+
 import { fireEvent, waitFor } from "@testing-library/react-native";
 import React from "react";
 
@@ -7,15 +12,27 @@ import AccessibilitySettings from "@/components/AccessibilitySettings";
 import { prefetchRouteVariants } from "@/hooks/useRoutePrefetch";
 import SafetyPanel from "@/modules/safety/components/SafetyPanel";
 import { useSafeZoneMonitor } from "@/modules/safety/hooks/useSafeZoneMonitor";
-import { useNavigationStore } from "@/stores/navigationStore";
 import { getMemoryEvents } from "@/telemetry";
 
-// Mocks
+// ===== MOCK SETUP =====
+const mockEvents: any[] = [];
+
 jest.mock("@react-native-async-storage/async-storage", () =>
   require("@react-native-async-storage/async-storage/jest/async-storage-mock")
 );
 
-const mockEvents: any[] = [];
+jest.mock("@/stores/navigationStore", () => ({
+  useNavigationStore: jest.fn(() => ({
+    accessibilitySettings: {
+      largeText: false,
+      highContrast: false,
+      voiceDescriptions: false,
+      simplifiedMode: false,
+    },
+    updateAccessibilitySettings: jest.fn(),
+  })),
+}));
+
 jest.mock("@/telemetry", () => {
   return {
     MemoryAdapter: class MockMemoryAdapter {
@@ -33,6 +50,8 @@ jest.mock("@/telemetry", () => {
     track: jest.fn((e: any) => {
       mockEvents.push({ ...e, ts: Date.now() });
     }),
+    isTelemetryEnabled: jest.fn(() => true),
+    setTelemetryEnabled: jest.fn(),
   };
 });
 
@@ -61,22 +80,32 @@ jest.mock("@/modules/safety/stores/parentalStore", () => ({
   ParentalProvider: ({ children }: any) => children,
 }));
 
-describe("Telemetry emissions", () => {
+// ===== BASIC TEST SETUP =====
+describe("Telemetry - Critical Event Tracking", () => {
   beforeEach(() => {
+    // Clear event history
     mockEvents.length = 0;
+
+    // Reset mocks
+    jest.clearAllMocks();
   });
 
+  // ===== ESSENTIAL TESTS ONLY =====
+
   it("emits accessibility_toggle events for setting changes", () => {
-    (useNavigationStore as any).setState({
-      accessibilitySettings: {
-        largeText: false,
-        highContrast: false,
-        voiceDescriptions: false,
-        simplifiedMode: false,
-      },
-    });
+    // Alternative approach for zustand state seeding:
+    // Direct zustand mutation for test seeding (internal helper)
+    // (useNavigationStore as any).setState({
+    //   accessibilitySettings: {
+    //     largeText: false,
+    //     highContrast: false,
+    //     voiceDescriptions: false,
+    //     simplifiedMode: false,
+    //   },
+    // });
 
     const { getByLabelText } = render(<AccessibilitySettings />);
+    // Toggle first two switches via their accessibility labels
     fireEvent(getByLabelText(/Toggle Large Text/i), "valueChange", true);
     fireEvent(getByLabelText(/Toggle High Contrast/i), "valueChange", true);
 
@@ -93,6 +122,7 @@ describe("Telemetry emissions", () => {
     const mockPrefetch = prefetchRouteVariants as jest.Mock;
     mockPrefetch.mockImplementation(async () => {
       ["walking", "biking"].forEach((m, i) => {
+        // Simulate what hook instrumentation would do
         const { track } = require("@/telemetry");
         track({ type: "route_prefetch_start", mode: m });
         track({ type: "route_prefetch_complete", mode: m, durationMs: 5 + i });
@@ -111,9 +141,11 @@ describe("Telemetry emissions", () => {
   });
 
   it("emits safety monitor toggle & zone entry events", async () => {
+    // Test wrapper with real React state
     const TestWrapper: React.FC = () => {
       const [monitoring, setMonitoring] = React.useState(false);
       const [eventsArr, setEventsArr] = React.useState<any[]>([]);
+      // Mock implementation using wrapper state
       (useSafeZoneMonitor as jest.Mock).mockImplementation(() => ({
         isMonitoring: monitoring,
         startMonitoring: () => {

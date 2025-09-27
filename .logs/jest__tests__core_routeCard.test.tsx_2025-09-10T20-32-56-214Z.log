@@ -1,0 +1,83 @@
+timestamp: 2025-09-10T20:32:57.763Z
+branch: dedupe/routeCard-proposed-patch
+sha: 89646ae13e7a01a69ed151c1a17077a6712eeea4
+args: jest _tests_/core/routeCard.test.tsx
+---
+
+[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2m_tests_/core/[22m[1mrouteCard.test.tsx[22m ([0m[1m[41m12.866 s[49m[22m[0m)
+  RouteCard
+    [32m√[39m [2mrenders without crashing and shows duration (71 ms)[22m
+    [32m√[39m [2mrenders unavailable state when route is null (25 ms)[22m
+    [31m×[39m [2mfires onPress when pressing the duration text (77 ms)[22m
+
+[1m[31m  [1m● [22m[1mRouteCard › fires onPress when pressing the duration text[39m[22m
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoThrow[2m()[22m
+
+    Error name:    [31m"Error"[39m
+    Error message: [31m"Unable to find an element with text: /min$/·[39m
+    [31m[36m<div[39m[31m[39m
+    [31m  [33maccessibilityHint[39m[31m=[32m\"Selects this route option\"[39m[31m[39m
+    [31m  [33maccessibilityLabel[39m[31m=[32m\"Route option, duration --\"[39m[31m[39m
+    [31m  [33maccessibilityRole[39m[31m=[32m\"button\"[39m[31m[39m
+    [31m  [33maccessibilityState[39m[31m=[32m{[39m
+    [31m    {[39m
+    [31m      \"selected\": false,[39m
+    [31m    }[39m
+    [31m  }[39m[31m[39m
+    [31m  [33mtestID[39m[31m=[32m\"route-card-undefined\"[39m[31m[39m
+    [31m[36m>[39m[31m[39m
+    [31m  [36m<div>[39m[31m[39m
+    [31m    [36m<span>[39m[31m[39m
+    [31m      [0m--[0m[39m
+    [31m    [36m</span>[39m[31m[39m
+    [31m    [36m<div>[39m[31m[39m
+    [31m      [36m<span[39m[31m[39m
+    [31m        [33mtestID[39m[31m=[32m\"clock-icon\"[39m[31m[39m
+    [31m      [36m>[39m[31m[39m
+    [31m        [0mClock(14,#475569)[0m[39m
+    [31m      [36m</span>[39m[31m[39m
+    [31m      [36m<span>[39m[31m[39m
+    [31m        [0m--[0m[39m
+    [31m        [0m - [0m[39m
+    [31m        [0m--[0m[39m
+    [31m      [36m</span>[39m[31m[39m
+    [31m    [36m</div>[39m[31m[39m
+    [31m  [36m</div>[39m[31m[39m
+    [31m  [36m<div>[39m[31m[39m
+    [31m    [36m<span>[39m[31m[39m
+    [31m      [0mNo steps[0m[39m
+    [31m    [36m</span>[39m[31m[39m
+    [31m  [36m</div>[39m[31m[39m
+    [31m[36m</div>[39m[31m"[39m
+
+        [0m [90m  99 |[39m     [36mconst[39m { getByText } [33m=[39m render([33m<[39m[33mRouteCard[39m route[33m=[39m{route} onPress[33m=[39m{onPress} [33m/[39m[33m>[39m)[33m;[39m
+         [90m 100 |[39m     [90m// Some older tests expect '25 min' from mockRoute; use a more tolerant assertion[39m
+        [31m[1m>[22m[39m[90m 101 |[39m     expect(() [33m=>[39m getByText([35m/min$/[39m))[33m.[39mnot[33m.[39mtoThrow()[33m;[39m
+         [90m     |[39m                  [31m[1m^[22m[39m
+         [90m 102 |[39m     [36mconst[39m el [33m=[39m getByText([35m/min$/[39m)[33m;[39m
+         [90m 103 |[39m     fireEvent[33m.[39mpress(el)[33m;[39m
+         [90m 104 |[39m     expect(onPress)[33m.[39mtoHaveBeenCalledWith(route)[33m;[39m[0m
+
+          [2mat getByText ([22m_tests_/core/routeCard.test.tsx[2m:101:18)[22m
+          [2mat Object.<anonymous> ([22mnode_modules/expect/build/toThrowMatchers.js[2m:74:11)[22m
+          [2mat Object.throwingMatcher [as toThrow] ([22mnode_modules/expect/build/index.js[2m:320:21)[22m
+          [2mat Object.toThrow ([22m_tests_/core/routeCard.test.tsx[2m:101:41)[22m
+[2m[22m
+[2m    [0m [90m  99 |[39m     [36mconst[39m { getByText } [33m=[39m render([33m<[39m[33mRouteCard[39m route[33m=[39m{route} onPress[33m=[39m{onPress} [33m/[39m[33m>[39m)[33m;[39m[22m
+[2m     [90m 100 |[39m     [90m// Some older tests expect '25 min' from mockRoute; use a more tolerant assertion[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 101 |[39m     expect(() [33m=>[39m getByText([35m/min$/[39m))[33m.[39mnot[33m.[39mtoThrow()[33m;[39m[22m
+[2m     [90m     |[39m                                         [31m[1m^[22m[2m[39m[22m
+[2m     [90m 102 |[39m     [36mconst[39m el [33m=[39m getByText([35m/min$/[39m)[33m;[39m[22m
+[2m     [90m 103 |[39m     fireEvent[33m.[39mpress(el)[33m;[39m[22m
+[2m     [90m 104 |[39m     expect(onPress)[33m.[39mtoHaveBeenCalledWith(route)[33m;[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.toThrow ([22m[2m[0m[36m_tests_/core/routeCard.test.tsx[39m[0m[2m:101:41)[22m[2m[22m
+
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, 1 total
+[1mTests:       [22m[1m[31m1 failed[39m[22m, [1m[32m2 passed[39m[22m, 3 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m22.006 s[39m[22m
+[2mRan all test suites[22m[2m matching [22m/_tests_\\core\\routeCard.test.tsx/i[2m.[22m
+
+EXIT CODE: 1

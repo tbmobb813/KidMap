@@ -108,7 +108,7 @@ const DevicePingHistory: React.FC<DevicePingHistoryProps> = ({ testId }) => {
 
   if (sortedPings.length === 0) {
     return (
-      <View style={styles.emptyContainer} testID={testId}>
+      <View style={styles.emptyContainer} testID={testId ?? 'device-ping-history'}>
         <Phone size={48} color={Colors.textSecondary} />
         <Text style={styles.emptyTitle}>No Device Pings</Text>
         <Text style={styles.emptySubtitle}>
@@ -123,7 +123,7 @@ const DevicePingHistory: React.FC<DevicePingHistoryProps> = ({ testId }) => {
     <ScrollView
       style={styles.container}
       showsVerticalScrollIndicator={false}
-      testID={testId}
+      testID={testId ?? 'device-ping-history'}
     >
       <Text style={styles.title}>Device Ping History</Text>
 

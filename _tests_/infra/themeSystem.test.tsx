@@ -150,8 +150,7 @@ describe("WCAG Contrast Compliance", () => {
     const { dark } = palettes;
 
     // Debug: Log the actual colors being tested
-    console.log("Dark theme secondary:", dark.secondary);
-    console.log("Dark theme secondaryForeground:", dark.secondaryForeground);
+  // debug logs removed
 
     // Button text combinations (4.5:1 minimum)
     expect(
@@ -162,7 +161,7 @@ describe("WCAG Contrast Compliance", () => {
       dark.secondaryForeground,
       dark.secondary
     );
-    console.log("Secondary contrast ratio:", secondaryRatio);
+  // debug log removed
     expect(secondaryRatio).toBeGreaterThanOrEqual(4.5);
 
     expect(

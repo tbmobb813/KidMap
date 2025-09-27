@@ -1,0 +1,88 @@
+import React from "react";
+import { render, act, fireEvent, waitFor } from "@testing-library/react-native";
+import { ThemeProvider } from "@/constants/theme";
+import AIJourneyCompanion from "@/components/AIJourneyCompanion";
+import type { PlaceCategory } from "@/types/navigation";
+
+describe("AIJourneyCompanion minimal render", () => {
+  beforeAll(() => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve({ completion: "Test content" })
+      })
+    );
+  });
+  afterAll(() => {
+    // @ts-ignore
+    delete global.fetch;
+  });
+
+  it("renders without crashing (minimal)", () => {
+    render(
+      <ThemeProvider>
+        <AIJourneyCompanion
+          isNavigating={true}
+          destination={{
+            id: "test",
+            name: "Test Place",
+            address: "123 Test St",
+            category: "park" as PlaceCategory,
+            coordinates: { latitude: 1, longitude: 2 }
+          }}
+          currentLocation={{ latitude: 0, longitude: 0 }}
+        />
+      </ThemeProvider>
+    );
+  });
+
+  it("displays AI generated message after navigation starts", async () => {
+    const { findByText } = render(
+      <ThemeProvider>
+        <AIJourneyCompanion
+          isNavigating={true}
+          destination={{
+            id: "test",
+            name: "Test Place",
+            address: "123 Test St",
+            category: "park" as PlaceCategory,
+            coordinates: { latitude: 1, longitude: 2 }
+          }}
+          currentLocation={{ latitude: 0, longitude: 0 }}
+        />
+      </ThemeProvider>
+    );
+    expect(await findByText(/Test content/)).toBeTruthy();
+  });
+
+  it('displays quiz question after navigation starts', async () => {
+    const mockDestination = {
+      id: 'dest1',
+      name: 'Museum',
+      address: '1 Main St',
+      category: 'library' as PlaceCategory,
+      coordinates: { latitude: 0, longitude: 0 }
+    };
+    const { findByText, getByText } = render(
+      <ThemeProvider>
+        <AIJourneyCompanion
+          isNavigating={true}
+          destination={mockDestination}
+          currentLocation={{ latitude: 0, longitude: 0 }}
+        />
+      </ThemeProvider>
+    );
+
+    // Wait for Buddy to appear then press it to expand actions
+    await waitFor(() => expect(getByText('Buddy')).toBeTruthy());
+    fireEvent.press(getByText('Buddy'));
+
+    // Wait for the Quiz Me button and press it
+    await waitFor(() => expect(getByText('Quiz Me!')).toBeTruthy());
+    fireEvent.press(getByText('Quiz Me!'));
+
+    const quizText = await findByText(/Quiz Time!/i);
+    expect(quizText).toBeTruthy();
+  });
+});

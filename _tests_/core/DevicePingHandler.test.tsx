@@ -1,6 +1,7 @@
+import React from "react";
 
 import DevicePingHandler from "../../components/DevicePingHandler";
-import { render, } from "../testUtils";
+import { render } from "../testUtils";
 
 const mockAcknowledgePing = jest.fn();
 const mockUpdateLastKnownLocation = jest.fn();
@@ -25,6 +26,11 @@ jest.mock("@/stores/parentalStore", () => ({
   }),
 }));
 
+// Mock the telemetry since DevicePingHandler uses it
+jest.mock("@/telemetry", () => ({
+  track: jest.fn(),
+}));
+
 const mockAlert = jest.fn();
 jest.doMock("react-native", () => {
   const RN = jest.requireActual("react-native");
@@ -36,6 +42,7 @@ describe("DevicePingHandler", () => {
     jest.clearAllMocks();
     mockAcknowledgePing.mockResolvedValue(undefined);
   });
+
   it("renders overlay when there is a pending ping", () => {
     const { getByTestId, getByText } = render(
       <DevicePingHandler testId="ping-overlay" />

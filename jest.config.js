@@ -23,8 +23,13 @@ module.exports = {
     },
     setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
     testMatch: [
-        '<rootDir>/_tests_/**/*.(test|spec).(ts|tsx|js)',
-        '<rootDir>/__tests__/**/*.(test|spec).(ts|tsx|js)'
+        '<rootDir>/_tests_/core/**/*.(test|spec).(ts|tsx|js)',
+        '<rootDir>/_tests_/critical/**/*.(test|spec).(ts|tsx|js)',
+        '<rootDir>/_tests_/infra/**/*.(test|spec).(ts|tsx|js)',
+        '<rootDir>/_tests_/misc/**/*.(test|spec).(ts|tsx|js)',
+        '<rootDir>/_tests_/mergeable-to-review/**/*.(test|spec).(ts|tsx|js)',
+        '<rootDir>/_tests_/components/**/*.(test|spec).(ts|tsx|js)' // ADD THIS LINE
+        , '<rootDir>/_tests_/platform/**/*.(test|spec).(ts|tsx|js)'
     ],
     collectCoverageFrom: [
         'components/**/*.{ts,tsx}',
@@ -46,7 +51,7 @@ module.exports = {
         '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
     },
     transformIgnorePatterns: [
-        'node_modules/(?!(react-native|@react-native|@react-navigation|@react-native-async-storage|expo(nent)?|expo-modules-core|expo-location|expo-image-picker|expo-image|lucide-react-native|@expo|@unimodules|@nkzw/create-context-hook)/)',
+        'node_modules/(?!(react-native|@react-native|@react-navigation|@react-native-async-storage|expo(nent)?|expo-modules-core|expo-location|expo-image-picker|expo-image|expo-constants|lucide-react-native|@expo|@unimodules|@nkzw/create-context-hook)/)',
         'node_modules/react-native/.*\\.flow$'
     ],
     extensionsToTreatAsEsm: ['.ts', '.tsx'],

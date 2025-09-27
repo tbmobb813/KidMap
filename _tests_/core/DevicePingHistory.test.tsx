@@ -43,9 +43,13 @@ describe("DevicePingHistory", () => {
   });
 
   it("renders empty state when no pings", () => {
-    jest.mock("@/stores/parentalStore", () => ({
-      useParentalStore: () => ({ devicePings: [] }),
-    }));
+    // Override the mocked parental store for this test to simulate no pings.
+    // Use require to get the mocked module and replace the hook implementation.
+    // Avoid jest.mock inside a test to prevent module cache conflicts.
+    const parental = require("@/stores/parentalStore");
+    if (parental && typeof parental.useParentalStore === "function") {
+      parental.useParentalStore = () => ({ devicePings: [] });
+    }
     const { getByText } = render(
       <ThemeProvider initial="light">
         <DevicePingHistory testId="ping-history-empty" />

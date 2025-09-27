@@ -55,7 +55,8 @@ const NotificationStatusCard: React.FC<NotificationStatusCardProps> = ({ testId 
   };
   
   return (
-  <View style={[themedStyles.card, themedStyles[statusInfo.status]]} testID={testId}>
+    <View style={[themedStyles.card, themedStyles[statusInfo.status]]} testID={testId ?? 'notification-status-card'}>
+      <Text style={themedStyles.title}>Notification Status</Text>
       <View style={themedStyles.header}>
         <View style={themedStyles.iconContainer}>
           {statusInfo.icon}

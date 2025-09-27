@@ -1,0 +1,18 @@
+timestamp: 2025-09-16T19:11:29.889Z
+branch: dedupe/routeCard-proposed-patch
+sha: 991e87a58e68bca990d0afb3eb091c7a264f4c3f
+args: jest _tests_/critical/errorHandling.test.tsx
+---
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [2m_tests_/critical/[22m[1merrorHandling.test.tsx[22m ([0m[1m[41m5.933 s[49m[22m[0m)
+  ErrorBoundary smoke
+    [32m√[39m [2mrenders fallback when child throws (243 ms)[22m
+    [32m√[39m [2mpasses through children when no error occurs (22 ms)[22m
+
+[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+[1mTests:       [22m[1m[32m2 passed[39m[22m, 2 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        11.549 s, estimated 15 s
+[2mRan all test suites[22m[2m matching [22m/_tests_\\critical\\errorHandling.test.tsx/i[2m.[22m
+
+EXIT CODE: 0

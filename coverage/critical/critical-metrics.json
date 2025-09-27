@@ -1,0 +1,50 @@
+{
+  "timestamp": "2025-09-19T18:42:19.877Z",
+  "suite": "critical",
+  "execution": {
+    "totalTime": 59143,
+    "maxAllowedTime": 30000,
+    "withinTimeLimit": false,
+    "averageTestTime": 2816.3333333333335
+  },
+  "results": {
+    "total": 21,
+    "passed": 21,
+    "failed": 0,
+    "passRate": 100,
+    "criticalPassRateMet": true
+  },
+  "validation": {
+    "timeValidation": false,
+    "passRateValidation": true,
+    "overallValidation": false
+  },
+  "slowestTests": [
+    {
+      "testPath": "_tests_\\critical\\telemetry.test.tsx",
+      "runtime": 26917,
+      "status": "passed"
+    },
+    {
+      "testPath": "_tests_\\critical\\safety.test.tsx",
+      "runtime": 24107,
+      "status": "passed"
+    },
+    {
+      "testPath": "_tests_\\critical\\routesCache.test.tsx",
+      "runtime": 3363,
+      "status": "passed"
+    },
+    {
+      "testPath": "_tests_\\critical\\hooks_routePrefetch.test.tsx",
+      "runtime": 2118,
+      "status": "passed"
+    },
+    {
+      "testPath": "_tests_\\critical\\stores_routeService.test.ts",
+      "runtime": 1375,
+      "status": "passed"
+    }
+  ],
+  "failedTests": []
+}

@@ -51,10 +51,12 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
 
   // Announce automatically when step changes if voiceDescriptions enabled
   useEffect(() => {
-    if (accessibilitySettings.voiceDescriptions && steps && steps.length > 0) {
+    // Guard in case accessibilitySettings is undefined in some test setups
+    const voiceEnabled = accessibilitySettings?.voiceDescriptions;
+    if (voiceEnabled && steps && steps.length > 0) {
       announce(activeInstruction, { politeness: 'polite' });
     }
-  }, [activeInstruction, accessibilitySettings.voiceDescriptions, steps]);
+  }, [activeInstruction, accessibilitySettings?.voiceDescriptions, steps]);
 
   const handleVoiceToggle = () => {
     if (isListening) {

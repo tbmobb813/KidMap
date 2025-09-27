@@ -1,10 +1,16 @@
-// Combined test for route caching and metrics
+/**
+ * Routes caching and metrics test following Basic Template pattern
+ * Critical functionality - route caching behavior and query optimization
+ */
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, waitFor } from "@testing-library/react-native";
+import React from "react";
 
 import { useRoutesQuery } from "@/hooks/useRoutesQuery";
 import * as routeService from "@/services/routeService";
 
+// ===== MOCK SETUP =====
 jest.mock("@/services/routeService", () => {
   return {
     fetchRoutes: jest.fn(),
@@ -13,6 +19,7 @@ jest.mock("@/services/routeService", () => {
   };
 });
 
+// ===== TEST HELPER COMPONENTS =====
 const origin = {
   id: "o1",
   name: "Origin",
@@ -20,6 +27,7 @@ const origin = {
   category: "other",
   coordinates: { latitude: 0, longitude: 0 },
 } as any;
+
 const destination = {
   id: "d1",
   name: "Destination",
@@ -27,6 +35,7 @@ const destination = {
   category: "other",
   coordinates: { latitude: 1, longitude: 1 },
 } as any;
+
 const options = {
   travelMode: "transit",
   avoidHighways: false,
@@ -50,25 +59,31 @@ function TestComponentSingleHook() {
   return null;
 }
 
-function createClient() {
+function createTestClient() {
   return new QueryClient({
     defaultOptions: { queries: { retry: 0, staleTime: 10000 } },
   });
 }
 
-describe("Routes query caching and metrics", () => {
+// ===== BASIC TEST SETUP =====
+describe("Routes Query Caching - Critical Tests", () => {
   const fetchRoutes = routeService.fetchRoutes as jest.Mock;
 
   beforeEach(() => {
+    // Reset mocks
     jest.clearAllMocks();
     fetchRoutes.mockImplementation(() => Promise.resolve([]));
+
+    // Reset metrics
     if (routeService.__resetRouteServiceMetrics) {
       routeService.__resetRouteServiceMetrics();
     }
   });
 
+  // ===== ESSENTIAL TESTS ONLY =====
+
   it("reuses cached data without refetch for identical keys (multiple hooks)", async () => {
-    const client = createClient();
+    const client = createTestClient();
     render(
       <QueryClientProvider client={client}>
         <TestComponentMultipleHooks />
@@ -85,7 +100,7 @@ describe("Routes query caching and metrics", () => {
   });
 
   it("calls fetchRoutes only once; second mount reuses cache (remount)", async () => {
-    const client = createClient();
+    const client = createTestClient();
     const { unmount, rerender } = render(
       <QueryClientProvider client={client}>
         <TestComponentSingleHook />
@@ -106,7 +121,7 @@ describe("Routes query caching and metrics", () => {
   });
 
   it("metrics: fetch count increments only once per unique query", async () => {
-    const client = createClient();
+    const client = createTestClient();
     render(
       <QueryClientProvider client={client}>
         <TestComponentMultipleHooks />

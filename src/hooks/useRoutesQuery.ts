@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import {
   fetchRoutes,
   FetchRoutesParams,
@@ -15,6 +16,8 @@ export function useRoutesQuery(
   mode: TravelMode,
   options: RouteOptions
 ) {
+  const { isConnected } = useNetworkStatus();
+
   return useQuery({
     queryKey: [
       "routes",
@@ -34,6 +37,10 @@ export function useRoutesQuery(
       const params: FetchRoutesParams = { origin, destination, mode, options };
       const before = getRouteServiceMetrics().fetchCount;
       const result = await fetchRoutes(params);
+  // Debug: surface the fetched result during tests to help triage
+  // (kept minimal; remove once tests stabilize)
+  // eslint-disable-next-line no-console
+  console.log("[useRoutesQuery] fetched:", JSON.stringify(result));
       const after = getRouteServiceMetrics().fetchCount;
       const cacheHit = after === before;
       if (cacheHit) mark(`routes_cache_hit:${keyId}`);
@@ -54,7 +61,11 @@ export function useRoutesQuery(
       return result;
     },
     enabled: !!origin && !!destination,
+    // Offline-first behavior: use cached data when offline
+    networkMode: isConnected ? "online" : "offlineFirst",
     // Keep previous data to reduce loading flashes when params change slightly
     placeholderData: (previous) => previous ?? [],
+    // Extended stale time when offline to prefer cached data
+    staleTime: isConnected ? 30_000 : 10 * 60 * 1000, // 10 minutes when offline
   });
 }
