@@ -29,7 +29,8 @@ import { log } from "../utils/error/logger";
 import ConfirmDialog from "./ConfirmDialog";
 import ErrorBoundary from "./ErrorBoundary";
 
-import Colors from "@/constants/colors";
+import { SAFETY_PANEL_A11Y } from '@/constants/a11yLabels';
+import Colors from '@/constants/colors';
 import { validatePhotoCheckIn, logValidationResult } from "@/core/validation";
 import { useToast } from "@/hooks/useToast";
 import { useGamificationStore } from "@/stores/gamificationStore";
@@ -555,9 +556,11 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({
   return (
     <ErrorBoundary>
       <View style={styles.container}>
-        <Pressable
+          <Pressable
           style={styles.header}
           onPress={() => setIsExpanded(!isExpanded)}
+          accessibilityRole="button"
+          accessibilityLabel={SAFETY_PANEL_A11Y.monitoring(false)}
         >
           <Shield size={20} color={Colors.primary} />
           <Text style={styles.title}>Safety Tools</Text>
@@ -570,6 +573,8 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({
               <Pressable
                 style={styles.safetyButton}
                 onPress={handleEmergencyCall}
+                accessibilityRole="button"
+                accessibilityLabel={SAFETY_PANEL_A11Y.emergencyCall ?? 'Emergency'}
               >
                 <Phone size={18} color="#FFFFFF" />
                 <Text style={styles.buttonText}>Emergency</Text>
@@ -578,6 +583,8 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({
               <Pressable
                 style={styles.safetyButton}
                 onPress={handleShareLocation}
+                accessibilityRole="button"
+                accessibilityLabel={SAFETY_PANEL_A11Y.shareLocation ?? 'Share Location'}
               >
                 <MapPin size={18} color="#FFFFFF" />
                 <Text style={styles.buttonText}>Share Location</Text>
@@ -588,6 +595,8 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({
               <Pressable
                 style={styles.safetyButton}
                 onPress={handleSafeArrival}
+                accessibilityRole="button"
+                accessibilityLabel={SAFETY_PANEL_A11Y.safeArrival ?? 'I Made It!'}
               >
                 <MessageCircle size={18} color="#FFFFFF" />
                 <Text style={styles.buttonText}>I Made It!</Text>
@@ -600,6 +609,8 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({
                 ]}
                 onPress={handlePhotoCheckIn}
                 disabled={isPhotoLoading}
+                accessibilityRole="button"
+                accessibilityLabel={SAFETY_PANEL_A11Y.photoCheckIn ?? 'Photo Check-in'}
               >
                 <Camera size={18} color="#FFFFFF" />
                 <Text style={styles.buttonText}>

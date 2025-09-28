@@ -5,6 +5,7 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 import { LiveArrival } from "./LiveArrivalsCard";
 import TransitStepIndicator from "./TransitStepIndicator";
 
+import { ARRIVAL_ALERT_A11Y } from '@/constants/a11yLabels';
 import { useTheme } from "@/constants/theme";
 
 type ArrivalAlertProps = {
@@ -44,7 +45,7 @@ const ArrivalAlert: React.FC<ArrivalAlertProps> = ({ arrival, onDismiss }) => {
             </Text>
           )}
         </View>
-        <Pressable style={styles.dismissButton} onPress={onDismiss} accessibilityLabel="Dismiss arrival alert">
+        <Pressable style={styles.dismissButton} onPress={onDismiss} accessibilityLabel={ARRIVAL_ALERT_A11Y.dismiss}>
           <X size={16} color={theme.colors.textSecondary} />
         </Pressable>
       </View>

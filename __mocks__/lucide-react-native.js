@@ -22,6 +22,11 @@ const explicitIcons = {
   Sun: createIcon('Sun'),
   Monitor: createIcon('Monitor'),
   ArrowRight: createIcon('ArrowRight'),
+  Train: createIcon('Train'),
+  Bike: createIcon('Bike'),
+  Car: createIcon('Car'),
+  Mic: createIcon('Mic'),
+  MicOff: createIcon('MicOff'),
   Clock: createIcon('Clock'),
   CheckCircle: createIcon('CheckCircle'),
   MapPin: createIcon('MapPin'),
@@ -63,14 +68,17 @@ const explicitIcons = {
 };
 
 // Use a Proxy so any imported icon name returns a mock component.
-// This prevents "Element type is invalid" errors when tests import an icon
-// that wasn't explicitly added above.
+// Export an __esModule flag and spread the explicit icons so that both
+// CommonJS and ES module named imports (import { X } from ...) resolve
+// correctly in Jest's transformed environment.
+const exported = Object.assign({ __esModule: true }, explicitIcons);
+
 const handler = {
   get(target, prop) {
-    if (prop === 'default') return explicitIcons.default || createIcon('DefaultIcon');
-    if (prop in explicitIcons) return explicitIcons[prop];
+    if (prop === 'default') return target.default || createIcon('DefaultIcon');
+    if (prop in target) return target[prop];
     return createIcon(String(prop));
   },
 };
 
-module.exports = new Proxy(explicitIcons, handler);
+module.exports = new Proxy(exported, handler);

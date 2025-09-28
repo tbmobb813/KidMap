@@ -5,6 +5,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useParentalStore } from '../stores/parentalStore';
 
 import Toast from '@/components/Toast';
+import { SAFETY_PANEL_A11Y } from '@/constants/a11yLabels';
 import { useTheme } from '@/constants/theme';
 import { useToast } from '@/hooks/useToast';
 import { useSafeZoneMonitor } from '@/modules/safety/hooks/useSafeZoneMonitor';
@@ -44,7 +45,7 @@ const SafetyPanel: React.FC<SafetyPanelProps> = ({ currentLocation, currentPlace
 			<View style={styles.headerRow}>
 				<Text style={[styles.title, { color: theme.colors.text }]}>Safety</Text>
 				<Pressable
-					accessibilityLabel={isMonitoring ? 'Stop monitoring safe zones' : 'Start monitoring safe zones'}
+					accessibilityLabel={SAFETY_PANEL_A11Y.monitoring(isMonitoring)}
 					style={[styles.monitorButton, { backgroundColor: isMonitoring ? theme.colors.error : theme.colors.primary }]}
 					onPress={() => {
 						if (isMonitoring) {

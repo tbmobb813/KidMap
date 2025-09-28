@@ -129,6 +129,9 @@ describe('useSafeZoneMonitor Hook - Critical Safety Tests', () => {
     setLocationState = null;
     currentMonitor = null;
     rerender = null;
+    // ensure the test's location setter is established by mounting the hook
+    // then updating location via the setter; some test runs could call
+    // updateLocation before setLocationState is available which yields no-op.
     updateLocation(0, 0);
 
     // Clear all mocks
@@ -141,7 +144,7 @@ describe('useSafeZoneMonitor Hook - Critical Safety Tests', () => {
 
   // ===== CORE FUNCTIONALITY TESTS =====
   
-  it('should generate entry event when entering a safe zone', () => {
+  it('should generate entry event when entering a safe zone', async () => {
     // Setup: Define a safe zone at origin
     mockSafeZones = [
       {
@@ -165,7 +168,8 @@ describe('useSafeZoneMonitor Hook - Critical Safety Tests', () => {
       monitor.forceRefresh();
     });
     
-    const initialStatus = monitor.getCurrentSafeZoneStatus();
+  // capture initial status for debug (not asserted here)
+  monitor.getCurrentSafeZoneStatus();
   // Debug logs removed: initialStatus and monitor.events are asserted below
     
     // Now move inside the zone (at center)
@@ -174,14 +178,16 @@ describe('useSafeZoneMonitor Hook - Critical Safety Tests', () => {
       monitor.forceRefresh();
     });
     
-    const afterStatus = monitor.getCurrentSafeZoneStatus();
+  monitor.getCurrentSafeZoneStatus();
   // Debug logs removed: events asserted in tests
     
     // Verify entry event was generated
-    const entries = monitor.events.filter(
-      (e) => e.type === "entry" && e.zoneId === "z1"
-    );
-    expect(entries.length).toBe(1);
+    await waitFor(() => {
+      const entries = monitor.events.filter(
+        (e) => e.type === "entry" && e.zoneId === "z1"
+      );
+      expect(entries.length).toBe(1);
+    });
   });
 
   it('should generate exit event when leaving a safe zone', async () => {
@@ -216,9 +222,7 @@ describe('useSafeZoneMonitor Hook - Critical Safety Tests', () => {
     
     // Verify entry event was generated
     await waitFor(() => {
-      expect(
-        monitor.events.filter((e) => e.type === "entry").length
-      ).toBe(1);
+      expect(monitor.events.filter((e) => e.type === "entry").length).toBe(1);
     });
     
     // Move outside the zone
@@ -309,7 +313,7 @@ describe('useSafeZoneMonitor Hook - Critical Safety Tests', () => {
     expect(status!.outside.length).toBe(1);
   });
 
-  it('should cap event history at 20 entries', () => {
+  it('should cap event history at 20 entries', async () => {
     // Setup: Define a safe zone
     mockSafeZones = [
       {
@@ -349,7 +353,9 @@ describe('useSafeZoneMonitor Hook - Critical Safety Tests', () => {
     }
     
     // Verify event history is capped at 20
-    expect(monitor.events.length).toBe(20);
+    await waitFor(() => {
+      expect(monitor.events.length).toBe(20);
+    });
     
     // Verify newest event is at index 0 (most recent first)
     const newest = monitor.events[0];

@@ -1,4 +1,3 @@
-import { jest } from "@jest/globals";
 import { fireEvent, waitFor } from "@testing-library/react-native";
 
 import { render } from "../testUtils";
@@ -43,12 +42,11 @@ jest.mock("lucide-react-native", () => ({
 
 // Mock RegionSelector component
 jest.mock("@/components/RegionSelector", () => {
-  return function MockRegionSelector({
-    regions,
-    selectedRegion,
-    onSelectRegion,
-  }: any) {
+  const React = require("react");
+  return function MockRegionSelector({ regions, selectedRegion, onSelectRegion }: any) {
     const { View, Text, Pressable } = require("react-native");
+    const [localSelected, setLocalSelected] = React.useState(selectedRegion || null);
+
     return View({
       testID: "region-selector",
       children: [
@@ -61,14 +59,17 @@ jest.mock("@/components/RegionSelector", () => {
           Pressable({
             key: region.id,
             testID: `region-option-${region.id}`,
-            onPress: () => onSelectRegion(region.id),
+            onPress: () => {
+              setLocalSelected(region.id);
+              if (onSelectRegion) onSelectRegion(region.id);
+            },
             children: Text({
               children: region.name,
-              style: selectedRegion === region.id ? { fontWeight: "bold" } : {},
+              style: localSelected === region.id ? { fontWeight: "bold" } : {},
             }),
           })
         ),
-        selectedRegion &&
+        localSelected &&
           Pressable({
             key: "continue",
             testID: "region-continue-button",
@@ -94,20 +95,61 @@ const mockRegionStore = {
     accessibilityMode: false,
     parentalControls: false,
   },
-  setRegion: jest.fn(),
+  setRegion: jest.fn((id: string) => {
+    // Simulate the real store behavior by updating the selectedRegion so
+    // components that read the store see the change and progress through
+    // the onboarding flow when tests press region options.
+    mockRegionStore.userPreferences.selectedRegion = id;
+  }),
   updatePreferences: jest.fn(),
   completeOnboarding: jest.fn(),
 };
 
-jest.mock("@/stores/regionStore", () => ({
-  useRegionStore: () => mockRegionStore,
-}));
+jest.mock("@/stores/regionStore", () => {
+  const React = require("react");
+
+  return {
+    useRegionStore: () => {
+      // Create a local React state inside the mock hook so that calls to
+      // setRegion/updatePreferences cause the component to re-render like
+      // the real store would.
+      const [userPreferences, setUserPreferences] = React.useState(
+        // initialize from the test-level mock so beforeEach resets are honored
+        mockRegionStore.userPreferences
+      );
+
+      return {
+        availableRegions: mockRegions,
+        userPreferences,
+        setRegion: (id: string) => {
+          // call the spy so assertions in the test can still observe calls
+          mockRegionStore.setRegion(id);
+          // update local state to trigger re-render
+          setUserPreferences((prev: any) => ({ ...prev, selectedRegion: id }));
+        },
+        updatePreferences: (prefs: any) => {
+          mockRegionStore.updatePreferences(prefs);
+          setUserPreferences((prev: any) => ({ ...prev, ...prefs }));
+        },
+        completeOnboarding: mockRegionStore.completeOnboarding,
+      };
+    },
+  };
+});
 
 describe("OnboardingFlow", () => {
   const mockOnComplete = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
+    // Restore the mock implementations so tests that temporarily override them
+    // (e.g. to simulate errors) don't leak into other tests.
+    mockRegionStore.setRegion = jest.fn((id: string) => {
+      mockRegionStore.userPreferences.selectedRegion = id;
+    });
+    mockRegionStore.updatePreferences = jest.fn();
+    mockRegionStore.completeOnboarding = jest.fn();
+
     mockRegionStore.userPreferences = {
       selectedRegion: null,
       preferredUnits: "imperial",
@@ -236,16 +278,22 @@ describe("OnboardingFlow", () => {
     it("displays safety configuration step", async () => {
       mockRegionStore.userPreferences.selectedRegion = "nyc";
 
-      const { getByText, getByTestId } = render(
+      const { getByText, getAllByTestId } = render(
         <OnboardingFlow onComplete={mockOnComplete} />
       );
 
       fireEvent.press(getByText("Get Started"));
+      // Navigate through to safety step by continuing past preferences
+      await waitFor(() => {
+        const continueBtn = getByText("Continue");
+        fireEvent.press(continueBtn);
+      });
 
-      // Navigate through to safety step
       await waitFor(
         () => {
-          expect(getByTestId("shield-icon")).toBeTruthy();
+          // Component renders multiple Shield icons (header + items). Accept any.
+          const shields = getAllByTestId("shield-icon");
+          expect(shields.length).toBeGreaterThan(0);
           expect(getByText("Safety Features")).toBeTruthy();
         },
         { timeout: 3000 }
@@ -260,6 +308,12 @@ describe("OnboardingFlow", () => {
       );
 
       fireEvent.press(getByText("Get Started"));
+
+      // Move past the preferences step
+      await waitFor(() => {
+        const continueBtn = getByText("Continue");
+        fireEvent.press(continueBtn);
+      });
 
       await waitFor(
         () => {
@@ -285,11 +339,23 @@ describe("OnboardingFlow", () => {
 
       fireEvent.press(getByText("Get Started"));
 
+      // Continue through preferences and safety to completion
+      await waitFor(() => {
+        const continueBtn = getByText("Continue");
+        fireEvent.press(continueBtn);
+      });
+
+      await waitFor(() => {
+        const continueBtn = getByText("Continue");
+        fireEvent.press(continueBtn);
+      });
+
       // Navigate to final completion step
       await waitFor(
         () => {
           expect(getByTestId("check-circle-icon")).toBeTruthy();
-          expect(getByText("You're All Set!")).toBeTruthy();
+          expect(getByText("You're All Set!"))
+            .toBeTruthy();
         },
         { timeout: 4000 }
       );
@@ -326,15 +392,26 @@ describe("OnboardingFlow", () => {
     });
 
     it("handles accessibility mode toggle", async () => {
-      const { getByText } = render(
+      const { getByText, getAllByTestId } = render(
         <OnboardingFlow onComplete={mockOnComplete} />
       );
 
       fireEvent.press(getByText("Get Started"));
 
+      // Select a region so the flow advances to preferences and Continue renders
+      await waitFor(() => {
+        // pick NY
+        fireEvent.press(getAllByTestId("region-option-nyc")[0]);
+      });
+
+      // Wait for preferences UI to render (avoid pressing Continue twice)
+      await waitFor(() => {
+        expect(getByText("Customize Your Experience")).toBeTruthy();
+      });
+
       await waitFor(
         () => {
-          const accessibilityToggle = getByText("Enable Accessibility Mode");
+          const accessibilityToggle = getByText("Enable accessibility features");
           fireEvent.press(accessibilityToggle);
 
           expect(mockRegionStore.updatePreferences).toHaveBeenCalledWith(

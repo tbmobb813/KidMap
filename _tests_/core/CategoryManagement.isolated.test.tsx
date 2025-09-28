@@ -6,7 +6,11 @@ jest.mock("lucide-react-native", () => ({
   Check: () => null,
   X: () => null,
 }));
+import React from "react";
 import { Text } from "react-native";
+
+import CategoryManagement from "../../components/CategoryManagement";
+import { render } from "../testUtils";
 describe("TrivialComponent", () => {
   it("renders a trivial component without crashing", () => {
     const Trivial = () => <Text>Trivial</Text>;
@@ -38,14 +42,9 @@ jest.mock("@/hooks/useToast", () => ({
   useToast: () => ({
     toast: { message: "", type: "info", visible: false },
     showToast: jest.fn(),
-    hideToast: jest.fn(),
   }),
 }));
-import React from "react";
 
-import CategoryManagement from "../../components/CategoryManagement";
-// debug log removed
-import { render } from "../testUtils";
 jest.mock("@/components/CategoryButton", () => ({
   __esModule: true,
   default: () => null,

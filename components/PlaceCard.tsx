@@ -2,6 +2,7 @@ import { Home, School, BookOpen, Trees, Store, Utensils, Users, Heart, MapPin } 
 import React from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 
+import { PLACE_A11Y } from '@/constants/a11yLabels';
 import { useTheme } from "@/constants/theme";
 import { Place } from "@/types/navigation";
 
@@ -37,9 +38,9 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, onPress }) => {
 
   return (
   <Pressable 
-      accessibilityRole="button"
-      accessibilityLabel={`Place ${place.name}`}
-      accessibilityHint="Shows details for this place"
+    accessibilityRole="button"
+    accessibilityLabel={PLACE_A11Y.forName(place.name)}
+    accessibilityHint="Shows details for this place"
       hitSlop={8}
       style={({ pressed }) => [
     styles.container,

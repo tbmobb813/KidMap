@@ -1,7 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { act } from "@testing-library/react-native";
 
-import { useNavigationStore } from "@/stores/navigationStore";
+// The global test setup provides a lightweight mock for stores to keep many tests
+// fast and isolated. This persistence test needs the real store implementation
+// so we can exercise its AsyncStorage persistence logic. Use requireActual to
+// load the real module here and call through to its store.
+const realNavStore = jest.requireActual("@/stores/navigationStore");
+const useNavigationStore = realNavStore.useNavigationStore as typeof import("@/stores/navigationStore").useNavigationStore;
 
 jest.mock("@react-native-async-storage/async-storage", () =>
   require("@react-native-async-storage/async-storage/jest/async-storage-mock")
@@ -19,6 +24,7 @@ describe("navigationStore persistence", () => {
   it("persists favorites and hydrates them", async () => {
     const place: any = { id: "favx", name: "Fav X" };
     await act(async () => {
+      // Call the real store so it performs persistence via AsyncStorage.
       useNavigationStore.getState().addToFavorites(place);
       await flush(350);
     });

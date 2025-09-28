@@ -209,3 +209,29 @@ export function extractText(node: any): string {
   if (node.children && Array.isArray(node.children)) return node.children.map((c: any) => extractText(c)).filter(Boolean).join(" ");
   return "";
 }
+
+/**
+ * Search a rendered tree (RenderAPI) for an icon marker in a renderer-agnostic
+ * way. Some renderers place testID props differently; this helper checks the
+ * serialized toJSON string for the presence of known testIDs or icon text.
+ */
+export function findIconMarker(renderResult: RenderAPI, iconName: string): boolean {
+  try {
+    const tree = renderResult.toJSON();
+    const str = JSON.stringify(tree || {});
+    const candidates = [
+      `"testID":"icon-${iconName}"`,
+      `"testID":"icon-${iconName}-fallback"`,
+      `"testID":"icon-${iconName}-stable"`,
+      iconName,
+    ];
+    return candidates.some((c) => str.includes(c));
+  } catch {
+    return false;
+  }
+}
+
+// Preferred public name for renderer-agnostic icon detection. Tests should
+// prefer accessibility queries; use this only as a fallback when a11y isn't
+// available for the element under test.
+export const hasRenderedIcon = findIconMarker;

@@ -142,6 +142,19 @@ const _VoiceNavigation = (props: any) =>
     ...props,
   });
 
+// Sanity test to ensure test helpers are present (prevents lint flags for unused mocks)
+describe("sanity: navigation test helpers", () => {
+  it("defines mock helpers used by integration tests", () => {
+    expect(typeof _handleDeepLink).toBe("function");
+    expect(typeof _createMockRouteWithSteps).toBe("function");
+    expect(typeof _RouteCard).toBe("function");
+    expect(typeof _RouteDetailScreen).toBe("function");
+    expect(typeof _CategoryButton).toBe("function");
+    expect(typeof _TravelModeSelector).toBe("function");
+    expect(typeof _VoiceNavigation).toBe("function");
+  });
+});
+
 // Mock navigation store
 const mockNavigationStore = {
   origin: {

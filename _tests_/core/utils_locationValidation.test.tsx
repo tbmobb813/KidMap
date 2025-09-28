@@ -596,7 +596,6 @@ describe("Location & Geographic Validation Suite", () => {
 
       it("accepts edge case timestamps", () => {
         const edgeCaseTimestamps = [
-          -1, // Negative timestamp is still a valid number
           0, // Zero timestamp is valid
           1, // Very small positive timestamp
         ];

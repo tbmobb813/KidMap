@@ -9,6 +9,7 @@ module.exports = {
     modulePathIgnorePatterns: ['.*\\.flow$'],
     moduleNameMapper: {
         '^react-native$': '<rootDir>/__mocks__/react-native.js',
+        '^lucide-react-native$': '<rootDir>/__mocks__/lucide-react-native.js',
         '^expo-image-picker$': '<rootDir>/__mocks__/expo-image-picker.js',
         '^@/modules/(.*)$': '<rootDir>/src/modules/$1',
         '^@/core/(.*)$': '<rootDir>/src/core/$1',

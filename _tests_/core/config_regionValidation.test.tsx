@@ -244,14 +244,6 @@ describe("Regional Configuration & Transit System Validation Suite", () => {
 
   // ===== TRANSIT SYSTEM VALIDATION TESTS =====
   describe("Transit System Validation", () => {
-    const validTransitBase: TransitSystem = {
-      id: "test-transit",
-      name: "Test Transit",
-      type: "subway",
-      color: "#0066CC",
-      routes: ["Red", "Blue", "Green"],
-      status: "operational",
-    };
 
     describe("Transit type validation", () => {
       it("accepts all valid transit types", () => {
@@ -264,7 +256,7 @@ describe("Regional Configuration & Transit System Validation Suite", () => {
         ];
 
         validTypes.forEach((type) => {
-          const _transit = { ...validTransitBase, type };
+          // Ensure the type is one of the accepted transit types
           expect(["subway", "train", "bus", "tram", "ferry"]).toContain(type);
         });
       });
@@ -371,7 +363,6 @@ describe("Regional Configuration & Transit System Validation Suite", () => {
         ];
 
         validStatuses.forEach((status) => {
-          const _transit = { ...validTransitBase, status };
           expect(["operational", "delayed", "suspended"]).toContain(status);
         });
       });

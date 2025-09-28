@@ -271,6 +271,7 @@ describe('Form Input Validation - ServiceTestTemplate', () => {
           placeName: 'Central Park',
           photoUrl: 'https://example.com/photo.jpg',
           timestamp: Date.now(),
+          location: { latitude: 40.0, longitude: -70.0 },
           notes: 'Great visit!'
         };
         
@@ -283,7 +284,8 @@ describe('Form Input Validation - ServiceTestTemplate', () => {
           placeId: 'place123',
           placeName: '',
           photoUrl: 'https://example.com/photo.jpg',
-          timestamp: Date.now()
+          timestamp: Date.now(),
+          location: { latitude: 0, longitude: 0 }
         };
         
         const result = PhotoCheckInSchema.safeParse(incompleteCheckIn);
@@ -295,7 +297,8 @@ describe('Form Input Validation - ServiceTestTemplate', () => {
           placeId: 'place123',
           placeName: 'Test Place',
           photoUrl: 'https://example.com/photo.jpg',
-          timestamp: -1
+          timestamp: -1,
+          location: { latitude: 0, longitude: 0 }
         };
         
         const result = PhotoCheckInSchema.safeParse(invalidTimestamp);
@@ -308,6 +311,7 @@ describe('Form Input Validation - ServiceTestTemplate', () => {
           placeName: 'Test Place',
           photoUrl: 'https://example.com/photo.jpg',
           timestamp: Date.now(),
+          location: { latitude: 0, longitude: 0 },
           notes: 'a'.repeat(600)
         };
         
@@ -436,7 +440,9 @@ describe('Form Input Validation - ServiceTestTemplate', () => {
         notes: userNotes
       };
       
-      const result = safeParseWithToast(PhotoCheckInSchema, checkInData, mockToast);
+  // Include a minimal location object — safeParseWithToast expects location
+  const checkInWithLocation = { ...checkInData, location: { latitude: 40.0, longitude: -70.0 } };
+  const result = safeParseWithToast(PhotoCheckInSchema, checkInWithLocation, mockToast);
       expect(result).not.toBeNull();
       expect(result?.notes).toBe('Great place! &lt;3');
       expect(mockToast.getCalls()).toHaveLength(0);

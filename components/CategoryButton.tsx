@@ -33,6 +33,7 @@ import {
 import React, { useEffect } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
+import { CATEGORY_BUTTON_A11Y } from '@/constants/a11yLabels';
 import { useTheme } from '@/constants/theme';
 import { CustomCategory, PlaceCategory } from "@/types/navigation";
 import { auditTouchTarget } from "@/utils/accessibility/touchTargetAudit";
@@ -145,9 +146,9 @@ const CategoryButtonComponent: React.FC<CategoryButtonProps> = ({
 
   return (
   <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={`${displayName} category button`}
-      accessibilityHint="Activates this category filter"
+    accessibilityRole="button"
+    accessibilityLabel={CATEGORY_BUTTON_A11Y.forDisplayName(displayName)}
+    accessibilityHint="Activates this category filter"
       hitSlop={8}
       style={({ pressed }) => [
         styles.container,

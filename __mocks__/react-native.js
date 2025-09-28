@@ -93,15 +93,6 @@ const createMockAnimatedValueXY = (initialValue = { x: 0, y: 0 }) => ({
 });
 
 // Mock animation functions
-const createMockAnimation = () => ({
-  start: jest.fn((_callback) => {
-    void _callback; // Suppress unused variable warning
-    // Don't call callback to avoid infinite recursion in tests
-    // Components can test animation behavior without actually running the animation loop
-  }),
-  stop: jest.fn(),
-  reset: jest.fn(),
-});
 
 // Define Alert mock first to avoid circular reference issues
 const Alert = {
@@ -188,49 +179,6 @@ module.exports = {
   ActivityIndicator: MockComponent,
   ProgressBarAndroid: MockComponent,
   Image: MockImage,
-  ScrollView: MockComponent,
-  FlatList: MockComponent,
-  SectionList: MockComponent,
-  VirtualizedList: MockComponent,
-
-  // Input components
-  TextInput: MockComponent,
-  Switch: MockComponent,
-  Slider: MockComponent,
-
-  // Touchable components
-  TouchableOpacity: MockComponent,
-  TouchableHighlight: MockComponent,
-  TouchableWithoutFeedback: MockComponent,
-  // TouchableNativeFeedback should be a callable component. Provide helper
-  // static methods (Ripple, SelectableBackground...) attached to the function
-  TouchableNativeFeedback: (() => {
-    const Comp = MockComponent;
-    Comp.Ripple = jest.fn((color, borderless) => ({
-      type: 'ripple',
-      color,
-      borderless,
-    }));
-    Comp.SelectableBackground = jest.fn(() => ({ type: 'selectableBackground' }));
-    Comp.SelectableBackgroundBorderless = jest.fn(() => ({ type: 'selectableBackgroundBorderless' }));
-    Comp.canUseNativeForeground = jest.fn(() => true);
-    return Comp;
-  })(),
-  Pressable: MockComponent,
-
-  // Layout components
-  SafeAreaView: MockComponent,
-  KeyboardAvoidingView: MockComponent,
-
-  // Navigation components
-  StatusBar: MockComponent,
-
-  // Modal and overlay components
-  Modal: MockComponent,
-
-  // Progress components
-  ActivityIndicator: MockComponent,
-  ProgressBarAndroid: MockComponent,
 
   // Platform and device info
   Platform: {

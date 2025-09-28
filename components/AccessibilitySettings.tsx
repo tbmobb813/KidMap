@@ -19,6 +19,7 @@ import {
   Pressable,
 } from "react-native";
 
+import { ACCESSIBILITY_SETTINGS_A11Y } from '@/constants/a11yLabels';
 import { useTheme } from "@/constants/theme";
 import { useNavigationStore } from "@/stores/navigationStore";
 import { track, setTelemetryEnabled, isTelemetryEnabled } from "@/telemetry";
@@ -62,9 +63,7 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({
       onPress={onPress}
       accessibilityRole="radio"
       accessibilityState={{ selected: isSelected }}
-      accessibilityLabel={`${title} theme. ${description}. ${
-        isSelected ? "Currently selected" : "Tap to select"
-      }`}
+      accessibilityLabel={ACCESSIBILITY_SETTINGS_A11Y.themeItem(title, description, isSelected)}
     >
       <View style={styles.themeIcon}>{icon}</View>
       <View style={styles.themeContent}>
@@ -131,8 +130,8 @@ const AccessibilitySettings: React.FC<AccessibilitySettingsProps> = ({
           {description}
         </Text>
       </View>
-      <Switch
-        accessibilityLabel={`Toggle ${title}`}
+    <Switch
+      accessibilityLabel={ACCESSIBILITY_SETTINGS_A11Y.toggleFor(title)}
         value={value}
         onValueChange={onValueChange}
         trackColor={{ false: theme.colors.border, true: theme.colors.primary }}

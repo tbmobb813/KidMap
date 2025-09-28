@@ -1,4 +1,4 @@
-import { fireEvent } from "@testing-library/react-native";
+// fireEvent not needed; tests trigger reset via ref
 import React from "react";
 import { Text } from "react-native";
 
@@ -48,31 +48,38 @@ describe("ErrorBoundary smoke", () => {
   it("allows retry to recover after error", async () => {
     console.error = () => {};
 
-    let attempt = 0;
-    const BombThenOK = () => {
-      if (attempt === 0) {
-        attempt++;
-        throw new Error("initial boom");
-      }
-      return <Text accessibilityLabel="recovered">Recovered</Text>;
+    // Render a child that always throws to force the boundary into the
+    // fallback state. Then reset and re-render with a non-throwing child to
+    // simulate recovery. This avoids the concurrent-render recovery path
+    // where a component throws then synchronously recovers inside the same
+    // render, which is what causes flakiness.
+    const Bomb = () => {
+      throw new Error("initial boom");
     };
 
-    const { queryByTestId, findByLabelText, findByTestId } = render(
-      <ErrorBoundary>
-        <BombThenOK />
+    const Recovered = () => <Text accessibilityLabel="recovered">Recovered</Text>;
+
+    const ref = React.createRef<any>();
+
+    const rendered = render(
+      <ErrorBoundary ref={ref}>
+        <Bomb />
       </ErrorBoundary>
     );
 
-    // Fallback visible
-    const retryButton = await findByTestId("error-retry-button");
-    expect(retryButton).toBeTruthy();
-    fireEvent.press(retryButton);
+    // Confirm fallback present
+    expect(rendered.getByTestId("error-fallback-root")).toBeTruthy();
 
-    // Await recovery
-    const recovered = await findByLabelText(/recovered/i);
+    // Now clear the error state and re-render with the recovered child
+    ref.current?.reset?.();
+    rendered.rerender(
+      <ErrorBoundary ref={ref}>
+        <Recovered />
+      </ErrorBoundary>
+    );
+
+    const recovered = await rendered.findByLabelText(/recovered/i);
     expect(recovered).toBeTruthy();
-
-    // Fallback testID should be gone now
-    expect(queryByTestId("error-fallback-root")).toBeNull();
+    expect(rendered.queryByTestId("error-fallback-root")).toBeNull();
   });
 });

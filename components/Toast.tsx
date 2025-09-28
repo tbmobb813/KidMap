@@ -2,6 +2,7 @@ import { AlertCircle, CheckCircle, Info, X } from "lucide-react-native";
 import React, { useCallback, useEffect, useRef } from "react";
 import { AccessibilityInfo, Animated, findNodeHandle, Platform, StyleSheet, Text } from "react-native";
 
+import { TOAST_A11Y } from '@/constants/a11yLabels';
 import { useTheme } from "@/constants/theme";
 import { announce } from "@/utils/accessibility/accessibility";
 
@@ -59,7 +60,7 @@ type ToastProps = {
         if (disableAnimation) {
           if (!announcedRef.current) {
             announcedRef.current = true;
-            const composed = `${typeLabels[type]}: ${message}`;
+            const composed = TOAST_A11Y.composed(typeLabels[type], message);
             announce(composed);
           }
         } else {
@@ -78,7 +79,7 @@ type ToastProps = {
 
           if (!announcedRef.current) {
             announcedRef.current = true;
-            const composed = `${typeLabels[type]}: ${message}`;
+            const composed = TOAST_A11Y.composed(typeLabels[type], message);
             announce(composed);
             setTimeout(() => {
               try {
@@ -158,7 +159,7 @@ type ToastProps = {
         accessibilityLiveRegion={
           Platform.OS === "android" ? "assertive" : undefined
         }
-        accessibilityLabel={`${typeLabels[type]}: ${message}`}
+  accessibilityLabel={TOAST_A11Y.composed(typeLabels[type], message)}
         testID="toast-alert"
       >
         {getIcon()}

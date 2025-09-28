@@ -39,7 +39,7 @@ export function useRoutesQuery(
       const result = await fetchRoutes(params);
   // Debug: surface the fetched result during tests to help triage
   // (kept minimal; remove once tests stabilize)
-  // eslint-disable-next-line no-console
+   
   console.log("[useRoutesQuery] fetched:", JSON.stringify(result));
       const after = getRouteServiceMetrics().fetchCount;
       const cacheHit = after === before;

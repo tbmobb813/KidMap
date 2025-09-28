@@ -2,6 +2,7 @@ import { Bike, Car, MapPin, Train } from "lucide-react-native";
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
+import { TRAVEL_MODE_A11Y } from '@/constants/a11yLabels';
 import { useTheme } from "@/constants/theme";
 import { TravelMode } from "@/types/navigation";
 import { tint } from "@/utils/color/color";
@@ -31,7 +32,7 @@ const TravelModeSelector: React.FC<TravelModeSelectorProps> = ({ selectedMode, o
             <Pressable
               key={mode}
               accessibilityRole="button"
-              accessibilityLabel={`${label} travel mode`}
+              accessibilityLabel={TRAVEL_MODE_A11Y.forLabel(label)}
               accessibilityState={{ selected: isSelected }}
               hitSlop={6}
               style={[styles.modeButton, isSelected && styles.selectedMode]}

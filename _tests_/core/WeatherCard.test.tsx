@@ -8,41 +8,53 @@ import Toast from "@/components/Toast";
 // ===== MOCKS =====
 // URI-based mock triggering to avoid Jest module scope violations
 jest.mock("lucide-react-native", () => ({
+  // Weather icons used in this file
   Sun: ({ size, color, ...props }: any) =>
     require("react-native").Text({
       testID: "weather-icon-sun",
-      children: `☀️`,
+      children: `\u2600\ufe0f`,
       style: { fontSize: size, color },
       ...props,
     }),
   Cloud: ({ size, color, ...props }: any) =>
     require("react-native").Text({
       testID: "weather-icon-cloud",
-      children: `☁️`,
+      children: `\u2601\ufe0f`,
       style: { fontSize: size, color },
       ...props,
     }),
   CloudRain: ({ size, color, ...props }: any) =>
     require("react-native").Text({
       testID: "weather-icon-rain",
-      children: `🌧️`,
+      children: `\ud83c\udf27\ufe0f`,
       style: { fontSize: size, color },
       ...props,
     }),
   Snowflake: ({ size, color, ...props }: any) =>
     require("react-native").Text({
       testID: "weather-icon-snow",
-      children: `❄️`,
+      children: `\u2744\ufe0f`,
       style: { fontSize: size, color },
       ...props,
     }),
   Wind: ({ size, color, ...props }: any) =>
     require("react-native").Text({
       testID: "weather-icon-wind",
-      children: `💨`,
+      children: `\ud83d\udca8`,
       style: { fontSize: size, color },
       ...props,
     }),
+  // Toast / shared icons that other components rely on; include them here so
+  // tests that mock lucide-react-native still render Toast without undefined
+  // element errors.
+  CheckCircle: ({ size, color, ...props }: any) =>
+    require("react-native").Text({ testID: "success-icon", children: "CheckCircle", style: { fontSize: size, color }, ...props }),
+  X: ({ size, color, ...props }: any) =>
+    require("react-native").Text({ testID: "error-icon", children: "X", style: { fontSize: size, color }, ...props }),
+  AlertCircle: ({ size, color, ...props }: any) =>
+    require("react-native").Text({ testID: "warning-icon", children: "AlertCircle", style: { fontSize: size, color }, ...props }),
+  Info: ({ size, color, ...props }: any) =>
+    require("react-native").Text({ testID: "info-icon", children: "Info", style: { fontSize: size, color }, ...props }),
 }));
 
 jest.mock("@/utils/accessibility/accessibility", () => ({

@@ -2,6 +2,7 @@ import { Star, Lock } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, Pressable } from "react-native";
 
+import { ACHIEVEMENT_A11Y } from '@/constants/a11yLabels';
 import { useTheme } from "@/constants/theme";
 import { Achievement } from "@/types/gamification";
 
@@ -30,7 +31,7 @@ const AchievementBadge: React.FC<AchievementBadgeProps> = ({
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${achievement.title} badge`}
+      accessibilityLabel={ACHIEVEMENT_A11Y.forTitle(achievement.title)}
       style={({ pressed }) => [
         styles.container,
         {

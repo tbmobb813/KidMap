@@ -1,13 +1,4 @@
-import {
-  Search,
-  Plus,
-  MapPin,
-  Trash2,
-  Edit3,
-  Globe,
-  Clock,
-  Phone,
-} from "lucide-react-native";
+import { Search, Plus } from "lucide-react-native";
 import React, { useState } from "react";
 import {
   StyleSheet,
@@ -20,7 +11,6 @@ import {
 
 import RegionCard from "../components/RegionCard";
 
-import ConfirmDialog from "./ConfirmDialog";
 import Toast from "./Toast";
 
 import Colors from "@/constants/colors"; // THEME MIGRATION: See issue #1234 for tracking phase-out of direct Colors references
@@ -40,15 +30,12 @@ export default function CityManagement({ onBack }: CityManagementProps) {
   const [editingRegion, setEditingRegion] = useState<RegionConfig | null>(null);
   const {
     availableRegions,
-    currentRegion,
-    setRegion,
     addCustomRegion,
-    removeRegion,
     updateRegionTransitData,
     searchRegions,
     getRegionsByCountry,
   } = useRegionStore();
-  const { toast, showToast, hideToast } = useToast();
+  const { toast, hideToast } = useToast();
   const filteredRegions = searchQuery
     ? searchRegions(searchQuery)
     : availableRegions;

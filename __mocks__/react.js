@@ -1,5 +1,6 @@
+/* eslint-env jest */
 // __mocks__/react.js
-const actualReact = jest.requireActual('react');
+const actualReact = require('react');
 
 module.exports = {
   ...actualReact,

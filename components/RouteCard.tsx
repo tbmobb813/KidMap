@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 
 import TransitStepIndicator from "./TransitStepIndicator";
 
+import { ROUTE_A11Y } from '@/constants/a11yLabels';
 import { useTheme } from '@/constants/theme';
 import { Route } from "@/types/navigation";
 
@@ -31,7 +32,7 @@ const RouteCardComponent: React.FC<RouteCardProps> = ({ route, onPress, isSelect
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`Route option, duration ${durationLabel}`}
+      accessibilityLabel={ROUTE_A11Y.optionFor(durationLabel)}
       accessibilityHint="Selects this route option"
       accessibilityState={{ selected: isSelected }}
       hitSlop={8}
