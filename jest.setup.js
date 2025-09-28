@@ -1,4 +1,4 @@
-/* global jest, global */
+/* global jest, global, beforeEach */
 import '@testing-library/jest-native/extend-expect';
 
 // Mock AsyncStorage first
@@ -146,6 +146,7 @@ try {
     global.__mockTrack = mockTrack;
 } catch {
     // ignore in environments where jest isn't available
+    /* no-op */
 }
 
 // Shared Animated mocks so individual tests don't need to re-create them.
@@ -170,6 +171,7 @@ try {
     Animated.timing = jest.fn(() => mockAnimation);
 } catch {
     // ignore when react-native isn't available in a non-test environment
+    /* no-op */
 }
 
 // Ensure testing-library label query helpers exist when destructured.
@@ -217,4 +219,43 @@ try {
             json: () => Promise.resolve({ completion: 'Test content' }),
         })
     );
-} catch {}
+} catch {
+    /* no-op */
+}
+
+// Ensure standard timer functions exist. Some test suites or mocks may replace or
+// remove globals (including setTimeout) which breaks helpers in testing-library
+// that reference the global timer functions. Restore them from Node's timers
+// implementation when missing or not a function.
+try {
+    const timers = require('timers');
+    if (typeof global.setTimeout !== 'function') global.setTimeout = timers.setTimeout;
+    if (typeof global.clearTimeout !== 'function') global.clearTimeout = timers.clearTimeout;
+    if (typeof global.setInterval !== 'function') global.setInterval = timers.setInterval;
+    if (typeof global.clearInterval !== 'function') global.clearInterval = timers.clearInterval;
+    if (typeof global.setImmediate !== 'function' && typeof timers.setImmediate === 'function') global.setImmediate = timers.setImmediate;
+    if (typeof global.clearImmediate !== 'function' && typeof timers.clearImmediate === 'function') global.clearImmediate = timers.clearImmediate;
+} catch {
+    // If timers can't be required in some environment, don't block tests — most
+    // environments will already have timer globals present.
+}
+
+// Some tests call `jest.useFakeTimers()` or reassign globals and (incorrectly)
+// leave the environment in a state where timer functions are missing or not
+// functions. That breaks helpers in @testing-library/react-native which call
+// `global.setTimeout` directly. To be defensive we restore the Node timers
+// implementation before each test so every test starts with working timer
+// functions.
+beforeEach(() => {
+    try {
+        const timers = require('timers');
+        if (typeof global.setTimeout !== 'function') global.setTimeout = timers.setTimeout;
+        if (typeof global.clearTimeout !== 'function') global.clearTimeout = timers.clearTimeout;
+        if (typeof global.setInterval !== 'function') global.setInterval = timers.setInterval;
+        if (typeof global.clearInterval !== 'function') global.clearInterval = timers.clearInterval;
+        if (typeof global.setImmediate !== 'function' && typeof timers.setImmediate === 'function') global.setImmediate = timers.setImmediate;
+        if (typeof global.clearImmediate !== 'function' && typeof timers.clearImmediate === 'function') global.clearImmediate = timers.clearImmediate;
+    } catch {
+        // Ignore failures restoring timers in exotic environments
+    }
+});
