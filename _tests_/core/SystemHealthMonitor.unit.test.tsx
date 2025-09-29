@@ -61,13 +61,10 @@ describe('SystemHealthMonitor', () => {
   it('shows action section and error summary when network is disconnected', async () => {
     // Spy on the network hook to simulate offline state for this test
     const networkModule = require('@/hooks/useNetworkStatus');
-    // Sanity check the exported shape
-    // eslint-disable-next-line no-console
-    console.log('networkModule keys:', Object.keys(networkModule));
+  // Sanity check the exported shape
     // ensure it's a function we can spy on
     if (typeof networkModule.useNetworkStatus !== 'function') {
-      // eslint-disable-next-line no-console
-      console.error('useNetworkStatus is not a function', networkModule.useNetworkStatus);
+      throw new Error('useNetworkStatus is not a function');
     }
   const spy = jest.spyOn(networkModule, 'useNetworkStatus').mockReturnValue({ isConnected: false });
   // ensure spy variable is referenced so linters don't complain
@@ -107,15 +104,11 @@ describe('SystemHealthMonitor', () => {
 
   // Diagnostic: ensure network hook is available before requiring component
   const networkModule = require('@/hooks/useNetworkStatus');
-  // eslint-disable-next-line no-console
-  console.log('web test - useNetworkStatus type:', typeof networkModule.useNetworkStatus);
   if (typeof networkModule.useNetworkStatus !== 'function') {
     throw new Error('useNetworkStatus is not a function in web test');
   }
-  // Call it to see what it returns
-  const ret = networkModule.useNetworkStatus();
-  // eslint-disable-next-line no-console
-  console.log('web test - useNetworkStatus returned:', ret);
+  // Call it to ensure hook exists
+  networkModule.useNetworkStatus();
 
   // Require component after adjusting Platform and globals
   const SystemHealthMonitor = require('@/components/SystemHealthMonitor').default;

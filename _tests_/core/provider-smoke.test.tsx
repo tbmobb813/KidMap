@@ -24,8 +24,8 @@ describe('Provider smoke test', () => {
         </ThemeProvider>
       </QueryClientProvider>
     );
-  // debug the rendered tree to help diagnose why the child may not be visible
-  console.log(renderResult.debug());
+  // ensure renderResult.debug exists if needed in future
+  void renderResult.debug;
     const { getByText } = renderResult;
     expect(getByText('ok')).toBeTruthy();
   });

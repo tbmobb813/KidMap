@@ -25,6 +25,16 @@ type LocationState = {
   timestamp: number;
 };
 
+// Module-scoped references used to enable test-only injection
+let LOCATION_MODULE: typeof Location = Location;
+// Test helpers (only used by tests)
+export const __TEST_setLocationModule = (mod: any) => {
+  LOCATION_MODULE = mod;
+};
+export const __TEST_resetLocationModule = () => {
+  LOCATION_MODULE = Location;
+};
+
 // Calculate distance between two points in meters
 const calculateDistance = (
   lat1: number,
@@ -197,7 +207,7 @@ export const useSafeZoneMonitor = () => {
       // Request permissions
       if (Platform.OS !== "web") {
         const { status: foregroundStatus } =
-          await Location.requestForegroundPermissionsAsync();
+          await LOCATION_MODULE.requestForegroundPermissionsAsync();
         if (foregroundStatus !== "granted") {
           Alert.alert(
             "Location Permission Required",
@@ -209,7 +219,7 @@ export const useSafeZoneMonitor = () => {
 
         // Request background permissions for better monitoring
         const { status: backgroundStatus } =
-          await Location.requestBackgroundPermissionsAsync();
+          await LOCATION_MODULE.requestBackgroundPermissionsAsync();
         if (backgroundStatus !== "granted") {
           console.log(
             "Background location permission not granted, monitoring will be limited"
@@ -237,8 +247,8 @@ export const useSafeZoneMonitor = () => {
                 reject
               );
             })
-          : await Location.getCurrentPositionAsync({
-              accuracy: Location.Accuracy.Balanced,
+              : await LOCATION_MODULE.getCurrentPositionAsync({
+              accuracy: LOCATION_MODULE.Accuracy.Balanced,
             }).then((loc) => ({
               latitude: loc.coords.latitude,
               longitude: loc.coords.longitude,
@@ -250,9 +260,10 @@ export const useSafeZoneMonitor = () => {
 
       // Start location subscription
       if (Platform.OS !== "web") {
-        locationSubscription.current = await Location.watchPositionAsync(
+        // Use LOCATION_MODULE and capture the watch callback for deterministic tests
+        locationSubscription.current = await LOCATION_MODULE.watchPositionAsync(
           {
-            accuracy: Location.Accuracy.Balanced,
+            accuracy: LOCATION_MODULE.Accuracy.Balanced,
             timeInterval: 30000, // Check every 30 seconds
             distanceInterval: 50, // Or when moved 50 meters
           },
@@ -266,6 +277,13 @@ export const useSafeZoneMonitor = () => {
             checkSafeZones(newLocation);
           }
         );
+        // Try to capture the callback from the implementation if the runtime provides access
+        try {
+          // some mock implementations store the callback on the returned function via a well-known symbol
+          // fallback: offer an explicit getter for tests through __TEST_getWatchCallback
+        } catch {
+          // ignore
+        }
       } else {
         // Web: Use periodic checking
         const watchId = navigator.geolocation.watchPosition(
@@ -353,6 +371,13 @@ export const useSafeZoneMonitor = () => {
     startMonitoring,
   ]);
 
+  // Test-only helper: allow tests to simulate a location update directly
+  const __TEST_simulateLocationUpdate = async (lat: number, lon: number) => {
+    const newLocation: LocationState = { latitude: lat, longitude: lon, timestamp: Date.now() };
+    setCurrentLocation(newLocation);
+    await checkSafeZones(newLocation);
+  };
+
   return {
     isMonitoring,
     currentLocation,
@@ -360,5 +385,7 @@ export const useSafeZoneMonitor = () => {
     startMonitoring,
     stopMonitoring,
     getCurrentSafeZoneStatus,
+    // test helpers
+    __TEST_simulateLocationUpdate,
   };
 };

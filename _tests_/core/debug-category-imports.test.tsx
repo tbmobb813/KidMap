@@ -8,14 +8,12 @@ describe('CategoryManagement import diagnostics', () => {
     const useToast = require('@/hooks/useToast');
     const categoryStore = require('@/stores/categoryStore');
 
-  // Print type information
-  console.log('CategoryButton:', typeof CategoryButton, CategoryButton && Object.keys(CategoryButton));
-  console.log('ConfirmDialog:', typeof ConfirmDialog, ConfirmDialog && Object.keys(ConfirmDialog));
-  console.log('Toast:', typeof Toast, Toast && Object.keys(Toast));
-  console.log('theme exports:', typeof theme, theme && Object.keys(theme));
-  console.log('useToast:', typeof useToast, useToast && Object.keys(useToast));
-  console.log('categoryStore:', typeof categoryStore, categoryStore && Object.keys(categoryStore));
-
-    expect(true).toBe(true);
+  // Sanity: ensure key exports exist on each module
+    expect(typeof CategoryButton === 'object' || typeof CategoryButton === 'function').toBeTruthy();
+    expect(typeof ConfirmDialog === 'object' || typeof ConfirmDialog === 'function').toBeTruthy();
+    expect(typeof Toast === 'object' || typeof Toast === 'function').toBeTruthy();
+    expect(typeof theme === 'object').toBeTruthy();
+    expect(typeof useToast === 'object' || typeof useToast === 'function').toBeTruthy();
+    expect(typeof categoryStore === 'object').toBeTruthy();
   });
 });

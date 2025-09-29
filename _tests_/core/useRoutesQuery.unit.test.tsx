@@ -40,8 +40,9 @@ describe('useRoutesQuery', () => {
       const data = res.data instanceof Promise ? await res.data : res.data;
       expect(Array.isArray(data)).toBe(true);
       expect(data.length).toBeGreaterThanOrEqual(0);
-  const svc = jest.requireMock('@/services/routeService');
-  expect(svc.fetchRoutes).toHaveBeenCalled();
+      // Require the mocked service module directly to access the fetchRoutes mock used by the hook
+      const svc = require('@/services/routeService');
+      expect(svc.fetchRoutes).toHaveBeenCalled();
     });
   });
 });
