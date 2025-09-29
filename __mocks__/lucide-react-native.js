@@ -29,6 +29,7 @@ const explicitIcons = {
   MicOff: createIcon('MicOff'),
   Clock: createIcon('Clock'),
   CheckCircle: createIcon('CheckCircle'),
+  RefreshCw: createIcon('RefreshCw'),
   MapPin: createIcon('MapPin'),
   Globe: createIcon('Globe'),
   Shield: createIcon('Shield'),
