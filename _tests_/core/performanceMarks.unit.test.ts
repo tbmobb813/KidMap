@@ -1,24 +1,45 @@
-describe('performance marks helpers', () => {
-  it('mark, measure, getMarks, and clearMarks behave as expected', () => {
-    jest.isolateModules(() => {
-      const pm = require('@/utils/performance/performanceMarks');
+import { mark, measure, getMarks, clearMarks } from '../../utils/performance/performanceMarks';
 
-      // Ensure clean slate
-      pm.clearMarks();
-      pm.mark('start_test');
-      // simulate a later mark
-      pm.mark('end_test');
-      pm.measure('m1', 'start_test', 'end_test');
+describe('performanceMarks', () => {
+  const originalEnv = process.env.NODE_ENV;
+  const originalNow = global.performance && global.performance.now;
 
-      const data = pm.getMarks();
-      expect(Array.isArray(data.marks)).toBe(true);
-      expect(Array.isArray(data.measures)).toBe(true);
-      expect(data.measures.length).toBeGreaterThanOrEqual(0);
+  beforeAll(() => {
+    process.env.NODE_ENV = 'test';
+  });
 
-      // clear
-      pm.clearMarks();
-      const cleared = pm.getMarks();
-      expect(cleared.marks.length).toBe(0);
-    });
+  afterAll(() => {
+    process.env.NODE_ENV = originalEnv;
+    if (originalNow) global.performance.now = originalNow;
+  });
+
+  beforeEach(() => {
+    clearMarks();
+  });
+
+  test('records marks and measures with deterministic performance.now', () => {
+    let now = 1000;
+    global.performance.now = () => now;
+
+    mark('start');
+    now += 50; // 50ms later
+    mark('end');
+    measure('duration', 'start', 'end');
+
+    const { marks, measures } = getMarks();
+    expect(marks.length).toBe(2);
+    expect(measures.length).toBe(1);
+    expect(Math.round(measures[0].duration)).toBe(50);
+  });
+
+  test('does not push measure if marks missing', () => {
+    let now = 2000;
+    global.performance.now = () => now;
+
+    mark('single');
+    // attempt measure with missing end
+    measure('bad', 'single', 'missing');
+    const { measures } = getMarks();
+    expect(measures.length).toBe(0);
   });
 });
