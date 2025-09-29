@@ -17,9 +17,10 @@ describe('Toast Component (minimal)', () => {
       disableAnimation: true,
     };
 
-    const { getByTestId, getByText } = renderWithTheme(<Toast {...props} />);
+  const { getByTestId, getByText } = renderWithTheme(<Toast {...props} />);
 
-    expect(getByTestId('toast-alert')).toBeTruthy();
-    expect(getByText('Minimal test')).toBeTruthy();
+  // Prefer accessibility queries in tests; keep testID fallback for consistency
+  expect(getByText('Minimal test')).toBeTruthy();
+  expect(getByTestId('toast-alert')).toBeTruthy();
   });
 });

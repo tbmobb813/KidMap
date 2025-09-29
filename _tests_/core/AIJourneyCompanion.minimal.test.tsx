@@ -20,6 +20,8 @@ describe("AIJourneyCompanion minimal render", () => {
 
   // No per-test console interception required anymore.
 
+  // ...existing code...
+
 
   it("renders without crashing (minimal)", async () => {
     const renderResult = render(
@@ -274,8 +276,8 @@ describe("AIJourneyCompanion minimal render", () => {
       </ThemeProvider>
     );
 
-    // Wait for AI content to appear (ensures currentMessage has been set)
-    await findByText(aiResponse, { timeout: 5000 });
+  // Wait for AI content to appear (ensures currentMessage has been set)
+  await findByText(aiResponse, {}, { timeout: 5000 });
     const buddyText = await findByText("Buddy");
     expect(buddyText.props.style).toEqual(
       expect.arrayContaining([

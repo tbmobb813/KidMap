@@ -113,8 +113,8 @@ try {
 const createMockData = (overrides: any = {}) => ({
   navigationStore: {
     photoCheckIns: [
-      { placeName: "School", timestamp: Date.now() - 100000 },
-      { placeName: "Home", timestamp: Date.now() - 200000 },
+      { id: 'pc-1', placeName: "School", timestamp: Date.now() - 100000, photoUrl: 'https://example.com/1.jpg' },
+      { id: 'pc-2', placeName: "Home", timestamp: Date.now() - 200000, photoUrl: 'https://example.com/2.jpg' },
     ],
     ...overrides.navigationStore,
   },
@@ -435,7 +435,7 @@ describe("SafetyDashboard - Enhanced Test Suite", () => {
 
       mockUseNavigationStore.mockReturnValue({
         photoCheckIns: [
-          { placeName: "Ancient Place", timestamp: veryOldTimestamp },
+          { id: 'ancient-1', placeName: "Ancient Place", timestamp: veryOldTimestamp, photoUrl: 'https://example.com/ancient.jpg' },
         ],
       });
 

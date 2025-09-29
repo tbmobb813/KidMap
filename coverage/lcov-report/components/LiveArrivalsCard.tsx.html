@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">38.46% </span>
+                <span class="strong">96.15% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/26</span>
+                <span class='fraction'>25/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.38% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/26</span>
+                <span class='fraction'>26/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">22.22% </span>
+                <span class="strong">88.88% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/9</span>
+                <span class='fraction'>8/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.61% </span>
+                <span class="strong">95.23% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/21</span>
+                <span class='fraction'>20/21</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -341,32 +341,32 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">30x</span>
+<span class="cline-any cline-yes">30x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">30x</span>
+<span class="cline-any cline-yes">30x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">30x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">23x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">30x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">30x</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -404,7 +404,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">30x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -434,7 +434,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -591,27 +591,27 @@ const LiveArrivalsCard: React.FC&lt;LiveArrivalsCardProps&gt; = ({
 &nbsp;
   // Alert for trains arriving soon
   useEffect(() =&gt; {
-    arrivals.forEach(<span class="fstat-no" title="function not covered" >ar</span>rival =&gt; {
-<span class="cstat-no" title="statement not covered" >      if (arrival.arrivalTime &lt;= 1 &amp;&amp; !alertedArrivals.has(arrival.id)) {</span>
-<span class="cstat-no" title="statement not covered" >        setAlertedArrivals(<span class="fstat-no" title="function not covered" >pr</span>ev =&gt; <span class="cstat-no" title="statement not covered" >new Set([...prev, arrival.id]))</span>;</span>
+    arrivals.forEach(arrival =&gt; {
+      if (arrival.arrivalTime &lt;= 1 &amp;&amp; !alertedArrivals.has(arrival.id)) {
+        setAlertedArrivals(prev =&gt; new Set([...prev, arrival.id]));
       }
     });
   }, [arrivals, alertedArrivals]);
 &nbsp;
-  const getArrivalTimeColor = <span class="fstat-no" title="function not covered" >(m</span>inutes: number) =&gt; {
-<span class="cstat-no" title="statement not covered" >    if (minutes === 0) <span class="cstat-no" title="statement not covered" >return theme.colors.error;</span></span>
-<span class="cstat-no" title="statement not covered" >    if (minutes &lt;= 2) <span class="cstat-no" title="statement not covered" >return theme.colors.warning;</span></span>
-<span class="cstat-no" title="statement not covered" >    return theme.colors.primary;</span>
+  const getArrivalTimeColor = (minutes: number) =&gt; {
+    if (minutes === 0) return theme.colors.error;
+    if (minutes &lt;= 2) return theme.colors.warning;
+    return theme.colors.primary;
   };
 &nbsp;
-  const getArrivalTimeText = <span class="fstat-no" title="function not covered" >(m</span>inutes: number) =&gt; {
-<span class="cstat-no" title="statement not covered" >    if (minutes === 0) <span class="cstat-no" title="statement not covered" >return "Arriving";</span></span>
-<span class="cstat-no" title="statement not covered" >    if (minutes === 1) <span class="cstat-no" title="statement not covered" >return "1 min";</span></span>
-<span class="cstat-no" title="statement not covered" >    return `${minutes} min`;</span>
+  const getArrivalTimeText = (minutes: number) =&gt; {
+    if (minutes === 0) return "Arriving";
+    if (minutes === 1) return "1 min";
+    return `${minutes} min`;
   };
 &nbsp;
-  const renderArrival = <span class="fstat-no" title="function not covered" >({</span> item }: { item: LiveArrival }) =&gt; (
-<span class="cstat-no" title="statement not covered" >    &lt;View style={[</span>
+  const renderArrival = ({ item }: { item: LiveArrival }) =&gt; (
+    &lt;View style={[
       styles.arrivalItem,
       item.arrivalTime &lt;= 1 &amp;&amp; [styles.urgentArrival, { borderLeftColor: theme.colors.warning, backgroundColor: theme.colors.surfaceAlt }]
     ]}&gt;
@@ -662,7 +662,7 @@ const LiveArrivalsCard: React.FC&lt;LiveArrivalsCardProps&gt; = ({
             &lt;Text style={[styles.updateText, { color: theme.colors.textSecondary }]}&gt;{lastUpdated}&lt;/Text&gt;
           &lt;/View&gt;
           {onRefresh &amp;&amp; (
-<span class="branch-1 cbranch-no" title="branch not covered" >            &lt;Pressable </span>
+            &lt;Pressable 
               style={styles.refreshButton}
               onPress={onRefresh}
               disabled={isRefreshing}
@@ -678,8 +678,8 @@ const LiveArrivalsCard: React.FC&lt;LiveArrivalsCardProps&gt; = ({
       &lt;/View&gt;
 &nbsp;
       {arrivals.length &gt; 0 ? (
-<span class="branch-0 cbranch-no" title="branch not covered" >        &lt;FlatList</span>
-          data={arrivals.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.arrivalTime - b.arrivalTime)</span>}
+        &lt;FlatList
+          data={arrivals.sort((a, b) =&gt; a.arrivalTime - b.arrivalTime)}
           renderItem={renderArrival}
           keyExtractor={<span class="fstat-no" title="function not covered" >it</span>em =&gt; <span class="cstat-no" title="statement not covered" >item.id}</span>
           scrollEnabled={false}
@@ -805,7 +805,7 @@ export default LiveArrivalsCard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-03T18:57:20.879Z
+                at 2025-09-28T18:37:31.009Z
             </div>
         <script src="../prettify.js"></script>
         <script>

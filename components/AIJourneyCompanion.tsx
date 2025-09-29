@@ -1,9 +1,9 @@
 import { Bot, Volume2, VolumeX, Sparkles } from 'lucide-react-native';
 import React from 'react';
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import { Animated } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Animated } from 'react-native';
 
+import IconButton from '@/components/IconButton';
 import { VOICE_A11Y_LABELS } from '@/constants/a11yLabels';
 import { useTheme } from '@/constants/theme';
 import { track } from '@/telemetry';
@@ -231,7 +231,7 @@ const AIJourneyCompanion = ({
           </Text>
         </View>
 
-        <Pressable
+        <IconButton
           style={styles.voiceButton}
           onPress={() => setVoiceEnabled(!voiceEnabled)}
           accessibilityLabel={voiceEnabled ? VOICE_A11Y_LABELS.enabled : VOICE_A11Y_LABELS.disabled}
@@ -242,7 +242,7 @@ const AIJourneyCompanion = ({
           ) : (
             <VolumeX size={16} color={theme.colors.textSecondary} />
           )}
-        </Pressable>
+        </IconButton>
       </Pressable>
 
       {isExpanded && (
@@ -446,10 +446,9 @@ const MinimalAIJourneyCompanion = ({
         <Text style={[{ color: (theme && theme.colors && theme.colors.primary) || '#000' }]}>Buddy</Text>
         <Text numberOfLines={1} style={[{ color: (theme && theme.colors && theme.colors.textSecondary) || '#666' }]}>{previewText}</Text>
       </Pressable>
-
       <Text>{destination.name}</Text>
 
-  <Pressable testID="voice-button" onPress={() => setVoiceEnabled(!voiceEnabled)} accessibilityLabel={voiceEnabled ? VOICE_A11Y_LABELS.enabled : VOICE_A11Y_LABELS.disabled} accessibilityRole="button">
+  <IconButton testID="voice-button" onPress={() => setVoiceEnabled(!voiceEnabled)} accessibilityLabel={voiceEnabled ? VOICE_A11Y_LABELS.enabled : VOICE_A11Y_LABELS.disabled} accessibilityRole="button">
         {/* Provide explicit testID-bearing elements so tests can query icons
             reliably across renderer environments and icon mocks. */}
         {voiceEnabled ? (
@@ -470,7 +469,7 @@ const MinimalAIJourneyCompanion = ({
             <Text testID="icon-VolumeX-stable" accessible={false} style={{ display: 'none' }} />
           </>
         )}
-      </Pressable>
+  </IconButton>
 
       {isExpanded && (
         <View>

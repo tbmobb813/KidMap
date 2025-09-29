@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">13.55% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>8/59</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">6.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>2/30</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">14.03% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/57</span>
+                <span class='fraction'>8/57</span>
             </div>
         
             
@@ -265,9 +265,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -393,27 +393,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -447,9 +447,9 @@ type LogEntry = {
 };
 &nbsp;
 class Logger {
-  private logs: LogEntry[] = <span class="cstat-no" title="statement not covered" >[];</span>
-  private maxLogs = <span class="cstat-no" title="statement not covered" >1000;</span>
-  private minLevel = <span class="cstat-no" title="statement not covered" >Config.isDev ? LogLevel.DEBUG : LogLevel.INFO;</span>
+  private logs: LogEntry[] = [];
+  private maxLogs = 1000;
+  private minLevel = Config.isDev ? LogLevel.DEBUG : <span class="branch-1 cbranch-no" title="branch not covered" >LogLevel.INFO;</span>
 &nbsp;
 <span class="fstat-no" title="function not covered" >  pr</span>ivate formatMessage(
     level: LogLevel,
@@ -575,10 +575,10 @@ class Logger {
   }
 }
 &nbsp;
-export const logger = <span class="cstat-no" title="statement not covered" >new Logger();</span>
+export const logger = new Logger();
 &nbsp;
 // Convenience functions
-export const log = <span class="cstat-no" title="statement not covered" >{</span>
+export const log = {
   debug: <span class="fstat-no" title="function not covered" >(m</span>essage: string, context?: Record&lt;string, any&gt;) =&gt;
 <span class="cstat-no" title="statement not covered" >    logger.debug(message, context),</span>
   info: <span class="fstat-no" title="function not covered" >(m</span>essage: string, context?: Record&lt;string, any&gt;) =&gt;
@@ -592,10 +592,10 @@ export const log = <span class="cstat-no" title="statement not covered" >{</span
 };
 &nbsp;
 // Global error handler
-<span class="cstat-no" title="statement not covered" >if (Platform.OS !== "web") {</span>
-  const originalHandler = <span class="cstat-no" title="statement not covered" >ErrorUtils.getGlobalHandler();</span>
+<span class="missing-if-branch" title="else path not taken" >E</span>if (Platform.OS !== "web") {
+  const originalHandler = ErrorUtils.getGlobalHandler();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  ErrorUtils.setGlobalHandler(<span class="fstat-no" title="function not covered" >(e</span>rror, isFatal) =&gt; {</span>
+  ErrorUtils.setGlobalHandler(<span class="fstat-no" title="function not covered" >(e</span>rror, isFatal) =&gt; {
 <span class="cstat-no" title="statement not covered" >    logger.error(`Global ${isFatal ? "Fatal" : "Non-Fatal"} Error`, error, {</span>
       isFatal,
       stack: error.stack,
@@ -616,7 +616,7 @@ export default logger;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-03T18:57:20.879Z
+                at 2025-09-28T18:37:31.009Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

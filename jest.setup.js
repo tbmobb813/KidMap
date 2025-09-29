@@ -117,17 +117,29 @@ jest.mock('expo-location', () => ({
 // Global setup
 global.__DEV__ = true;
 
-// Silence react-native dev menu errors that occur in tests
+// Silence specific noisy console errors that are non-actionable in tests.
+// Keep the original console.error for all other messages.
 const originalConsoleError = console.error;
 console.error = (message, ...args) => {
-    if (
-        typeof message === 'string' &&
-        (message.includes('TurboModuleRegistry') ||
+    if (typeof message === 'string') {
+        // Suppress TurboModule/DevMenu/Invariant messages we don't care about
+        if (
+            message.includes('TurboModuleRegistry') ||
             message.includes('DevMenu') ||
             message.includes('Invariant Violation') ||
-            message.includes('could not be found'))
-    ) {
-        return; // Suppress these specific errors
+            message.includes('could not be found')
+        ) {
+            return;
+        }
+
+        // Suppress the React "not wrapped in act(...)" warning emitted by
+        // components that schedule setTimeout-based updates during tests.
+        // These are noisy for this suite and we prefer to handle them via
+        // test-side act() or fake timers where practical. For now we
+        // silence the runtime warning to reduce CI noise.
+        if (message.includes('An update to') && message.includes('inside a test was not wrapped in act')) {
+            return;
+        }
     }
     originalConsoleError(message, ...args);
 };

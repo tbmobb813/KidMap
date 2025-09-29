@@ -4,6 +4,7 @@ import { Animated, Platform } from "react-native";
 
 import { createTestWrapper } from "@/_tests_/testUtils";
 import Toast from "@/components/Toast";
+import { TOAST_A11Y } from '@/constants/a11yLabels';
 
 // ===== MOCKS =====
 // URI-based mock triggering to avoid Jest module scope violations
@@ -100,22 +101,23 @@ describe("Toast Component", () => {
   // ===== SMOKE TESTS =====
   it("should render without errors when visible", () => {
     const props = createMockProps();
-    const { getByTestId } = renderWithTheme(<Toast {...props} />);
-    expect(getByTestId("toast-alert")).toBeTruthy();
+  const { getByTestId, getByText } = renderWithTheme(<Toast {...props} />);
+  // Prefer accessibility queries; fall back to testID for renderer differences
+  expect(getByText('Test message')).toBeTruthy();
+  expect(getByTestId("toast-alert")).toBeTruthy();
   });
 
   it("should not render when not visible", () => {
     const props = createMockProps({ visible: false });
-    const { queryByTestId } = renderWithTheme(<Toast {...props} />);
-    expect(queryByTestId("toast-alert")).toBeNull();
+  const { queryByTestId } = renderWithTheme(<Toast {...props} />);
+  expect(queryByTestId("toast-alert")).toBeNull();
   });
 
   // ===== PROP VERIFICATION =====
   it("should render with required props", () => {
     const props = createMockProps();
-    const { getByTestId, getByText } = renderWithTheme(<Toast {...props} />);
-    expect(getByTestId("toast-alert")).toBeTruthy();
-    expect(getByText("Test message")).toBeTruthy();
+  const { getByText } = renderWithTheme(<Toast {...props} />);
+  expect(getByText("Test message")).toBeTruthy();
   });
 
   it("should use default duration when not specified", () => {
@@ -273,18 +275,17 @@ describe("Toast Component", () => {
       message: "Accessibility test",
       type: "warning",
     });
-    const { getByTestId } = renderWithTheme(<Toast {...props} />);
-
-    const toast = getByTestId("toast-alert");
-    expect(toast.props.accessible).toBe(true);
-    expect(toast.props.accessibilityRole).toBe("alert");
-    expect(toast.props.accessibilityLabel).toBe("Warning: Accessibility test");
+  const { getByTestId } = renderWithTheme(<Toast {...props} />);
+  const toast = getByTestId("toast-alert");
+  expect(toast.props.accessible).toBe(true);
+  expect(toast.props.accessibilityRole).toBe("alert");
+  expect(toast.props.accessibilityLabel).toBe(TOAST_A11Y.composed('Warning', 'Accessibility test'));
   });
 
   it("should call setTimeout for accessibility focus", () => {
     jest.spyOn(global, "setTimeout");
     const props = createMockProps({ visible: false, disableAnimation: false });
-    const { rerender } = renderWithTheme(<Toast {...props} />);
+  const { rerender } = renderWithTheme(<Toast {...props} />);
 
     // Make toast visible to trigger the animation and focus logic
     rerender(<Toast {...props} visible={true} />);
@@ -369,7 +370,6 @@ describe("Toast Component", () => {
   it("should apply theme background color", () => {
     const props = createMockProps();
     const { getByTestId } = renderWithTheme(<Toast {...props} />);
-
     const toast = getByTestId("toast-alert");
     expect(toast.props.style).toEqual(
       expect.arrayContaining([

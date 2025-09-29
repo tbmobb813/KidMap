@@ -5,6 +5,7 @@ import { Text } from "react-native";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { render, screen } from "../testUtils";
 
+
 jest.mock("lucide-react-native", () => ({
   AlertTriangle: () => null,
   RefreshCw: () => null,
@@ -57,7 +58,7 @@ describe("ErrorBoundary smoke", () => {
       throw new Error("initial boom");
     };
 
-    const Recovered = () => <Text accessibilityLabel="recovered">Recovered</Text>;
+  const Recovered = () => <Text accessibilityLabel="recovered">Recovered</Text>;
 
     const ref = React.createRef<any>();
 
@@ -78,7 +79,8 @@ describe("ErrorBoundary smoke", () => {
       </ErrorBoundary>
     );
 
-    const recovered = await rendered.findByLabelText(/recovered/i);
+    // Use a text-based query (findByText) which is available across runners.
+  const recovered = await rendered.findByText(/recovered/i);
     expect(recovered).toBeTruthy();
     expect(rendered.queryByTestId("error-fallback-root")).toBeNull();
   });
