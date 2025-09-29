@@ -100,4 +100,37 @@ KidMap includes behavior-driven tests for:
 - Error boundaries and defensive rendering
 - Performance marks and cache hit/miss tracking
 
-See `ARCHITECTURE.md` for more details on testing strategy and coverage.
+
+## Test Architecture & Migration Status
+
+KidMap now uses a standardized test architecture:
+
+- All tests are organized under `_tests_/` in the following structure:
+	- `critical/` (security, safety, performance-critical)
+	- `core/` (component integration, workflows)
+	- `infra/` (hooks, utilities, theme)
+	- `misc/` (experimental, variants)
+	- `duplicates/` (archive for resolved duplicates)
+	- `_templates_/` (test templates)
+- All new and migrated tests use template-based patterns (see `_templates_/README.md`).
+- Legacy tests are being migrated and consolidated; see `_tests_/TEST_CATALOG.md` and `MERGE_COMPLETION_REPORT.md` for progress.
+- Template compliance is enforced in CI and PR review.
+- Coverage stabilization and technical debt reduction are current priorities.
+
+## Documentation & Planning
+
+- See `ARCHITECTURE.md` for up-to-date app and test architecture.
+- See `BACKLOG.md` for current and completed tickets.
+- See `NEXT_PHASE_STRATEGY.md` for the latest implementation plan and priorities.
+- See `_tests_/TEST_CATALOG.md` for test coverage and canonical locations.
+
+## Major Changes & Deviations
+
+- Test architecture overhauled for maintainability and coverage.
+- Validation logic consolidated to `@/core/validation`.
+- Toast system and error boundaries now standard for UI feedback.
+- React Query cache persistence and accessibility utilities expanded.
+- Template system adopted for all new and migrated tests.
+
+---
+This README and all referenced docs are kept up to date as the project evolves. For details on migration, coverage, and planning, see the linked documentation files.

@@ -46,7 +46,12 @@ export const [AuthProvider, useAuth] = createContextHook(() => {
       unsubscribe();
       clearTimeout(initTimer);
     };
-  }, [isInitialized]);
+  // Intentionally run this effect once on mount. The auth manager's listener
+  // will drive subsequent updates. Including isInitialized in the dependency
+  // array causes the effect to re-run and may overwrite listener-driven state
+  // during tests and provider initialization.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const login = useCallback(async (credentials: LoginCredentials) => {
     setAuthState(prev => ({ ...prev, isLoading: true, error: null }));

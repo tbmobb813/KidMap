@@ -191,7 +191,10 @@ export const [CategoryProvider, useCategoryStoreInternal] = createContextHook(()
 
   // Approve a category (parent action)
   const approveCategory = async (id: string) => {
-    await updateCategory(id, { isApproved: true });
+    const updatedCategories = categories.map(cat =>
+      cat.id === id ? { ...cat, isApproved: true } : cat
+    );
+    await saveCategories(updatedCategories);
   };
 
   // Get approved categories only

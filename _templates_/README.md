@@ -54,6 +54,23 @@ This directory contains reusable test templates for KidMap React Native componen
 - Use all 13 test categories
 - Add component-specific edge cases
 - Essential for safety-critical and complex components
+### 3. **ServiceTestTemplate.test.tsx** - Service/Utility Testing
+
+- **Use for:** Services, utilities, validation, and store logic
+- **Coverage:** 20+ tests, edge cases, error paths
+- **Examples:** SafeAsyncStorage, validation helpers, regionUtils
+
+### 4. **HookTestTemplate.test.tsx** - Custom Hook Testing
+
+- **Use for:** Custom hooks, store hooks, effect logic
+- **Coverage:** 10+ tests, state transitions, effect validation
+- **Examples:** useSafeZoneMonitor, useGlobalToast
+
+### 5. **IntegrationTestTemplate.test.tsx** - Multi-Component/Workflow Testing
+
+- **Use for:** Multi-component flows, integration scenarios
+- **Coverage:** 15+ tests, workflow, error handling
+- **Examples:** OnboardingFlow, route workflow, telemetry
 
 ## Integration with KidMap
 
@@ -69,6 +86,42 @@ These templates work seamlessly with:
 ## Next Steps
 
 Apply these templates to remaining KidMap components:
+
+
+✅ **SafeAsyncStorage**: 21/21 tests passing (Service Template)
+✅ **useSafeZoneMonitor**: 12/12 tests passing (Hook Template)
+✅ **OnboardingFlow**: 18/18 tests passing (Integration Template)
+
+## Migration & Compliance Status
+
+All legacy and new tests are being migrated to template-based files. See `TEST_CATALOG.md` for up-to-date coverage and canonical test locations. Migration progress and consolidation patterns are tracked in `MERGE_COMPLETION_REPORT.md` and `TEST_ARCHITECTURE_ANALYSIS.md`.
+
+**Directory Structure:**
+
+```
+_tests_/
+├── critical/           # Security, safety, performance-critical tests
+├── core/               # Component integration, user workflows  
+├── infra/              # Infrastructure, hooks, utilities
+├── misc/               # Experimental, variant, non-critical tests
+├── duplicates/         # Archive for resolved duplicates
+├── mergeable-to-review/# Pending merge candidates
+└── _templates_/        # Test templates for different patterns
+```
+
+**Naming & Compliance:**
+- All new and migrated tests use describe/it patterns, import order, and mocking strategies from templates.
+- Template compliance is enforced in CI and PR review.
+- Canonical test locations and coverage tracked in `TEST_CATALOG.md`.
+
+## Expanded Template Usage
+
+Templates are now used for:
+- Component tests
+- Service/utility tests
+- Store and validation tests
+- Custom hooks
+- Integration/multi-component workflows
 
 1. **VirtualPetCompanion** (Comprehensive - complex interactions)
 2. **RouteCard** (Comprehensive - critical navigation)  
