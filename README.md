@@ -88,6 +88,7 @@ KidMap uses Expo Router’s tab layout for intuitive navigation. The main screen
 ## Accessibility
 
 All interactive components are designed for accessibility:
+
 - Buttons and cards use `accessibilityRole`, `accessibilityLabel`, and `accessibilityHint`.
 - Touch targets meet the recommended minimum size (48x48).
 - A development utility audits touch target sizes and accessibility props.
@@ -95,23 +96,23 @@ All interactive components are designed for accessibility:
 ## Testing
 
 KidMap includes behavior-driven tests for:
+
 - Route caching and query metrics
 - Accessibility labels and touch targets
 - Error boundaries and defensive rendering
 - Performance marks and cache hit/miss tracking
-
 
 ## Test Architecture & Migration Status
 
 KidMap now uses a standardized test architecture:
 
 - All tests are organized under `_tests_/` in the following structure:
-	- `critical/` (security, safety, performance-critical)
-	- `core/` (component integration, workflows)
-	- `infra/` (hooks, utilities, theme)
-	- `misc/` (experimental, variants)
-	- `duplicates/` (archive for resolved duplicates)
-	- `_templates_/` (test templates)
+  - `critical/` (security, safety, performance-critical)
+  - `core/` (component integration, workflows)
+  - `infra/` (hooks, utilities, theme)
+  - `misc/` (experimental, variants)
+  - `duplicates/` (archive for resolved duplicates)
+  - `_templates_/` (test templates)
 - All new and migrated tests use template-based patterns (see `_templates_/README.md`).
 - Legacy tests are being migrated and consolidated; see `_tests_/TEST_CATALOG.md` and `MERGE_COMPLETION_REPORT.md` for progress.
 - Template compliance is enforced in CI and PR review.

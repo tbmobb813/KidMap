@@ -12,7 +12,6 @@ With Sprint 3's accessibility and performance foundations complete, and the test
 2. **Resolving technical debt** (test migration, coverage stabilization, template compliance)
 3. **Advancing to high-value backlog items** (S3-7, S3-8, parent alert escalation, enhanced route prediction)
 
-
 ## Immediate Action Plan (Priority Order)
 
 ### 🔥 **Phase 4.1: Sprint 1 Completion & Quality & Test Stabilization**
@@ -51,6 +50,7 @@ With Sprint 3's accessibility and performance foundations complete, and the test
 ## Test Stabilization & Coverage Plan (Expanded)
 
 As part of Phase 4.1 we will prioritize:
+
 - Migrating legacy tests to template-based files.
 - Stabilizing failing store tests (harness fixes, AsyncStorage mocks, valid Zod payloads).
 - Enforcing template compliance in CI and PR review.
@@ -130,14 +130,14 @@ Evaluate telemetry data from Sprint 3 usage to inform data-driven enhancements i
 As part of Phase 4.1 we will prioritize stabilizing failing store tests and adding a small number of high-value focused tests to raise coverage quickly.
 
 - Fixes in scope:
-	- Ensure persistence and AsyncStorage mocks are declared before importing stores.
-	- Convert fragile render-harness store tests to deterministic getState() unit tests where possible.
-	- Add waitFor/act and per-test fake timers for debounce/persist behavior when provider hydration is required.
-	- Use valid Zod payloads (e.g., 6-digit hex colors like `#112233`) to avoid validation rejections in tests.
+ 	- Ensure persistence and AsyncStorage mocks are declared before importing stores.
+ 	- Convert fragile render-harness store tests to deterministic getState() unit tests where possible.
+ 	- Add waitFor/act and per-test fake timers for debounce/persist behavior when provider hydration is required.
+ 	- Use valid Zod payloads (e.g., 6-digit hex colors like `#112233`) to avoid validation rejections in tests.
 
 - Goals:
-	- Get failing category/navigation unit tests green.
-	- Add 2–4 focused persistence/error-path tests for stores to increase branch coverage.
-	- Re-run core test suite with coverage and iterate until coverage meets CI threshold.
+ 	- Get failing category/navigation unit tests green.
+ 	- Add 2–4 focused persistence/error-path tests for stores to increase branch coverage.
+ 	- Re-run core test suite with coverage and iterate until coverage meets CI threshold.
 
 Estimated effort: 1–2 hours. Next action: apply harness fixes, re-run the two failing store suites, then run core coverage.

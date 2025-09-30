@@ -54,6 +54,7 @@ This directory contains reusable test templates for KidMap React Native componen
 - Use all 13 test categories
 - Add component-specific edge cases
 - Essential for safety-critical and complex components
+
 ### 3. **ServiceTestTemplate.test.tsx** - Service/Utility Testing
 
 - **Use for:** Services, utilities, validation, and store logic
@@ -87,7 +88,6 @@ These templates work seamlessly with:
 
 Apply these templates to remaining KidMap components:
 
-
 ✅ **SafeAsyncStorage**: 21/21 tests passing (Service Template)
 ✅ **useSafeZoneMonitor**: 12/12 tests passing (Hook Template)
 ✅ **OnboardingFlow**: 18/18 tests passing (Integration Template)
@@ -110,6 +110,7 @@ _tests_/
 ```
 
 **Naming & Compliance:**
+
 - All new and migrated tests use describe/it patterns, import order, and mocking strategies from templates.
 - Template compliance is enforced in CI and PR review.
 - Canonical test locations and coverage tracked in `TEST_CATALOG.md`.
@@ -117,6 +118,7 @@ _tests_/
 ## Expanded Template Usage
 
 Templates are now used for:
+
 - Component tests
 - Service/utility tests
 - Store and validation tests
