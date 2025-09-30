@@ -1,4 +1,3 @@
-// Single-file clean tests for persistence helpers
 const mockStorage: Record<string, string> = {};
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
@@ -23,7 +22,7 @@ describe('persistence utils', () => {
   });
 
   it('savePersistedState stores JSON with version and load returns it', async () => {
-    const partial = { favorites: [], recentSearches: [], accessibilitySettings: {}, photoCheckIns: [], selectedTravelMode: 'walk', routeOptions: {} };
+    const partial = { favorites: [], recentSearches: [], accessibilitySettings: {}, photoCheckIns: [], selectedTravelMode: 'walk', routeOptions: {} } as any;
     await expect(persistence.savePersistedState(partial)).resolves.toBeUndefined();
     const raw = mockStorage['kidmap.navigation.v1'];
     expect(typeof raw).toBe('string');

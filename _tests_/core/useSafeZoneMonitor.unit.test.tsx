@@ -1,200 +1,99 @@
+import React from 'react';
+
 /**
- * Unit tests for useSafeZoneMonitor
- * - Mocks Location and parental store BEFORE importing the hook (isolateModules + doMock)
+ * Minimal isolated tests for useSafeZoneMonitor.
+ * Uses jest.isolateModules + jest.doMock to ensure mocks are present before import.
  */
 
-import { jest } from '@jest/globals';
-
 describe('useSafeZoneMonitor (unit)', () => {
-  // Helper: wait for a condition with timeout (ms)
-  const waitFor = (cond: () => boolean, timeout = 2000) =>
+  const waitForApi = (getter: () => any, timeout = 2000) =>
     new Promise<void>((resolve, reject) => {
       const start = Date.now();
       const tick = () => {
         try {
-          if (cond()) return resolve();
+          if (getter()) return resolve();
         } catch (e) {
           // ignore
         }
-        if (Date.now() - start > timeout) return reject(new Error('waitFor timeout'));
+        if (Date.now() - start > timeout) return reject(new Error('timeout'));
         setTimeout(tick, 10);
       };
       tick();
     });
-  // Prefer clearing/restoring mocks; avoid resetModules globally because
-  // it can remove module-level jest.fn placeholders used across tests.
+
   afterEach(() => {
+    jest.resetModules();
     jest.clearAllMocks();
-    jest.restoreAllMocks();
   });
 
-  it('getCurrentSafeZoneStatus returns null when no current location', async () => {
+  it('returns API and reports null when no location', async () => {
     let api: any = null;
-    let unmount: any = null;
 
     jest.isolateModules(() => {
-  const React = require('react');
-  const renderer = require('react-test-renderer');
-
-      // Minimal parental store mock (stable reference)
-      const parentalStore = {
-        safeZones: [],
-        settings: { safeZoneAlerts: true },
-        dashboardData: { safeZoneActivity: [] },
-        saveDashboardData: jest.fn(),
-      };
-      jest.doMock('@/stores/parentalStore', () => ({
-        useParentalStore: () => parentalStore,
-      }));
-
-      // Minimal Location mock
-      jest.doMock('expo-location', () => ({
-        requestForegroundPermissionsAsync: jest.fn(),
-        requestBackgroundPermissionsAsync: jest.fn(),
-        getCurrentPositionAsync: jest.fn(),
-        watchPositionAsync: jest.fn(),
-        Accuracy: { Balanced: 'balanced' },
-      }));
-
-      // Notification utils
-      jest.doMock('@/utils/notification/notification', () => ({
-        requestNotificationPermission: jest.fn(),
-        showNotification: jest.fn(),
-      }));
+      jest.doMock('@/stores/parentalStore', () => ({ useParentalStore: () => ({ safeZones: [], settings: { safeZoneAlerts: true }, dashboardData: { safeZoneActivity: [] }, saveDashboardData: jest.fn() }) }));
+      jest.doMock('expo-location', () => ({ requestForegroundPermissionsAsync: jest.fn(), requestBackgroundPermissionsAsync: jest.fn(), getCurrentPositionAsync: jest.fn(), watchPositionAsync: jest.fn(), Accuracy: { Balanced: 'balanced' } }));
+      jest.doMock('@/utils/notification/notification', () => ({ requestNotificationPermission: jest.fn(), showNotification: jest.fn() }));
 
       const { useSafeZoneMonitor } = require('@/hooks/useSafeZoneMonitor');
+      const ReactReq = require('react');
+      const renderer = require('react-test-renderer');
 
-      const TestComp: React.FC<{ onReady: (api: any) => void }> = ({ onReady }) => {
+      const TestComp = ({ onReady }: any) => {
         const apiLocal = useSafeZoneMonitor();
-        React.useEffect(() => {
-          onReady(apiLocal);
-        }, [apiLocal, onReady]);
+        ReactReq.useEffect(() => onReady && onReady(apiLocal), [apiLocal, onReady]);
         return null;
       };
 
-  const rendered = renderer.create(React.createElement(TestComp, { onReady: (a: any) => (api = a) }));
-  unmount = () => rendered.unmount();
+      renderer.create(ReactReq.createElement(TestComp, { onReady: (a: any) => (api = a) }));
     });
 
-  // wait for the TestComp to set the api
-  await waitFor(() => api != null);
-  expect(api).not.toBeNull();
-    // hook hasn't been given any location yet, so status should be null
+    await waitForApi(() => api != null);
+    expect(api).not.toBeNull();
     expect(api.getCurrentSafeZoneStatus()).toBeNull();
-    if (unmount) unmount();
   });
 
-  it('produces entry event on startMonitoring and calls notification + save', async () => {
-    // Prepare mocks for an active safe zone and a location inside it
-  const mockSave = jest.fn() as any;
-  mockSave.mockResolvedValue(undefined as any);
-  const mockShowNotification = jest.fn() as any;
-  mockShowNotification.mockResolvedValue(undefined as any);
+  it('startMonitoring triggers notification and save when inside an active zone', async () => {
+    const mockSave = jest.fn().mockResolvedValue(undefined);
+    const mockShow = jest.fn().mockResolvedValue(undefined);
 
-    const zone = {
-      id: 'zone1',
-      name: 'Home',
-      latitude: 12.34,
-      longitude: 56.78,
-      radius: 1000, // large radius to ensure inside
-      isActive: true,
-      notifications: { onEntry: true, onExit: true },
-    };
+    const zone = { id: 'z1', name: 'Home', latitude: 12.34, longitude: 56.78, radius: 10000, isActive: true, notifications: { onEntry: true, onExit: true } };
 
-  let api: any = null;
-  let unmount: any = null;
+    let api: any = null;
 
-    // isolateModules must be synchronous; we prepare and render inside it,
-    // then await hook async actions outside.
     jest.isolateModules(() => {
-  const React = require('react');
-  const renderer = require('react-test-renderer');
+      jest.doMock('@/stores/parentalStore', () => ({ useParentalStore: () => ({ safeZones: [zone], settings: { safeZoneAlerts: true }, dashboardData: { safeZoneActivity: [] }, saveDashboardData: mockSave }) }));
+      const mockGetCurrent = jest.fn().mockResolvedValue({ coords: { latitude: 12.34, longitude: 56.78 } });
+      const mockRequestForeground = jest.fn().mockResolvedValue({ status: 'granted' });
+      const mockRequestBackground = jest.fn().mockResolvedValue({ status: 'granted' });
+      const mockWatch = jest.fn().mockResolvedValue({ remove: jest.fn() });
+      jest.doMock('expo-location', () => ({ requestForegroundPermissionsAsync: mockRequestForeground, requestBackgroundPermissionsAsync: mockRequestBackground, getCurrentPositionAsync: mockGetCurrent, watchPositionAsync: mockWatch, Accuracy: { Balanced: 'balanced' } }));
+      jest.doMock('@/utils/notification/notification', () => ({ requestNotificationPermission: jest.fn().mockResolvedValue(undefined), showNotification: mockShow }));
 
-      const parentalStore = {
-        safeZones: [zone],
-        settings: { safeZoneAlerts: true },
-        dashboardData: { safeZoneActivity: [] },
-        saveDashboardData: mockSave,
-      };
-      jest.doMock('@/stores/parentalStore', () => ({
-        useParentalStore: () => parentalStore,
-      }));
-
-      // Mock Location flows
-  const mockGetCurrent = jest.fn() as any;
-  mockGetCurrent.mockResolvedValue({ coords: { latitude: 12.34, longitude: 56.78 } } as any);
-  const mockRequestForeground = jest.fn() as any;
-  mockRequestForeground.mockResolvedValue({ status: 'granted' } as any);
-  const mockRequestBackground = jest.fn() as any;
-  mockRequestBackground.mockResolvedValue({ status: 'granted' } as any);
-  // watchPositionAsync typically returns a promise resolving to a subscription
-      const mockWatch = jest.fn().mockResolvedValue({ remove: jest.fn() } as any);
-
-      jest.doMock('expo-location', () => ({
-        requestForegroundPermissionsAsync: mockRequestForeground,
-        requestBackgroundPermissionsAsync: mockRequestBackground,
-        getCurrentPositionAsync: mockGetCurrent,
-        watchPositionAsync: mockWatch,
-        Accuracy: { Balanced: 'balanced' },
-      }));
-
-      jest.doMock('@/utils/notification/notification', () => ({
-        requestNotificationPermission: (jest.fn() as any).mockResolvedValue(undefined as any),
-        showNotification: mockShowNotification,
-      }));
-
-      // Require the hook after mocks
       const { useSafeZoneMonitor } = require('@/hooks/useSafeZoneMonitor');
+      const ReactReq = require('react');
+      const renderer = require('react-test-renderer');
 
-      const TestComp: React.FC<{ onReady: (api: any) => void }> = ({ onReady }) => {
+      const TestComp = ({ onReady }: any) => {
         const apiLocal = useSafeZoneMonitor();
-        React.useEffect(() => {
-          onReady(apiLocal);
-        }, [apiLocal, onReady]);
+        ReactReq.useEffect(() => onReady && onReady(apiLocal), [apiLocal, onReady]);
         return null;
       };
 
-  const rendered = renderer.create(React.createElement(TestComp, { onReady: (a: any) => (api = a) }));
-  unmount = () => rendered.unmount();
+      renderer.create(ReactReq.createElement(TestComp, { onReady: (a: any) => (api = a) }));
     });
 
-  // wait for the TestComp to set the api
-  await waitFor(() => api != null);
-  expect(api).not.toBeNull();
-    // startMonitoring returns a promise; call and await
+    await waitForApi(() => api != null);
+    expect(api).not.toBeNull();
     await api.startMonitoring();
 
-  // After starting, the status should report inside the zone
-  const status = api.getCurrentSafeZoneStatus();
+    const status = api.getCurrentSafeZoneStatus();
     expect(status).not.toBeNull();
     expect(status?.inside.length).toBeGreaterThanOrEqual(1);
-
-    // Notification and save should have been called
-    expect(mockShowNotification).toHaveBeenCalled();
+    expect(mockShow).toHaveBeenCalled();
     expect(mockSave).toHaveBeenCalled();
-
-    // Stop monitoring to cleanup
     api.stopMonitoring();
-    if (unmount) unmount();
   });
-
-  it('ignores inactive zones (no notification)', async () => {
-    const mockSave = jest.fn() as any;
-    mockSave.mockResolvedValue(undefined as any);
-    const mockShowNotification = jest.fn() as any;
-    mockShowNotification.mockResolvedValue(undefined as any);
-
-    const zone = {
-      id: 'zone1',
-      name: 'Park',
-      latitude: 12.34,
-      longitude: 56.78,
-      radius: 1000,
-      isActive: false,
-      notifications: { onEntry: true, onExit: true },
-    };
-
-  let api: any = null;
+});
   let unmount: any = null;
 
     jest.isolateModules(() => {

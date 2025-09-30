@@ -45,8 +45,8 @@ describe('SystemHealthMonitor', () => {
   });
 });
 
-import React from 'react';
 import { waitFor } from '@testing-library/react-native';
+import React from 'react';
 import { render } from '../testUtils';
 
 // Baseline module mocks
