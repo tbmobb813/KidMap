@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 
 import TransitStepIndicator from "./TransitStepIndicator";
 
+import { DIRECTION_STEP_A11Y } from '@/constants/a11yLabels';
 import { useTheme } from "@/constants/theme";
 import { TransitStep } from "@/types/navigation";
 
@@ -17,7 +18,7 @@ const DirectionStep: React.FC<DirectionStepProps> = ({ step, isLast }) => {
   // Defensive guards & fallbacks to avoid runtime crashes on malformed data
   if (!step) {
     return (
-      <View style={styles.container} accessible accessibilityRole="summary" accessibilityLabel="Unavailable step">
+      <View style={styles.container} accessible accessibilityRole="summary" accessibilityLabel={DIRECTION_STEP_A11Y.unavailable}>
         <View style={styles.leftColumn}>
           <View style={[styles.placeholderIndicator, { backgroundColor: theme.colors.border }]} />
           {!isLast && <View style={styles.connector} />}
@@ -38,7 +39,7 @@ const DirectionStep: React.FC<DirectionStepProps> = ({ step, isLast }) => {
   const toText = step.to || "Unknown destination";
 
   return (
-    <View style={styles.container} accessibilityRole="summary" accessibilityLabel={`${typeLabel} step from ${fromText} to ${toText}`}>
+    <View style={styles.container} accessibilityRole="summary" accessibilityLabel={DIRECTION_STEP_A11Y.forStep(typeLabel, fromText, toText)}>
       <View style={styles.leftColumn}>
         <TransitStepIndicator step={step as TransitStep} size="large" />
         {!isLast && <View style={styles.connector} />}

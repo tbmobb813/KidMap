@@ -18,6 +18,7 @@ import {
 
 import Colors from "@/constants/colors";
 import useLocation from "@/hooks/useLocation";
+import { useGlobalToast } from "@/providers/ToastProvider";
 import { useParentalStore } from "@/stores/parentalStore";
 import { DevicePingRequest } from "@/types/parental";
 
@@ -26,8 +27,10 @@ type DevicePingHandlerProps = {
 };
 
 const DevicePingHandler: React.FC<DevicePingHandlerProps> = ({ testId }) => {
-  const { devicePings, acknowledgePing, updateLastKnownLocation } = useParentalStore();
+  const { devicePings, acknowledgePing, updateLastKnownLocation } =
+    useParentalStore();
   const { location } = useLocation();
+  const { showToast } = useGlobalToast();
   const [activePing, setActivePing] = useState<DevicePingRequest | null>(null);
   const [isRinging, setIsRinging] = useState(false);
 
@@ -65,18 +68,18 @@ const DevicePingHandler: React.FC<DevicePingHandlerProps> = ({ testId }) => {
 
         setActivePing(null);
 
-        Alert.alert(
-          "✅ Response Sent",
+        showToast(
           shareLocation
             ? "Your location has been shared with your parent"
-            : "Response sent to your parent"
+            : "Response sent to your parent",
+          "success"
         );
       } catch (error) {
         console.error("Failed to acknowledge ping:", error);
-        Alert.alert("Error", "Failed to respond to ping. Please try again.");
+        showToast("Failed to respond to ping. Please try again.", "error");
       }
     },
-    [isRinging, location, acknowledgePing, updateLastKnownLocation]
+    [isRinging, location, acknowledgePing, updateLastKnownLocation, showToast]
   );
 
   const handleRingPing = React.useCallback(

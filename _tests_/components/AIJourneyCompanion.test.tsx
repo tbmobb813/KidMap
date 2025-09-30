@@ -86,7 +86,11 @@ describe("AIJourneyCompanion", () => {
   beforeEach(() => {
     mockUseTheme.mockReturnValue(mockTheme as any);
     jest.clearAllMocks();
-    jest.useFakeTimers();
+    // Use real timers so Promise microtasks and async fetch flows resolve
+    // naturally under testing-library's act wrappers. Fake timers can
+    // prevent async state updates from running and cause "not wrapped in
+    // act(...)" warnings when Promises resolve outside of an act.
+    jest.useRealTimers();
   });
 
   afterEach(() => {
@@ -116,88 +120,77 @@ describe("AIJourneyCompanion", () => {
       expect(queryByText("Buddy")).toBeNull();
     });
 
-    it("renders when navigating with destination", async () => {
+  it("renders when navigating with destination", async () => {
       mockFetch.mockResolvedValueOnce({
         json: () => Promise.resolve({ completion: "Welcome to your journey!" }),
       } as Response);
 
-      const { getByText } = render(
+  const { getByText } = render(
         <AIJourneyCompanion {...defaultProps} isNavigating={true} />
       );
 
-      // Fast forward timers to complete async operations
-      jest.advanceTimersByTime(100);
+      // Allow pending microtasks (fetch promise resolution) to run so the
+      // component's state updates occur inside testing-library's act.
+      await Promise.resolve();
 
-      await waitFor(
-        () => {
-          expect(getByText("Buddy")).toBeTruthy();
-        },
-        { timeout: 2000 }
-      );
+      await waitFor(() => {
+        expect(getByText("Buddy")).toBeTruthy();
+      }, { timeout: 5000 });
     }, 5000);
   });
 
   describe("AI Content Generation", () => {
-    it("makes API call when starting navigation", async () => {
+  it("makes API call when starting navigation", async () => {
       mockFetch.mockResolvedValueOnce({
         json: () => Promise.resolve({ completion: "Test content" }),
       } as Response);
 
       render(<AIJourneyCompanion {...defaultProps} isNavigating={true} />);
 
-      jest.advanceTimersByTime(100);
-
-      await waitFor(
-        () => {
-          expect(mockFetch).toHaveBeenCalledWith(
-            "https://toolkit.rork.com/text/llm/",
-            expect.objectContaining({
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-            })
-          );
-        },
-        { timeout: 2000 }
-      );
+  // allow any pending microtasks (fetch) to resolve
+  await Promise.resolve();
+      await waitFor(() => {
+        expect(mockFetch).toHaveBeenCalledWith(
+          "https://toolkit.rork.com/text/llm/",
+          expect.objectContaining({
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          })
+        );
+      }, { timeout: 5000 });
     }, 5000);
 
-    it("displays AI generated content", async () => {
+  it("displays AI generated content", async () => {
       const aiResponse = "Libraries are amazing places!";
       mockFetch.mockResolvedValueOnce({
         json: () => Promise.resolve({ completion: aiResponse }),
       } as Response);
 
-      const { getByText } = render(
+  const { getByText } = render(
         <AIJourneyCompanion {...defaultProps} isNavigating={true} />
       );
 
-      jest.advanceTimersByTime(100);
-
-      await waitFor(
-        () => {
-          expect(getByText(aiResponse)).toBeTruthy();
-        },
-        { timeout: 2000 }
-      );
+  // allow fetch promise to resolve
+  await Promise.resolve();
+      await waitFor(() => {
+        expect(getByText(aiResponse)).toBeTruthy();
+      }, { timeout: 5000 });
     }, 5000);
 
-    it("handles API failures gracefully", async () => {
+  it("handles API failures gracefully", async () => {
       mockFetch.mockRejectedValueOnce(new Error("Network error"));
 
-      const { getByText } = render(
+  const { getByText } = render(
         <AIJourneyCompanion {...defaultProps} isNavigating={true} />
       );
 
-      jest.advanceTimersByTime(100);
-
-      await waitFor(
-        () => {
-          expect(
-            getByText(/Great choice going to Central Library/)
-          ).toBeTruthy();
-        },
-        { timeout: 2000 }
-      );
+  // allow fallback or fetch microtask to run
+  await Promise.resolve();
+      await waitFor(() => {
+        expect(
+          getByText(/Great choice going to Central Library/)
+        ).toBeTruthy();
+      }, { timeout: 5000 });
     }, 5000);
   });
 
@@ -211,7 +204,8 @@ describe("AIJourneyCompanion", () => {
         <AIJourneyCompanion {...defaultProps} isNavigating={true} />
       );
 
-      jest.advanceTimersByTime(100);
+      // allow any fetch resolution
+      await Promise.resolve();
 
       await waitFor(() => expect(getByText("Buddy")).toBeTruthy(), {
         timeout: 2000,
@@ -223,17 +217,18 @@ describe("AIJourneyCompanion", () => {
       expect(getByText("Tell Me More")).toBeTruthy();
     }, 5000);
 
-    it("generates quiz content when Quiz Me pressed", async () => {
+  it("generates quiz content when Quiz Me pressed", async () => {
       // Initial content
       mockFetch.mockResolvedValueOnce({
         json: () => Promise.resolve({ completion: "Initial content" }),
       } as Response);
 
-      const { getByText } = render(
+      const { getByText, getAllByText } = render(
         <AIJourneyCompanion {...defaultProps} isNavigating={true} />
       );
 
-      jest.advanceTimersByTime(100);
+      // allow any pending fetch microtask
+      await Promise.resolve();
       await waitFor(() => expect(getByText("Buddy")).toBeTruthy(), {
         timeout: 2000,
       });
@@ -248,13 +243,14 @@ describe("AIJourneyCompanion", () => {
 
       fireEvent.press(getByText("Quiz Me!"));
 
-      jest.advanceTimersByTime(100);
-
+      // allow pending fetches/microtasks
+      await Promise.resolve();
       await waitFor(
         () => {
-          expect(
-            getByText("🧠 Quiz Time! What makes libraries special?")
-          ).toBeTruthy();
+          // The quiz text may appear in multiple places (preview and expanded
+          // content). Use a tolerant assertion to accept multiple matches.
+          const matches = getAllByText("🧠 Quiz Time! What makes libraries special?");
+          expect(matches.length).toBeGreaterThan(0);
         },
         { timeout: 2000 }
       );
@@ -283,8 +279,8 @@ describe("AIJourneyCompanion", () => {
         <AIJourneyCompanion {...defaultProps} isNavigating={true} />
       );
 
-      jest.advanceTimersByTime(100);
-
+      // allow fetch microtasks to resolve
+      await Promise.resolve();
       await waitFor(
         () => {
           expect(getByText(/Great choice going to/)).toBeTruthy();
@@ -302,7 +298,8 @@ describe("AIJourneyCompanion", () => {
         <AIJourneyCompanion {...defaultProps} isNavigating={true} />
       );
 
-      jest.advanceTimersByTime(100);
+      // allow any pending fetch microtasks
+      await Promise.resolve();
       await waitFor(() => expect(getByText("Buddy")).toBeTruthy(), {
         timeout: 2000,
       });
@@ -326,15 +323,16 @@ describe("AIJourneyCompanion", () => {
         <AIJourneyCompanion {...defaultProps} isNavigating={true} />
       );
 
-      jest.advanceTimersByTime(100);
+      // allow any pending microtasks
+      await Promise.resolve();
 
-      await waitFor(
-        () => {
-          const buddyButton = getByText("Buddy").parent;
-          expect(buddyButton && buddyButton.type).toBe("Pressable");
-        },
-        { timeout: 2000 }
-      );
+      // Instead of inspecting implementation details (parent.type), verify
+      // the element is interactable by pressing it and observing the
+      // resulting UI (the action buttons are shown). This is more robust
+      // across test renderers.
+      await waitFor(() => expect(getByText("Buddy")).toBeTruthy(), { timeout: 2000 });
+      fireEvent.press(getByText("Buddy"));
+      await waitFor(() => expect(getByText("Quiz Me!")).toBeTruthy(), { timeout: 2000 });
     }, 5000);
   });
 
@@ -348,8 +346,8 @@ describe("AIJourneyCompanion", () => {
         <AIJourneyCompanion {...defaultProps} isNavigating={true} />
       );
 
-      jest.advanceTimersByTime(100);
-
+      // allow any pending microtasks
+      await Promise.resolve();
       await waitFor(
         () => {
           const buddyText = getByText("Buddy");

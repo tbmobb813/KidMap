@@ -1,0 +1,68 @@
+timestamp: 2025-09-16T18:38:14.600Z
+branch: dedupe/routeCard-proposed-patch
+sha: 991e87a58e68bca990d0afb3eb091c7a264f4c3f
+args: jest _tests_/critical/errorHandling.test.tsx
+---
+
+[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2m_tests_/critical/[22m[1merrorHandling.test.tsx[22m ([0m[1m[41m19.556 s[49m[22m[0m)
+  ErrorBoundary smoke
+    [31m×[39m [2mrenders fallback when child throws (187 ms)[22m
+    [31m×[39m [2mpasses through children when no error occurs (41 ms)[22m
+
+[1m[31m  [1m● [22m[1mErrorBoundary smoke › renders fallback when child throws[39m[22m
+
+    boom
+[2m[22m
+[2m    [0m [90m 14 |[39m[22m
+[2m     [90m 15 |[39m     [36mconst[39m [33mBomb[39m [33m=[39m () [33m=>[39m {[22m
+[2m    [31m[1m>[22m[2m[39m[90m 16 |[39m       [36mthrow[39m [36mnew[39m [33mError[39m([32m"boom"[39m)[33m;[39m[22m
+[2m     [90m    |[39m             [31m[1m^[22m[2m[39m[22m
+[2m     [90m 17 |[39m     }[33m;[39m[22m
+[2m     [90m 18 |[39m[22m
+[2m     [90m 19 |[39m     render([0m[22m
+[2m[22m
+[2m      [2mat Bomb ([22m[2m[0m[36m_tests_/critical/errorHandling.test.tsx[39m[0m[2m:16:13)[22m[2m[22m
+[2m      [2mat Object.react-stack-bottom-frame ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:12679:20)[22m[2m[22m
+[2m      [2mat renderWithHooks ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:3622:25)[22m[2m[22m
+[2m      [2mat updateFunctionComponent ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:5635:19)[22m[2m[22m
+[2m      [2mat beginWork ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:7086:18)[22m[2m[22m
+[2m      [2mat runWithFiberInDEV ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:540:16)[22m[2m[22m
+[2m      [2mat performUnitOfWork ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:10917:22)[22m[2m[22m
+[2m      [2mat workLoopSync ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:10763:41)[22m[2m[22m
+[2m      [2mat renderRootSync ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:10744:11)[22m[2m[22m
+[2m      [2mat performWorkOnRoot ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:10299:39)[22m[2m[22m
+[2m      [2mat performWorkOnRootViaSchedulerTask ([22m[2mnode_modules/react-test-renderer/cjs/react-test-renderer.development.js[2m:1879:7)[22m[2m[22m
+[2m      [2mat flushActQueue ([22m[2mnode_modules/react/cjs/react.development.js[2m:566:34)[22m[2m[22m
+[2m      [2mat Object.<anonymous>.process.env.NODE_ENV.exports.act ([22m[2mnode_modules/react/cjs/react.development.js[2m:860:10)[22m[2m[22m
+[2m      [2mat actImplementation ([22m[2mnode_modules/@testing-library/react-native/src/act.ts[2m:30:25)[22m[2m[22m
+[2m      [2mat renderWithAct ([22m[2mnode_modules/@testing-library/react-native/src/render-act.ts[2m:12:11)[22m[2m[22m
+[2m      [2mat renderInternal ([22m[2mnode_modules/@testing-library/react-native/src/render.tsx[2m:81:33)[22m[2m[22m
+[2m      [2mat renderInternal ([22m[2mnode_modules/@testing-library/react-native/src/render.tsx[2m:44:10)[22m[2m[22m
+[2m      [2mat customRender ([22m[2m_tests_/testUtils.tsx[2m:56:19)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36m_tests_/critical/errorHandling.test.tsx[39m[0m[2m:19:11)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1mErrorBoundary smoke › passes through children when no error occurs[39m[22m
+
+    Unable to find an element with text: /ok/i
+
+    [36m<div>[39m
+      [0mok[0m
+    [36m</div>[39m
+[2m[22m
+[2m    [0m [90m 35 |[39m     )[33m;[39m[22m
+[2m     [90m 36 |[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 37 |[39m     expect(screen[33m.[39mgetByText([35m/ok/i[39m))[33m.[39mtoBeTruthy()[33m;[39m[22m
+[2m     [90m    |[39m                   [31m[1m^[22m[2m[39m[22m
+[2m     [90m 38 |[39m   })[33m;[39m[22m
+[2m     [90m 39 |[39m })[33m;[39m[22m
+[2m     [90m 40 |[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.getByText ([22m[2m[0m[36m_tests_/critical/errorHandling.test.tsx[39m[0m[2m:37:19)[22m[2m[22m
+
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, 1 total
+[1mTests:       [22m[1m[31m2 failed[39m[22m, 2 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        29.562 s
+[2mRan all test suites[22m[2m matching [22m/_tests_\\critical\\errorHandling.test.tsx/i[2m.[22m
+
+EXIT CODE: 1

@@ -1,0 +1,719 @@
+import React from 'react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react-native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { jest } from '@jest/globals';
+
+import { {{MAIN_COMPONENT}} } from '@/components/{{MAIN_COMPONENT}}';
+import { {{SECONDARY_COMPONENT}} } from '@/components/{{SECONDARY_COMPONENT}}';
+import { createTestWrapper, mockTheme } from '@/_tests_/testUtils';
+
+// ===== INTEGRATION SCENARIO: {{SCENARIO_NAME}} =====
+// This test suite covers end-to-end scenarios involving multiple components,
+// services, stores, and user interactions working together.
+
+// ===== MOCK SETUP =====
+// Mock navigation
+const mockNavigate = jest.fn();
+const mockGoBack = jest.fn();
+const mockReset = jest.fn();
+
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: () => ({
+    navigate: mockNavigate,
+    goBack: mockGoBack,
+    reset: mockReset,
+  }),
+  useRoute: () => ({
+    params: { testParam: 'test-value' },
+  }),
+  useFocusEffect: jest.fn(),
+}));
+
+// Mock stores
+jest.mock('@/stores/{{PRIMARY_STORE}}', () => ({
+  use{{PRIMARY_STORE}}: jest.fn(),
+  get{{PRIMARY_STORE}}State: jest.fn(),
+  update{{PRIMARY_STORE}}: jest.fn(),
+}));
+
+jest.mock('@/stores/{{SECONDARY_STORE}}', () => ({
+  use{{SECONDARY_STORE}}: jest.fn(),
+  get{{SECONDARY_STORE}}State: jest.fn(),
+  update{{SECONDARY_STORE}}: jest.fn(),
+}));
+
+// Mock services
+jest.mock('@/services/{{API_SERVICE}}', () => ({
+  {{API_METHOD}}: jest.fn(),
+  {{SECONDARY_API_METHOD}}: jest.fn(),
+}));
+
+// Mock native modules
+jest.mock('react-native', () => ({
+  ...jest.requireActual('react-native'),
+  Alert: { alert: jest.fn() },
+  Platform: { OS: 'ios' },
+  Linking: { openURL: jest.fn() },
+  Dimensions: {
+    get: () => ({ width: 375, height: 812 }),
+  },
+}));
+
+// Mock async storage
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+);
+
+// Mock permissions
+jest.mock('react-native-permissions', () => ({
+  request: jest.fn(),
+  check: jest.fn(),
+  PERMISSIONS: {
+    IOS: { LOCATION_WHEN_IN_USE: 'ios.permission.location' },
+    ANDROID: { ACCESS_FINE_LOCATION: 'android.permission.location' },
+  },
+  RESULTS: {
+    GRANTED: 'granted',
+    DENIED: 'denied',
+    BLOCKED: 'blocked',
+  },
+}));
+
+// ===== TEST DATA =====
+const mockInitialData = {
+  {{PRIMARY_ENTITY}}: {
+    id: 'test-id-1',
+    name: 'Test {{PRIMARY_ENTITY}}',
+    status: 'active',
+  },
+  {{SECONDARY_ENTITY}}: {
+    id: 'test-id-2',
+    relatedId: 'test-id-1',
+    value: 'Test Value',
+  },
+};
+
+const mockUpdatedData = {
+  ...mockInitialData,
+  {{PRIMARY_ENTITY}}: {
+    ...mockInitialData.{{PRIMARY_ENTITY}},
+    status: 'updated',
+  },
+};
+
+const mockErrorData = {
+  error: 'Integration test error',
+  code: 'TEST_ERROR',
+};
+
+// ===== TEST SETUP HELPERS =====
+const createQueryClient = () => {
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+        staleTime: 0,
+        gcTime: 0,
+      },
+      mutations: {
+        retry: false,
+      },
+    },
+  });
+};
+
+const setupMockStores = (initialState = {}) => {
+  const primaryStore = require('@/stores/{{PRIMARY_STORE}}');
+  const secondaryStore = require('@/stores/{{SECONDARY_STORE}}');
+
+  primaryStore.use{{PRIMARY_STORE}}.mockReturnValue({
+    {{PRIMARY_ENTITY}}: initialState.{{PRIMARY_ENTITY}} || mockInitialData.{{PRIMARY_ENTITY}},
+    loading: false,
+    error: null,
+    ...initialState.primary,
+  });
+
+  secondaryStore.use{{SECONDARY_STORE}}.mockReturnValue({
+    {{SECONDARY_ENTITY}}: initialState.{{SECONDARY_ENTITY}} || mockInitialData.{{SECONDARY_ENTITY}},
+    processing: false,
+    error: null,
+    ...initialState.secondary,
+  });
+
+  return { primaryStore, secondaryStore };
+};
+
+const setupMockServices = () => {
+  const apiService = require('@/services/{{API_SERVICE}}');
+  
+  apiService.{{API_METHOD}}.mockResolvedValue({
+    success: true,
+    data: mockInitialData,
+  });
+
+  apiService.{{SECONDARY_API_METHOD}}.mockResolvedValue({
+    success: true,
+    data: mockUpdatedData,
+  });
+
+  return { apiService };
+};
+
+const renderIntegrationComponent = (props = {}, storeState = {}) => {
+  const queryClient = createQueryClient();
+  setupMockStores(storeState);
+  setupMockServices();
+
+  const ComponentWrapper = () => (
+    <QueryClientProvider client={queryClient}>
+      <{{MAIN_COMPONENT}} {...props} />
+    </QueryClientProvider>
+  );
+
+  return render(<ComponentWrapper />, { wrapper: createTestWrapper });
+};
+
+describe('{{SCENARIO_NAME}} Integration', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    // Reset navigation mocks
+    mockNavigate.mockClear();
+    mockGoBack.mockClear();
+    mockReset.mockClear();
+  });
+
+  // ===== COMPONENT RENDERING =====
+  describe('Component Rendering Integration', () => {
+    it('renders all components with correct initial state', async () => {
+      renderIntegrationComponent();
+
+      await waitFor(() => {
+        expect(screen.getByText('Test {{PRIMARY_ENTITY}}')).toBeOnTheScreen();
+        expect(screen.getByText('Test Value')).toBeOnTheScreen();
+      });
+
+      // Verify component hierarchy
+      expect(screen.getByTestId('{{MAIN_COMPONENT}}-container')).toBeOnTheScreen();
+      expect(screen.getByTestId('{{SECONDARY_COMPONENT}}-container')).toBeOnTheScreen();
+    });
+
+    it('handles component state synchronization', async () => {
+      const { primaryStore, secondaryStore } = setupMockStores();
+      
+      renderIntegrationComponent();
+
+      await waitFor(() => {
+        expect(primaryStore.use{{PRIMARY_STORE}}).toHaveBeenCalled();
+        expect(secondaryStore.use{{SECONDARY_STORE}}).toHaveBeenCalled();
+      });
+
+      // Verify data flows between components
+      expect(screen.getByText('Test {{PRIMARY_ENTITY}}')).toBeOnTheScreen();
+    });
+
+    it('propagates loading states across components', async () => {
+      renderIntegrationComponent({}, {
+        primary: { loading: true },
+        secondary: { processing: true },
+      });
+
+      expect(screen.getByTestId('loading-indicator')).toBeOnTheScreen();
+      expect(screen.getByTestId('processing-indicator')).toBeOnTheScreen();
+    });
+
+    it('displays coordinated error states', async () => {
+      renderIntegrationComponent({}, {
+        primary: { error: 'Primary error' },
+        secondary: { error: 'Secondary error' },
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText(/Primary error/)).toBeOnTheScreen();
+        expect(screen.getByText(/Secondary error/)).toBeOnTheScreen();
+      });
+    });
+  });
+
+  // ===== USER INTERACTION FLOWS =====
+  describe('User Interaction Flows', () => {
+    it('completes full user workflow successfully', async () => {
+      const { apiService } = setupMockServices();
+      renderIntegrationComponent();
+
+      // Step 1: Initial load
+      await waitFor(() => {
+        expect(screen.getByText('Test {{PRIMARY_ENTITY}}')).toBeOnTheScreen();
+      });
+
+      // Step 2: User interacts with primary component
+      const primaryButton = screen.getByTestId('primary-action-button');
+      fireEvent.press(primaryButton);
+
+      // Step 3: Secondary component updates
+      await waitFor(() => {
+        expect(apiService.{{API_METHOD}}).toHaveBeenCalled();
+      });
+
+      // Step 4: Navigate to related screen
+      const navigationButton = screen.getByTestId('navigate-button');
+      fireEvent.press(navigationButton);
+
+      expect(mockNavigate).toHaveBeenCalledWith('{{TARGET_SCREEN}}', {
+        {{PRIMARY_ENTITY}}Id: 'test-id-1',
+      });
+    });
+
+    it('handles multi-step form submission', async () => {
+      const { apiService } = setupMockServices();
+      renderIntegrationComponent();
+
+      // Step 1: Fill first form section
+      const firstInput = screen.getByTestId('first-input');
+      fireEvent.changeText(firstInput, 'First Value');
+
+      // Step 2: Move to second section
+      const nextButton = screen.getByTestId('next-button');
+      fireEvent.press(nextButton);
+
+      // Step 3: Fill second form section
+      await waitFor(() => {
+        expect(screen.getByTestId('second-input')).toBeOnTheScreen();
+      });
+
+      const secondInput = screen.getByTestId('second-input');
+      fireEvent.changeText(secondInput, 'Second Value');
+
+      // Step 4: Submit complete form
+      const submitButton = screen.getByTestId('submit-button');
+      fireEvent.press(submitButton);
+
+      await waitFor(() => {
+        expect(apiService.{{SECONDARY_API_METHOD}}).toHaveBeenCalledWith({
+          firstValue: 'First Value',
+          secondValue: 'Second Value',
+        });
+      });
+    });
+
+    it('manages complex state updates across interactions', async () => {
+      const { primaryStore, secondaryStore } = setupMockStores();
+      renderIntegrationComponent();
+
+      // Trigger state update in primary component
+      const updateButton = screen.getByTestId('update-primary-button');
+      fireEvent.press(updateButton);
+
+      await waitFor(() => {
+        expect(primaryStore.update{{PRIMARY_STORE}}).toHaveBeenCalled();
+      });
+
+      // Verify secondary component reacts to state change
+      await waitFor(() => {
+        expect(secondaryStore.update{{SECONDARY_STORE}}).toHaveBeenCalled();
+      });
+    });
+
+    it('handles user cancellation and rollback', async () => {
+      renderIntegrationComponent();
+
+      // Start an operation
+      const startButton = screen.getByTestId('start-operation-button');
+      fireEvent.press(startButton);
+
+      // Cancel the operation
+      await waitFor(() => {
+        expect(screen.getByTestId('cancel-button')).toBeOnTheScreen();
+      });
+
+      const cancelButton = screen.getByTestId('cancel-button');
+      fireEvent.press(cancelButton);
+
+      // Verify rollback
+      await waitFor(() => {
+        expect(screen.getByText('Operation cancelled')).toBeOnTheScreen();
+      });
+    });
+  });
+
+  // ===== DATA FLOW INTEGRATION =====
+  describe('Data Flow Integration', () => {
+    it('synchronizes data between stores and components', async () => {
+      const { primaryStore, secondaryStore } = setupMockStores();
+      const { apiService } = setupMockServices();
+
+      renderIntegrationComponent();
+
+      // Trigger data update
+      const refreshButton = screen.getByTestId('refresh-button');
+      fireEvent.press(refreshButton);
+
+      await waitFor(() => {
+        expect(apiService.{{API_METHOD}}).toHaveBeenCalled();
+        expect(primaryStore.update{{PRIMARY_STORE}}).toHaveBeenCalled();
+        expect(secondaryStore.update{{SECONDARY_STORE}}).toHaveBeenCalled();
+      });
+    });
+
+    it('handles data conflicts and resolution', async () => {
+      const { apiService } = setupMockServices();
+      
+      // Mock conflicting data response
+      apiService.{{API_METHOD}}.mockResolvedValueOnce({
+        success: false,
+        error: 'Data conflict detected',
+        conflicts: ['field1', 'field2'],
+      });
+
+      renderIntegrationComponent();
+
+      const saveButton = screen.getByTestId('save-button');
+      fireEvent.press(saveButton);
+
+      await waitFor(() => {
+        expect(screen.getByText(/Data conflict detected/)).toBeOnTheScreen();
+        expect(screen.getByTestId('conflict-resolution-dialog')).toBeOnTheScreen();
+      });
+    });
+
+    it('maintains data consistency during concurrent operations', async () => {
+      const { apiService } = setupMockServices();
+      renderIntegrationComponent();
+
+      // Start multiple operations concurrently
+      const button1 = screen.getByTestId('operation-1-button');
+      const button2 = screen.getByTestId('operation-2-button');
+
+      fireEvent.press(button1);
+      fireEvent.press(button2);
+
+      await waitFor(() => {
+        expect(apiService.{{API_METHOD}}).toHaveBeenCalledTimes(2);
+      });
+
+      // Verify final state is consistent
+      await waitFor(() => {
+        expect(screen.getByText('Operations completed')).toBeOnTheScreen();
+      });
+    });
+
+    it('handles offline/online state transitions', async () => {
+      const { apiService } = setupMockServices();
+      
+      // Mock offline state
+      apiService.{{API_METHOD}}.mockRejectedValue(new Error('Network error'));
+
+      renderIntegrationComponent();
+
+      const syncButton = screen.getByTestId('sync-button');
+      fireEvent.press(syncButton);
+
+      await waitFor(() => {
+        expect(screen.getByText(/offline/i)).toBeOnTheScreen();
+      });
+
+      // Mock coming back online
+      apiService.{{API_METHOD}}.mockResolvedValue({
+        success: true,
+        data: mockUpdatedData,
+      });
+
+      // Trigger retry
+      const retryButton = screen.getByTestId('retry-button');
+      fireEvent.press(retryButton);
+
+      await waitFor(() => {
+        expect(screen.getByText(/online/i)).toBeOnTheScreen();
+      });
+    });
+  });
+
+  // ===== API INTEGRATION =====
+  describe('API Integration', () => {
+    it('coordinates multiple API calls correctly', async () => {
+      const { apiService } = setupMockServices();
+      renderIntegrationComponent();
+
+      const loadAllButton = screen.getByTestId('load-all-button');
+      fireEvent.press(loadAllButton);
+
+      await waitFor(() => {
+        expect(apiService.{{API_METHOD}}).toHaveBeenCalled();
+        expect(apiService.{{SECONDARY_API_METHOD}}).toHaveBeenCalled();
+      });
+
+      // Verify both API responses are handled
+      await waitFor(() => {
+        expect(screen.getByText('All data loaded')).toBeOnTheScreen();
+      });
+    });
+
+    it('handles API dependency chains', async () => {
+      const { apiService } = setupMockServices();
+      
+      // Set up dependency chain: second call depends on first
+      apiService.{{API_METHOD}}.mockResolvedValueOnce({
+        success: true,
+        data: { dependencyId: 'dep-123' },
+      });
+
+      renderIntegrationComponent();
+
+      const chainButton = screen.getByTestId('chain-operations-button');
+      fireEvent.press(chainButton);
+
+      await waitFor(() => {
+        expect(apiService.{{API_METHOD}}).toHaveBeenCalled();
+      });
+
+      await waitFor(() => {
+        expect(apiService.{{SECONDARY_API_METHOD}}).toHaveBeenCalledWith(
+          expect.objectContaining({ dependencyId: 'dep-123' })
+        );
+      });
+    });
+
+    it('manages API rate limiting and throttling', async () => {
+      const { apiService } = setupMockServices();
+      
+      // Mock rate limit response
+      apiService.{{API_METHOD}}.mockRejectedValueOnce({
+        status: 429,
+        message: 'Rate limit exceeded',
+        retryAfter: 1000,
+      });
+
+      renderIntegrationComponent();
+
+      const rapidButton = screen.getByTestId('rapid-requests-button');
+      
+      // Make rapid requests
+      for (let i = 0; i < 5; i++) {
+        fireEvent.press(rapidButton);
+      }
+
+      await waitFor(() => {
+        expect(screen.getByText(/rate limit/i)).toBeOnTheScreen();
+      });
+    });
+
+    it('handles API version compatibility', async () => {
+      const { apiService } = setupMockServices();
+      
+      // Mock version mismatch
+      apiService.{{API_METHOD}}.mockRejectedValueOnce({
+        status: 400,
+        message: 'API version not supported',
+        supportedVersions: ['v2', 'v3'],
+      });
+
+      renderIntegrationComponent();
+
+      const versionButton = screen.getByTestId('check-version-button');
+      fireEvent.press(versionButton);
+
+      await waitFor(() => {
+        expect(screen.getByText(/version not supported/i)).toBeOnTheScreen();
+      });
+    });
+  });
+
+  // ===== NAVIGATION INTEGRATION =====
+  describe('Navigation Integration', () => {
+    it('maintains state across navigation', async () => {
+      renderIntegrationComponent();
+
+      // Set some state
+      const input = screen.getByTestId('state-input');
+      fireEvent.changeText(input, 'Persistent State');
+
+      // Navigate away
+      const navigateButton = screen.getByTestId('navigate-away-button');
+      fireEvent.press(navigateButton);
+
+      expect(mockNavigate).toHaveBeenCalled();
+    });
+
+    it('passes data correctly between screens', async () => {
+      renderIntegrationComponent();
+
+      const dataToPass = { id: 'test-123', value: 'Test Data' };
+      
+      const passDataButton = screen.getByTestId('pass-data-button');
+      fireEvent.press(passDataButton);
+
+      expect(mockNavigate).toHaveBeenCalledWith('{{TARGET_SCREEN}}', {
+        screenData: dataToPass,
+      });
+    });
+
+    it('handles deep linking integration', async () => {
+      const deepLinkProps = {
+        route: {
+          params: {
+            deepLinkId: 'deep-123',
+            action: 'view',
+          },
+        },
+      };
+
+      renderIntegrationComponent(deepLinkProps);
+
+      await waitFor(() => {
+        expect(screen.getByText('Deep link handled')).toBeOnTheScreen();
+      });
+    });
+
+    it('manages navigation stack properly', async () => {
+      renderIntegrationComponent();
+
+      // Navigate through multiple screens
+      const screen1Button = screen.getByTestId('navigate-screen1-button');
+      fireEvent.press(screen1Button);
+
+      const screen2Button = screen.getByTestId('navigate-screen2-button');
+      fireEvent.press(screen2Button);
+
+      // Reset navigation stack
+      const resetButton = screen.getByTestId('reset-navigation-button');
+      fireEvent.press(resetButton);
+
+      expect(mockReset).toHaveBeenCalledWith({
+        index: 0,
+        routes: [{ name: '{{HOME_SCREEN}}' }],
+      });
+    });
+  });
+
+  // ===== ERROR SCENARIOS =====
+  describe('Error Scenarios', () => {
+    it('handles cascading failures gracefully', async () => {
+      const { apiService } = setupMockServices();
+      
+      // Mock cascading failures
+      apiService.{{API_METHOD}}.mockRejectedValue(new Error('Primary failure'));
+      apiService.{{SECONDARY_API_METHOD}}.mockRejectedValue(new Error('Secondary failure'));
+
+      renderIntegrationComponent();
+
+      const triggerButton = screen.getByTestId('trigger-cascade-button');
+      fireEvent.press(triggerButton);
+
+      await waitFor(() => {
+        expect(screen.getByText(/multiple errors occurred/i)).toBeOnTheScreen();
+      });
+    });
+
+    it('provides comprehensive error recovery', async () => {
+      const { apiService } = setupMockServices();
+      
+      apiService.{{API_METHOD}}.mockRejectedValueOnce(new Error('Temporary failure'))
+                               .mockResolvedValueOnce({ success: true, data: mockInitialData });
+
+      renderIntegrationComponent();
+
+      // Trigger error
+      const failButton = screen.getByTestId('fail-operation-button');
+      fireEvent.press(failButton);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('retry-button')).toBeOnTheScreen();
+      });
+
+      // Retry and recover
+      const retryButton = screen.getByTestId('retry-button');
+      fireEvent.press(retryButton);
+
+      await waitFor(() => {
+        expect(screen.getByText('Operation successful')).toBeOnTheScreen();
+      });
+    });
+
+    it('maintains system stability during errors', async () => {
+      renderIntegrationComponent();
+
+      // Trigger multiple error conditions
+      const errorButtons = [
+        'error-1-button',
+        'error-2-button',
+        'error-3-button',
+      ];
+
+      for (const buttonId of errorButtons) {
+        const button = screen.getByTestId(buttonId);
+        fireEvent.press(button);
+      }
+
+      // System should remain functional
+      await waitFor(() => {
+        expect(screen.getByTestId('{{MAIN_COMPONENT}}-container')).toBeOnTheScreen();
+        expect(screen.getByText(/errors handled/i)).toBeOnTheScreen();
+      });
+    });
+  });
+
+  // ===== PERFORMANCE INTEGRATION =====
+  describe('Performance Integration', () => {
+    it('handles large datasets efficiently', async () => {
+      const largeDataset = Array.from({ length: 1000 }, (_, i) => ({
+        id: `item-${i}`,
+        value: `Value ${i}`,
+      }));
+
+      renderIntegrationComponent({}, {
+        primary: { {{PRIMARY_ENTITY}}: largeDataset },
+      });
+
+      const startTime = Date.now();
+      
+      await waitFor(() => {
+        expect(screen.getByTestId('large-list')).toBeOnTheScreen();
+      }, { timeout: 5000 });
+
+      const endTime = Date.now();
+      expect(endTime - startTime).toBeLessThan(3000); // Should render within 3 seconds
+    });
+
+    it('manages memory usage during intensive operations', async () => {
+      const initialMemory = performance.memory?.usedJSHeapSize || 0;
+
+      renderIntegrationComponent();
+
+      // Perform intensive operations
+      const intensiveButton = screen.getByTestId('intensive-operation-button');
+      for (let i = 0; i < 10; i++) {
+        fireEvent.press(intensiveButton);
+        await waitFor(() => {}, { timeout: 100 });
+      }
+
+      // Check memory hasn't grown excessively
+      const finalMemory = performance.memory?.usedJSHeapSize || 0;
+      const memoryGrowth = finalMemory - initialMemory;
+      
+      // Allow some growth but ensure it's reasonable
+      expect(memoryGrowth).toBeLessThan(50 * 1024 * 1024); // Less than 50MB growth
+    });
+
+    it('optimizes re-renders during state updates', async () => {
+      const renderSpy = jest.fn();
+      
+      const SpiedComponent = React.memo(() => {
+        renderSpy();
+        return <{{MAIN_COMPONENT}} />;
+      });
+
+      render(<SpiedComponent />, { wrapper: createTestWrapper });
+
+      const updateButton = screen.getByTestId('minor-update-button');
+      
+      // Make multiple minor updates
+      for (let i = 0; i < 5; i++) {
+        fireEvent.press(updateButton);
+        await waitFor(() => {}, { timeout: 50 });
+      }
+
+      // Should not cause excessive re-renders
+      expect(renderSpy).toHaveBeenCalledTimes(1); // Initial render only
+    });
+  });
+});

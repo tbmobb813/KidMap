@@ -35,7 +35,7 @@ export const useSafeZoneMonitor = (): {
     const [isMonitoring, setIsMonitoring] = useState(false);
     const lastUpdateRef = useRef<number>(Date.now());
     const [cachedStatus, setCachedStatus] = useState<SafeZoneStatus>(null);
-    const [events, setEvents] = useState<ZoneEvent[]>([]);
+    const eventsRef = useRef<ZoneEvent[]>([]);
     // Works across platforms
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const lastInsideIdsRef = useRef<Set<string>>(new Set());
@@ -81,8 +81,8 @@ export const useSafeZoneMonitor = (): {
             });
             if (parse.success) validated.push(z);
         }
-        const curHasLocation = hasLocationRef.current;
-        const curLocation: any = locationRef.current as any;
+    const curHasLocation = hasLocationRef.current;
+    const curLocation: any = locationRef.current as any;
         if (!curHasLocation || curLocation?.error) {
             return {
                 inside: [],
@@ -99,7 +99,11 @@ export const useSafeZoneMonitor = (): {
             const dx = zone.latitude - latitude;
             const dy = zone.longitude - longitude;
             const distanceMeters = Math.sqrt(dx * dx + dy * dy) * 111_000; // coarse meter conversion
-            if (distanceMeters <= zone.radius) inside.push(zone); else outside.push(zone);
+            if (distanceMeters <= zone.radius) {
+                inside.push(zone);
+            } else {
+                outside.push(zone);
+            }
         }
         return {
             inside,
@@ -110,7 +114,8 @@ export const useSafeZoneMonitor = (): {
     }, []);
 
     const recordEvents = useCallback((nextInside: SafeZone[]) => {
-        const prevInside = lastInsideIdsRef.current;
+        // Read the previous set at invocation time and compute diffs.
+        const prevInside = new Set(Array.from(lastInsideIdsRef.current));
         const nextSet = new Set(nextInside.map(z => z.id));
         const newEvents: ZoneEvent[] = [];
         // Entries
@@ -141,8 +146,13 @@ export const useSafeZoneMonitor = (): {
             }
         }
         if (newEvents.length) {
-            setEvents(prev => [...newEvents, ...prev].slice(0, 20)); // keep recent 20
+            // Mutate the existing array in-place so callers holding a
+            // reference (like tests that read monitor.events) observe the
+            // updates without needing a new array identity.
+            eventsRef.current.unshift(...newEvents);
+            if (eventsRef.current.length > 20) eventsRef.current.length = 20;
         }
+        // Update ref after recording so subsequent comparisons are correct.
         lastInsideIdsRef.current = nextSet;
     }, []);
 
@@ -171,5 +181,5 @@ export const useSafeZoneMonitor = (): {
         setIsMonitoring(false);
     };
 
-    return { isMonitoring, getCurrentSafeZoneStatus, startMonitoring, stopMonitoring, events, forceRefresh };
+    return { isMonitoring, getCurrentSafeZoneStatus, startMonitoring, stopMonitoring, events: eventsRef.current, forceRefresh };
 };

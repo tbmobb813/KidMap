@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">71.42% </span>
+                <span class="strong">92.85% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/14</span>
+                <span class='fraction'>13/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">6.25% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/16</span>
+                <span class='fraction'>4/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">91.66% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/12</span>
+                <span class='fraction'>11/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -279,31 +279,31 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -481,16 +481,16 @@ import { formatDistance, getLocationAccuracyDescription } from "@/utils/location
 const PhotoCheckInHistory: React.FC = () =&gt; {
   const { photoCheckIns } = useNavigationStore();
 &nbsp;
-  const formatTimestamp = <span class="fstat-no" title="function not covered" >(t</span>imestamp: number) =&gt; {
-    const date = <span class="cstat-no" title="statement not covered" >new Date(timestamp);</span>
-<span class="cstat-no" title="statement not covered" >    return date.toLocaleDateString() + " " + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });</span>
+  const formatTimestamp = (timestamp: number) =&gt; {
+    const date = new Date(timestamp);
+    return date.toLocaleDateString() + " " + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 &nbsp;
   const theme = useTheme();
   const styles = React.useMemo(() =&gt; createStyles(theme), [theme]);
 &nbsp;
-  <span class="missing-if-branch" title="else path not taken" >E</span>if (photoCheckIns.length === 0) {
-    return (
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (photoCheckIns.length === 0) {
+<span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;View style={styles.emptyContainer}&gt;
         &lt;MapPin size={40} color={theme.colors.textSecondary} /&gt;
         &lt;Text style={styles.emptyText}&gt;No check-ins yet&lt;/Text&gt;
@@ -501,12 +501,12 @@ const PhotoCheckInHistory: React.FC = () =&gt; {
     );
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;ScrollView style={styles.container} showsVerticalScrollIndicator={false}&gt;
       &lt;Text style={styles.title}&gt;Photo Check-in History&lt;/Text&gt;
       
-      {photoCheckIns.map(<span class="fstat-no" title="function not covered" >(c</span>heckIn) =&gt; (
-<span class="cstat-no" title="statement not covered" >        &lt;View key={checkIn.id} style={styles.checkInCard}&gt;</span>
+      {photoCheckIns.map((checkIn) =&gt; (
+        &lt;View key={checkIn.id} style={styles.checkInCard}&gt;
           &lt;View style={styles.cardHeader}&gt;
             &lt;View style={styles.headerLeft}&gt;
               &lt;Text style={styles.placeName}&gt;{checkIn.placeName}&lt;/Text&gt;
@@ -519,7 +519,7 @@ const PhotoCheckInHistory: React.FC = () =&gt; {
             &lt;/View&gt;
             
             {checkIn.isLocationVerified !== undefined &amp;&amp; (
-              &lt;View style={[
+<span class="branch-1 cbranch-no" title="branch not covered" >              &lt;View style={[</span>
                 styles.verificationBadge,
                 checkIn.isLocationVerified ? styles.verifiedBadge : styles.unverifiedBadge
               ]}&gt;
@@ -541,11 +541,11 @@ const PhotoCheckInHistory: React.FC = () =&gt; {
           &lt;Image source={{ uri: checkIn.photoUrl }} style={styles.photo} /&gt;
           
           {checkIn.notes &amp;&amp; (
-            &lt;Text style={styles.notes}&gt;{checkIn.notes}&lt;/Text&gt;
+<span class="branch-1 cbranch-no" title="branch not covered" >            &lt;Text style={styles.notes}&gt;{checkIn.notes}&lt;/Text&gt;</span>
           )}
           
           {checkIn.distanceFromPlace !== undefined &amp;&amp; (
-            &lt;View style={styles.locationInfo}&gt;
+<span class="branch-1 cbranch-no" title="branch not covered" >            &lt;View style={styles.locationInfo}&gt;</span>
               &lt;MapPin size={14} color={theme.colors.textSecondary} /&gt;
               &lt;Text style={styles.locationText}&gt;
                 {getLocationAccuracyDescription(checkIn.distanceFromPlace)} 
@@ -679,7 +679,7 @@ export default PhotoCheckInHistory;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-03T18:57:20.879Z
+                at 2025-09-28T18:37:31.009Z
             </div>
         <script src="../prettify.js"></script>
         <script>

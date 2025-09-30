@@ -1,14 +1,19 @@
 # Architecture Overview
 
+This document reflects the current KidMap architecture, including major changes from recent sprints: test architecture overhaul, template system adoption, validation consolidation, and expanded accessibility and performance instrumentation.
+
 This document summarizes current app structure after Sprint 1 stabilization and early Sprint 2 (data & performance) enhancements.
 
 ## Core Domains
 
 - Navigation & Routing: Expo Router with typed helper (`nav`) ensuring parameter safety.
-- Validation Layer: Zod schemas in `src/core/validation` used for safety zones, categories, photo check-ins.
+- Validation Layer: Zod schemas in `@/core/validation` (consolidated from scattered utils) used for safety zones, categories, photo check-ins.
 - Safety Monitoring: `useSafeZoneMonitor` hook producing status + capped event history; feature error boundary isolates issues.
 - State Management: Zustand stores (`navigationStore`, `regionStore`, `categoryStore`, etc.) kept lean; actions perform validation before mutating state.
 - UI Feedback: Toast system replaces non-critical Alerts; ErrorBoundaries catch render errors; invariant utility logs dev-only warnings.
+- Test Architecture: All tests now use a standardized template system and are organized under `_tests_/critical`, `core`, `infra`, `misc`, and `duplicates`. See `_tests_/TEST_CATALOG.md` and `_templates_/README.md`.
+- Template compliance is enforced in CI and PR review.
+- Legacy tests are being migrated and consolidated; see `MERGE_COMPLETION_REPORT.md` for details.
 
 ## Data Flow (Routes After S2-3)
 
@@ -56,9 +61,10 @@ Caching Behavior: Identical query keys reuse cache (validated by tests). Metrics
 ## Accessibility Enhancements
 
 - Interactive components marked with `accessibilityRole`, `accessibilityLabel`, and state.
-- Hit slop added for touch targets.
+- Touch targets meet the recommended minimum size (48x48).
 - Toasts announce themselves to screen readers (role="alert" + announcement utility) and attempt to shift focus.
 - Dev touch target audit utility warns for elements under 48x48 effective size (considering hitSlop); core buttons updated.
+- Announce API v2 (single API + web live regions) is now standard; legacy helpers deprecated.
 - Foundation laid for future live region announcements & contrast / dark mode enhancements.
 
 ### Accessibility Utilities
@@ -85,8 +91,8 @@ Unified `announce(message, { politeness, dedupe })` introduced:
 
 Future additions: queue management & cancellation handles for long-running voice navigation (ties into S3-3).
 
-## Testing Strategy
-
+- Test architecture now uses templates for all new and migrated tests. See `_templates_/README.md` for details.
+- Tests are organized by criticality and type: `critical/`, `core/`, `infra/`, `misc/`, `duplicates/`.
 - Behavior-oriented tests for safety monitor, deep linking, and route detail.
 - Defensive rendering tests for nullability (RouteCard, DirectionStep).
 - Accessibility labels presence test to guard regressions.
@@ -95,6 +101,7 @@ Future additions: queue management & cancellation handles for long-running voice
 - Tests cover route caching, accessibility, error boundaries, and performance marks.
 - Integration tests for navigation and tab switching are planned.
 - Edge case tests for error handling and null states are being expanded.
+- Coverage stabilization and technical debt reduction are current priorities.
 
 ## Error Handling
 
@@ -123,13 +130,13 @@ Future additions: queue management & cancellation handles for long-running voice
 
 All instrumentation is gated (no-op in production) to avoid user-impacting overhead.
 
-## Planned (Sprint 3)
+## Major Changes & Planned Additions
 
-Upcoming architectural additions:
-
-| Area | Planned Addition | Notes |
-|------|------------------|-------|
-| Accessibility | Announce API v2 (single API + web live regions) | Dedupe legacy helper, politeness levels |
+| Area | Change / Addition | Notes |
+|------|-------------------|-------|
+| Test Architecture | Template system, directory overhaul | See `_templates_/README.md` |
+| Validation | Consolidated to `@/core/validation` | All validation logic migrated |
+| Accessibility | Announce API v2, touch audit | Legacy helpers deprecated |
 | Theming | Dark mode & high contrast tokens | Semantic token layer with contrast checks |
 | Data Persistence | React Query cache persistence | AsyncStorage adapter + versioned schema key |
 | Navigation UX | Voice navigation progressive announcements | Distance threshold scheduling & cancellation |

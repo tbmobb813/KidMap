@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
-import { Pressable, StyleSheet, Text, TextStyle, ViewStyle } from "react-native";
+import { Pressable, StyleSheet, Text, TextStyle, ViewStyle, PressableProps } from "react-native";
 
 import { theme } from "@/constants/theme";
 import { getAccessibilityHint, getAccessibilityLabel } from "@/utils/accessibility/accessibility";
 import { auditTouchTarget } from "@/utils/accessibility/touchTargetAudit";
 
-type AccessibleButtonProps = {
+type AccessibleButtonProps = PressableProps & {
   title: string;
-  onPress: () => void;
   style?: ViewStyle;
   textStyle?: TextStyle;
   disabled?: boolean;
@@ -25,6 +24,8 @@ const AccessibleButton = ({
   accessibilityLabel,
   accessibilityHint,
   variant = "primary",
+  hitSlop,
+  ...rest
 }: AccessibleButtonProps) => {
   const getButtonStyle = () => {
     switch (variant) {
@@ -49,8 +50,11 @@ const AccessibleButton = ({
   };
 
   useEffect(() => {
-    auditTouchTarget({ name: 'AccessibleButton', minHeight: 48 });
-  }, []);
+    // Pass a sensible minimum width as well as height to ensure audit
+    // reflects a typical tappable target. If callers provide a hitSlop
+    // we pass it through so the audit accounts for it.
+    auditTouchTarget({ name: 'AccessibleButton', minHeight: 48, minWidth: 48, hitSlop: hitSlop ?? 8 });
+  }, [hitSlop]);
 
   return (
     <Pressable
@@ -63,6 +67,8 @@ const AccessibleButton = ({
       ]}
       onPress={onPress}
       disabled={disabled}
+      hitSlop={hitSlop ?? 8}
+      {...rest}
       accessible={true}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel || getAccessibilityLabel(title)}

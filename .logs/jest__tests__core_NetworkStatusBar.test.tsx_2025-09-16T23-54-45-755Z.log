@@ -1,0 +1,36 @@
+timestamp: 2025-09-16T23:54:46.466Z
+branch: dedupe/routeCard-proposed-patch
+sha: 09236501df27c3ac0d77f6315a5f474cb8a9dcaf
+args: jest _tests_/core/NetworkStatusBar.test.tsx
+---
+
+[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2m_tests_/core/[22m[1mNetworkStatusBar.test.tsx[22m ([0m[1m[41m13.841 s[49m[22m[0m)
+  NetworkStatusBar
+    [31m×[39m [2mdoes not render when connected with internet (80 ms)[22m
+    [32m√[39m [2mrenders no connection message when disconnected (81 ms)[22m
+    [32m√[39m [2mrenders limited connectivity message when connected but no internet (35 ms)[22m
+    [32m√[39m [2mrenders retry button when onRetry is provided (19 ms)[22m
+    [32m√[39m [2mdoes not render retry button when onRetry is not provided (16 ms)[22m
+    [32m√[39m [2mhandles retry action correctly (11 ms)[22m
+
+[1m[31m  [1m● [22m[1mNetworkStatusBar › does not render when connected with internet[39m[22m
+
+    TypeError: Cannot read properties of undefined (reading 'children')
+[2m[22m
+[2m    [0m [90m 30 |[39m[22m
+[2m     [90m 31 |[39m     [36mconst[39m { root } [33m=[39m render([33m<[39m[33mNetworkStatusBar[39m [33m/[39m[33m>[39m)[33m;[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 32 |[39m     expect(root[33m.[39mchildren)[33m.[39mtoHaveLength([35m0[39m)[33m;[39m[22m
+[2m     [90m    |[39m                 [31m[1m^[22m[2m[39m[22m
+[2m     [90m 33 |[39m   })[33m;[39m[22m
+[2m     [90m 34 |[39m[22m
+[2m     [90m 35 |[39m   it([32m"renders no connection message when disconnected"[39m[33m,[39m () [33m=>[39m {[0m[22m
+[2m[22m
+[2m      [2mat Object.children ([22m[2m[0m[36m_tests_/core/NetworkStatusBar.test.tsx[39m[0m[2m:32:17)[22m[2m[22m
+
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, 1 total
+[1mTests:       [22m[1m[31m1 failed[39m[22m, [1m[32m5 passed[39m[22m, 6 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m22.708 s[39m[22m
+[2mRan all test suites[22m[2m matching [22m/_tests_\\core\\NetworkStatusBar.test.tsx/i[2m.[22m
+
+EXIT CODE: 1

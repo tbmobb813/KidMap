@@ -1,0 +1,284 @@
+name: Test Suite Stratification
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+    inputs:
+      test_suite:
+        description: 'Test suite to run'
+        required: true
+        default: 'critical'
+        type: choice
+        options:
+        - critical
+        - core
+        - full
+        - stratified
+
+jobs:
+  # CRITICAL TESTS - Run on every commit/PR
+  critical-tests:
+    name: Critical Tests (<30s)
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' || github.event.inputs.test_suite == 'critical' || github.event.inputs.test_suite == 'stratified' }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run Critical Tests
+      run: npm run test:critical:ci
+      timeout-minutes: 2
+      
+    - name: Upload Critical Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: critical-test-results
+        path: |
+          coverage/critical/
+          
+    - name: Comment PR - Critical Results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = './coverage/critical/critical-metrics.json';
+          
+          if (fs.existsSync(path)) {
+            const results = JSON.parse(fs.readFileSync(path, 'utf8'));
+            const status = results.validation.overallValidation ? '✅ PASSED' : '❌ FAILED';
+            const timeStatus = results.validation.timeValidation ? '✅' : '❌';
+            const passStatus = results.validation.passRateValidation ? '✅' : '❌';
+            
+            const body = `## 🔥 Critical Test Results ${status}
+            
+            | Metric | Value | Status |
+            |--------|-------|--------|
+            | Execution Time | ${results.execution.totalTime}ms | ${timeStatus} |
+            | Pass Rate | ${results.results.passRate.toFixed(1)}% | ${passStatus} |
+            | Tests | ${results.results.passed}/${results.results.total} | - |
+            
+            **Target:** <30 seconds execution time with 100% pass rate
+            
+            ${results.failedTests.length > 0 ? '⚠️ **Critical test failures detected - immediate attention required**' : '🎉 All critical tests passing!'}
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+          }
+
+  # CORE TESTS - Run on feature branches and daily
+  core-tests:
+    name: Core Tests (<5min)
+    runs-on: ubuntu-latest
+    needs: critical-tests
+    if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' || github.event.inputs.test_suite == 'core' || github.event.inputs.test_suite == 'stratified' }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run Core Tests
+      run: npm run test:core:ci
+      timeout-minutes: 7
+      
+    - name: Upload Core Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: core-test-results
+        path: |
+          coverage/core/
+          
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        directory: ./coverage/core
+        flags: core-tests
+        name: core-coverage
+        
+    - name: Comment PR - Core Results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = './coverage/core/core-metrics.json';
+          
+          if (fs.existsSync(path)) {
+            const results = JSON.parse(fs.readFileSync(path, 'utf8'));
+            const status = results.validation.overallValidation ? '✅ PASSED' : '❌ FAILED';
+            const timeStatus = results.validation.timeValidation ? '✅' : '❌';
+            const passStatus = results.validation.passRateValidation ? '✅' : '❌';
+            const coverageStatus = results.validation.coverageValidation ? '✅' : '❌';
+            
+            const body = `## 🔧 Core Test Results ${status}
+            
+            | Metric | Value | Status |
+            |--------|-------|--------|
+            | Execution Time | ${(results.execution.totalTime / 1000).toFixed(1)}s | ${timeStatus} |
+            | Pass Rate | ${results.results.passRate.toFixed(1)}% | ${passStatus} |
+            | Coverage | ${results.coverage ? results.coverage.lines.toFixed(1) + '%' : 'N/A'} | ${coverageStatus} |
+            | Tests | ${results.results.passed}/${results.results.total} | - |
+            
+            **Target:** <5 minutes execution time with 95% pass rate and 70% coverage
+            
+            ### Test Distribution
+            - Critical: ${results.testsByCategory.critical.passed}/${results.testsByCategory.critical.count}
+            - Core: ${results.testsByCategory.core.passed}/${results.testsByCategory.core.count}
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+          }
+
+  # FULL TESTS - Run nightly and on releases
+  full-tests:
+    name: Full Test Suite (<15min)
+    runs-on: ubuntu-latest
+    needs: core-tests
+    if: ${{ github.event_name == 'schedule' || github.event.inputs.test_suite == 'full' || github.event.inputs.test_suite == 'stratified' || (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run Full Test Suite
+      run: npm run test:full:ci
+      timeout-minutes: 18
+      
+    - name: Upload Full Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: full-test-results
+        path: |
+          coverage/full/
+          
+    - name: Upload Full Coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        directory: ./coverage/full
+        flags: full-tests
+        name: full-coverage
+        
+    - name: Generate Test Report
+      if: always()
+      run: |
+        echo "## 🚀 Full Test Suite Results" >> $GITHUB_STEP_SUMMARY
+        if [ -f "./coverage/full/full-summary.json" ]; then
+          node -e "
+            const data = require('./coverage/full/full-summary.json');
+            console.log('| Metric | Value |');
+            console.log('|--------|-------|');
+            console.log('| Total Tests | ' + data.summary.totalTests + ' |');
+            console.log('| Pass Rate | ' + data.summary.passRate + ' |');
+            console.log('| Execution Time | ' + data.summary.executionTime + ' |');
+            console.log('| Coverage | ' + data.summary.coverage + ' |');
+            console.log('| Status | ' + data.summary.overallStatus + ' |');
+            console.log('');
+            console.log('### Test Categories');
+            Object.keys(data.categories).forEach(cat => {
+              console.log('- **' + cat + ':** ' + data.categories[cat]);
+            });
+          " >> $GITHUB_STEP_SUMMARY
+        fi
+        
+    - name: Create Release Report
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: |
+        mkdir -p release-reports
+        cp coverage/full/full-summary.json release-reports/test-report-$(date +%Y%m%d-%H%M%S).json
+        
+    - name: Upload Release Report
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-test-report
+        path: release-reports/
+
+# Nightly full test run
+  nightly-full-tests:
+    name: Nightly Full Test Suite
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run Nightly Full Tests
+      run: npm run test:full:ci
+      timeout-minutes: 20
+      
+    - name: Create Issue on Failure
+      if: failure()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: 'Nightly Test Suite Failed - ' + new Date().toDateString(),
+            body: `The nightly full test suite has failed. Please review the [workflow run](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}) for details.
+            
+            **Action Required:**
+            - Review failed tests
+            - Check for regressions
+            - Fix issues before next release
+            
+            /cc @maintainers`,
+            labels: ['bug', 'nightly-failure', 'priority-high']
+          });
+
+# Scheduled nightly runs
+# (Removed duplicate 'on:' block to fix workflow error)

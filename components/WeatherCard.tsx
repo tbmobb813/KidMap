@@ -12,7 +12,7 @@ type WeatherCardProps = {
 const WeatherCard: React.FC<WeatherCardProps> = ({ weather }) => {
   const theme = useTheme();
   const styles = React.useMemo(() => createStyles(theme), [theme]);
-  
+
   const getWeatherIcon = () => {
     switch (weather.condition.toLowerCase()) {
       case "sunny":
@@ -30,60 +30,69 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ weather }) => {
 
   const getBackgroundColor = () => {
     switch (weather.condition.toLowerCase()) {
-      case "sunny": return "#FFF8DC";
-      case "cloudy": return "#F0F8FF";
-      case "rainy": return "#E6F3FF";
-      case "snowy": return "#F0F8FF";
-      default: return theme.colors.surface;
+      case "sunny":
+        return "#FFF8DC";
+      case "cloudy":
+        return "#F0F8FF";
+      case "rainy":
+        return "#E6F3FF";
+      case "snowy":
+        return "#F0F8FF";
+      default:
+        return theme.colors.surface;
     }
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: getBackgroundColor() }]}>
+    <View
+      testID="weather-card"
+      style={[styles.container, { backgroundColor: getBackgroundColor() }]}
+    >
       <View style={styles.weatherInfo}>
         {getWeatherIcon()}
         <View style={styles.textContainer}>
-          <Text style={styles.temperature}>{weather.temperature}°F</Text>
+          <Text style={styles.temperature}>{weather.temperature}°C</Text>
           <Text style={styles.condition}>{weather.condition}</Text>
         </View>
       </View>
-      
+
       <Text style={styles.recommendation}>{weather.recommendation}</Text>
     </View>
   );
 };
 
-const createStyles = (theme: ReturnType<typeof useTheme>) => StyleSheet.create({
-  condition: {
-    color: theme.colors.textSecondary,
-    fontSize: 14,
-    textTransform: "capitalize",
-  },
-  container: {
-    borderLeftColor: theme.colors.primary,
-    borderLeftWidth: 4,
-    borderRadius: 12,
-    margin: 16,
-    padding: 16,
-  },
-  recommendation: {
-    color: theme.colors.text,
-    fontSize: 14,
-    fontStyle: "italic",
-  },
-  temperature: {
-    color: theme.colors.text,
-    fontSize: 18,
-    fontWeight: "700",
-  },
-  textContainer: {
-    marginLeft: 12,
-  },
-  weatherInfo: {
-    alignItems: "center",
-    flexDirection: "row",
-    marginBottom: 8,
-  },
-});
+const createStyles = (theme: ReturnType<typeof useTheme>) =>
+  StyleSheet.create({
+    condition: {
+      color: theme.colors.textSecondary,
+      fontSize: 14,
+      textTransform: "capitalize",
+    },
+    container: {
+      borderLeftColor: theme.colors.primary,
+      borderLeftWidth: 4,
+      borderRadius: 12,
+      margin: 16,
+      padding: 16,
+    },
+    recommendation: {
+      color: theme.colors.text,
+      fontSize: 14,
+      fontStyle: "italic",
+    },
+    temperature: {
+      color: theme.colors.text,
+      fontSize: 18,
+      fontWeight: "700",
+    },
+    textContainer: {
+      marginLeft: 12,
+    },
+    weatherInfo: {
+      alignItems: "center",
+      flexDirection: "row",
+      marginBottom: 8,
+    },
+  });
 
 export default WeatherCard;

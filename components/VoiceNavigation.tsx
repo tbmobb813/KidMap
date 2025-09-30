@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import Toast from './Toast';
 
+import { VOICE_NAV_A11Y } from '@/constants/a11yLabels';
 import { useTheme } from "@/constants/theme";
 import { useToast } from '@/hooks/useToast';
 import { useNavigationStore } from '@/stores/navigationStore';
@@ -51,10 +52,12 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
 
   // Announce automatically when step changes if voiceDescriptions enabled
   useEffect(() => {
-    if (accessibilitySettings.voiceDescriptions && steps && steps.length > 0) {
+    // Guard in case accessibilitySettings is undefined in some test setups
+    const voiceEnabled = accessibilitySettings?.voiceDescriptions;
+    if (voiceEnabled && steps && steps.length > 0) {
       announce(activeInstruction, { politeness: 'polite' });
     }
-  }, [activeInstruction, accessibilitySettings.voiceDescriptions, steps]);
+  }, [activeInstruction, accessibilitySettings?.voiceDescriptions, steps]);
 
   const handleVoiceToggle = () => {
     if (isListening) {
@@ -97,7 +100,7 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
       <View style={styles.stepContainer}>
         <Text style={styles.stepText} testID="voice-active-instruction">{activeInstruction}</Text>
         {steps && steps.length > 0 && (
-          <Text style={styles.stepMeta} accessibilityLabel={`Step ${stepIndex + 1} of ${steps.length}`}>{`Step ${stepIndex + 1}/${steps.length}`}</Text>
+          <Text style={styles.stepMeta} accessibilityLabel={VOICE_NAV_A11Y.stepMeta(stepIndex + 1, steps.length)}>{`Step ${stepIndex + 1}/${steps.length}`}</Text>
         )}
       </View>
 
@@ -105,7 +108,7 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
         {steps && steps.length > 0 && (
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={stepIndex === 0 ? 'Previous step (disabled)' : 'Go to previous step'}
+            accessibilityLabel={VOICE_NAV_A11Y.controlsPrevious(stepIndex === 0)}
             accessibilityState={{ disabled: stepIndex === 0 }}
             hitSlop={8}
             style={[styles.navButton, stepIndex === 0 && styles.navButtonDisabled]}
@@ -120,7 +123,7 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
 
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={isListening ? 'Stop listening' : 'Activate voice commands'}
+          accessibilityLabel={isListening ? VOICE_NAV_A11Y.stopListening : VOICE_NAV_A11Y.activateCommands}
           accessibilityState={{ selected: isListening }}
           hitSlop={8}
           style={[
@@ -142,7 +145,7 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
 
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={isSpeaking ? 'Repeating directions' : 'Repeat current step'}
+          accessibilityLabel={isSpeaking ? VOICE_NAV_A11Y.repeating : VOICE_NAV_A11Y.repeatCurrent}
           accessibilityState={{ busy: isSpeaking }}
           hitSlop={8}
           style={[
@@ -161,7 +164,7 @@ const VoiceNavigation: React.FC<VoiceNavigationProps> = ({
         {steps && steps.length > 0 && (
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={stepIndex === steps.length - 1 ? 'Next step (disabled)' : 'Go to next step'}
+            accessibilityLabel={VOICE_NAV_A11Y.controlsNext(stepIndex === steps.length - 1)}
             accessibilityState={{ disabled: stepIndex === steps.length - 1 }}
             hitSlop={8}
             style={[styles.navButton, stepIndex === steps.length - 1 && styles.navButtonDisabled]}

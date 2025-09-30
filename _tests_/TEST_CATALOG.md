@@ -4,17 +4,18 @@ This file is a draft inventory and recommendation for the repository's test cove
 
 ## Summary
 
-- Indexed (approx): 238 tests across `_tests_`.
-- Found several duplicate subjects; see `dedupe-report.json` for a machine-friendly listing.
+ Indexed (approx): 238 tests across `_tests_` (critical, core, infra, misc, duplicates).
+ All new and migrated tests use template-based patterns (see `_templates_/README.md`).
+ Legacy tests are being migrated and consolidated; see `MERGE_COMPLETION_REPORT.md` for progress.
+ Template compliance is enforced in CI and PR review.
+ Found several duplicate subjects; see `dedupe-report.json` for a machine-friendly listing.
 
 ## Priority: Extensive (critical)
 
 Place these under `_tests_/critical/` and run them in CI gate.
 
-- `PinAuthentication` — security-critical, full workflow, many edge cases.
-- `routeService` / `routesCache` / `routePrefetch` — backend fetch, caching, metrics; must verify caching metrics and correct fetch counts.
-- `telemetry` — ensure event emission, adapters, and memory buffer behavior.
-- `SafetyDashboard` and related safety features — combined behavior with state and permissions.
+ Run `npm run test:core` and check coverage meets threshold.
+ Ensure all tests use template-based patterns and correct directory.
 
 ## Priority: Intermediate (core)
 

@@ -1,0 +1,496 @@
+import { jest } from '@jest/globals';
+
+import { {{SERVICE_NAME}} } from '@/services/{{SERVICE_NAME}}';
+// or import * as {{SERVICE_NAME}} from '@/utils/{{SERVICE_NAME}}';
+
+// ===== MOCK SECTION =====
+// Mock external dependencies
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+);
+
+jest.mock('@/stores/{{STORE_NAME}}', () => ({
+  get{{STORE_NAME}}State: jest.fn(),
+  update{{STORE_NAME}}: jest.fn(),
+}));
+
+// Mock API calls
+global.fetch = jest.fn() as jest.MockedFunction<typeof fetch>;
+
+// Mock native modules
+jest.mock('react-native', () => ({
+  Platform: { OS: 'ios' },
+  Alert: { alert: jest.fn() },
+  Linking: { openURL: jest.fn() },
+}));
+
+// ===== TEST DATA SETUP =====
+const mockApiResponse = {
+  success: true,
+  data: {
+    id: 'test-id',
+    value: 'test-value',
+  },
+};
+
+const mockErrorResponse = {
+  success: false,
+  error: 'Test error message',
+};
+
+const mockNetworkError = new Error('Network error');
+
+describe('{{SERVICE_NAME}}', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    // Reset fetch mock
+    (fetch as jest.MockedFunction<typeof fetch>).mockClear();
+    
+    // Reset store mocks
+    const storeModule = require('@/stores/{{STORE_NAME}}');
+    storeModule.get{{STORE_NAME}}State.mockReturnValue({});
+    storeModule.update{{STORE_NAME}}.mockReturnValue(undefined);
+  });
+
+  // ===== BASIC FUNCTIONALITY =====
+  describe('Basic Functionality', () => {
+    it('exports expected interface', () => {
+      expect({{SERVICE_NAME}}).toBeDefined();
+      expect(typeof {{SERVICE_NAME}}.{{PRIMARY_METHOD}}).toBe('function');
+      expect(typeof {{SERVICE_NAME}}.{{SECONDARY_METHOD}}).toBe('function');
+    });
+
+    it('handles valid input correctly', async () => {
+      const testInput = {
+        // Add test input parameters
+        param1: 'value1',
+        param2: 'value2',
+      };
+
+      const result = await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}(testInput);
+
+      expect(result).toBeDefined();
+      expect(result.success).toBe(true);
+    });
+
+    it('returns consistent output format', async () => {
+      const result = await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}({});
+
+      expect(result).toHaveProperty('success');
+      expect(result).toHaveProperty('data');
+    });
+  });
+
+  // ===== INPUT VALIDATION =====
+  describe('Input Validation', () => {
+    it('handles null input gracefully', async () => {
+      const result = await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}(null);
+
+      expect(result.success).toBe(false);
+      expect(result.error).toBeDefined();
+    });
+
+    it('handles undefined input gracefully', async () => {
+      const result = await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}(undefined);
+
+      expect(result.success).toBe(false);
+      expect(result.error).toBeDefined();
+    });
+
+    it('validates required parameters', async () => {
+      const incompleteInput = {
+        // Missing required parameters
+        param1: 'value1',
+        // param2: 'value2', // Missing
+      };
+
+      const result = await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}(incompleteInput);
+
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('required');
+    });
+
+    it('validates parameter types', async () => {
+      const invalidInput = {
+        param1: 123, // Should be string
+        param2: 'value2',
+      };
+
+      const result = await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}(invalidInput);
+
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('type');
+    });
+
+    it('handles edge case values', async () => {
+      const edgeCases = [
+        { param1: '', param2: 'value2' }, // Empty string
+        { param1: '   ', param2: 'value2' }, // Whitespace
+        { param1: 'a'.repeat(1000), param2: 'value2' }, // Very long string
+      ];
+
+      for (const testCase of edgeCases) {
+        const result = await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}(testCase);
+        expect(result).toBeDefined();
+        expect(typeof result.success).toBe('boolean');
+      }
+    });
+  });
+
+  // ===== API INTEGRATION =====
+  describe('API Integration', () => {
+    it('makes correct API calls', async () => {
+      (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockApiResponse),
+      } as Response);
+
+      const testInput = { param1: 'value1' };
+      await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}(testInput);
+
+      expect(fetch).toHaveBeenCalledTimes(1);
+      expect(fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/api/'),
+        expect.objectContaining({
+          method: 'POST',
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+          }),
+          body: expect.stringContaining('value1'),
+        })
+      );
+    });
+
+    it('handles successful API responses', async () => {
+      (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockApiResponse),
+      } as Response);
+
+      const result = await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}({ param1: 'value1' });
+
+      expect(result.success).toBe(true);
+      expect(result.data).toEqual(mockApiResponse.data);
+    });
+
+    it('handles API error responses', async () => {
+      (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValue({
+        ok: false,
+        status: 400,
+        json: () => Promise.resolve(mockErrorResponse),
+      } as Response);
+
+      const result = await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}({ param1: 'value1' });
+
+      expect(result.success).toBe(false);
+      expect(result.error).toBeDefined();
+    });
+
+    it('handles network failures', async () => {
+      (fetch as jest.MockedFunction<typeof fetch>).mockRejectedValue(mockNetworkError);
+
+      const result = await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}({ param1: 'value1' });
+
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('Network');
+    });
+
+    it('includes proper authentication headers', async () => {
+      const mockToken = 'test-auth-token';
+      
+      // Mock getting auth token
+      const authModule = require('@/stores/{{STORE_NAME}}');
+      authModule.get{{STORE_NAME}}State.mockReturnValue({ token: mockToken });
+
+      (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockApiResponse),
+      } as Response);
+
+      await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}({ param1: 'value1' });
+
+      expect(fetch).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Authorization': `Bearer ${mockToken}`,
+          }),
+        })
+      );
+    });
+  });
+
+  // ===== DATA PROCESSING =====
+  describe('Data Processing', () => {
+    it('transforms input data correctly', async () => {
+      const inputData = {
+        rawValue: 'test-raw-value',
+        needsTransformation: true,
+      };
+
+      const processedData = {{SERVICE_NAME}}.{{TRANSFORM_METHOD}}(inputData);
+
+      expect(processedData).toBeDefined();
+      expect(processedData.transformedValue).toBeDefined();
+    });
+
+    it('validates processed data', async () => {
+      const invalidData = {
+        // Invalid data structure
+        malformed: true,
+      };
+
+      const result = {{SERVICE_NAME}}.{{VALIDATE_METHOD}}(invalidData);
+
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toBeDefined();
+      expect(result.errors.length).toBeGreaterThan(0);
+    });
+
+    it('handles data format conversion', () => {
+      const testData = [
+        { format: 'json', data: '{"key": "value"}' },
+        { format: 'xml', data: '<root><key>value</key></root>' },
+        { format: 'csv', data: 'key,value\ntest,data' },
+      ];
+
+      testData.forEach(({ format, data }) => {
+        const result = {{SERVICE_NAME}}.{{CONVERT_METHOD}}(data, format);
+        expect(result).toBeDefined();
+        expect(result.success).toBe(true);
+      });
+    });
+
+    it('sanitizes sensitive data', () => {
+      const sensitiveData = {
+        username: 'testuser',
+        password: 'secret123',
+        email: 'test@example.com',
+        creditCard: '1234-5678-9012-3456',
+      };
+
+      const sanitized = {{SERVICE_NAME}}.{{SANITIZE_METHOD}}(sensitiveData);
+
+      expect(sanitized.username).toBe('testuser');
+      expect(sanitized.password).toBeUndefined();
+      expect(sanitized.email).toBe('t***@e***.com');
+      expect(sanitized.creditCard).toBe('****-****-****-3456');
+    });
+  });
+
+  // ===== CACHING BEHAVIOR =====
+  describe('Caching Behavior', () => {
+    it('caches results appropriately', async () => {
+      (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockApiResponse),
+      } as Response);
+
+      const testInput = { param1: 'cached-value' };
+
+      // First call
+      await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}(testInput);
+      // Second call with same input
+      await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}(testInput);
+
+      // Should only make one API call due to caching
+      expect(fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('respects cache expiration', async () => {
+      jest.useFakeTimers();
+
+      (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockApiResponse),
+      } as Response);
+
+      const testInput = { param1: 'expired-cache' };
+
+      // First call
+      await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}(testInput);
+
+      // Advance time beyond cache expiration
+      jest.advanceTimersByTime(60000); // 1 minute
+
+      // Second call after expiration
+      await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}(testInput);
+
+      expect(fetch).toHaveBeenCalledTimes(2);
+
+      jest.useRealTimers();
+    });
+
+    it('clears cache when requested', async () => {
+      (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockApiResponse),
+      } as Response);
+
+      const testInput = { param1: 'clear-cache-test' };
+
+      // First call
+      await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}(testInput);
+
+      // Clear cache
+      {{SERVICE_NAME}}.{{CLEAR_CACHE_METHOD}}();
+
+      // Second call after cache clear
+      await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}(testInput);
+
+      expect(fetch).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  // ===== ERROR HANDLING =====
+  describe('Error Handling', () => {
+    it('provides detailed error information', async () => {
+      (fetch as jest.MockedFunction<typeof fetch>).mockRejectedValue(
+        new Error('Detailed test error')
+      );
+
+      const result = await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}({ param1: 'error-test' });
+
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('Detailed test error');
+      expect(result.errorCode).toBeDefined();
+      expect(result.timestamp).toBeDefined();
+    });
+
+    it('handles timeout scenarios', async () => {
+      jest.useFakeTimers();
+
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Timeout')), 30000);
+      });
+
+      (fetch as jest.MockedFunction<typeof fetch>).mockReturnValue(
+        timeoutPromise as Promise<Response>
+      );
+
+      const resultPromise = {{SERVICE_NAME}}.{{PRIMARY_METHOD}}({ param1: 'timeout-test' });
+
+      jest.advanceTimersByTime(30000);
+
+      const result = await resultPromise;
+
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('Timeout');
+
+      jest.useRealTimers();
+    });
+
+    it('recovers from transient failures', async () => {
+      let callCount = 0;
+      (fetch as jest.MockedFunction<typeof fetch>).mockImplementation(() => {
+        callCount++;
+        if (callCount < 3) {
+          return Promise.reject(new Error('Transient failure'));
+        }
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockApiResponse),
+        } as Response);
+      });
+
+      const result = await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}({ param1: 'retry-test' });
+
+      expect(result.success).toBe(true);
+      expect(fetch).toHaveBeenCalledTimes(3); // Initial + 2 retries
+    });
+  });
+
+  // ===== PERFORMANCE =====
+  describe('Performance', () => {
+    it('processes large datasets efficiently', async () => {
+      const largeDataset = Array.from({ length: 10000 }, (_, i) => ({
+        id: i,
+        value: `value-${i}`,
+      }));
+
+      const startTime = Date.now();
+      const result = await {{SERVICE_NAME}}.{{PROCESS_BULK_METHOD}}(largeDataset);
+      const endTime = Date.now();
+
+      expect(result.success).toBe(true);
+      expect(endTime - startTime).toBeLessThan(5000); // Should complete within 5 seconds
+    });
+
+    it('handles concurrent requests appropriately', async () => {
+      (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockApiResponse),
+      } as Response);
+
+      const concurrentRequests = Array.from({ length: 10 }, (_, i) =>
+        {{SERVICE_NAME}}.{{PRIMARY_METHOD}}({ param1: `concurrent-${i}` })
+      );
+
+      const results = await Promise.all(concurrentRequests);
+
+      expect(results).toHaveLength(10);
+      results.forEach(result => {
+        expect(result.success).toBe(true);
+      });
+    });
+
+    it('manages memory usage efficiently', async () => {
+      const initialMemory = process.memoryUsage().heapUsed;
+
+      // Perform many operations
+      for (let i = 0; i < 100; i++) {
+        await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}({ param1: `memory-test-${i}` });
+      }
+
+      // Force garbage collection if available
+      if (global.gc) {
+        global.gc();
+      }
+
+      const finalMemory = process.memoryUsage().heapUsed;
+      const memoryIncrease = finalMemory - initialMemory;
+
+      // Memory increase should be reasonable (less than 50MB)
+      expect(memoryIncrease).toBeLessThan(50 * 1024 * 1024);
+    });
+  });
+
+  // ===== INTEGRATION SCENARIOS =====
+  describe('Integration Scenarios', () => {
+    it('integrates with store updates', async () => {
+      const storeModule = require('@/stores/{{STORE_NAME}}');
+      
+      (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve(mockApiResponse),
+      } as Response);
+
+      await {{SERVICE_NAME}}.{{PRIMARY_METHOD}}({ param1: 'store-integration' });
+
+      expect(storeModule.update{{STORE_NAME}}).toHaveBeenCalledWith(
+        expect.objectContaining(mockApiResponse.data)
+      );
+    });
+
+    it('coordinates with other services', async () => {
+      const dependentService = require('@/services/{{DEPENDENT_SERVICE}}');
+      dependentService.{{DEPENDENT_METHOD}} = jest.fn().mockResolvedValue({ success: true });
+
+      const result = await {{SERVICE_NAME}}.{{ORCHESTRATION_METHOD}}({ param1: 'service-coordination' });
+
+      expect(dependentService.{{DEPENDENT_METHOD}}).toHaveBeenCalled();
+      expect(result.success).toBe(true);
+    });
+
+    it('handles service dependency failures', async () => {
+      const dependentService = require('@/services/{{DEPENDENT_SERVICE}}');
+      dependentService.{{DEPENDENT_METHOD}} = jest.fn().mockRejectedValue(new Error('Dependency failure'));
+
+      const result = await {{SERVICE_NAME}}.{{ORCHESTRATION_METHOD}}({ param1: 'dependency-failure' });
+
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('Dependency failure');
+    });
+  });
+});

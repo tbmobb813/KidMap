@@ -8,6 +8,7 @@ import {
 import React from "react";
 
 import { ThemeProvider } from "../constants/theme";
+import { ToastProvider } from "../providers/ToastProvider";
 
 // Ensure manual mock for lucide icons is used across tests
 try {
@@ -43,7 +44,9 @@ export function AllTheProviders({
   const qc = queryClient || createTestQueryClient();
   return (
     <QueryClientProvider client={qc}>
-      <ThemeProvider initial={theme}>{children}</ThemeProvider>
+      <ThemeProvider initial={theme}>
+        <ToastProvider>{children}</ToastProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
@@ -116,17 +119,7 @@ export const mockLocation = {
 };
 
 export const mockStores = {
-  parentalStore: {
-    useParentalStore: () => ({
-      settings: {
-        emergencyContacts: [{ id: "p1", phone: "9876543210", isPrimary: true }],
-      },
-      dashboardData: { safeZoneActivity: [] },
-      devicePings: [],
-      addCheckInToDashboard: jest.fn(),
-      updateLastKnownLocation: jest.fn(),
-    }),
-  },
+  // Mock store data for tests - actual mocking is done in jest.setup.js
 };
 
 export const mockHooks = {
@@ -167,3 +160,78 @@ export const integrationTestHelpers = {
     }
   },
 };
+
+// Helpers to access shared test mocks configured in jest.setup.js
+export function getGlobalMockTrack(): jest.Mock | undefined {
+  return (global as any).__mockTrack as jest.Mock | undefined;
+}
+
+export function getGlobalFetchMock(): jest.Mock | undefined {
+  return (global as any).fetch as jest.Mock | undefined;
+}
+
+export function resetGlobalFetchMock() {
+  (global as any).fetch = jest.fn(() =>
+    Promise.resolve(createMockFetchResponse("Test content"))
+  );
+}
+
+/**
+ * Create a minimal fetch response object suitable for Jest fetch mocks.
+ * Use this to avoid casting to `any` in tests when mocking fetch responses.
+ */
+export function createMockFetchResponse(
+  text: string,
+  ok = true,
+  status = 200,
+  body: any = undefined
+) {
+  const payload = body !== undefined ? body : { completion: text };
+  return {
+    ok,
+    status,
+    json: () => Promise.resolve(payload),
+  } as unknown as Response;
+}
+
+/**
+ * Recursively extract visible text from react-test-renderer instances,
+ * plain strings, arrays or element props used by tests. Useful when
+ * the test renderer returns ReactTestInstance shapes rather than
+ * simple DOM nodes.
+ */
+export function extractText(node: any): string {
+  if (!node) return "";
+  if (typeof node === "string") return node;
+  if (Array.isArray(node)) return node.map((n) => extractText(n)).filter(Boolean).join(" ");
+  if (node.props && typeof node.props.children === "string") return node.props.children;
+  if (node.props && node.props.children) return extractText(node.props.children);
+  if (node.children && Array.isArray(node.children)) return node.children.map((c: any) => extractText(c)).filter(Boolean).join(" ");
+  return "";
+}
+
+/**
+ * Search a rendered tree (RenderAPI) for an icon marker in a renderer-agnostic
+ * way. Some renderers place testID props differently; this helper checks the
+ * serialized toJSON string for the presence of known testIDs or icon text.
+ */
+export function findIconMarker(renderResult: RenderAPI, iconName: string): boolean {
+  try {
+    const tree = renderResult.toJSON();
+    const str = JSON.stringify(tree || {});
+    const candidates = [
+      `"testID":"icon-${iconName}"`,
+      `"testID":"icon-${iconName}-fallback"`,
+      `"testID":"icon-${iconName}-stable"`,
+      iconName,
+    ];
+    return candidates.some((c) => str.includes(c));
+  } catch {
+    return false;
+  }
+}
+
+// Preferred public name for renderer-agnostic icon detection. Tests should
+// prefer accessibility queries; use this only as a fallback when a11y isn't
+// available for the element under test.
+export const hasRenderedIcon = findIconMarker;
