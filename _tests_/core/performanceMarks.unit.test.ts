@@ -1,8 +1,8 @@
-import { mark, measure, getMarks, clearMarks } from '../../utils/performance/performanceMarks';
+import { mark, measure, getMarks, clearMarks } from '@/utils/performance/performanceMarks';
 
 describe('performanceMarks', () => {
   const originalEnv = process.env.NODE_ENV;
-  const originalNow = global.performance && global.performance.now;
+  const originalNow = (global as any).performance && (global as any).performance.now;
 
   beforeAll(() => {
     process.env.NODE_ENV = 'test';
@@ -10,7 +10,7 @@ describe('performanceMarks', () => {
 
   afterAll(() => {
     process.env.NODE_ENV = originalEnv;
-    if (originalNow) global.performance.now = originalNow;
+    if (originalNow) (global as any).performance.now = originalNow;
   });
 
   beforeEach(() => {
@@ -19,10 +19,11 @@ describe('performanceMarks', () => {
 
   test('records marks and measures with deterministic performance.now', () => {
     let now = 1000;
-    global.performance.now = () => now;
+    (global as any).performance = { now: () => now };
 
     mark('start');
     now += 50; // 50ms later
+    (global as any).performance = { now: () => now };
     mark('end');
     measure('duration', 'start', 'end');
 
@@ -33,8 +34,8 @@ describe('performanceMarks', () => {
   });
 
   test('does not push measure if marks missing', () => {
-    let now = 2000;
-    global.performance.now = () => now;
+    const now = 2000;
+    (global as any).performance = { now: () => now };
 
     mark('single');
     // attempt measure with missing end

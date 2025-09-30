@@ -1,6 +1,4 @@
-import * as persistence from '@/utils/persistence/persistence';
-
-// Mock AsyncStorage used in persistence.ts
+// Single-file clean tests for persistence helpers
 const mockStorage: Record<string, string> = {};
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
@@ -11,29 +9,28 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   }),
 }));
 
-describe('persistence', () => {
+import * as persistence from '@/utils/persistence/persistence';
+
+describe('persistence utils', () => {
   beforeEach(() => {
     for (const k of Object.keys(mockStorage)) delete mockStorage[k];
+    jest.clearAllMocks();
   });
 
-  it('loadPersistedState returns null when nothing stored', async () => {
-    const result = await persistence.loadPersistedState();
-    expect(result).toBeNull();
+  it('loadPersistedState returns null when storage empty', async () => {
+    const res = await persistence.loadPersistedState();
+    expect(res).toBeNull();
   });
 
-  it('savePersistedState stores JSON string without throwing', async () => {
+  it('savePersistedState stores JSON with version and load returns it', async () => {
     const partial = { favorites: [], recentSearches: [], accessibilitySettings: {}, photoCheckIns: [], selectedTravelMode: 'walk', routeOptions: {} };
     await expect(persistence.savePersistedState(partial)).resolves.toBeUndefined();
     const raw = mockStorage['kidmap.navigation.v1'];
     expect(typeof raw).toBe('string');
     const parsed = JSON.parse(raw);
     expect(parsed.version).toBe(1);
-    expect(parsed.selectedTravelMode).toBe('walk');
-  });
-
-  it('loadPersistedState returns object when stored with correct version', async () => {
-    mockStorage['kidmap.navigation.v1'] = JSON.stringify({ version: 1, favorites: [], recentSearches: [], accessibilitySettings: {}, photoCheckIns: [], selectedTravelMode: 'drive', routeOptions: {} });
+    // now load
     const out = await persistence.loadPersistedState();
-    expect(out).toMatchObject({ selectedTravelMode: 'drive' });
+    expect(out).toMatchObject({ selectedTravelMode: 'walk' });
   });
 });

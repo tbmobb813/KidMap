@@ -1,4 +1,4 @@
-import { parseHex, luminance, contrastRatio, meetsAA } from '@/utils/color/contrast';
+import { parseHex, luminance, contrastRatio, meetsAA } from '../../utils/color/contrast';
 
 describe('color contrast utilities', () => {
   it('parses 3- and 6-digit hex colors correctly', () => {
